@@ -684,11 +684,11 @@ $dailyEarnings = Cache::remember('user_'.auth()->id().'_daily_earnings', now()->
 
         <!-- Summary -->
         <div class="mt-4 pt-4 border-t border-gray-200">
-            <div class="flex justify-between items-center mb-2">
+       
+            <div class="flex justify-between items-center">
                 <span class="text-sm font-medium text-gray-600">Profit Earned</span>
-                <span class="text-sm font-bold text-gray-800">${{ number_format($totalEarnedAll,2) }}</span>
+                <span class="text-xl font-bold text-green-600">${{ number_format($totalEarnedAll,2) }}</span>
             </div>
-         
         </div>
     </div>
 </div>
