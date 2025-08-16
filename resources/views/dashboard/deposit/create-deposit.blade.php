@@ -341,12 +341,12 @@
                         <table class="table w-full whitespace-nowrap text-sm">
                             <thead style="background: #fff !important;">
                                 <tr>
-                                    <th class="text-left">#</th>
-                                    <th class="text-left">Plan Name</th>
-                                    <th class="text-left">Min Deposit (<span id="currencySymbol">$</span>)</th>
-                                    <th class="text-left">Max Deposit (<span id="currencySymbol2">$</span>)</th>
-                                    <th class="text-left">Duration</th>
-                                    <th class="text-left">Interest Rate</th>
+                                    <th class="text-left" style="background-color: white !important;">#</th>
+                                    <th class="text-left" style="background-color: white !important;">Plan Name</th>
+                                    <th class="text-left" style="background-color: white !important;">Min Deposit (<span id="currencySymbol">$</span>)</th>
+                                    <th class="text-left" style="background-color: white !important;">Max Deposit (<span id="currencySymbol2">$</span>)</th>
+                                    <th class="text-left" style="background-color: white !important;">Duration</th>
+                                    <th class="text-left" style="background-color: white !important;">Interest Rate</th>
                                 </tr>
                             </thead>
                             <tbody>
