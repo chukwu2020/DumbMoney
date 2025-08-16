@@ -281,86 +281,185 @@
             }
         </style>
 
-       <script>
-    const activities = [
-        { name: "Liam", action: "earned", amount: "$4,200 profit", emoji: "📈" },
-        { name: "Sophie", action: "deposited", amount: "$12,000", emoji: "💰" },
-        { name: "Chen Wei", action: "earned", amount: "$2,800 profit", emoji: "📈" },
-        { name: "Isabelle", action: "deposited", amount: "$7,500", emoji: "💰" },
-        { name: "Yuki Tanaka", action: "earned", amount: "$6,100 profit", emoji: "📈" },
-        { name: "Ivan Petrov", action: "deposited", amount: "$15,000", emoji: "💰" },
-        { name: "Olivia", action: "earned", amount: "$5,000 profit", emoji: "📈" },
-        { name: "Emily", action: "started", plan: "Ambassadorship Plan", emoji: "🚀" },
-        { name: "Thomas Müller", action: "earned", amount: "$3,700 profit", emoji: "📈" },
-        { name: "Lucas", action: "deposited", amount: "$20,000", emoji: "💰" },
-        { name: "Charlotte", action: "upgraded", tier: "VIP Tier", emoji: "🌟" },
-        { name: "Mei Ling", action: "earned", amount: "$2,500 profit", emoji: "📈" },
-        { name: "Dmitri", action: "deposited", amount: "$10,500", emoji: "💰" },
-        { name: "Arthur", action: "earned", amount: "$6,400 profit", emoji: "📈" },
-        { name: "Sophia Dubois", action: "deposited", amount: "$18,000", emoji: "💰" },
-        { name: "Elena Ivanova", action: "earned", amount: "$3,200 profit", emoji: "📈" },
-        { name: "Mateo", action: "deposited", amount: "$9,000", emoji: "💰" },
-        { name: "Amélie", action: "earned", amount: "$4,800 profit", emoji: "📈" },
-        { name: "Sebastian", action: "started", plan: "Premium Plan", emoji: "✨" },
-        { name: "Victor", action: "deposited", amount: "$11,700", emoji: "💰" }
-    ];
+        <script>
+            const activities = [{
+                    name: "Liam",
+                    action: "earned",
+                    amount: "$4,200 profit",
+                    emoji: "📈"
+                },
+                {
+                    name: "Sophie",
+                    action: "deposited",
+                    amount: "$12,000",
+                    emoji: "💰"
+                },
+                {
+                    name: "Chen Wei",
+                    action: "earned",
+                    amount: "$2,800 profit",
+                    emoji: "📈"
+                },
+                {
+                    name: "Isabelle",
+                    action: "deposited",
+                    amount: "$7,500",
+                    emoji: "💰"
+                },
+                {
+                    name: "Yuki Tanaka",
+                    action: "earned",
+                    amount: "$6,100 profit",
+                    emoji: "📈"
+                },
+                {
+                    name: "Ivan Petrov",
+                    action: "deposited",
+                    amount: "$15,000",
+                    emoji: "💰"
+                },
+                {
+                    name: "Olivia",
+                    action: "earned",
+                    amount: "$5,000 profit",
+                    emoji: "📈"
+                },
+                {
+                    name: "Emily",
+                    action: "started",
+                    plan: "Ambassadorship Plan",
+                    emoji: "🚀"
+                },
+                {
+                    name: "Thomas Müller",
+                    action: "earned",
+                    amount: "$3,700 profit",
+                    emoji: "📈"
+                },
+                {
+                    name: "Lucas",
+                    action: "deposited",
+                    amount: "$20,000",
+                    emoji: "💰"
+                },
+                {
+                    name: "Charlotte",
+                    action: "upgraded",
+                    tier: "VIP Tier",
+                    emoji: "🌟"
+                },
+                {
+                    name: "Mei Ling",
+                    action: "earned",
+                    amount: "$2,500 profit",
+                    emoji: "📈"
+                },
+                {
+                    name: "Dmitri",
+                    action: "deposited",
+                    amount: "$10,500",
+                    emoji: "💰"
+                },
+                {
+                    name: "Arthur",
+                    action: "earned",
+                    amount: "$6,400 profit",
+                    emoji: "📈"
+                },
+                {
+                    name: "Sophia Dubois",
+                    action: "deposited",
+                    amount: "$18,000",
+                    emoji: "💰"
+                },
+                {
+                    name: "Elena Ivanova",
+                    action: "earned",
+                    amount: "$3,200 profit",
+                    emoji: "📈"
+                },
+                {
+                    name: "Mateo",
+                    action: "deposited",
+                    amount: "$9,000",
+                    emoji: "💰"
+                },
+                {
+                    name: "Amélie",
+                    action: "earned",
+                    amount: "$4,800 profit",
+                    emoji: "📈"
+                },
+                {
+                    name: "Sebastian",
+                    action: "started",
+                    plan: "Premium Plan",
+                    emoji: "✨"
+                },
+                {
+                    name: "Victor",
+                    action: "deposited",
+                    amount: "$11,700",
+                    emoji: "💰"
+                }
+            ];
 
-    let cycleIndex = 0;
-    const actionTypes = ['deposited', 'earned', 'milestone'];
+            let cycleIndex = 0;
+            const actionTypes = ['deposited', 'earned', 'milestone'];
 
-    function getNextActionType() {
-        const current = actionTypes[cycleIndex % actionTypes.length];
-        cycleIndex++;
-        return current;
-    }
+            function getNextActionType() {
+                const current = actionTypes[cycleIndex % actionTypes.length];
+                cycleIndex++;
+                return current;
+            }
 
-    function getNextActivity() {
-        const type = getNextActionType();
+            function getNextActivity() {
+                const type = getNextActionType();
 
-        const filtered = activities.filter(a => {
-            if (type === 'milestone') return a.action !== 'deposited' && a.action !== 'earned';
-            return a.action === type;
-        });
+                const filtered = activities.filter(a => {
+                    if (type === 'milestone') return a.action !== 'deposited' && a.action !== 'earned';
+                    return a.action === type;
+                });
 
-        return filtered[Math.floor(Math.random() * filtered.length)];
-    }
+                return filtered[Math.floor(Math.random() * filtered.length)];
+            }
 
-    function showActivity() {
-        const feed = document.getElementById('activityFeed');
-        const activity = getNextActivity();
+            function showActivity() {
+                const feed = document.getElementById('activityFeed');
+                const activity = getNextActivity();
 
-        const element = document.createElement('div');
-        element.className = 'absolute top-0 left-0 w-full activity-enter text-sm text-gray-700';
+                const element = document.createElement('div');
+                element.className = 'absolute top-0 left-0 w-full activity-enter text-sm text-gray-700';
 
-        let content = '';
-        if (activity.action === 'deposited') {
-            content = `${activity.emoji} ${activity.name} deposited <span class="font-medium">${activity.amount}</span>`;
-        } else if (activity.action === 'earned') {
-            content = `${activity.emoji} ${activity.name} earned <span class="font-medium">${activity.amount}</span>`;
-        } else if (activity.action === 'started') {
-            content = `${activity.emoji} ${activity.name} started <span class="font-medium">${activity.plan}</span>`;
-        } else if (activity.action === 'upgraded') {
-            content = `${activity.emoji} ${activity.name} upgraded to <span class="font-medium">${activity.tier}</span>`;
-        } else {
-            content = `${activity.emoji} ${activity.name} ${activity.action}`;
-        }
+                let content = '';
+                if (activity.action === 'deposited') {
+                    content = `${activity.emoji} ${activity.name} deposited <span class="font-medium">${activity.amount}</span>`;
+                } else if (activity.action === 'earned') {
+                    content = `${activity.emoji} ${activity.name} earned <span class="font-medium">${activity.amount}</span>`;
+                } else if (activity.action === 'started') {
+                    content = `${activity.emoji} ${activity.name} started <span class="font-medium">${activity.plan}</span>`;
+                } else if (activity.action === 'upgraded') {
+                    content = `${activity.emoji} ${activity.name} upgraded to <span class="font-medium">${activity.tier}</span>`;
+                } else {
+                    content = `${activity.emoji} ${activity.name} ${activity.action}`;
+                }
 
-        element.innerHTML = content;
-        feed.appendChild(element);
+                element.innerHTML = content;
+                feed.appendChild(element);
 
-        setTimeout(() => {
-            element.classList.remove('activity-enter');
-            element.classList.add('activity-exit');
-            setTimeout(() => element.remove(), 600);
-        }, 3500);
-    }
+                setTimeout(() => {
+                    element.classList.remove('activity-enter');
+                    element.classList.add('activity-exit');
+                    setTimeout(() => element.remove(), 600);
+                }, 3500);
+            }
 
-    // Initial activity
-    showActivity();
+            // Initial activity
+            showActivity();
 
-    // Show new activity every 4–6 seconds
-    setInterval(showActivity, Math.random() * 2000 + 4000);
-</script>
+            // Show new activity every 4–6 seconds
+            setInterval(showActivity, Math.random() * 2000 + 4000);
+        </script>
 
 
         <!-- Stats Cards -->
@@ -432,293 +531,206 @@
 
 
 
+@php
+use Carbon\Carbon;
 
-            <!-- profit table -->
+$allInvestments = auth()->user()->investments()
+    ->where('status','active')
+    ->with('plan')
+    ->orderBy('created_at', 'desc')
+    ->get();
 
+$totalEarnedAll = 0;
+$displayCount = min(2, count($allInvestments));
 
+// Load daily earnings from cache or default to empty array
+$dailyEarnings = Cache::remember('user_'.auth()->id().'_daily_earnings', now()->addDay(), fn() => []);
+@endphp
 
+<div class="investment-performance-card bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden w-full max-w-md mx-auto"
+    style="border-top: 4px solid #8bc905; background-image: url('assets/images/hero/hero-image-1.svg'); background-size: cover; background-position: center;">
+    <div class="p-5">
+        <!-- Header -->
+        <div class="flex justify-between items-start mb-4">
+            <div>
+                <h3 class="text-lg font-semibold text-gray-800">PROFIT PERFORMANCE</h3>
+                <h6 class="text-xs text-gray-500 mt-1"> 
+                    <span class="pulse-dot me-2"></span>
+                    Live Updates
+                </h6>
+                <style>
+                    .pulse-dot {
+                        width: 6px;
+                        height: 6px;
+                        background-color: var(--primary-accent);
+                        border-radius: 50%;
+                        display: inline-block;
+                        animation: pulseAnim 1.5s infinite;
+                        box-shadow: 0 0 0 rgba(187, 255, 40, 0.4);
+                    }
+
+                    @keyframes pulseAnim {
+                        0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(139, 201, 5, 0.7); }
+                        70% { transform: scale(1.5); box-shadow: 0 0 0 10px rgba(139, 201, 5, 0.7); }
+                        100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(139, 201, 5, 0.7); }
+                    }
+                </style>
+            </div>
+        </div>
+
+        <div id="investmentContainer" class="space-y-3">
+            @foreach($allInvestments->take($displayCount) as $investment)
             @php
-            use Carbon\Carbon;
+                $startDate = $investment->created_at;
+                $now = now();
+                $duration = $investment->plan->duration;
+                $rate = $investment->plan->interest_rate;
+                $amount = $investment->amount_invested;
 
-            $allInvestments = auth()->user()->investments()
-            ->where('status','active')
-            ->with('plan')
-            ->orderBy('created_at', 'desc')
-            ->get();
+                $projectedTotal = $amount * (1 + $rate / 100);
+                $projectedProfit = $amount * $rate / 100;
 
-            $totalEarnedAll = 0;
-            $displayCount = min(2, count($allInvestments));
+                $daysCompleted = max(0, $now->diffInDays($startDate));
+                $currentDay = min($daysCompleted + 1, $duration);
+                $isLongTerm = $duration > 28;
 
-            // Load daily earnings from cache or default to empty array
-            $dailyEarnings = Cache::remember('user_'.auth()->id().'_daily_earnings', now()->addDay(), fn() => []);
+                // Fluctuation color and icons
+                if (mt_rand(1, 100) <= 90) {
+                    $fluctuation=round(mt_rand(-53, 150)/100, 2);
+                } else {
+                    $fluctuation=round(mt_rand(151, 10000)/100, 2);
+                }
+
+                $fluctuation = ($fluctuation==0) ? 0.01 : $fluctuation;
+                $isPositive = $fluctuation >= 0;
+                $fluctuationDisplay = abs($fluctuation);
+
+                $trendColor = $isPositive ? 'text-green-600' : 'text-red-600';
+                $borderLeftColor = $isPositive ? 'border-green-500' : 'border-red-500';
+                $progressBarColor = $isPositive ? 'bg-green-500' : 'bg-red-500';
+
+                // Earnings
+                $totalEarned = 0;
+                $minimumFirstDay = $projectedProfit * 0.10;
+
+                if ($duration === 1) {
+                    $totalEarned = $projectedProfit;
+                    $currentDay = 1;
+                } elseif (!$isLongTerm) {
+                    if ($currentDay === 1) {
+                        $totalEarned = $minimumFirstDay;
+                    } else {
+                        $progressRatio = min(1, ($currentDay - 1)/($duration-1));
+                        $totalEarned = $minimumFirstDay + ($projectedProfit - $minimumFirstDay) * $progressRatio;
+                    }
+                } else {
+                    $totalWeeks = ceil($duration / 7);
+                    $weeksCompleted = floor($daysCompleted / 7);
+                    if ($weeksCompleted === 0) {
+                        $totalEarned = 0;
+                        $currentDay = 1;
+                    } else {
+                        $progressRatio = min(1, $weeksCompleted / $totalWeeks);
+                        $totalEarned = $projectedProfit * $progressRatio;
+                        $currentDay = min($weeksCompleted * 7 + 1, $duration);
+                    }
+                }
+
+                $totalEarned = round($totalEarned,2);
+                $dailyEarnings[$investment->id] = $totalEarned;
+                $totalEarnedAll += $totalEarned;
+                $displayPercentage = min(100, round(($totalEarned/$projectedProfit)*100));
             @endphp
 
-            <div class="investment-performance-card bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden w-full max-w-md mx-auto"
-                style="border-top: 4px solid #8bc905; background-image: url('assets/images/hero/hero-image-1.svg'); background-size: cover; background-position: center;">
-                <div class="p-5">
-                    <!-- Header -->
-                    <div class="flex justify-between items-start mb-4">
-                        <div>
-                            <h3 class="text-lg font-semibold text-gray-800">PROFIT PERFORMANCE</h3>
-                            <h6 class="text-xs text-gray-500 mt-1"> <span class="pulse-dot me-2"></span>
-Live Updates   
-                            </h6>
-                            <style>
-                                
-        .pulse-dot {
-    width: 6px;
-    height: 6px;
-    background-color: var(--primary-accent);
-    border-radius: 50%;
-    display: inline-block;
-    animation: pulseAnim 1.5s infinite;
-    box-shadow: 0 0 0 rgba(187, 255, 40, 0.4);
-}
+            <!-- Single Investment Card -->
+            <div class="investment-item bg-white rounded-lg p-3 border-l-4 {{ $borderLeftColor }} shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex justify-between items-center">
+                    <span class="text-sm font-medium text-gray-800">{{ strtoupper($investment->plan->name) }}</span>
+                    <span class="text-xs font-bold {{ $trendColor }} flex items-center {{ $isPositive ? 'animate-fluctuation-up' : 'animate-fluctuation-down' }}" id="fluctuation-{{ $investment->id }}">
+                        @if($isPositive)
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+                        </svg>
+                        @else
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                        </svg>
+                        @endif
+                        {{ $fluctuationDisplay }}%
+                    </span>
+                </div>
 
-@keyframes pulseAnim {
-    0% {
-        transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(139, 201, 5, 0.7) ;
-    }
-    70% {
-        transform: scale(1.5);
-        box-shadow: 0 0 0 10px  rgba(139, 201, 5, 0.7);
-    }
-    100% {
-        transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(139, 201, 5, 0.7);
-    }
-}
+                <div class="flex justify-between items-center mt-2">
+                    <span class="text-xs text-gray-500">Day {{ $currentDay }} of {{ $duration }}</span>
+                    <span class="text-xs font-medium">
+                        <span class="{{ $totalEarned>0?'text-gray-800':'text-gray-500' }}">${{ number_format($totalEarned,2) }}</span>
+                        <span class="mx-1 text-gray-300">/</span>
+                        <span class="text-gray-700">${{ number_format($projectedProfit,2) }}</span>
+                    </span>
+                </div>
 
-                            </style>
-                        </div>
-                    </div>
-
-                    <div id="investmentContainer" class="space-y-3">
-                        @foreach($allInvestments->take($displayCount) as $investment)
-                        @php
-                        $startDate = $investment->created_at;
-                        $now = now();
-
-                        $duration = $investment->plan->duration;
-                        $rate = $investment->plan->interest_rate;
-                        $amount = $investment->amount_invested;
-
-                        $projectedTotal = $amount * (1 + $rate / 100);
-                        $projectedProfit = $amount * $rate / 100;
-
-                        $daysCompleted = max(0, $now->diffInDays($startDate));
-                        $currentDay = min($daysCompleted + 1, $duration);
-
-                        $isLongTerm = $duration > 28;
-
-                        // Fluctuation color and icons
-                        // Smooth and realistic fluctuation logic
-                        if (mt_rand(1, 100) <= 90) {
-                            // 90% of the time, show small realistic changes: -0.53% to +1.5%
-                            $fluctuation=round(mt_rand(-53, 150) / 100, 2);
-                            } else {
-                            // 10% of the time, allow bigger surges: +1.51% to +100%
-                            $fluctuation=round(mt_rand(151, 10000) / 100, 2);
-                            }
-
-                            $fluctuation=($fluctuation==0) ? 0.01 : $fluctuation; // avoid exact 0%
-                            $isPositive=$fluctuation>= 0;
-                            $fluctuationDisplay = abs($fluctuation);
-
-                            $trendColor = $isPositive ? 'text-green-600' : 'text-red-600';
-                            $borderLeftColor = $isPositive ? 'border-green-500' : 'border-red-500';
-                            $progressBarColor = $isPositive ? 'bg-green-500' : 'bg-red-500';
-
-                            // -------------------------
-                            // CORRECTED Earnings calculation
-                            // -------------------------
-                            $totalEarned = 0;
-                            $minimumFirstDay = $projectedProfit * 0.10; // 10% guaranteed first day
-
-                            if ($duration === 1) {
-                            // Single day investment - show full profit immediately
-                            $totalEarned = $projectedProfit;
-                            $currentDay = 1;
-                            } elseif (!$isLongTerm) {
-                            // Short term - daily gradual increase
-                            if ($currentDay === 1) {
-                            $totalEarned = $minimumFirstDay;
-                            } else {
-                            // Linear progression from 10% to 100% over duration
-                            $progressRatio = min(1, ($currentDay - 1) / ($duration - 1));
-                            $totalEarned = $minimumFirstDay + ($projectedProfit - $minimumFirstDay) * $progressRatio;
-                            }
-                            } else {
-                            // Long term - weekly gradual increase
-                            $totalWeeks = ceil($duration / 7);
-                            $weeksCompleted = floor($daysCompleted / 7); // no +1
-
-                            if ($weeksCompleted === 0) {
-                            $totalEarned = 0; // No profit at all yet
-                            $currentDay = 1; // Day 1 for display
-                            } else {
-                            $progressRatio = min(1, $weeksCompleted / $totalWeeks);
-                            $totalEarned = $projectedProfit * $progressRatio;
-                            $currentDay = min($weeksCompleted * 7 + 1, $duration); // +1 to show user-friendly day count
-                            }
-
-                            }
-
-                            $totalEarned = round($totalEarned, 2);
-                            $dailyEarnings[$investment->id] = $totalEarned;
-                            $totalEarnedAll += $totalEarned;
-
-                            // Calculate actual percentage for display (not progress ratio)
-                            $displayPercentage = min(100, round(($totalEarned / $projectedProfit) * 100));
-                            @endphp
-
-                            <!-- Single Investment Card -->
-                            <div class="investment-item bg-white rounded-lg p-3 border-l-4 {{ $borderLeftColor }} shadow-sm hover:shadow-md transition-shadow">
-                                <div class="flex justify-between items-center">
-                                    <span class="text-sm font-medium text-gray-800">{{ strtoupper($investment->plan->name) }}</span>
-                                    <span class="text-xs font-bold {{ $trendColor }} flex items-center animate-fluctuation- {{ $isPositive ? 'up' : 'down' }}">
-                                        @if($isPositive)
-                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
-                                        </svg>
-                                        @else
-                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                                        </svg>
-                                        @endif
-                                        {{ $fluctuationDisplay }}%
-                                    </span>
-                                </div>
-
-                                <div class="flex justify-between items-center mt-2">
-                                    <span class="text-xs text-gray-500">
-                                        Day {{ $currentDay }} of {{ $duration }}
-                                    </span>
-                                    <span class="text-xs font-medium">
-                                        <span class="{{ $totalEarned > 0 ? 'text-gray-800' : 'text-gray-500' }}">
-                                            ${{ number_format($totalEarned, 2) }}
-                                        </span>
-                                        <span class="mx-1 text-gray-300">/</span>
-                                        <span class="text-gray-700">${{ number_format($projectedProfit, 2) }}</span>
-                                    </span>
-                                </div>
-
-                                <!-- Progress Bar -->
-                                <div class="w-full bg-gray-100 rounded-full h-1.5 mt-2">
-                                    <div class="h-1.5 rounded-full {{ $progressBarColor }}" style="width: {{ $displayPercentage }}%"></div>
-                                </div>
-                            </div>
-                            @endforeach
-                    </div>
-
-                    @php
-                    Cache::put('user_'.auth()->id().'_daily_earnings', $dailyEarnings, now()->addDay());
-                    @endphp
-
-                    <!-- Summary -->
-                    @php
-                    $totalProjectedAll = $allInvestments->sum(fn($inv) => ($inv->amount_invested * $inv->plan->interest_rate) / 100);
-                    @endphp
-
-                    <div class="mt-4 pt-4 border-t border-gray-200">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-sm font-medium text-gray-600">Profit Earned</span>
-                            <span class="text-sm font-bold text-gray-800">${{ number_format($totalEarnedAll, 2) }}</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm font-medium text-gray-600">Projected Total</span>
-                            <span class="text-xl font-bold text-green-600">${{ number_format($totalProjectedAll, 2) }}</span>
-                        </div>
-                    </div>
+                <!-- Progress Bar -->
+                <div class="w-full bg-gray-100 rounded-full h-1.5 mt-2">
+                    <div class="h-1.5 rounded-full {{ $progressBarColor }}" style="width: {{ $displayPercentage }}%"></div>
                 </div>
             </div>
+            @endforeach
+        </div>
 
-            <style>
-                /* Your existing styles remain unchanged */
-                @keyframes fluctuationUp {
+        @php
+        Cache::put('user_'.auth()->id().'_daily_earnings', $dailyEarnings, now()->addDay());
+        $totalProjectedAll = $allInvestments->sum(fn($inv) => ($inv->amount_invested * $inv->plan->interest_rate)/100);
+        @endphp
 
-                    0%,
-                    100% {
-                        transform: translateY(0);
-                    }
+        <!-- Summary -->
+        <div class="mt-4 pt-4 border-t border-gray-200">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-sm font-medium text-gray-600">Profit Earned</span>
+                <span class="text-sm font-bold text-gray-800">${{ number_format($totalEarnedAll,2) }}</span>
+            </div>
+            <div class="flex justify-between items-center">
+                <span class="text-sm font-medium text-gray-600">Projected Total</span>
+                <span class="text-xl font-bold text-green-600">${{ number_format($totalProjectedAll,2) }}</span>
+            </div>
+        </div>
+    </div>
+</div>
 
-                    50% {
-                        transform: translateY(-2px);
-                    }
+<style>
+    @keyframes fluctuationUp {0%,100%{transform:translateY(0);}50%{transform:translateY(-2px);}}
+    @keyframes fluctuationDown {0%,100%{transform:translateY(0);}50%{transform:translateY(2px);}}
+    .animate-fluctuation-up {animation: fluctuationUp 1.5s ease-in-out infinite;}
+    .animate-fluctuation-down {animation: fluctuationDown 1.5s ease-in-out infinite;}
+    .text-green-600 {color:#16a34a !important;}
+    .text-red-600 {color:#dc2626 !important;}
+    .investment-performance-card {border-top-width:4px;border-top-color:#8bc905;}
+    .investment-item {transition: all 0.2s ease;}
+    .investment-item:hover {transform: translateY(-1px);box-shadow: 0 4px 6px rgba(0,0,0,0.05);}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const refreshFluctuations = () => {
+        fetch('/user/fluctuations-json?refresh=' + new Date().getTime(), {
+            headers: {'X-Requested-With': 'XMLHttpRequest'},
+            cache: 'no-store'
+        })
+        .then(res => res.json())
+        .then(data => {
+            for (const id in data) {
+                const span = document.getElementById('fluctuation-' + id);
+                if (span) {
+                    span.innerHTML = data[id].html;
+                    span.className = data[id].class;
                 }
+            }
+        });
+    };
+    setInterval(refreshFluctuations, 5000);
+    document.addEventListener('visibilitychange', () => { if(!document.hidden) refreshFluctuations(); });
+});
+</script>
 
-                @keyframes fluctuationDown {
-
-                    0%,
-                    100% {
-                        transform: translateY(0);
-                    }
-
-                    50% {
-                        transform: translateY(2px);
-                    }
-                }
-
-                .animate-fluctuation-up {
-                    animation: fluctuationUp 1.5s ease-in-out infinite;
-                }
-
-                .animate-fluctuation-down {
-                    animation: fluctuationDown 1.5s ease-in-out infinite;
-                }
-
-                .text-green-600 {
-                    color: #16a34a !important;
-                }
-
-                .text-red-600 {
-                    color: #dc2626 !important;
-                }
-
-                .investment-performance-card {
-                    border-top-width: 4px;
-                    border-top-color: #8bc905;
-                }
-
-                .investment-item {
-                    transition: all 0.2s ease;
-                }
-
-                .investment-item:hover {
-                    transform: translateY(-1px);
-                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-                }
-            </style>
-
-            <script>
-                // Auto-refresh every 15 seconds
-                document.addEventListener('DOMContentLoaded', function() {
-                    const refreshInvestments = () => {
-                        fetch(window.location.href + '?refresh=' + new Date().getTime(), {
-                                headers: {
-                                    'X-Requested-With': 'XMLHttpRequest'
-                                },
-                                cache: 'no-store'
-                            })
-                            .then(response => response.text())
-                            .then(html => {
-                                const parser = new DOMParser();
-                                const doc = parser.parseFromString(html, 'text/html');
-                                const newComponent = doc.querySelector('.investment-performance-card');
-                                if (newComponent) {
-                                    document.querySelector('.investment-performance-card').outerHTML = newComponent.outerHTML;
-                                }
-                            });
-                    };
-
-                    setInterval(refreshInvestments, 5000); // Changed to 15 seconds
-
-                    document.addEventListener('visibilitychange', () => {
-                        if (!document.hidden) refreshInvestments();
-                    });
-                });
-            </script>
 
 
             <!-- Total Invested Card -->

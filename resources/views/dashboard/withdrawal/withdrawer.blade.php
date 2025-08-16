@@ -157,7 +157,7 @@ $usdt = $profile->usdt_address ?? null;
 
         dropdown.addEventListener('click', (e) => {
             options.classList.toggle('hidden');
-            e.stopPropagation(); // prevent document click from closing it immediately
+            e.stopPropagation();
         });
 
         document.querySelectorAll('.option-item').forEach(option => {
@@ -172,7 +172,7 @@ $usdt = $profile->usdt_address ?? null;
                     walletInfo.innerHTML = `
                         <label class="block mb-1 text-sm font-medium text-gray-700">Select Wallet</label>
                         <div id="wallet-dropdown" tabindex="0"
-                            class="w-full px-4 py-3 rounded-lg border  cursor-pointer flex justify-between items-center"
+                            class="w-full px-4 py-3 rounded-lg border cursor-pointer flex justify-between items-center"
                             style="border-color: #8AC304; background-color: white;">
                             <span id="wallet-text">Choose wallet address</span>
                             <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -182,8 +182,7 @@ $usdt = $profile->usdt_address ?? null;
 
                         <input type="hidden" name="wallet_choice" id="wallet_choice">
 
-                    <div id="wallet-options" class="absolute z-20 mt-1 border rounded-lg shadow-lg hidden bg-white text-gray-800 w-full max-w-full overflow-auto" style="border-color: #8AC304;">
-
+                        <div id="wallet-options" class="absolute z-20 mt-1 border rounded-lg shadow-lg hidden bg-white text-gray-800 w-full max-w-full overflow-auto" style="border-color: #8AC304;">
                             @if($bitcoin)
                                 <div class="wallet-item px-4 py-3 cursor-pointer hover:bg-gray-100" data-wallet="bitcoin">🟢 BTC - {{ $bitcoin }}</div>
                             @endif
@@ -201,19 +200,17 @@ $usdt = $profile->usdt_address ?? null;
                             @endif
                         </div>
                     `;
-
-                    setupWalletDropdownEvents(); // rebind dropdown events
+                    setupWalletDropdownEvents();
 
                 } else if (value === 'digital_wallet') {
                     walletInfo.classList.remove('hidden');
                     walletInfo.innerHTML = `
-                      
-<div class="text-sm text-gray-800 bg-[#f9f9f9] border border-[#8AC304] p-4 rounded-lg shadow-sm">
-    For digital transfer withdrawals, please 
-    <a href="#" onclick="window.chaport && chaport.open(); return false;" class="underline text-blue-600" style"color:blue !important;">
-        (click to contact support)
-    </a>
-</div>
+                        <div class="text-sm text-gray-800 bg-[#f9f9f9] border border-[#8AC304] p-4 rounded-lg shadow-sm">
+                            For digital transfer withdrawals, please 
+                            <a href="#" onclick="window.chaport && chaport.open(); return false;" class="underline text-blue-600" style="color:blue !important;">
+                                (click to contact support)
+                            </a>
+                        </div>
                     `;
                 } else {
                     walletInfo.classList.add('hidden');
@@ -222,7 +219,7 @@ $usdt = $profile->usdt_address ?? null;
             });
         });
 
-        // Reusable wallet dropdown logic
+        // Wallet dropdown logic
         function setupWalletDropdownEvents() {
             const walletDropdown = document.getElementById('wallet-dropdown');
             const walletOptions = document.getElementById('wallet-options');
@@ -253,7 +250,7 @@ $usdt = $profile->usdt_address ?? null;
             });
         }
 
-        // PIN auto-jump logic
+        // PIN auto-jump logic + paste support
         const pinInputs = document.querySelectorAll('.pin-input');
         pinInputs.forEach((input, idx) => {
             input.addEventListener('input', () => {
@@ -267,8 +264,26 @@ $usdt = $profile->usdt_address ?? null;
                 }
             });
         });
+
+        // Allow pasting full PIN
+        pinInputs[0].addEventListener('paste', (e) => {
+            e.preventDefault();
+            const pasteData = (e.clipboardData || window.clipboardData).getData('text');
+            const digits = pasteData.replace(/\D/g, '').split('').slice(0, pinInputs.length);
+
+            digits.forEach((digit, i) => {
+                pinInputs[i].value = digit;
+            });
+
+            if (digits.length === pinInputs.length) {
+                pinInputs[pinInputs.length - 1].focus();
+            } else if (digits.length > 0) {
+                pinInputs[digits.length].focus();
+            }
+        });
     });
 </script>
+
 
 
 

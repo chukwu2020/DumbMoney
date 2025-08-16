@@ -25,9 +25,17 @@
     }
 
     @keyframes gradientMove {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
     }
 
     .card-header {
@@ -36,21 +44,22 @@
         align-items: center;
         margin-bottom: 1rem;
     }
-.card-flip.flipped {
-    transform: rotateY(180deg);
-    background-color: none !important;
-}
+
+    .card-flip.flipped {
+        transform: rotateY(180deg);
+        background-color: none !important;
+    }
 
 
-.toggle-btn iconify-icon {
-    color: black !important;
-}
+    .toggle-btn iconify-icon {
+        color: black !important;
+    }
 
     .card-brand {
         font-size: 1.5rem;
         font-weight: bold;
         letter-spacing: 1.5px;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         flex: 1;
     }
 
@@ -78,7 +87,7 @@
         text-align: center;
         letter-spacing: 2px;
         margin: 1rem 0;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
     .card-footer {
@@ -134,8 +143,10 @@
     .card-wrapper {
         perspective: 1000px;
         max-width: 420px;
-        height: 250px; /* match the card height */
-        margin: 0 auto 2rem; /* adds space below the card */
+        height: 250px;
+        /* match the card height */
+        margin: 0 auto 2rem;
+        /* adds space below the card */
         position: relative;
     }
 
@@ -148,7 +159,8 @@
     }
 
 
-    .card-front, .card-back {
+    .card-front,
+    .card-back {
         position: absolute;
         top: 0;
         left: 0;
@@ -173,6 +185,7 @@
         font-weight: 600;
         transition: background-color 0.3s ease;
     }
+
     .btn-copy:hover {
         background-color: #0C3A30;
         color: #8bc905 !important;
@@ -220,17 +233,48 @@
             padding: 1.25rem;
         }
 
-        .card-brand { font-size: 1.3rem; margin-top: 2rem; }
-        .card-logo { height: 40px; max-width: 100px; margin-top: 2rem; }
-        .card-number { font-size: 1.1rem; margin: 0.75rem 0; }
-        .card-value { font-size: 0.9rem; }
+        .card-brand {
+            font-size: 1.3rem;
+            margin-top: 2rem;
+        }
+
+        .card-logo {
+            height: 40px;
+            max-width: 100px;
+            margin-top: 2rem;
+        }
+
+        .card-number {
+            font-size: 1.1rem;
+            margin: 0.75rem 0;
+        }
+
+        .card-value {
+            font-size: 0.9rem;
+        }
     }
 
     @media (max-width: 480px) {
-        .atm-card { height: 200px; padding: 1rem; }
-        .card-brand { font-size: 1.2rem; margin-top: 1.5rem; }
-        .card-logo { height: 35px; max-width: 90px; margin-top: 1.5rem; }
-        .card-number { font-size: 1rem; margin-top: 1.5rem; }
+        .atm-card {
+            height: 200px;
+            padding: 1rem;
+        }
+
+        .card-brand {
+            font-size: 1.2rem;
+            margin-top: 1.5rem;
+        }
+
+        .card-logo {
+            height: 35px;
+            max-width: 90px;
+            margin-top: 1.5rem;
+        }
+
+        .card-number {
+            font-size: 1rem;
+            margin-top: 1.5rem;
+        }
     }
 </style>
 
@@ -241,8 +285,8 @@
             <ul class="flex items-center gap-[6px]">
                 <li class="font-medium">
                     <a href="{{ route('user_dashboard') }}" class="flex items-center gap-2 hover:text-primary-600"
-                       onmouseover="this.style.color='#9EDD05';"
-                       onmouseout="this.style.color='#0C3A30';">
+                        onmouseover="this.style.color='#9EDD05';"
+                        onmouseout="this.style.color='#0C3A30';">
                         <iconify-icon icon="solar:home-smile-angle-outline" class="icon text-lg"></iconify-icon>
                         Dashboard
                     </a>
@@ -253,53 +297,53 @@
         </div>
 
         @if ($card)
-            @php
-                $expiry = now()->addYears(4)->format('m/Y');
-                $cvv = str_pad(rand(100, 999), 3, '0', STR_PAD_LEFT);
-            @endphp
+        @php
+        $expiry = now()->addYears(4)->format('m/Y');
+        $cvv = str_pad(rand(100, 999), 3, '0', STR_PAD_LEFT);
+        @endphp
 
-            <div class="relative z-10">
-                <div class="card-wrapper" id="cardWrapper">
-                    <div class="card-flip" id="cardFlip">
-                        <!-- Front of card -->
-                        <div class="card-front">
-                            <div class="atm-card">
-                                <div class="card-header" style="margin-top: -3.5rem;">
-                                    <div class="card-brand" style="color:#fff !important;">MARKETMIND</div>
-                                    <div class="card-logo-wrapper">
-                                        <img src="{{ asset('assets/images/mymarketmindmainlogo.png') }}"
-                                             alt="MarketMind Logo"
-                                             class="card-logo" style="width: 120px; height:auto;" />
-                                    </div>
+        <div class="relative z-10">
+            <div class="card-wrapper" id="cardWrapper">
+                <div class="card-flip" id="cardFlip">
+                    <!-- Front of card -->
+                    <div class="card-front">
+                        <div class="atm-card">
+                            <div class="card-header" style="margin-top: -3.5rem;">
+                                <div class="card-brand" style="color:#fff !important;">MARKETMIND</div>
+                                <div class="card-logo-wrapper">
+                                    <img src="{{ asset('assets/images/mymarketmindmainlogo.png') }}"
+                                        alt="MarketMind Logo"
+                                        class="card-logo" style="width: 120px; height:auto;" />
+                                </div>
+                            </div>
+
+                            <div class="card-number" style="margin-top: -1.3rem; color:#fff !important;">
+                                {{ chunk_split($card->card_number, 4, ' ') }}
+                            </div>
+
+                            <div class="card-footer">
+                                <div class="card-footer-item" style="color:#fff !important;">
+                                    <span class="card-label" style="color:#fff !important;">Card Holder</span>
+                                    <span class="card-value" style="color:#fff !important; font-size: 18px;">{{ $card->name_on_card }}</span>
                                 </div>
 
-                                <div class="card-number" style="margin-top: -1.3rem; color:#fff !important;">
-                                    {{ chunk_split($card->card_number, 4, ' ') }}
-                                </div>
-
-                                <div class="card-footer">
-                                    <div class="card-footer-item" style="color:#fff !important;">
-                                        <span class="card-label" style="color:#fff !important;">Card Holder</span>
-                                        <span class="card-value" style="color:#fff !important; font-size: 18px;">{{ $card->name_on_card }}</span>
-                                    </div>
-
-                                    <div class="card-footer-item" style="color:#fff !important;">
-                                        <span class="card-label" style="color:#fff !important;">PIN</span>
-                                        <span id="pinValue" class="card-value" style="font-size: 18px; padding-right:5px; color:#fff !important; user-select:none;">••••</span>
-                                        <button type="button" class="toggle-btn" onclick="toggleVisibility('pin')">
-                                            <iconify-icon id="pinToggleIcon" icon="mdi:eye-off-outline"></iconify-icon>
-                                        </button>
-                                    </div>
+                                <div class="card-footer-item" style="color:#fff !important;">
+                                    <span class="card-label" style="color:#fff !important;">PIN</span>
+                                    <span id="pinValue" class="card-value" style="font-size: 18px; padding-right:5px; color:#fff !important; user-select:none;">••••</span>
+                                    <button type="button" class="toggle-btn" onclick="toggleVisibility('pin')">
+                                        <iconify-icon id="pinToggleIcon" icon="mdi:eye-off-outline"></iconify-icon>
+                                    </button>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Back of card -->
-                        <div class="card-back">
-                            <div class="atm-card" style="background: linear-gradient(135deg, #0C3A30, #1E3A8A); padding-top: 2rem;">
+                    <!-- Back of card -->
+                    <div class="card-back">
+                        <div class="atm-card" style="background: linear-gradient(135deg, #0C3A30, #1E3A8A); padding-top: 2rem;">
 
-                                {{-- Magnetic Strip --}}
-                                <div style="
+                            {{-- Magnetic Strip --}}
+                            <div style="
                                     height: 40px;
                                     width: 100%;
                                     background-color: #111;
@@ -307,66 +351,66 @@
                                     border-radius: 6px;
                                 "></div>
 
-                                {{-- Signature Strip + CVV and Expiry --}}
-                                <div class="card-footer" style="margin-bottom:3rem;">
-                                    <div class="card-footer-item" style="color:#fff !important;">
-                                        <span class="card-label" style="color:#fff !important;">Expires</span>
-                                        <span class="card-value" style="background:#fff; color:#111; padding:5px 10px; border-radius:4px;">
-                                            {{ $expiry }}
-                                        </span>
-                                    </div>
-                                    <div class="card-footer-item" style="color:#fff !important;">
-                                        <span class="card-label" style="color:#fff !important;">CVV</span>
-                                        <span id="cvvValue" class="card-value" style="background:#fff; color:#111; padding:5px 10px; border-radius:4px; user-select:none;">•••</span>
-                                        <button type="button" class="toggle-btn" onclick="toggleVisibility('cvv')" style="color:#111;">
-                                            <iconify-icon id="cvvToggleIcon" icon="mdi:eye-off-outline"></iconify-icon>
-                                        </button>
-                                    </div>
+                            {{-- Signature Strip + CVV and Expiry --}}
+                            <div class="card-footer" style="margin-bottom:3rem;">
+                                <div class="card-footer-item" style="color:#fff !important;">
+                                    <span class="card-label" style="color:#fff !important;">Expires</span>
+                                    <span class="card-value" style="background:#fff; color:#111; padding:5px 10px; border-radius:4px;">
+                                        {{ $expiry }}
+                                    </span>
+                                </div>
+                                <div class="card-footer-item" style="color:#fff !important;">
+                                    <span class="card-label" style="color:#fff !important;">CVV</span>
+                                    <span id="cvvValue" class="card-value" style="background:#fff; color:#111; padding:5px 10px; border-radius:4px; user-select:none;">•••</span>
+                                    <button type="button" class="toggle-btn" onclick="toggleVisibility('cvv')" style="color:#111;">
+                                        <iconify-icon id="cvvToggleIcon" icon="mdi:eye-off-outline"></iconify-icon>
+                                    </button>
                                 </div>
                             </div>
                         </div>
-   
-       
                     </div>
-                    <div class="flex justify-center mt-2">
-    <button id="flipCardBtn" >
-        <iconify-icon icon="mdi:rotate-3d-variant" style="font-size: 24px; color: white;"></iconify-icon>
-    </button>
-</div>
-                          </div>
-            
 
 
-
-
+                </div>
+                <div class="flex justify-center mt-2">
+                    <button id="flipCardBtn">
+                        <iconify-icon icon="mdi:rotate-3d-variant" style="font-size: 24px; color: white;"></iconify-icon>
+                    </button>
+                </div>
             </div>
 
-            {{-- Card Worth Balance Display --}}
-            <div class="card-balance">
-              Card Worth For Online Purchases: ${{ number_format(Auth::user()->available_balance, 2) }}
 
-            </div>
 
-            {{-- Copy Buttons --}}
-            <div class="flex justify-center gap-4 mt-4">
-                <button class="btn-copy" onclick="copyToClipboard('{{ $card->card_number }}', 'copyNumberFeedback')">
-                    Copy Card Number
-                </button>
-                <button class="btn-copy" onclick="copyToClipboard('{{ $card->pin }}', 'copyPinFeedback')">
-                    Copy PIN
-                </button>
-            </div>
 
-            <div class="copy-feedback text-center" id="copyNumberFeedback">Card number copied!</div>
-            <div class="copy-feedback text-center" id="copyPinFeedback">PIN copied!</div>
 
-            <p class="info-text text-sm mt-6">
-                Your Virtual Card is worth an amount and can be used for online purchases and payments.
-                Withdrawals are deducted from your available balance, funded by this card.
-            </p>
+        </div>
+
+        {{-- Card Worth Balance Display --}}
+        <div class="card-balance">
+            Card Worth For Online Purchases: ${{ number_format(Auth::user()->available_balance, 2) }}
+
+        </div>
+
+        {{-- Copy Buttons --}}
+        <div class="flex justify-center gap-4 mt-4">
+            <button class="btn-copy" onclick="copyToClipboard('{{ $card->card_number }}', 'copyNumberFeedback')">
+                Copy Card Number
+            </button>
+            <button class="btn-copy" onclick="copyToClipboard('{{ $card->pin }}', 'copyPinFeedback')">
+                Copy PIN
+            </button>
+        </div>
+
+        <div class="copy-feedback text-center" id="copyNumberFeedback">Card number copied!</div>
+        <div class="copy-feedback text-center" id="copyPinFeedback">PIN copied!</div>
+
+        <p class="info-text text-sm mt-6">
+            Your Virtual Card is worth an amount and can be used for online purchases and payments.
+            Withdrawals are deducted from your available balance, funded by this card.
+        </p>
 
         @else
-            <p class="text-gray-600 mt-12">No card has been generated yet.</p>
+        <p class="text-gray-600 mt-12">No card has been generated yet.</p>
         @endif
     </div>
 </div>
@@ -379,22 +423,22 @@
     let cvvVisible = false;
 
     function toggleVisibility(type) {
-        if(type === 'pin') {
+        if (type === 'pin') {
             pinVisible = !pinVisible;
             const pinSpan = document.getElementById('pinValue');
             const icon = document.getElementById('pinToggleIcon');
-            if(pinVisible) {
+            if (pinVisible) {
                 pinSpan.textContent = pinActual;
                 icon.setAttribute('icon', 'mdi:eye-outline');
             } else {
                 pinSpan.textContent = '••••';
                 icon.setAttribute('icon', 'mdi:eye-off-outline');
             }
-        } else if(type === 'cvv') {
+        } else if (type === 'cvv') {
             cvvVisible = !cvvVisible;
             const cvvSpan = document.getElementById('cvvValue');
             const icon = document.getElementById('cvvToggleIcon');
-            if(cvvVisible) {
+            if (cvvVisible) {
                 cvvSpan.textContent = cvvActual;
                 icon.setAttribute('icon', 'mdi:eye-outline');
             } else {
@@ -418,10 +462,9 @@
 
     // flip 
     document.getElementById('flipCardBtn').addEventListener('click', () => {
-    const flipCard = document.getElementById('cardFlip');
-    flipCard.classList.toggle('flipped');
-});
-
+        const flipCard = document.getElementById('cardFlip');
+        flipCard.classList.toggle('flipped');
+    });
 </script>
 
 @endsection
