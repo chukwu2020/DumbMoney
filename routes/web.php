@@ -226,7 +226,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/approved', 'approvedDeposits')->name('admin.deposits.approved');
         Route::post('/approve/{id}', 'approveDeposit')->name('admin.approve.deposit');
 
-        Route::delete('/admin/deposits/reject/{id}',  'rejectDeposit')->name('admin.reject.deposit');
+       
+          Route::delete('/reject/{id}',  'rejectDeposit')->name('admin.reject.deposit');
 
     });
 
