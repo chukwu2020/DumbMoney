@@ -89,6 +89,23 @@ class AdminController extends Controller
 
         return view('admin.deposits.approved', compact('deposits'));
     }
+
+
+    public function rejectDeposit($id)
+{
+    $deposit = Deposit::findOrFail($id);
+
+    // Make sure it's not already approved
+    if ($deposit->status === 1) {
+        return back()->with('error', 'You cannot reject an already approved deposit.');
+    }
+
+    // Delete the deposit entirely
+    $deposit->delete();
+
+    return back()->with('success', 'Deposit rejected and removed successfully.');
+}
+
     public function approveDeposit($id)
     {
         $deposit = Deposit::findOrFail($id);

@@ -225,6 +225,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/pending', 'pendingDeposits')->name('admin.deposits.pending');
         Route::get('/approved', 'approvedDeposits')->name('admin.deposits.approved');
         Route::post('/approve/{id}', 'approveDeposit')->name('admin.approve.deposit');
+
+        Route::delete('/admin/deposits/reject/{id}',  'rejectDeposit')->name('admin.reject.deposit');
+
     });
 
     // Withdrawals management

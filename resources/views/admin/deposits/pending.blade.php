@@ -83,12 +83,25 @@
 
 
 
+
                                         <form method="POST" action="{{ route('admin.approve.deposit', $deposit->id) }}" onsubmit="this.querySelector('button').disabled = true;">
                                             @csrf
                                             <button type="submit" class="btn btn-sm btn-primary">Approve</button>
                                         </form>
 
                                     </td>
+
+                                    <td><form method="POST" action="{{ route('admin.reject.deposit', $deposit->id) }}" 
+      onsubmit="return confirm('Are you sure you want to reject this deposit?.');">
+    @csrf
+    @method('DELETE')
+   <button type="submit" 
+    class="px-3 py-1.5 text-sm font-medium rounded-lg shadow 
+           bg-red-600 hover:bg-red-700 text-white focus:outline-none focus:ring-2 focus:ring-red-400">
+    Reject
+</button>
+
+</form></td>
                                 </tr>
                                 @endforeach
                             </tbody>
