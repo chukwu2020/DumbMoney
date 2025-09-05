@@ -87,7 +87,8 @@ class AdminController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('admin.deposits.approved', compact('deposits'));
+        return view('admin.deposits.approve', compact('deposits'));
+        //   return view('admin.deposits.approved', compact('deposits'));
     }
 
 

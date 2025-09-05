@@ -231,6 +231,8 @@ Route::middleware(['auth'])->group(function () {
 
     });
 
+
+
     // Withdrawals management
     Route::prefix('withdrawals')->group(function () {
         Route::get('/pending', [AdminController::class, 'adminViewWithdrawals'])->name('withdrawals.pending');
