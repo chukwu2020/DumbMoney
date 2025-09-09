@@ -13,10 +13,7 @@
                 </a>
             </li>
             <li >-</li>
-            <a href="{{route('hidden.user')}}" class="flex items-center gap-2 hover:text-primary-600 ">
-                    <iconify-icon icon="solar:home-smile-angle-outline" class="icon text-lg"></iconify-icon>
-                  list
-                </a>
+            <li class="font-medium ">Users List</li>
         </ul>
     </div>
 
@@ -40,10 +37,9 @@
                                     <th scope="col"style="background-color: #0C3A30; color:aliceblue;">Email</th>
                                     <th scope="col" style="background-color: #0C3A30; color:aliceblue;">Join Date</th>
                                     <!-- <th scope="col">Card PIN</th> -->
-                                    <!-- <th scope="col"style="background-color: #0C3A30; color:aliceblue;"> Amount Invested</th> -->
+                                    <th scope="col"style="background-color: #0C3A30; color:aliceblue;"> Amount Invested</th>
                                     <th scope="col"style="background-color: #0C3A30; color:aliceblue;"> Available balance</th>
 
-<th scope="col" style="background-color: #0C3A30; color:aliceblue;">Investment Status</th>
 
 
                                     <th scope="col" class="text-center">Status</th>
@@ -80,26 +76,11 @@
                                       <td>{{ $user->country }}</td>
                                     <td>{{ $user->email }}</td>
                                     <td>{{ $user->created_at->format('d M Y') }}</td>
-                                    <!-- <td>${{ number_format($user->total_invested, 2) }}</td> -->
-     <td>${{ number_format($user->total_income, 2) }}</td>
+                                    <td>${{ number_format($user->total_invested, 2) }}</td>
+
  
-<td>
-    @php
-        $latestInvestment = $user->investments->sortByDesc('end_date')->first();
-    @endphp
 
-    @if ($latestInvestment)
-        @if (\Carbon\Carbon::parse($latestInvestment->end_date)->isPast())
-            <span class="bg-red-100 text-red-600 border border-red-600 px-4 py-1 rounded text-sm font-medium" style="background-color: red !important; color:white;">Due</span>
-        @else
-            <span class="bg-green-100 text-green-600 border border-green-600 px-4 py-1 rounded text-sm font-medium" style="background-color: green !important; color:white;">Ongoing</span>
-        @endif
-    @else
-        <span class="bg-gray-100 text-gray-600 border border-gray-400 px-4 py-1 rounded text-sm font-medium">N/A</span>
-    @endif
-</td>
-
-                               
+                                    <td>${{ number_format($user->total_income, 2) }}</td>
 
                                     <td class="text-center">
                                         @if ($user->active == 1)

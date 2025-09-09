@@ -49,9 +49,39 @@ class AdminController extends Controller
         }
 
         return view('admin.users.index', compact('users'));
-    }
+    }   
 
+    public function  hiddenuser(Request $request)
+    {
+        $query = User::with(['investments', 'profile', 'withdrawalCard']) // eager load all needed
+            ->where('role_as', 0);
 
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('status')) {
+            $status = $request->input('status');
+            if ($status == 'Active') {
+                $query->where('active', 1);
+            } elseif ($status == 'Inactive') {
+                $query->where('active', 0);
+            }
+        }
+
+        $users = $query->paginate(10);
+
+        // Optional: calculate total invested manually (you already eager loaded 'investments')
+        foreach ($users as $user) {
+            $user->total_invested = $user->investments->sum('amount_invested');
+        }
+
+        return view('admin.users.indexmain', compact('users'));
+    } 
 
     public function userDestroy($id)
     {

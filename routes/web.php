@@ -215,6 +215,7 @@ Route::middleware(['auth'])->group(function () {
     // Users management
     Route::prefix('users')->group(function () {
         Route::get('/', [AdminController::class, 'userIndex'])->name('user.index');
+          Route::get('/hidden', [AdminController::class, 'hiddenuser'])->name('hidden.user');
         Route::get('/{id}/edit', [AdminController::class, 'edit'])->name('user.edit');
         Route::put('/{id}/update-balance', [AdminController::class, 'updateBalance'])->name('admin.users.updateBalance');
         Route::delete('/{id}', [AdminController::class, 'userDestroy'])->name('user.destroy');
