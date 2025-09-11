@@ -176,6 +176,9 @@ Route::middleware(['auth'])->group(function () {
         });
     });
 
+
+       Route::get('/rules&guildlines', [UserController::class, 'rules_regulations'])->name('rules.regulations');
+
     // --- Admin Routes ---
     Route::prefix('admin')->middleware('isAdmin')->group(function () {
 

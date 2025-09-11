@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\URL;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 class UserController extends Controller
 {
@@ -349,4 +350,11 @@ public function initiateReinvestment(Request $request)
     
     return redirect()->route('user.deposit')->with('info', 'You are in reinvestment mode. Your available balance will be used.');
 }
+
+
+public function rules_regulations(){
+ 
+     return view('dashboard.informations.rules_guildelines');
+}
+
 }

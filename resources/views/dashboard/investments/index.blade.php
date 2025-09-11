@@ -1,6 +1,7 @@
 @extends('layout.user')
 
 @section('content')
+
 <div class="w-full min-h-screen bg-cover bg-center bg-no-repeat">
     <div class="max-w-7xl mx-auto px-4 md:px-6 py-10 relative z-10" style="background-image: url(assets/images/hero/hero-image-1.svg); background-repeat: no-repeat; background-size: cover; background-position:center;">
         <div class="flex flex-wrap items-center justify-between gap-2 mb-6">

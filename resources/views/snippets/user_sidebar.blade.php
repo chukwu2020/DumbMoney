@@ -113,6 +113,18 @@
                     <span><iconify-icon icon="solar:user-linear" ></iconify-icon>Profile</span>
                 </a>
             </li>
+
+                <li>
+    <a href="{{ route('rules.regulations') }}" 
+       class="menu-link {{ request()->routeIs('rules.regulations') ? 'active-link' : '' }}" 
+       style="font-size: 16px;">
+        <span>
+            <iconify-icon icon="mdi:shield-outline" class="mr-1"></iconify-icon>
+            Rules & Guidelines
+        </span>
+    </a>
+</li>
+
             
             <!-- STANDALONE LOGOUT BUTTON -->
             <!-- STANDALONE LOGOUT BUTTON -->
