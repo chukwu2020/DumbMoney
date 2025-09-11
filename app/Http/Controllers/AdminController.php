@@ -210,19 +210,24 @@ public function unapproveBalanceWithdrawal($id)
         return back()->with('error', 'Only approved withdrawals can be unapproved.');
     }
 
-    // Change status to failed
+    // ✅ Return the amount to the user's available balance
+    $user = $withdrawal->user;
+    $user->available_balance += $withdrawal->amount;
+    $user->save();
+
+    // Change withdrawal status to failed
     $withdrawal->status = 'failed';
     $withdrawal->save();
 
-    // Notify user
-    $user = $withdrawal->user;
+    // Notify the user
     $user->notify(new TransactionNotification(
         'Withdrawal Unapproved',
-        'Your withdrawal request of $' . number_format($withdrawal->amount, 2) . ' has been unapproved and marked as failed.'
+        'Your withdrawal request of $' . number_format($withdrawal->amount, 2) . ' has failed and the amount returned to your available balance.'
     ));
 
-    return back()->with('success', 'Withdrawal has been unapproved and marked as failed.');
+    return back()->with('success', 'Withdrawal has been unapproved and the amount returned to the user\'s balance.');
 }
+
 
 
     public function withdrawaldestroy($id)

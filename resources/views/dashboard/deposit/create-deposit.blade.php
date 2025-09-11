@@ -569,7 +569,7 @@
                         Reset
                     </button>
                     <button type="submit" class="btn-custom">
-                        Continue
+                        Continue 
                     </button>
                 </div>
             </div>
