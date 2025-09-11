@@ -169,10 +169,7 @@
                         <iconify-icon icon="ic:round-arrow-right" class="text-[#9EDD05] mt-1 mr-2"></iconify-icon>
                         <span>Higher daily profits than Entry Plan</span>
                     </li>
-                    <li class="flex items-start">
-                        <iconify-icon icon="ic:round-arrow-right" class="text-[#9EDD05] mt-1 mr-2"></iconify-icon>
-                        <span>Access to live trading sessions with analysts</span>
-                    </li>
+               
                     <li class="flex items-start">
                         <iconify-icon icon="ic:round-arrow-right" class="text-[#9EDD05] mt-1 mr-2"></iconify-icon>
                         <span>Closer to becoming a full community member</span>
@@ -213,6 +210,7 @@
                     <h3 class="text-lg font-semibold text-[#0C3A30]">VIP Plan</h3>
                     <span class="inline-block px-3 py-1 bg-[#F3E5F5] text-[#4A148C] text-sm font-medium rounded-full mt-2 md:mt-0">Premium Level</span>
                 </div>
+                
                 <p class="text-gray-700 mb-3">Exclusive access with significant privileges and reinvestment options.</p>
                 <ul class="space-y-2 text-gray-700">
                     <li class="flex items-start">

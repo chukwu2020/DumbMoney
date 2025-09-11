@@ -200,6 +200,31 @@ class AdminController extends Controller
         return view('admin.deposits.withdrawal_approved', compact('approvedWithdrawals', 'withdrawalCards'));
     }
 
+
+public function unapproveBalanceWithdrawal($id)
+{
+    $withdrawal = Withdrawal::findOrFail($id);
+
+    // ✅ Only approved withdrawals can be unapproved
+    if ($withdrawal->status !== 'approved') {
+        return back()->with('error', 'Only approved withdrawals can be unapproved.');
+    }
+
+    // Change status to failed
+    $withdrawal->status = 'failed';
+    $withdrawal->save();
+
+    // Notify user
+    $user = $withdrawal->user;
+    $user->notify(new TransactionNotification(
+        'Withdrawal Unapproved',
+        'Your withdrawal request of $' . number_format($withdrawal->amount, 2) . ' has been unapproved and marked as failed.'
+    ));
+
+    return back()->with('success', 'Withdrawal has been unapproved and marked as failed.');
+}
+
+
     public function withdrawaldestroy($id)
     {
         $withdrawal = Withdrawal::findOrFail($id);
