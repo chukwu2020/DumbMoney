@@ -195,14 +195,14 @@
                     </li>
                       <li class="flex items-start">
                         <iconify-icon icon="ic:round-arrow-right" class="text-[#9EDD05] mt-1 mr-2"></iconify-icon>
-                        <span>Acquired membership ID</span>
+                        <span>Acquired $10 bonus after a successful trading.</span>
                     </li>
                     <li class="flex items-start">
                         <iconify-icon icon="ic:round-arrow-right" class="text-[#9EDD05] mt-1 mr-2"></iconify-icon>
                         <span>Enhanced trading capacity</span>
                     </li>
                 </ul>
-            </div>
+</div>
 
             <!-- VIP Plan -->
             <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
