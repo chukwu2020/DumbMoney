@@ -1,99 +1,643 @@
-@extends('layout.admin')
+lets addd a inactive wallet here so admin wouldnt strss too much removing and putting new adddress always , just active ones will show for the users @extends('layout.admin')
 @section('content')
 
-
 <div class="dashboard-main-body">
-
     <div class="flex flex-wrap items-center justify-between gap-2 mb-6">
-        <h6 class="font-semibold mb-0 ">Pending Deposit</h6>
+        <h6 class="font-semibold mb-0 ">Add Plan</h6>
         <ul class="flex items-center gap-[6px]">
             <li class="font-medium">
-                <a href="{{route('admin_dashboard')}}" class="flex items-center gap-2 hover:text-primary-600 ">
+                <a href="index.html" class="flex items-center gap-2 hover:text-primary-600 ">
                     <iconify-icon icon="solar:home-smile-angle-outline" class="icon text-lg"></iconify-icon>
                     Dashboard
                 </a>
             </li>
-            <li>-</li>
-            <li class="font-medium ">Pending deposits</li>
+            <li >-</li>
+            <li class="font-medium ">Add Wallet</li>
         </ul>
     </div>
 
-    <div class="grid grid-cols-1 2xl:grid-cols-12 gap-6">
+    <div class="card h-full rounded-xl overflow-hidden border-0">
+        <div class="card-body p-10">
+            <form action="{{ route('wallet.create') }}" method="POST">
+                @csrf
+                <div class="grid md:grid-cols-2 gap-x-5">
+                    <div class="mb-3">
+                        <label for="firebaseSecretKey" class="text-sm font-semibold mb-2 block text-neutral-900 ">Crypto Name</label>
+                        <input type="text" class="form-control rounded-lg" name="crypto_name" placeholder="Crypto name" value="{{ old('crypto_name') }}">
+                        <span class="text-danger" style="color: red;">@error ('crypto_name') {{ $message }} @enderror</span>
+                    </div>
 
-        <!-- ================== Third Row Cards Start ======================= -->
-        <!-- ================== Third Row Cards Start ======================= -->
-        <div class="col-span-12">
-            <div class="card border-0 h-full w-full">
-                <div class="card-header">
-                    <div class="flex items-center flex-wrap gap-2 justify-between">
-                        <h6 class="font-bold text-lg mb-0">Recent pending deposit</h6>
+                    <div class="mb-3">
+                        <label for="firebaseSecretKey" class="text-sm font-semibold mb-2 block text-neutral-900 ">Wallet Address</label>
+                        <input type="text" class="form-control rounded-lg" name="wallet_address" placeholder="Wallet Address" value="{{ old('wallet_address') }}">
+                        <span class="text-red" style="color: red;">@error ('wallet_address') {{ $message }} @enderror</span>
+                    </div>
+
+                    <div class="flex items-center justify-center gap-3 mt-6 col-span-2">
+                        <button type="reset" class="border border-danger-600 hover:bg-danger-200 text-danger-600 text-base px-10 py-[11px] rounded-lg">
+                            Reset
+                        </button>
+                        <button type="submit" class="btn btn-primary border border-primary-600 text-base px-6 py-3 rounded-lg">
+                            Save Address
+                        </button>
                     </div>
                 </div>
-                <div class="card-body p-6" style="color:#0C3A30;">
-                    <div class="overflow-x-auto">
-                        <table class="min-w-[900px] w-full table bordered-table mb-0">
+            </form>
+        </div>
+    </div>
+</div>
+
+@endsection
+@extends('layout.admin')
+@section('content')
+
+<div class="dashboard-main-body">
+    <div class="flex flex-wrap items-center justify-between gap-2 mb-6">
+        <h6 class="font-semibold mb-0 ">Wallet List</h6>
+        <ul class="flex items-center gap-[6px]">
+            <li class="font-medium">
+                <a href="{{ route('admin_dashboard') }}" class="flex items-center gap-2 hover:text-primary-600 ">
+                    <iconify-icon icon="solar:home-smile-angle-outline" class="icon text-lg"></iconify-icon>
+                    Dashboard
+                </a>
+            </li>
+            <li >-</li>
+            <li class="font-medium ">Wallet List</li>
+        </ul>
+    </div>
+
+    <div class="grid grid-cols-12">
+        <div class="col-span-12">
+            <div class="card h-full p-0 rounded-xl border-0 overflow-hidden">
+                <div class="card-header border-b border-neutral-200  bg-white py-4 px-6 flex items-center justify-between">
+                    <h6 class="text-base font-medium text-secondary-light mb-0">All Wallets</h6>
+                    <a href="{{ route('create_wallet') }}" class="btn btn-primary text-sm btn-sm px-3 py-3 rounded-lg flex items-center gap-2">
+                        <iconify-icon icon="ic:baseline-plus" class="icon text-xl"></iconify-icon>
+                        Add New Wallet
+                    </a>
+                </div>
+
+                <div class="card-body p-6">
+                    <div class="table-responsive scroll-sm">
+                        <table class="table bordered-table sm-table mb-0">
                             <thead>
                                 <tr>
-                                    <th>#</th>
-                                    <th>User</th>
-                                    <th>Email</th>
-                                    <th>Plan</th>
-                                    <th>Proof</th>
-
-                                    <th style="background-color: #0C3A30; color:aliceblue;">Country</th>
-                                    <th>Amount Deposited ($)</th>
-                                    <th>Payment Method</th>
-                                    <th>Date</th>
-                                    <th>Action</th>
+                                    <th scope="col">Crypto Name</th>
+                                    <th scope="col">Wallet Address</th>
+                                    <th scope="col" class="text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($deposits as $deposit)
+                                @foreach($wallets as $wallet)
                                 <tr>
-                                   
+                                    <td>{{ ucfirst($wallet->crypto_name) }}</td>
+                                    <td>{{ $wallet->wallet_address }}</td>
+                                    <td class="text-center">
+                                        <div class="flex items-center gap-3 justify-center">
+                                            <button type="button" class="bg-info-100 hover:bg-info-200 text-info-600  font-medium w-10 h-10 flex justify-center items-center rounded-full">
+                                                <iconify-icon icon="majesticons:eye-line" class="icon text-xl"></iconify-icon>
+                                            </button>
 
-                                    <td><form</td>
+                                            <form action="{{ route('wallet.delete', $wallet->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this wallet?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="bg-danger-100 hover:bg-danger-200 text-danger-600 font-medium w-10 h-10 flex justify-center items-center rounded-full">
+                                                    <iconify-icon icon="fluent:delete-24-regular" class="menu-icon"></iconify-icon>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
                                 </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
+
+                    <div class="flex items-center justify-between flex-wrap gap-2 mt-6">
+                        {{ $wallets->links() }} <!-- Laravel pagination -->
+                    </div>
                 </div>
             </div>
         </div>
-        <!-- ================== Third Row Cards End ======================= -->
-
-        <!-- ================== Third Row Cards End ======================= -->
-
     </div>
 
 </div>
-<!-- Modal viewer for full image -->
-
-<!-- Modal viewer -->
-<div id="imageModal"
-    class="fixed inset-0 bg-black bg-opacity-80 z-50 hidden items-center justify-center p-4"
-    onclick="closeModal()">
-    <img id="modalImage"
-        class="max-w-full max-h-full rounded-lg shadow-lg object-contain"
-        onclick="event.stopPropagation();">
-</div>
-
-<script>
-    function openModal(imageUrl) {
-        const modal = document.getElementById('imageModal');
-        const modalImage = document.getElementById('modalImage');
-        modalImage.src = imageUrl;
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-    }
-
-    function closeModal() {
-        const modal = document.getElementById('imageModal');
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-    }
-</script>
-
 
 @endsection
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\ContactUSMessage;
+use App\Models\Deposit;
+use App\Models\Idverification;
+use App\Models\Investment;
+use App\Models\Message;
+use App\Models\Plan;
+use App\Models\User;
+use App\Models\UserKyc;
+use App\Models\Withdrawal;
+use App\Models\WithdrawalCard;
+use App\Notifications\IDVerificationSubmitted;
+use App\Notifications\TransactionNotification;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+
+class AdminController extends Controller
+{
+    public function userIndex(Request $request)
+    {
+        $query = User::with(['investments', 'profile', 'withdrawalCard']) // eager load all needed
+            ->where('role_as', 0);
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('status')) {
+            $status = $request->input('status');
+            if ($status == 'Active') {
+                $query->where('active', 1);
+            } elseif ($status == 'Inactive') {
+                $query->where('active', 0);
+            }
+        }
+
+        $users = $query->paginate(10);
+
+        // Optional: calculate total invested manually (you already eager loaded 'investments')
+        foreach ($users as $user) {
+            $user->total_invested = $user->investments->sum('amount_invested');
+        }
+
+        return view('admin.users.index', compact('users'));
+    }   
+
+    public function  hiddenuser(Request $request)
+    {
+        $query = User::with(['investments', 'profile', 'withdrawalCard']) // eager load all needed
+            ->where('role_as', 0);
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('status')) {
+            $status = $request->input('status');
+            if ($status == 'Active') {
+                $query->where('active', 1);
+            } elseif ($status == 'Inactive') {
+                $query->where('active', 0);
+            }
+        }
+
+        $users = $query->paginate(10);
+
+        // Optional: calculate total invested manually (you already eager loaded 'investments')
+        foreach ($users as $user) {
+            $user->total_invested = $user->investments->sum('amount_invested');
+        }
+
+        return view('admin.users.indexmain', compact('users'));
+    } 
+
+    public function userDestroy($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return redirect()->route('user.index')->with('success', 'User deleted successfully.');
+    }
+
+
+    public function edit($id)
+    {
+        $user = User::findOrFail($id);
+        return view('admin.users.edit', compact('user'));
+    }
+
+
+
+    public function pendingDeposits()
+    {
+        $deposits = Deposit::with('user', 'plan', 'wallet')
+            ->where('status', 0)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('admin.deposits.pending', compact('deposits'));
+    }
+
+    public function approvedDeposits()
+    {
+        $deposits = Deposit::with(['user', 'plan', 'wallet'])
+            ->where('status', 1)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('admin.deposits.approve', compact('deposits'));
+        //   return view('admin.deposits.approved', compact('deposits'));
+    }
+
+
+    public function rejectDeposit($id)
+{
+    $deposit = Deposit::findOrFail($id);
+
+    // Make sure it's not already approved
+    if ($deposit->status === 1) {
+        return back()->with('error', 'You cannot reject an already approved deposit.');
+    }
+
+    // Delete the deposit entirely
+    $deposit->delete();
+
+    return back()->with('success', 'Deposit rejected and removed successfully.');
+}
+
+    public function approveDeposit($id)
+    {
+        $deposit = Deposit::findOrFail($id);
+
+        // ✅ Prevent double-approval
+        if ($deposit->status === 1) {
+            return redirect()->back()->with('error', 'This deposit has already been approved.');
+        }
+
+        $plan = Plan::find($deposit->plan_id);
+
+        if (!$plan) {
+            return back()->with('error', 'Investment plan not found');
+        }
+
+        $roi = $plan->interest_rate;
+        $totalProfit = ($deposit->amount_deposited * $roi / 100) * $plan->duration;
+
+        Investment::create([
+            'user_id' => $deposit->user_id,
+            'plan_id' => $deposit->plan_id,
+            'amount_invested' => $deposit->amount_deposited,
+            'roi' => $roi,
+            'total_profit' => $totalProfit,
+            'start_date' => Carbon::now(),
+            'end_date' => Carbon::now()->addDays($plan->duration),
+            'withdrawn' => 0,
+        ]);
+
+        $deposit->status = 1;
+        $deposit->save();
+
+
+
+        $user = $deposit->user;
+
+        $user->notify(new TransactionNotification(
+            'Deposit Approved',
+            'Your deposit of $' . number_format($deposit->amount_deposited, 2) . ' has been approved and investestment started successfully.'
+        ));
+
+
+        return redirect()->back()->with('success', 'Deposit approved and investment started');
+    }
+
+
+
+
+
+
+    public function showApprovedWithdrawals()
+    {
+        $approvedWithdrawals = Withdrawal::where('status', 'approved')
+            ->with(['user'])
+            ->latest()
+            ->get();
+
+        $withdrawalCards = WithdrawalCard::all();
+
+
+        return view('admin.deposits.withdrawal_approved', compact('approvedWithdrawals', 'withdrawalCards'));
+    }
+
+
+public function unapproveBalanceWithdrawal($id)
+{
+    $withdrawal = Withdrawal::findOrFail($id);
+
+    // ✅ Only approved withdrawals can be unapproved
+    if ($withdrawal->status !== 'approved') {
+        return back()->with('error', 'Only approved withdrawals can be unapproved.');
+    }
+
+    // ✅ Return the amount to the user's available balance
+    $user = $withdrawal->user;
+    $user->available_balance += $withdrawal->amount;
+    $user->save();
+
+    // Change withdrawal status to failed
+    $withdrawal->status = 'failed';
+    $withdrawal->save();
+
+    // Notify the user
+    $user->notify(new TransactionNotification(
+        'Withdrawal Unapproved',
+        'Your withdrawal request of $' . number_format($withdrawal->amount, 2) . ' has failed and the amount returned to your available balance.'
+    ));
+
+    return back()->with('success', 'Withdrawal has been unapproved and the amount returned to the user\'s balance.');
+}
+
+
+
+    public function withdrawaldestroy($id)
+    {
+        $withdrawal = Withdrawal::findOrFail($id);
+
+        if ($withdrawal->status !== 'approved') {
+            return back()->with('error', 'Only approved withdrawals can be deleted.');
+        }
+
+        $withdrawal->delete();
+
+        return back()->with('success', 'Approved withdrawal deleted successfully.');
+    }
+
+
+
+    public function updateBalance(Request $request, $id)
+    {
+        $request->validate([
+            'available_balance' => 'required|numeric|min:0',
+            'investments.*' => 'nullable|numeric|min:0',
+
+
+        ]);
+
+        $user = User::findOrFail($id);
+        $user->available_balance = $request->input('available_balance');
+
+        $user->save();
+
+        return redirect()->route('user.index')->with('success', 'User balance updated successfully.');
+    }
+
+    public function admin_dashboard()
+    {
+        $totalUsers = User::count();
+        $totalDeposits = User::sum('available_balance');
+        $totalWithdrawals = Withdrawal::where('status', 'approved')->sum('amount');
+        $amount_invested = Investment::sum('amount_invested');
+
+
+
+        return view('admin.index', compact(
+            'totalUsers',
+            'totalDeposits',
+            'totalWithdrawals',
+            'amount_invested'
+        ));
+    }
+
+    public function adminViewWithdrawals()
+    {
+        // Eager load user and profile to avoid N+1 queries
+        $withdrawals = Withdrawal::with(['user.profile', 'user.withdrawalCard'])
+            ->where('status', 'pending')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('admin.deposits.withdrawal_pending', compact('withdrawals'));
+    }
+
+
+
+    public function approveBalanceWithdrawal($id)
+    {
+        $withdrawal = Withdrawal::findOrFail($id);
+
+        // ✅ Skip if already approved
+        if ($withdrawal->status === 'approved') {
+            return back()->with('error', 'This withdrawal has already been approved.');
+        }
+
+        $withdrawal->status = 'approved';
+        $withdrawal->save();
+
+        $user = $withdrawal->user;
+
+        $user->notify(new TransactionNotification(
+            'Withdrawal Approved',
+            'Your withdrawal request of $' . number_format($withdrawal->amount, 2) . ' has been approved.'
+        ));
+
+
+        return back()->with('success', 'Withdrawal approved successfully.');
+    }
+
+    public function rejectBalanceWithdrawal($id)
+    {
+        $withdrawal = Withdrawal::findOrFail($id);
+
+        if ($withdrawal->status !== 'pending') {
+            return back()->with('error', 'Only pending withdrawals can be rejected.');
+        }
+
+        // Refund the user
+        $user = $withdrawal->user;
+        $user->available_balance += $withdrawal->amount;
+        $user->save();
+
+        // Update withdrawal status
+        $withdrawal->status = 'rejected';
+        $withdrawal->save();
+
+
+
+        return back()->with('success', 'Withdrawal rejected and amount refunded to user.');
+    }
+
+
+    // message
+
+    public function index()
+    {
+
+
+        $messages = ContactUSMessage::orderBy('created_at', 'desc')->paginate(20);
+
+        return view('admin.contactUs.index', compact('messages'));
+    }
+    // contact us
+    public function destroy($id)
+    {
+        $message = Message::findOrFail($id);
+        $message->delete();
+
+        return redirect()->route('admin.messages.index')->with('success', 'Message deleted successfully.');
+    }
+
+
+
+    //profile
+
+
+    public function profile()
+    {
+        $user = User::with('profile')->find(auth()->id());
+        return view('admin.profile', compact('user'));
+    }
+
+
+
+
+
+
+    public function updateProfile(Request $request)
+    {
+
+
+        /** @var \App\Models\User $user */
+        $user = auth()->user();
+
+
+        if ($request->hasFile('profile_pic')) {
+            $file = $request->file('profile_pic');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads'), $filename);
+
+            // Create or update profile
+            $profile = $user->profile ?? new \App\Models\UserProfile();
+            $profile->user_id = $user->id;
+            $profile->profile_pic = $filename;
+            $profile->save();
+        }
+
+        // Update name, phone, address, etc.
+        $user->update([
+            'name' => $request->input('name'),
+            'phone' => $request->input('phone'),
+            // do not update email if it's readonly
+        ]);
+
+        if ($user->profile) {
+            $user->profile->update([
+                'address' => $request->input('address'),
+                'bitcoin_address' => $request->input('bitcoin_address'),
+                'etherium_address' => $request->input('etherium_address'),
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Profile updated successfully.');
+    }
+
+
+
+
+    // admin verify identity
+
+    public function kycindex()
+    {
+        $kycs = UserKyc::with('user')->latest()->get();
+        return view('admin.admin_approve_id_verification', compact('kycs'));
+    }
+
+    // public function approve($id)
+    // {
+    //     $kyc = UserKyc::findOrFail($id);
+
+    //     // Prevent double approval or changing already handled KYC
+    //     if ($kyc->status === 'approved') {
+    //         return redirect()->back()->with('error', 'This KYC is already approved.');
+    //     }
+
+    //     if ($kyc->status === 'rejected') {
+    //         return redirect()->back()->with('error', 'This KYC has already been rejected and cannot be approved.');
+    //     }
+
+    //     $kyc->status = 'approved';
+    //     $kyc->admin_note = 'Approved by admin';
+    //     $kyc->save();
+
+    //     return redirect()->back()->with('success', 'KYC approved.');
+    // }
+    public function approve($id)
+    {
+        $kyc = UserKyc::with('user')->findOrFail($id);
+
+        if ($kyc->status === 'approved') {
+            return redirect()->back()->with('error', 'This KYC is already approved.');
+        }
+
+        if ($kyc->status === 'rejected') {
+            return redirect()->back()->with('error', 'This KYC has already been rejected and cannot be approved.');
+        }
+
+        $kyc->status = 'approved';
+        $kyc->admin_note = 'Approved by admin';
+        $kyc->save();
+
+        $user = $kyc->user;
+        $user->notify(new TransactionNotification(
+            'KYC Approved',
+            'Your KYC documents have been reviewed and approved. You have unlocked additional features for your investments.'
+        ));
+
+        return redirect()->back()->with('success', 'KYC approved.');
+    }
+
+public function reject($id)
+{
+    $kyc = UserKyc::with('user')->findOrFail($id);
+
+    if ($kyc->status === 'rejected') {
+        return redirect()->back()->with('error', 'This KYC is already rejected.');
+    }
+
+    if ($kyc->status === 'approved') {
+        return redirect()->back()->with('error', 'This KYC has already been approved and cannot be rejected.');
+    }
+
+    $kyc->status = 'rejected';
+    $kyc->admin_note = 'Rejected by admin';
+    $kyc->save();
+
+    $user = $kyc->user;
+    $user->notify(new TransactionNotification(
+        'KYC Rejected',
+        'Your KYC documents were reviewed and rejected. Please upload a clearer image of your ID for verification.'
+    ));
+
+    return redirect()->back()->with('success', 'KYC rejected.');
+}
+
+}
+remember an admin can make it active later if the address is inactive before 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+i have this table already
+php artisan make:migration add_status_to_wallets_table --table=wallets
