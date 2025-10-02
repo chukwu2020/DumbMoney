@@ -43,7 +43,7 @@
 
                     <button type="submit" class="default-btn w-100 text-center">Send Password Reset code</button>
 
-                    <p class="mt-3">Remembered your password? <a href="{{ route('login') }}">Login</a></p>
+                    
                 </form>
             </div>
         </div>
