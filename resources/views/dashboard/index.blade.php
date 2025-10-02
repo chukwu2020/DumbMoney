@@ -8,6 +8,58 @@ $shouldResetOverlay = session()->pull('clearCertOverlay', false);
 @endphp
 
 <!-- Promo Overlay -->
+<div
+    x-data="{
+        showPromo: false,
+        loginPromoLimit: 5,
+        overlayCountToday: {{ $overlayCountToday }},
+        shouldReset: {{ $shouldResetOverlay ? 'true' : 'false' }},
+        init() {
+            if (this.shouldReset) {
+                sessionStorage.removeItem('promoClosed');
+            }
+            let closedPromo = sessionStorage.getItem('promoClosed') === 'true';
+
+            // ✅ Show promo immediately on ANY page load 
+            // (so it works for already logged in users too)
+            if (!closedPromo && this.overlayCountToday < this.loginPromoLimit) {
+                this.showPromo = true;
+            }
+        },
+        closePromo() {
+            this.showPromo = false;
+            sessionStorage.setItem('promoClosed', 'true');
+            fetch('/certificate-shown', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json'
+                },
+            });
+        }
+    }"
+    x-init="init()"
+    x-show="showPromo"
+    x-cloak
+    class="fixed inset-0 z-50 bg-black/90 flex items-center justify-center px-4"
+    style="backdrop-filter: blur(4px);">
+
+    <div class="relative w-full max-w-3xl text-center p-4">
+        <img src="{{ asset('assets/images/promo1.jpg') }}"
+            alt="Promo"
+            class="mx-auto object-contain rounded-lg shadow-2xl"
+            style="max-height: 60vh; max-width: 80%; width: auto;" />
+        <div class="mt-2 space-y-2 px-4">
+            <p class="text-base text-[#0C3A30] font-medium">
+                🔥 Limited Time <span class="font-semibold">Promo Offer</span> Don’t Miss Out!
+            </p>
+        </div>
+        <button
+            @click="closePromo"
+            class="hover:text-red-500 text-[140px] font-bold rounded-full p-1 z-50 transition-all"
+            style="width: 2.5rem; height: 2.5rem; color: #8bc905 !important; background-color: #0C3A30; box-shadow: 0 0 15px rgba(139, 201, 5, 0.64);">&times;</button>
+    </div>
+</div>
 
 <!-- Certificate Overlay -->
 <div
