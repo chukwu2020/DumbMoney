@@ -182,20 +182,21 @@
                     </tr>
                     <tr>
                         <th class="py-2 pr-2 font-medium text-gray-500">Wallet</th>
-                        <td class="py-2 text-gray-700" style="white-space: nowrap !important;">
-                            @if($walletAddress !== 'N/A')
-                                <span class="font-semibold">{{ $walletLabel }}</span>
-                                <span style="word-break: break-all !important;">{{ $walletAddress }}</span>
-                                <button type="button"
-                                    class="copy-btn ml-2 bg-[#9EDD05] hover:bg-[#86cc00] text-[#0C3A30] px-2 py-1 rounded inline-flex items-center justify-center"
-                                    data-copy-text="{{ $walletAddress }}"
-                                    title="Copy wallet address">
-                                    <iconify-icon icon="solar:copy-outline" class="text-lg"></iconify-icon>
-                                </button>
-                            @else
-                                <span class="text-gray-500">N/A</span>
-                            @endif
-                        </td>
+                      <td class="py-2 text-black" style="white-space: nowrap !important;">
+    @if($walletAddress !== 'N/A')
+        <span class="font-semibold text-black">{{ $walletLabel }}</span>
+        <span class="text-black" style="word-break: break-all !important;">{{ $walletAddress }}</span>
+        <button type="button"
+            class="copy-btn ml-2 bg-[#9EDD05] hover:bg-[#86cc00] text-[#0C3A30] px-2 py-1 rounded inline-flex items-center justify-center"
+            data-copy-text="{{ $walletAddress }}"
+            title="Copy wallet address">
+            <iconify-icon icon="solar:copy-outline" class="text-lg"></iconify-icon>
+        </button>
+    @else
+        <span class="text-gray-500">N/A</span>
+    @endif
+</td>
+
                     </tr>
                     <tr>
                         <th class="py-2 pr-2 font-medium text-gray-500">Date</th>
