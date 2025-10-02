@@ -182,7 +182,7 @@
                     </tr>
                     <tr>
                         <th class="py-2 pr-2 font-medium text-gray-500">Wallet</th>
-                      <td class="py-2 text-black" style="white-space: nowrap !important;">
+                      <td class="py-2 text-black" style="white-space: nowrap !important; color:black !important;">
     @if($walletAddress !== 'N/A')
         <span class="font-semibold text-black">{{ $walletLabel }}</span>
         <span class="text-black" style="word-break: break-all !important;">{{ $walletAddress }}</span>
