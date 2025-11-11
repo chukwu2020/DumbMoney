@@ -51,8 +51,8 @@
                         };
 
                         $paymentMethodDisplay = match($withdrawal->payment_method) {
-                        'cryptocurrency' => '💰 Cryptocurrency',
-                        'digital_wallet' => '🏦 Bank Transfer',
+                        'cryptocurrency' => ' Cryptocurrency',
+                        'digital_wallet' => ' Bank Transfer',
                         default => ucfirst(str_replace('_', ' ', $withdrawal->payment_method))
                         };
 
@@ -228,8 +228,8 @@
 
                                 @if($status === 'pending')
                                 <div class="mt-3 p-2 rounded-lg bg-yellow-50 border border-yellow-200">
-                                    <p class="text-xs text-yellow-800 text-center">
-                                        ⏳ Processing... Please wait
+                                    <p class="text-xs text-yellow-800 text-center" style="color:black !important; font-size:0.8rem; ">
+                                         Processing... Please wait
                                     </p>
                                 </div>
                                 @endif
