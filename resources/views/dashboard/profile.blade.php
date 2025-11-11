@@ -24,12 +24,11 @@
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {{-- Left: Personal Info --}}
         <div class="lg:col-span-4">
-            <div class="rounded-xl border border-[#9EDD05] shadow-lg  bg-opacity-90 p-6 space-y-6" style="background-image: url(assets/images/hero/hero-image-1.svg);">
+            <div class="rounded-xl border border-[#9EDD05] shadow-lg bg-opacity-90 p-6 space-y-6" style="background-image: url(assets/images/hero/hero-image-1.svg);">
                 {{-- Avatar --}}
                 <div class="text-center border-b pb-6 border-gray-300">
                     @php
                     $profilePic = $user->profile->profile_pic ?? null;
-
                     $initials = collect(explode(' ', $user->name))
                     ->map(fn($w) => strtoupper(substr($w, 0, 1)))
                     ->take(2)
@@ -49,7 +48,6 @@
                     </div>
                     @endif
                 </div>
-
 
                 {{-- Personal Info --}}
                 <div style="color: #0c3a30;">
@@ -72,7 +70,7 @@
                             <span class="text-right text-[#0C3A30] font-medium">{{ $user->country }}</span>
                         </li>
                         <li class="flex justify-between items-start">
-                            <span class="font-semibold text-neutral-700"> Card Number</span>
+                            <span class="font-semibold text-neutral-700">Card Number</span>
                             <span class="text-right text-[#0C3A30] font-medium">
                                 @if ($card)
                                 <div class="card-number">{{ chunk_split($card->card_number, 4, ' ') }}</div>
@@ -81,9 +79,6 @@
                                 @endif
                             </span>
                         </li>
-
-
-
                     </ul>
                 </div>
             </div>
@@ -149,7 +144,7 @@
                                     </div>
                                 </div>
 
-                                {{-- Wallets --}}
+                                {{-- Crypto Wallets --}}
                                 <h6 class="text-base mt-6 mb-4 font-semibold text-[#0C3A30]">Crypto Wallets</h6>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
@@ -163,6 +158,35 @@
                                     <div>
                                         <label class="block font-semibold text-sm text-[#0C3A30] mb-2">Ethereum Address</label>
                                         <input type="text" name="etherium_address" value="{{ old('etherium_address', $user->profile->etherium_address ?? '') }}" class="form-control custom-input" />
+                                    </div>
+                                </div>
+
+                                {{-- Bank Information Section --}}
+                                <h6 class="text-base mt-6 mb-4 font-semibold text-[#0C3A30]">Bank Information (for Digital Payment)</h6>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block font-semibold text-sm text-[#0C3A30] mb-2">Recipient Name</label>
+                                        <input type="text" name="recipient_name" value="{{ old('recipient_name', $user->profile->recipient_name ?? '') }}" placeholder="Full name on account" class="form-control custom-input" />
+                                    </div>
+                                    <div>
+                                        <label class="block font-semibold text-sm text-[#0C3A30] mb-2">Bank Name</label>
+                                        <input type="text" name="bank_name" value="{{ old('bank_name', $user->profile->bank_name ?? '') }}" placeholder="Official bank name" class="form-control custom-input" />
+                                    </div>
+                                    <div>
+                                        <label class="block font-semibold text-sm text-[#0C3A30] mb-2">Account Number</label>
+                                        <input type="text" name="account_number" value="{{ old('account_number', $user->profile->account_number ?? '') }}" placeholder="Local account number" class="form-control custom-input" />
+                                    </div>
+                                    <div>
+                                        <label class="block font-semibold text-sm text-[#0C3A30] mb-2">IBAN (if applicable)</label>
+                                        <input type="text" name="iban" value="{{ old('iban', $user->profile->iban ?? '') }}" placeholder="International Bank Account Number" class="form-control custom-input" />
+                                    </div>
+                                    <div>
+                                        <label class="block font-semibold text-sm text-[#0C3A30] mb-2">SWIFT/BIC Code</label>
+                                        <input type="text" name="swift_bic" value="{{ old('swift_bic', $user->profile->swift_bic ?? '') }}" placeholder="International bank code" class="form-control custom-input" />
+                                    </div>
+                                    <div>
+                                        <label class="block font-semibold text-sm text-[#0C3A30] mb-2">Bank Address</label>
+                                        <input type="text" name="bank_address" value="{{ old('bank_address', $user->profile->bank_address ?? '') }}" placeholder="Bank branch address" class="form-control custom-input" />
                                     </div>
                                 </div>
 
@@ -194,12 +218,11 @@
                                 </button>
                             </form>
                         </div>
-                        
                     </div>
                 </div>
             </div>
         </div>
-    </div> {{-- end grid --}}
+    </div>
 </div>
 
 {{-- Tab Toggle Script --}}
@@ -253,7 +276,6 @@
         const updateButton = updateForm.querySelector('button[type="submit"]');
 
         updateForm.addEventListener('submit', function () {
-            // Disable the button to prevent double-click
             updateButton.disabled = true;
             updateButton.textContent = 'Updating...';
             updateButton.style.backgroundColor = '#B2B2B2';
@@ -263,3 +285,4 @@
 </script>
 
 @endsection
+

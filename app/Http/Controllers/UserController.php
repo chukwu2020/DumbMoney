@@ -36,12 +36,8 @@ class UserController extends Controller
             'email'       => 'required|email|unique:users,email|max:255',
             'phone'       => 'required|string|max:20',
             'country' => 'nullable|string|max:100',
-            'password'    => [
-                'required',
-                'min:8',
-                'max:40',
-                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/'
-            ],
+          
+              'password'    => ['required', 'string', 'min:6', 'max:40', 'confirmed'],
             'referral_id' => 'nullable|string|max:255',
         ]);
 
@@ -70,6 +66,7 @@ class UserController extends Controller
         $user->phone = $request->phone;
         $user->country = $request->country;
         $user->password = Hash::make($request->password);
+        
         $user->role_as = '0';
         $user->email_verification_otp = $newOtp;
         $user->referred_by = $referredBy;

@@ -26,14 +26,10 @@ class ProfileController extends Controller
     /**
      * Update the user's profile.
      */
-    // ProfileController.php
-
     public function updateProfile(Request $request)
     {
         /** @var \App\Models\User $user */
         $user = auth()->user();
-
-
 
         $request->validate([
             'name' => 'required|string|max:255',
@@ -41,8 +37,15 @@ class ProfileController extends Controller
             'country' => 'nullable|string|max:100',
             'address' => 'nullable|string|max:255',
             'bitcoin_address' => 'nullable|string|max:255',
-            'etherium_address'  => 'nullable|string|max:255',
-            'usdt_address' => 'nullable|string|max:255', // FIXED: changed from image to string
+            'etherium_address' => 'nullable|string|max:255',
+            'usdt_address' => 'nullable|string|max:255',
+            // Bank information fields
+            'recipient_name' => 'nullable|string|max:255',
+            'bank_name' => 'nullable|string|max:255',
+            'account_number' => 'nullable|string|max:255',
+            'iban' => 'nullable|string|max:255',
+            'swift_bic' => 'nullable|string|max:255',
+            'bank_address' => 'nullable|string|max:500',
         ]);
 
         // Update User model
@@ -58,6 +61,13 @@ class ProfileController extends Controller
             'bitcoin_address' => $request->bitcoin_address,
             'etherium_address' => $request->etherium_address,
             'usdt_address' => $request->usdt_address,
+            // Bank information
+            'recipient_name' => $request->recipient_name,
+            'bank_name' => $request->bank_name,
+            'account_number' => $request->account_number,
+            'iban' => $request->iban,
+            'swift_bic' => $request->swift_bic,
+            'bank_address' => $request->bank_address,
         ];
 
         // Handle profile picture
@@ -73,12 +83,9 @@ class ProfileController extends Controller
         return back()->with('success', 'Profile updated successfully.');
     }
 
-
     /**
      * Update the user's password.
      */
-
-
     public function updatePassword(Request $request)
     {
         $request->validate([
@@ -87,7 +94,6 @@ class ProfileController extends Controller
         ]);
 
         try {
-
             /** @var \App\Models\User $user */
             $user = Auth::user();
 
@@ -108,3 +114,10 @@ class ProfileController extends Controller
         }
     }
 }
+
+
+
+
+
+
+
