@@ -117,7 +117,7 @@
 
                                 {{-- Destination (Shows Account Number for Banks) --}}
                                 <div class="flex justify-between items-center">
-                                    <span class="font-medium text-gray-600">Destination:</span>
+                                    <span class="font-medium text-gray-600">Destination Acc:</span>
                                     <span class="text-gray-700 text-right font-mono text-xs">
                                         {{ $destination }}
                                     </span>
@@ -140,27 +140,31 @@
                                         @if($bankName || $recipientName || $accountNumber || $iban || $swiftBic || $bankAddress)
                                         <div class="space-y-2 text-xs">
                                             {{-- Bank Header --}}
-                                            <div class="flex items-center gap-3 mb-3 pb-3 border-b border-[#8AC304]" >
-                                                <div class="w-10 h-10 rounded-full bg-[#8AC304] flex items-center justify-center">
-                                                    <span class="text-white text-base">BANK INFO</span>
-                                                </div>
+                                            <div class="flex items-center gap-3 mb-3 pb-3 border-b border-[#8AC304]">
+
                                                 <div class="flex-1">
                                                     <p class="font-semibold text-[#0C3A30] text-sm"></p>
                                                     @if($bankName)
-                                                    <span class="inline-block px-2 py-1 rounded text-xs font-medium text-white mt-1" style="background-color: #8AC304;">✓ Verified</span>
+                                                    <span class="inline-block ml-3 px-2 py-1 rounded text-xs font-medium text-white mt-1" style="background-color: #8AC304;">✓ Bank Info Verified</span>
                                                     @endif
                                                 </div>
                                             </div>
-                                           @if($bankName)
-                                            <div class="flex justify-between items-start">
-                                                <span class="text-gray-600 font-medium">Bank Name:</span>
-                                                <span class="text-[#0C3A30] font-semibold text-right">{{ $bankName ?? 'Bank Name' }}</span>
-                                            </div>
-                                            @endif
+
+
 
 
                                             {{-- Bank Details Grid --}}
                                             <div class="space-y-2 text-sm">
+
+
+                                                @if($bankName)
+                                                <div class="flex justify-between items-start">
+                                                    <span class="text-gray-600 font-medium">Bank Name:</span>
+                                                    <span class="text-[#0C3A30] font-semibold text-right">{{ $bankName ?? 'Bank Name' }}</span>
+                                                </div>
+                                                @endif
+
+
                                                 @if($recipientName)
                                                 <div class="flex justify-between items-start">
                                                     <span class="text-gray-600 font-medium">Recipient:</span>
