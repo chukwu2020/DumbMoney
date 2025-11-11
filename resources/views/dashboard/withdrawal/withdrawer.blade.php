@@ -76,9 +76,9 @@ $hasCryptoWallet = $bitcoin || $etherium || $usdt;
             <label class="block text-sm font-medium text-gray-700">Withdrawal Amount</label>
             <div class="relative">
                 <span class="absolute left-3 top-3 text-gray-500">$</span>
-                <input type="number" name="amount" min="1" max="{{ auth()->user()->available_balance }}" 
+                <input type="number" name="amount" min="1" max="{{ auth()->user()->available_balance }}"
                     value="{{ old('amount') }}"
-                    class="w-full pl-8 pr-4 py-3 rounded-lg border focus:outline-none" 
+                    class="w-full pl-8 pr-4 py-3 rounded-lg border focus:outline-none"
                     style="border-color: #8AC304;" required>
             </div>
             <p class="mt-1 text-xs text-gray-500">Available: <strong>${{ number_format(auth()->user()->total_income, 2) }}</strong></p>
@@ -87,8 +87,8 @@ $hasCryptoWallet = $bitcoin || $etherium || $usdt;
         {{-- Transfer Method --}}
         <div class="relative">
             <label class="block mb-1 text-sm font-medium text-gray-700">Transfer Method</label>
-            <div id="custom-dropdown" tabindex="0" 
-                class="w-full px-4 py-3 rounded-lg border cursor-pointer flex justify-between items-center hover:border-[#0C3A30]" 
+            <div id="custom-dropdown" tabindex="0"
+                class="w-full px-4 py-3 rounded-lg border cursor-pointer flex justify-between items-center hover:border-[#0C3A30]"
                 style="border-color: #8AC304;">
                 <span id="selected-option-text">Select transfer method</span>
                 <svg class="w-5 h-5 text-gray-400" id="dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -102,12 +102,12 @@ $hasCryptoWallet = $bitcoin || $etherium || $usdt;
                 style="border-color: #8AC304; background-color: white !important;">
                 @if($hasCryptoWallet)
                 <div class="option-item px-4 py-3 cursor-pointer hover:bg-[#8AC304] hover:text-[#0C3A30]" data-value="cryptocurrency">
-                  Cryptocurrency Wallet
+                    Cryptocurrency Wallet
                 </div>
                 @endif
                 @if($hasBankInfo)
                 <div class="option-item px-4 py-3 cursor-pointer hover:bg-[#8AC304] hover:text-[#0C3A30]" data-value="digital_wallet">
-                     Bank Transfer
+                    Bank Transfer
                 </div>
                 @endif
             </div>
@@ -124,15 +124,15 @@ $hasCryptoWallet = $bitcoin || $etherium || $usdt;
             <label class="block mb-1 text-sm font-medium text-gray-700">Security PIN</label>
             <div class="grid grid-cols-4 gap-2">
                 @for ($i = 1; $i <= 4; $i++)
-                <input type="password" name="digit{{ $i }}" maxlength="1" required inputmode="numeric"
+                    <input type="password" name="digit{{ $i }}" maxlength="1" required inputmode="numeric"
                     class="pin-input h-12 text-center text-xl rounded-lg border" style="border-color: #8AC304;">
-                @endfor
+                    @endfor
             </div>
         </div>
 
         {{-- Submit --}}
-        <button type="submit" id="submitBtn" 
-            class="w-full flex items-center justify-center py-3 px-4 rounded-lg font-medium shadow hover:shadow-md transition" 
+        <button type="submit" id="submitBtn"
+            class="w-full flex items-center justify-center py-3 px-4 rounded-lg font-medium shadow hover:shadow-md transition"
             style="background-color: #8AC304; color:#0C3A30; margin-top:2rem;">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
@@ -183,9 +183,18 @@ $hasCryptoWallet = $bitcoin || $etherium || $usdt;
         const walletInfo = document.getElementById('wallet-info');
 
         dropdown.addEventListener('click', (e) => {
-            options.classList.toggle('hidden');
             e.stopPropagation();
+
+            // If user has no bank or crypto info, show a dropdown message instead
+            if (!hasBankInfo && !hasCryptoWallet) {
+                showUpdateProfileDropdown();
+                return;
+            }
+
+            // Otherwise, toggle the normal dropdown options
+            options.classList.toggle('hidden');
         });
+
 
         // Close dropdown when clicking outside
         document.addEventListener('click', function(event) {
@@ -378,6 +387,54 @@ $hasCryptoWallet = $bitcoin || $etherium || $usdt;
             });
         }
 
+   function showUpdateProfileDropdown() {
+    // Prevent duplicates
+    if (document.getElementById('update-profile-dropdown')) return;
+
+    const dropdownContainer = document.createElement('div');
+    dropdownContainer.id = 'update-profile-dropdown';
+    dropdownContainer.className =
+        "absolute mt-2 w-full rounded-xl border shadow-lg bg-white z-50 overflow-hidden transform opacity-0 translate-y-3 transition-all duration-500 ease-out";
+    dropdownContainer.style.borderColor = "#8AC304";
+
+    dropdownContainer.innerHTML = `
+        <div class="p-2 text-center bg-gradient-to-br from-yellow-50 to-amber-100 rounded-xl">
+            <div class="w-5 h-10 mx-auto mb-2 rounded-full flex items-center justify-center shadow-md"
+                >
+                <span class="text-xl text-white">⚠️</span>
+            </div>
+            <p class="text-amber-900 font-semibold text-sm mb-1">No Payment Method Found</p>
+            <p class="text-xs text-amber-700 mb-3 leading-snug">Update your profile to include your withdrawal method.</p>
+            <a href="${profileUrl}" 
+                class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-white text-xs font-semibold shadow-md hover:shadow-lg transition-all duration-300"
+                style="background: linear-gradient(135deg, #9EDD05 0%, #8AC304 100%);">
+                Go to Profile →
+            </a>
+        </div>
+    `;
+
+    // Insert the dropdown below the custom selector
+    dropdown.parentElement.appendChild(dropdownContainer);
+
+    // 🎬 Animate in
+    setTimeout(() => {
+        dropdownContainer.classList.remove('opacity-0', 'translate-y-3');
+        dropdownContainer.classList.add('opacity-100', 'translate-y-0');
+    }, 50);
+
+    // 🧹 Close when clicking outside (with fade-out)
+    document.addEventListener('click', function handleOutsideClick(event) {
+        if (!dropdown.contains(event.target) && !dropdownContainer.contains(event.target)) {
+            dropdownContainer.classList.add('opacity-0', 'translate-y-3');
+            setTimeout(() => dropdownContainer.remove(), 400);
+            document.removeEventListener('click', handleOutsideClick);
+        }
+    });
+}
+
+
+
+
         // Bank dropdown logic
         function setupBankDropdownEvents() {
             const bankDropdown = document.getElementById('bank-dropdown');
@@ -478,11 +535,33 @@ $hasCryptoWallet = $bitcoin || $etherium || $usdt;
             opacity: 0;
             transform: translateY(-8px);
         }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+
+
+    }
+
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+
         to {
             opacity: 1;
             transform: translateY(0);
         }
     }
+
+    .animate__fadeInDown {
+        animation: fadeInDown 0.3s ease-out;
+    }
+
+
 
     #bank-options:not(.hidden),
     #wallet-options:not(.hidden),

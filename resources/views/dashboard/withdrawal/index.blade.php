@@ -103,7 +103,7 @@
 
                                     {{-- Destination --}}
                                     <div class="flex justify-between items-center">
-                                        <span class="font-medium text-gray-600">Destination:</span>
+                                        <span class="font-medium text-gray-600">Destination Account:</span>
                                         <span class="text-gray-700 text-right">
                                             {{ $destination }}
                                         </span>
