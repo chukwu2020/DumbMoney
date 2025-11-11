@@ -77,13 +77,20 @@
 
                         <div class="mb-3 col-md-6 position-relative">
                             <label for="">Confirm Password</label>
-                            <input type="password" id="regConfirmPassword" class="form-control pe-5" name="confirm_password" placeholder="Password (e.g. Ch@#%)" value="{{ old('confirm_password') }}">
+                          
+
+                            <input type="password" id="regConfirmPassword" class="form-control pe-5" 
+    name="password_confirmation" placeholder="Confirm Password (e.g. Ch@#%)" 
+    value="{{ old('password_confirmation') }}">
+
                             <span class="password-toggle" onclick="toggleRegConfirmPassword()">
                                 <i class="ri-eye-line" id="regConfirmToggleIcon"></i> <!-- eye without slash = visible -->
                             </span>
 
 
-                            <span class="text-danger">@error('confirm_password') {{ $message }} @enderror</span>
+              
+                            <span class="text-danger">@error('password_confirmation') {{ $message }} @enderror</span>
+
                         </div>
 
 

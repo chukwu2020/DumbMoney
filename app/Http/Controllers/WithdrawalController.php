@@ -66,7 +66,13 @@ class WithdrawalController extends Controller
 
     public function withdrawalList()
     {
-        $withdrawals = auth()->user()->withdrawals()->latest()->get();
+        // ✅ FIX: Eager load user and profile relationships
+        $withdrawals = auth()->user()
+            ->withdrawals()
+            ->with(['user.profile']) // Load the user and their profile
+            ->latest()
+            ->get();
+            
         return view('dashboard.withdrawal.index', compact('withdrawals'));
     }
 
