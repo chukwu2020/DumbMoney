@@ -23,7 +23,7 @@
                     <div class="flex items-center justify-between mb-5">
                         <h6 class="font-bold text-lg text-gray-800">Recent Withdrawals</h6>
                         <a href="{{ route('user.withdraw.form') }}"
-                            class="px-4 py-2 rounded-lg font-medium text-white hover:shadow-lg transition"
+                            class="px-2 py-2 rounded-lg font-medium text-white hover:shadow-lg transition"
                             style="background-color: #8AC304;">
                             + New Withdrawal
                         </a>
@@ -32,7 +32,6 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mt-6">
                         @forelse ($withdrawals as $key => $withdrawal)
                         @php
-                        // ✅ Fetch bank details for THIS specific withdrawal
                         $userProfile = $withdrawal->user->profile ?? null;
                         $recipientName = $userProfile->recipient_name ?? null;
                         $bankName = $userProfile->bank_name ?? null;
@@ -56,7 +55,6 @@
                         default => ucfirst(str_replace('_', ' ', $withdrawal->payment_method))
                         };
 
-                        // Show account number as destination for bank transfers
                         $destination = 'N/A';
                         if ($withdrawal->payment_method === 'cryptocurrency') {
                         $destination = match($withdrawal->wallet_choice) {
@@ -66,7 +64,6 @@
                         default => ucfirst($withdrawal->wallet_choice ?? 'Crypto')
                         };
                         } elseif ($withdrawal->payment_method === 'digital_wallet') {
-                        // Show last 4 digits of account or IBAN
                         if ($accountNumber) {
                         $destination = '****' . substr($accountNumber, -4);
                         } elseif ($iban) {
@@ -86,7 +83,7 @@
                         @endphp
 
                         <div class="bg-white border border-gray-100 rounded-2xl shadow-xl p-5 w-full hover:shadow-2xl transition-shadow duration-300">
-                            {{-- Header --}}
+
                             <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
                                 <h4 class="text-base font-semibold text-gray-800">
                                     Withdrawal #{{ str_pad($withdrawal->id, 4, '0', STR_PAD_LEFT) }}
@@ -97,9 +94,8 @@
                                 </span>
                             </div>
 
-                            {{-- Details --}}
                             <div class="space-y-3 text-sm">
-                                {{-- Amount --}}
+
                                 <div class="flex justify-between items-center">
                                     <span class="font-medium text-gray-600">Amount:</span>
                                     <span class="text-lg font-bold" style="color: #0C3A30;">
@@ -107,7 +103,6 @@
                                     </span>
                                 </div>
 
-                                {{-- Payment Method --}}
                                 <div class="flex justify-between items-center">
                                     <span class="font-medium text-gray-600">Method:</span>
                                     <span class="font-semibold text-gray-800">
@@ -115,7 +110,6 @@
                                     </span>
                                 </div>
 
-                                {{-- Destination (Shows Account Number for Banks) --}}
                                 <div class="flex justify-between items-center">
                                     <span class="font-medium text-gray-600">Destination Acc:</span>
                                     <span class="text-gray-700 text-right font-mono text-xs">
@@ -123,7 +117,6 @@
                                     </span>
                                 </div>
 
-                                {{-- Bank Details Dropdown (Only for Bank Transfers) --}}
                                 @if($withdrawal->payment_method === 'digital_wallet')
                                 <div class="mt-3">
                                     <button
@@ -139,9 +132,8 @@
                                     <div class="bank-details-content hidden mt-3 p-4 rounded-lg border-2" style="border-color: #8AC304; background-color: #f0fde4;">
                                         @if($bankName || $recipientName || $accountNumber || $iban || $swiftBic || $bankAddress)
                                         <div class="space-y-2 text-xs">
-                                            {{-- Bank Header --}}
-                                            <div class="flex items-center gap-3 mb-3 pb-3 border-b border-[#8AC304]">
 
+                                            <div class="flex items-center gap-3 mb-3 pb-3 border-b border-[#8AC304]">
                                                 <div class="flex-1">
                                                     <p class="font-semibold text-[#0C3A30] text-sm"></p>
                                                     @if($bankName)
@@ -150,20 +142,13 @@
                                                 </div>
                                             </div>
 
-
-
-
-                                            {{-- Bank Details Grid --}}
                                             <div class="space-y-2 text-sm">
-
-
                                                 @if($bankName)
                                                 <div class="flex justify-between items-start">
                                                     <span class="text-gray-600 font-medium">Bank Name:</span>
                                                     <span class="text-[#0C3A30] font-semibold text-right">{{ $bankName ?? 'Bank Name' }}</span>
                                                 </div>
                                                 @endif
-
 
                                                 @if($recipientName)
                                                 <div class="flex justify-between items-start">
@@ -192,12 +177,9 @@
                                                     <span class="text-[#0C3A30] font-mono text-xs text-right">{{ $swiftBic }}</span>
                                                 </div>
                                                 @endif
-
-
                                             </div>
                                         </div>
                                         @else
-                                        {{-- Warning if no bank details --}}
                                         <div class="text-center py-3">
                                             <div class="w-12 h-12 mx-auto mb-2 rounded-full bg-yellow-100 flex items-center justify-center">
                                                 <span class="text-yellow-600 text-lg">⚠️</span>
@@ -210,7 +192,6 @@
                                 </div>
                                 @endif
 
-                                {{-- Date --}}
                                 <div class="flex justify-between items-center pt-2 border-t border-gray-100">
                                     <span class="font-medium text-gray-600">Date:</span>
                                     <span class="text-gray-700 text-xs">
@@ -218,18 +199,68 @@
                                     </span>
                                 </div>
 
-                                {{-- Status Messages --}}
+                                {{-- FIXED ADMIN NOTE --}}
+
                                 @if(in_array($status, ['rejected', 'failed']) && $withdrawal->admin_note)
-                                <div class="mt-3 p-3 rounded-lg bg-red-50 border border-red-200">
-                                    <p class="text-xs font-semibold text-red-800 mb-1">❌ Reason:</p>
-                                    <p class="text-xs text-red-700">{{ $withdrawal->admin_note }}</p>
+
+                                <div class="admin-note">
+                                    <div class="admin-note-header">
+                                        <span class="admin-note-icon">⚠</span>
+                                        <p class="admin-note-title">Admin Note</p>
+                                    </div>
+                                    <p class="admin-note-message">{{ $withdrawal->admin_note }}</p>
                                 </div>
                                 @endif
+<style>
+    .admin-note {
+    margin-top: 1rem !important;
+    border-left: 4px solid #ef4444 !important; /* bright red */
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%) !important;
+    padding: 1rem !important;
+    border-radius: 0.75rem !important; /* rounded-xl */
+    box-shadow: 0 2px 6px rgba(239, 68, 68, 0.15) !important;
+}
+
+.admin-note-header {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.admin-note-icon {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 1.75rem !important;
+    height: 1rem !important;
+    border-radius: 9999px !important; /* full circle */
+    background-color: rgba(239, 68, 68, 0.1) !important;
+    color: #b91c1c !important;
+    font-size: 1rem !important;
+}
+
+.admin-note-title {
+    font-weight: 600 !important;
+    color: #b91c1c !important;
+    font-size: 0.875rem !important; /* text-sm */
+    letter-spacing: 0.5px !important;
+}
+
+.admin-note-message {
+    font-size: 0.75rem !important; /* text-xs */
+    color: #991b1b !important;
+    line-height: 1.4 !important;
+    padding-left: 2.25rem !important; /* align with icon */
+}
+
+</style>
+
 
                                 @if($status === 'pending')
                                 <div class="mt-3 p-2 rounded-lg bg-yellow-50 border border-yellow-200">
                                     <p class="text-xs text-yellow-800 text-center" style="color:black !important; font-size:0.8rem; ">
-                                         Processing... Please wait
+                                        Processing... Please wait
                                     </p>
                                 </div>
                                 @endif
@@ -268,7 +299,6 @@
     </div>
 </div>
 
-{{-- JavaScript for Toggle Functionality --}}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('.bank-details-toggle').forEach(button => {
@@ -284,7 +314,6 @@
 </script>
 
 <style>
-    /* Status Badges */
     .badge-approved {
         background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
         color: #065f46;
@@ -314,34 +343,12 @@
         color: #374151;
     }
 
-    /* Card Hover Effects */
-    .bg-white.border.rounded-2xl {
-        transition: all 0.3s ease;
-    }
-
-    .bg-white.border.rounded-2xl:hover {
-        transform: translateY(-4px);
-        border-color: #8AC304;
-    }
-
-    /* Arrow rotation */
     .arrow-icon {
         transition: transform 0.3s ease;
     }
 
     .rotate-180 {
         transform: rotate(180deg);
-    }
-
-    /* Bank details animation */
-    .bank-details-content {
-        transition: all 0.3s ease;
-    }
-
-    .bank-details-toggle:hover {
-        background-color: #f0fde4 !important;
-        transform: translateY(-1px);
-        box-shadow: 0 2px 8px rgba(138, 195, 4, 0.2);
     }
 </style>
 @endsection

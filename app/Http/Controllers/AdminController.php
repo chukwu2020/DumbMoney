@@ -123,19 +123,19 @@ class AdminController extends Controller
 
 
     public function rejectDeposit($id)
-{
-    $deposit = Deposit::findOrFail($id);
+    {
+        $deposit = Deposit::findOrFail($id);
 
-    // Make sure it's not already approved
-    if ($deposit->status === 1) {
-        return back()->with('error', 'You cannot reject an already approved deposit.');
+        // Make sure it's not already approved
+        if ($deposit->status === 1) {
+            return back()->with('error', 'You cannot reject an already approved deposit.');
+        }
+
+        // Delete the deposit entirely
+        $deposit->delete();
+
+        return back()->with('success', 'Deposit rejected and removed successfully.');
     }
-
-    // Delete the deposit entirely
-    $deposit->delete();
-
-    return back()->with('success', 'Deposit rejected and removed successfully.');
-}
 
     public function approveDeposit($id)
     {
@@ -169,8 +169,6 @@ class AdminController extends Controller
         $deposit->status = 1;
         $deposit->save();
 
-
-
         $user = $deposit->user;
 
         $user->notify(new TransactionNotification(
@@ -178,14 +176,8 @@ class AdminController extends Controller
             'Your deposit of $' . number_format($deposit->amount_deposited, 2) . ' has been approved and investestment started successfully.'
         ));
 
-
         return redirect()->back()->with('success', 'Deposit approved and investment started');
     }
-
-
-
-
-
 
     public function showApprovedWithdrawals()
     {
@@ -196,39 +188,41 @@ class AdminController extends Controller
 
         $withdrawalCards = WithdrawalCard::all();
 
-
         return view('admin.deposits.withdrawal_approved', compact('approvedWithdrawals', 'withdrawalCards'));
     }
 
+    // ✅ UPDATED: Unapprove with admin note
+    public function unapproveBalanceWithdrawal(Request $request, $id)
+    {
+        $request->validate([
+            'admin_note' => 'required|string|max:500',
+        ]);
 
-public function unapproveBalanceWithdrawal($id)
-{
-    $withdrawal = Withdrawal::findOrFail($id);
+        $withdrawal = Withdrawal::findOrFail($id);
 
-    // ✅ Only approved withdrawals can be unapproved
-    if ($withdrawal->status !== 'approved') {
-        return back()->with('error', 'Only approved withdrawals can be unapproved.');
+        // ✅ Only approved withdrawals can be unapproved
+        if ($withdrawal->status !== 'approved') {
+            return back()->with('error', 'Only approved withdrawals can be unapproved.');
+        }
+
+        // ✅ Return the amount to the user's available balance
+        $user = $withdrawal->user;
+        $user->available_balance += $withdrawal->amount;
+        $user->save();
+
+        // Change withdrawal status to rejected and save admin note
+        $withdrawal->status = 'rejected';
+        $withdrawal->admin_note = $request->admin_note;
+        $withdrawal->save();
+
+        // Notify the user with the reason
+        $user->notify(new TransactionNotification(
+            'Withdrawal Unapproved',
+            'Your withdrawal request of $' . number_format($withdrawal->amount, 2) . ' has been unapproved. Reason: ' . $request->admin_note
+        ));
+
+        return back()->with('success', 'Withdrawal has been unapproved and the amount returned to the user\'s balance with notification sent.');
     }
-
-    // ✅ Return the amount to the user's available balance
-    $user = $withdrawal->user;
-    $user->available_balance += $withdrawal->amount;
-    $user->save();
-
-    // Change withdrawal status to failed
-    $withdrawal->status = 'failed';
-    $withdrawal->save();
-
-    // Notify the user
-    $user->notify(new TransactionNotification(
-        'Withdrawal Unapproved',
-        'Your withdrawal request of $' . number_format($withdrawal->amount, 2) . ' has failed and the amount returned to your available balance.'
-    ));
-
-    return back()->with('success', 'Withdrawal has been unapproved and the amount returned to the user\'s balance.');
-}
-
-
 
     public function withdrawaldestroy($id)
     {
@@ -243,15 +237,11 @@ public function unapproveBalanceWithdrawal($id)
         return back()->with('success', 'Approved withdrawal deleted successfully.');
     }
 
-
-
     public function updateBalance(Request $request, $id)
     {
         $request->validate([
             'available_balance' => 'required|numeric|min:0',
             'investments.*' => 'nullable|numeric|min:0',
-
-
         ]);
 
         $user = User::findOrFail($id);
@@ -268,8 +258,6 @@ public function unapproveBalanceWithdrawal($id)
         $totalDeposits = User::sum('available_balance');
         $totalWithdrawals = Withdrawal::where('status', 'approved')->sum('amount');
         $amount_invested = Investment::sum('amount_invested');
-
-
 
         return view('admin.index', compact(
             'totalUsers',
@@ -290,8 +278,6 @@ public function unapproveBalanceWithdrawal($id)
         return view('admin.deposits.withdrawal_pending', compact('withdrawals'));
     }
 
-
-
     public function approveBalanceWithdrawal($id)
     {
         $withdrawal = Withdrawal::findOrFail($id);
@@ -302,6 +288,7 @@ public function unapproveBalanceWithdrawal($id)
         }
 
         $withdrawal->status = 'approved';
+        $withdrawal->admin_note = null; // Clear any previous rejection notes
         $withdrawal->save();
 
         $user = $withdrawal->user;
@@ -311,12 +298,16 @@ public function unapproveBalanceWithdrawal($id)
             'Your withdrawal request of $' . number_format($withdrawal->amount, 2) . ' has been approved.'
         ));
 
-
         return back()->with('success', 'Withdrawal approved successfully.');
     }
 
-    public function rejectBalanceWithdrawal($id)
+    // ✅ UPDATED: Reject with admin note
+    public function rejectBalanceWithdrawal(Request $request, $id)
     {
+        $request->validate([
+            'admin_note' => 'required|string|max:500',
+        ]);
+
         $withdrawal = Withdrawal::findOrFail($id);
 
         if ($withdrawal->status !== 'pending') {
@@ -328,26 +319,28 @@ public function unapproveBalanceWithdrawal($id)
         $user->available_balance += $withdrawal->amount;
         $user->save();
 
-        // Update withdrawal status
+        // Update withdrawal status with admin note
         $withdrawal->status = 'rejected';
+        $withdrawal->admin_note = $request->admin_note;
         $withdrawal->save();
 
+        // Notify the user with the reason
+        $user->notify(new TransactionNotification(
+            'Withdrawal Rejected',
+            'Your withdrawal request of $' . number_format($withdrawal->amount, 2) . ' has been rejected. Reason: ' . $request->admin_note
+        ));
 
-
-        return back()->with('success', 'Withdrawal rejected and amount refunded to user.');
+        return back()->with('success', 'Withdrawal rejected, amount refunded to user, and notification sent.');
     }
 
-
     // message
-
     public function index()
     {
-
-
         $messages = ContactUSMessage::orderBy('created_at', 'desc')->paginate(20);
 
         return view('admin.contactUs.index', compact('messages'));
     }
+    
     // contact us
     public function destroy($id)
     {
@@ -357,29 +350,17 @@ public function unapproveBalanceWithdrawal($id)
         return redirect()->route('admin.messages.index')->with('success', 'Message deleted successfully.');
     }
 
-
-
     //profile
-
-
     public function profile()
     {
         $user = User::with('profile')->find(auth()->id());
         return view('admin.profile', compact('user'));
     }
 
-
-
-
-
-
     public function updateProfile(Request $request)
     {
-
-
         /** @var \App\Models\User $user */
         $user = auth()->user();
-
 
         if ($request->hasFile('profile_pic')) {
             $file = $request->file('profile_pic');
@@ -411,36 +392,13 @@ public function unapproveBalanceWithdrawal($id)
         return redirect()->back()->with('success', 'Profile updated successfully.');
     }
 
-
-
-
     // admin verify identity
-
     public function kycindex()
     {
         $kycs = UserKyc::with('user')->latest()->get();
         return view('admin.admin_approve_id_verification', compact('kycs'));
     }
 
-    // public function approve($id)
-    // {
-    //     $kyc = UserKyc::findOrFail($id);
-
-    //     // Prevent double approval or changing already handled KYC
-    //     if ($kyc->status === 'approved') {
-    //         return redirect()->back()->with('error', 'This KYC is already approved.');
-    //     }
-
-    //     if ($kyc->status === 'rejected') {
-    //         return redirect()->back()->with('error', 'This KYC has already been rejected and cannot be approved.');
-    //     }
-
-    //     $kyc->status = 'approved';
-    //     $kyc->admin_note = 'Approved by admin';
-    //     $kyc->save();
-
-    //     return redirect()->back()->with('success', 'KYC approved.');
-    // }
     public function approve($id)
     {
         $kyc = UserKyc::with('user')->findOrFail($id);
@@ -466,29 +424,28 @@ public function unapproveBalanceWithdrawal($id)
         return redirect()->back()->with('success', 'KYC approved.');
     }
 
-public function reject($id)
-{
-    $kyc = UserKyc::with('user')->findOrFail($id);
+    public function reject($id)
+    {
+        $kyc = UserKyc::with('user')->findOrFail($id);
 
-    if ($kyc->status === 'rejected') {
-        return redirect()->back()->with('error', 'This KYC is already rejected.');
+        if ($kyc->status === 'rejected') {
+            return redirect()->back()->with('error', 'This KYC is already rejected.');
+        }
+
+        if ($kyc->status === 'approved') {
+            return redirect()->back()->with('error', 'This KYC has already been approved and cannot be rejected.');
+        }
+
+        $kyc->status = 'rejected';
+        $kyc->admin_note = 'Rejected by admin';
+        $kyc->save();
+
+        $user = $kyc->user;
+        $user->notify(new TransactionNotification(
+            'KYC Rejected',
+            'Your KYC documents were reviewed and rejected. Please upload a clearer image of your ID for verification.'
+        ));
+
+        return redirect()->back()->with('success', 'KYC rejected.');
     }
-
-    if ($kyc->status === 'approved') {
-        return redirect()->back()->with('error', 'This KYC has already been approved and cannot be rejected.');
-    }
-
-    $kyc->status = 'rejected';
-    $kyc->admin_note = 'Rejected by admin';
-    $kyc->save();
-
-    $user = $kyc->user;
-    $user->notify(new TransactionNotification(
-        'KYC Rejected',
-        'Your KYC documents were reviewed and rejected. Please upload a clearer image of your ID for verification.'
-    ));
-
-    return redirect()->back()->with('success', 'KYC rejected.');
-}
-
 }

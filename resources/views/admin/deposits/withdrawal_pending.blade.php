@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="w-full px-2 md:px-6 mt-12 pt-24" style="margin-top: 2rem;">
-    <div class="max-w-4xl mx-auto dashboard-main-body">
+    <div class="max-w-7xl mx-auto dashboard-main-body">
         <div class="flex flex-wrap items-center justify-between gap-2 mb-6">
             <h5 class="font-semibold mb-0" style="color: #0C3A30; padding-right: 0.3rem;">Withdrawals</h5>
             <ul class="flex items-center gap-[2px]">
@@ -17,6 +17,18 @@
                 <li class="font-medium">Pending Withdrawals</li>
             </ul>
         </div>
+
+        @if(session('success'))
+            <div class="mb-4 p-4 bg-green-100 text-green-700 rounded-lg">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">
+                {{ session('error') }}
+            </div>
+        @endif
 
         @php
             $withdrawStatusMap = [
@@ -106,12 +118,11 @@
                                                 </button>
                                             </form>
 
-                                            <form method="POST" action="{{ route('admin.withdraw.reject', $withdrawal->id) }}" onsubmit="return confirm('Are you sure you want to reject this withdrawal?');">
-                                                @csrf
-                                                <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-sm font-semibold">
-                                                    Reject
-                                                </button>
-                                            </form>
+                                            <button type="button" 
+                                                    class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-sm font-semibold open-reject-modal"
+                                                    data-withdrawal-id="{{ $withdrawal->id }}">
+                                                Reject
+                                            </button>
                                         </div>
                                     @else
                                         <span class="text-green-600 font-semibold">Approved</span>
@@ -216,12 +227,11 @@
                                 </button>
                             </form>
 
-                            <form method="POST" action="{{ route('admin.withdraw.reject', $withdrawal->id) }}" onsubmit="return confirm('Are you sure you want to reject this withdrawal?');">
-                                @csrf
-                                <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-sm font-semibold">
-                                    Reject
-                                </button>
-                            </form>
+                            <button type="button" 
+                                    class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-sm font-semibold open-reject-modal"
+                                    data-withdrawal-id="{{ $withdrawal->id }}">
+                                Reject
+                            </button>
                         @else
                             <p class="text-green-600 font-semibold text-center">Approved</p>
                         @endif
@@ -234,8 +244,43 @@
     </div>
 </div>
 
+{{-- Rejection Modal --}}
+<div id="rejectModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50" style="display: none;">
+    <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md mx-4">
+        <h3 class="text-lg font-semibold mb-4" style="color: #0C3A30;">Reject Withdrawal</h3>
+        <form id="rejectForm" method="POST">
+            @csrf
+            <div class="mb-4">
+                <label for="admin_note" class="block text-sm font-medium text-gray-700 mb-2">
+                    Reason for Rejection <span class="text-red-500">*</span>
+                </label>
+                <textarea 
+                    name="admin_note" 
+                    id="admin_note" 
+                    rows="4" 
+                    required
+                    maxlength="500"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8AC304] focus:border-transparent"
+                    placeholder="Please explain why this withdrawal is being rejected..."></textarea>
+                <p class="text-xs text-gray-500 mt-1">Max 500 characters. User will see this message.</p>
+            </div>
+            <div class="flex gap-3 justify-end">
+                <button type="button" 
+                        class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition close-modal">
+                    Cancel
+                </button>
+                <button type="submit" 
+                        class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
+                    Confirm Rejection
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
     document.addEventListener('DOMContentLoaded', () => {
+        // Copy wallet address functionality
         document.querySelectorAll('.copy-btn').forEach(button => {
             button.addEventListener('click', () => {
                 const text = button.getAttribute('data-copy-text');
@@ -251,6 +296,32 @@
                     alert('Failed to copy. Please try manually.');
                 });
             });
+        });
+
+        // Modal functionality
+        const modal = document.getElementById('rejectModal');
+        const rejectForm = document.getElementById('rejectForm');
+        const adminNote = document.getElementById('admin_note');
+
+        document.querySelectorAll('.open-reject-modal').forEach(button => {
+            button.addEventListener('click', () => {
+                const withdrawalId = button.getAttribute('data-withdrawal-id');
+                rejectForm.action = `/admin/withdrawals/${withdrawalId}/reject`;
+                adminNote.value = '';
+                modal.style.display = 'flex';
+            });
+        });
+
+        document.querySelectorAll('.close-modal').forEach(button => {
+            button.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
         });
     });
 </script>
