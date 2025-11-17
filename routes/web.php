@@ -195,7 +195,10 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/profile', [AdminController::class, 'profile'])->name('admin.profile');
             Route::post('/profile/update', [AdminController::class, 'updateProfile'])->name('admin.profile.update');
         });
-        Route::post('/admin/withdrawals/{id}/unapprove', [AdminController::class, 'unapproveBalanceWithdrawal'])->name('admin.withdrawal.unapprove');
+       
+Route::post('/admin/withdrawals/{id}/unapprove', [AdminController::class,'unapproveBalanceWithdrawal'])->name('withdraw.unapprove');
+
+
 
     });
 

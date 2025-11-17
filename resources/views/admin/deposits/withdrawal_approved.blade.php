@@ -102,7 +102,7 @@
 </div>
 
 {{-- Unapprove Modal --}}
-<div id="unapproveModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50" style="display: none;">
+<div id="unapproveModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
     <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md mx-4">
         <h3 class="text-lg font-semibold mb-4" style="color: #0C3A30;">Unapprove Withdrawal</h3>
         <div class="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded">
@@ -139,32 +139,32 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const unapproveModal = document.getElementById('unapproveModal');
-        const unapproveForm = document.getElementById('unapproveForm');
-        const unapproveNote = document.getElementById('unapprove_note');
+document.addEventListener('DOMContentLoaded', () => {
+    const unapproveModal = document.getElementById('unapproveModal');
+    const unapproveForm = document.getElementById('unapproveForm');
+    const unapproveNote = document.getElementById('unapprove_note');
 
-        document.querySelectorAll('.open-unapprove-modal').forEach(button => {
-            button.addEventListener('click', () => {
-                const withdrawalId = button.getAttribute('data-withdrawal-id');
-                unapproveForm.action = `/admin/withdrawals/${withdrawalId}/unapprove`;
-                unapproveNote.value = '';
-                unapproveModal.style.display = 'flex';
-            });
-        });
-
-        document.querySelectorAll('.close-unapprove-modal').forEach(button => {
-            button.addEventListener('click', () => {
-                unapproveModal.style.display = 'none';
-            });
-        });
-
-        unapproveModal.addEventListener('click', (e) => {
-            if (e.target === unapproveModal) {
-                unapproveModal.style.display = 'none';
-            }
+    document.querySelectorAll('.open-unapprove-modal').forEach(button => {
+        button.addEventListener('click', () => {
+            const withdrawalId = button.getAttribute('data-withdrawal-id');
+            // Use proper route() in Blade with placeholder
+            unapproveForm.action = "{{ route('withdraw.unapprove', ['id' => ':id']) }}".replace(':id', withdrawalId);
+            unapproveNote.value = '';
+            unapproveModal.classList.remove('hidden');
         });
     });
-</script>
 
+    document.querySelectorAll('.close-unapprove-modal').forEach(button => {
+        button.addEventListener('click', () => {
+            unapproveModal.classList.add('hidden');
+        });
+    });
+
+    unapproveModal.addEventListener('click', (e) => {
+        if (e.target === unapproveModal) {
+            unapproveModal.classList.add('hidden');
+        }
+    });
+});
+</script>
 @endsection

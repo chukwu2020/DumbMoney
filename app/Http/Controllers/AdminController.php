@@ -193,36 +193,20 @@ class AdminController extends Controller
 
     // ✅ UPDATED: Unapprove with admin note
     public function unapproveBalanceWithdrawal(Request $request, $id)
-    {
-        $request->validate([
-            'admin_note' => 'required|string|max:500',
-        ]);
+{
+    $withdrawal = Withdrawal::findOrFail($id);
 
-        $withdrawal = Withdrawal::findOrFail($id);
+    // Restore balance to user
+    $withdrawal->user->available_balance += $withdrawal->amount;
+    $withdrawal->user->save();
 
-        // ✅ Only approved withdrawals can be unapproved
-        if ($withdrawal->status !== 'approved') {
-            return back()->with('error', 'Only approved withdrawals can be unapproved.');
-        }
+    // Mark withdrawal as failed
+    $withdrawal->status = 'failed';
+    $withdrawal->admin_note = $request->admin_note; // note from modal
+    $withdrawal->save();
 
-        // ✅ Return the amount to the user's available balance
-        $user = $withdrawal->user;
-        $user->available_balance += $withdrawal->amount;
-        $user->save();
-
-        // Change withdrawal status to rejected and save admin note
-        $withdrawal->status = 'rejected';
-        $withdrawal->admin_note = $request->admin_note;
-        $withdrawal->save();
-
-        // Notify the user with the reason
-        $user->notify(new TransactionNotification(
-            'Withdrawal Unapproved',
-            'Your withdrawal request of $' . number_format($withdrawal->amount, 2) . ' has been unapproved. Reason: ' . $request->admin_note
-        ));
-
-        return back()->with('success', 'Withdrawal has been unapproved and the amount returned to the user\'s balance with notification sent.');
-    }
+    return redirect()->back()->with('success', 'Withdrawal has been unapproved and marked as failed.');
+}
 
     public function withdrawaldestroy($id)
     {
