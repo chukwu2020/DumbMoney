@@ -28,6 +28,14 @@
                             + New Withdrawal
                         </a>
                     </div>
+@if($status === 'failed')
+<div class="mt-3 p-2 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs text-center">
+    ⚠️ Your withdrawal was unapproved. 
+    @if($withdrawal->admin_note)
+        Note: {{ $withdrawal->admin_note }}
+    @endif
+</div>
+@endif
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mt-6">
                         @forelse ($withdrawals as $key => $withdrawal)
@@ -206,7 +214,7 @@
                                 <div class="admin-note">
                                     <div class="admin-note-header">
                                         <span class="admin-note-icon">⚠</span>
-                                        <p class="admin-note-title">Admin Note</p>
+                                        <p class="admin-note-title"> Note</p>
                                     </div>
                                     <p class="admin-note-message">{{ $withdrawal->admin_note }}</p>
                                 </div>
