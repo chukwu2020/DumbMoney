@@ -244,7 +244,36 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 </script>
+<style>
+    .admin-note-header {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.6rem !important;
+    margin-bottom: 0.4rem !important;
+}
 
+.admin-note-icon {
+    background:#fecaca !important;
+    color:#b91c1c !important;
+    border-radius:9999px !important;
+    width:1.6rem !important;
+    height:1.6rem !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    font-size: 0.9rem !important;
+    font-weight: bold !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+}
+
+.admin-note-title {
+    font-weight: 600 !important;
+    color: #b91c1c !important;
+    font-size: 0.85rem !important;
+    margin: 0 !important;
+}
+
+</style>
 <!-- CSS -->
 <style>
 .badge-approved {
