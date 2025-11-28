@@ -142,7 +142,7 @@
 
     
 
-    <li class="font-medium text-[#9EDD05]">
+    <li class="font-semibold mb-0 flex items-center space-x-2 " style="color: #0C3A30;">
         <a href="{{ route('user_live') }}">Live Trading</a>
     </li>
 </ul>

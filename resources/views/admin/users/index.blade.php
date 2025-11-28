@@ -3,143 +3,244 @@
 @section('content')
 
 <div class="dashboard-main-body">
+
+    <!-- Header -->
     <div class="flex flex-wrap items-center justify-between gap-2 mb-6">
-        <h6 class="font-semibold mb-0 ">Users List</h6>
-        <ul class="flex items-center gap-[6px]">
-            <li class="font-medium">
-                <a href="{{route('admin_dashboard')}}" class="flex items-center gap-2 hover:text-primary-600 ">
-                    <iconify-icon icon="solar:home-smile-angle-outline" class="icon text-lg"></iconify-icon>
+        <h6 class="font-semibold mb-0">Users List</h6>
+        <ul class="flex items-center gap-[6px] text-sm">
+            <li>
+                <a href="{{ route('admin_dashboard') }}" class="flex items-center gap-2 hover:text-primary-600">
+                    <iconify-icon icon="solar:home-smile-angle-outline" class="text-lg"></iconify-icon>
                     Dashboard
                 </a>
             </li>
-            <li >-</li>
-            <a href="{{route('hidden.user')}}" class="flex items-center gap-2 hover:text-primary-600 ">
-                    <iconify-icon icon="solar:home-smile-angle-outline" class="icon text-lg"></iconify-icon>
-                  list
+            <li>-</li>
+            <li>
+                <a href="{{ route('hidden.user') }}" class="flex items-center gap-2 hover:text-primary-600">
+                    <iconify-icon icon="solar:users-group-rounded" class="text-lg"></iconify-icon>
+                    List
                 </a>
+            </li>
         </ul>
     </div>
 
+    <!-- Table -->
     <div class="grid grid-cols-12">
         <div class="col-span-12">
-            <div class="card h-full p-0 rounded-xl border-0 overflow-hidden" style="background: #fff !important;">
-                <div class="card-header border-b border-neutral-200 bg-white py-4 px-6 flex items-center flex-wrap gap-3 justify-between">
-
-
-                </div>
+            <div class="card rounded-xl overflow-hidden border-0 bg-white shadow-sm">
 
                 <div class="card-body p-6">
+
                     <div class="table-responsive scroll-sm">
                         <table class="table bordered-table sm-table mb-0">
-                            <thead style="background: #fff !important;">
-                                <tr style="background-color: #fff !important; color:aliceblue;">
-                                    <th scope="col"style="background-color: #0C3A30; color:aliceblue;">Profile</th>
-                                    <th scope="col" style="background-color: #0C3A30; color:aliceblue;">Name</th>
-                                      <th scope="col" style="background-color: #0C3A30; color:aliceblue;">Phone</th>
-                                        <th style="background-color: #0C3A30; color:aliceblue;">Country</th>
-                                    <th scope="col"style="background-color: #0C3A30; color:aliceblue;">Email</th>
-                                    <th scope="col" style="background-color: #0C3A30; color:aliceblue;">Join Date</th>
-                                    <!-- <th scope="col">Card PIN</th> -->
-                                    <!-- <th scope="col"style="background-color: #0C3A30; color:aliceblue;"> Amount Invested</th> -->
-                                    <th scope="col"style="background-color: #0C3A30; color:aliceblue;"> Available balance</th>
 
-<th scope="col" style="background-color: #0C3A30; color:aliceblue;">Investment Status</th>
-
-
-                                    <th scope="col" class="text-center">Status</th>
-                                    <th scope="col" class="text-center">Action</th>
+                            <thead>
+                                <tr style="background:#0C3A30 !important;">
+                                    <th  style="background:#0C3A30 !important;" class="text-white py-3">Profile</th>
+                                    <th  style="background:#0C3A30 !important;" class="text-white py-3">Name</th>
+                                    <th  style="background:#0C3A30 !important;" class="text-white py-3">Phone</th>
+                                    <th  style="background:#0C3A30 !important;" class="text-white py-3">Country</th>
+                                    <th style="background:#0C3A30 !important;" class="text-white py-3">Email</th>
+                                    <th  style="background:#0C3A30 !important;" class="text-white py-3">Join Date</th>
+                                    <th  style="background:#0C3A30 !important;" class="text-white py-3">Available Balance</th>
+                                    <th  style="background:#0C3A30 !important;"class="text-white py-3">Investment Status</th>
+                                    <th  style="background:#0C3A30 !important;"class="text-white py-3 text-center">Membership Code</th>
+                                    <th  style="background:#0C3A30 !important;"class="text-white py-3 text-center">Status</th>
+                                    <th  style="background:#0C3A30 !important;"class="text-white py-3 text-center">Action</th>
                                 </tr>
                             </thead>
+
                             <tbody>
+
                                 @foreach ($users as $user)
                                 <tr>
+
+                                    <!-- Profile -->
                                     <td>
                                         @php
-                                        $profilePic = $user->profile->profile_pic ?? null;
-                                        $hasProfilePic = $profilePic && file_exists(public_path('uploads/' . $profilePic));
-
-                                        // Get initials from user name, fallback "U"
-                                        $initials = collect(explode(' ', $user->name))
-                                        ->map(fn($word) => strtoupper(substr($word, 0, 1)))
-                                        ->take(2)
-                                        ->join('') ?: 'U';
+                                            $profilePic = $user->profile->profile_pic ?? null;
+                                            $hasProfilePic = $profilePic && file_exists(public_path('uploads/' . $profilePic));
+                                            $initials = collect(explode(' ', $user->name))
+                                                ->map(fn($w) => strtoupper(substr($w, 0, 1)))
+                                                ->take(2)
+                                                ->join('') ?: 'U';
                                         @endphp
 
-                                        @if ($hasProfilePic)
-                                        <img src="{{ asset('uploads/' . $profilePic) }}" alt="{{ $user->name }}" class="w-10 h-10 rounded-full object-cover" />
+                                        @if($hasProfilePic)
+                                            <img src="{{ asset('uploads/' . $profilePic) }}" class="w-10 h-10 rounded-full object-cover" />
                                         @else
-                                        <div class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-semibold text-sm select-none">
-                                            {{ $initials }}
-                                        </div>
+                                            <div class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-semibold">
+                                                {{ $initials }}
+                                            </div>
                                         @endif
-
                                     </td>
 
+                                    <!-- Name -->
                                     <td>{{ $user->name }}</td>
-                                     <td>{{ $user->phone }}</td>
-                                      <td>{{ $user->country }}</td>
+
+                                    <!-- Phone -->
+                                    <td>{{ $user->phone }}</td>
+
+                                    <!-- Country -->
+                                    <td>{{ $user->country }}</td>
+
+                                    <!-- Email -->
                                     <td>{{ $user->email }}</td>
+
+                                    <!-- Join Date -->
                                     <td>{{ $user->created_at->format('d M Y') }}</td>
-                                    <!-- <td>${{ number_format($user->total_invested, 2) }}</td> -->
-     <td>${{ number_format($user->total_income, 2) }}</td>
- 
-<td>
-    @php
-        $latestInvestment = $user->investments->sortByDesc('end_date')->first();
-    @endphp
 
-    @if ($latestInvestment)
-        @if (\Carbon\Carbon::parse($latestInvestment->end_date)->isPast())
-            <span class="bg-red-100 text-red-600 border border-red-600 px-4 py-1 rounded text-sm font-medium" style="background-color: red !important; color:white;">Due</span>
-        @else
-            <span class="bg-green-100 text-green-600 border border-green-600 px-4 py-1 rounded text-sm font-medium" style="background-color: green !important; color:white;">Ongoing</span>
-        @endif
-    @else
-        <span class="bg-gray-100 text-gray-600 border border-gray-400 px-4 py-1 rounded text-sm font-medium">N/A</span>
-    @endif
-</td>
+                                    <!-- Balance -->
+                                    <td>${{ number_format($user->total_income, 2) }}</td>
 
-                               
+                                    <!-- Investment Status -->
+                                    <td>
+                                        @php
+                                            $latestInvestment = $user->investments->sortByDesc('end_date')->first();
+                                        @endphp
 
-                                    <td class="text-center">
-                                        @if ($user->active == 1)
-                                        <span class="bg-success-100 text-success-600border border-success-600 px-6 py-1.5 rounded font-medium text-sm">Active</span>
+                                        @if($latestInvestment)
+                                            @if(\Carbon\Carbon::parse($latestInvestment->end_date)->isPast())
+                                                <span class="px-4 py-1 rounded text-white text-sm" style="background:red !important;">
+                                                    Due
+                                                </span>
+                                            @else
+                                                <span class="px-4 py-1 rounded text-white text-sm" style="background:green !important;">
+                                                    Ongoing
+                                                </span>
+                                            @endif
                                         @else
-                                        <span class="bg-danger-100  text-danger-600  border border-danger-600 px-6 py-1.5 rounded font-medium text-sm">Inactive</span>
+                                            <span class="px-4 py-1 rounded text-sm border">N/A</span>
                                         @endif
                                     </td>
+
+                                    <!-- Membership Code Column -->
                                     <td class="text-center">
-                                        <div class="flex items-center gap-3 justify-center">
-                                            <a href="{{ route('user.edit', $user->id) }}">
-                                                <button type="button" class="bg-success-100 text-success-600 hover:bg-success-200 font-medium w-10 h-10 flex justify-center items-center rounded-full">
-                                                    <iconify-icon icon="lucide:edit" class="menu-icon"></iconify-icon>
+
+                                        @if($user->membership_code)
+
+                                            <div style="background: linear-gradient(to right, #22c55e, #10b981) !important;
+                                                padding:0.5rem 0.75rem !important; border-radius:0.75rem !important;
+                                                box-shadow:0 4px 6px rgba(0,0,0,0.1) !important; margin-bottom:0.5rem !important;">
+
+                                                <div class="text-xs font-semibold mb-1">✅ Generated</div>
+
+                                                <div class="font-mono text-sm font-bold mb-2"
+                                                     id="membershipCode-{{ $user->id }}">
+                                                    {{ $user->membership_code }}
+                                                </div>
+
+                                                <div class="flex gap-2">
+                                                    <span class="text-xs mt-1 opacity-90 flex-1">
+                                                        Status:
+                                                        @if($user->has_membership)
+                                                            🟢 Active
+                                                        @else
+                                                            🟡 Pending Activation
+                                                        @endif
+                                                    </span>
+
+                                                    <button id="copyBtn-{{ $user->id }}"
+                                                        onclick="copyMembershipCode({{ $user->id }})"
+                                                        style="padding:0.25rem 0.5rem !important;
+                                                        background:#8AC304 !important; color:black !important;
+                                                        border-radius:0.5rem !important; font-size:0.75rem !important;
+                                                        font-weight:bold !important; cursor:pointer !important;">
+                                                        📋 Copy
+                                                    </button>
+                                                </div>
+
+                                            </div>
+
+                                        @else
+                                            <button onclick="generateMembershipCode({{ $user->id }})"
+                                                style="padding:0.5rem 1rem !important; background: linear-gradient(to right, #8AC304, #6ea003) !important;
+                                                    border-radius:0.5rem !important; font-size:0.875rem !important;
+                                                    font-weight:bold !important; color:black !important;">
+                                                <iconify-icon icon="mdi:ticket-confirmation" class="mr-1"></iconify-icon>
+                                                Generate Code
+                                            </button>
+                                        @endif
+
+                                    </td>
+
+                                    <!-- Active / Inactive -->
+                                    <td class="text-center">
+                                        @if ($user->active)
+                                            <span class="px-6 py-1.5 rounded bg-green-100 text-green-600 border border-green-600 text-sm font-medium" style="background:green !important;">
+                                                Active
+                                            </span>
+                                        @else
+                                            <span class="px-6 py-1.5 rounded bg-red-100 text-red-600 border border-red-600 text-sm font-medium" style="background:red !important;">
+                                                Inactive
+                                            </span>
+                                        @endif
+                                    </td>
+
+                                    <!-- Actions -->
+                                    <td class="text-center">
+                                        <div class="flex justify-center gap-3">
+
+                                            <!-- Edit -->
+                                            <a href="{{ route('user.edit', $user->id) }}"  style="background:green !important;">
+                                                <button class="w-10 h-10 rounded-full bg-green-100 text-green-600 hover:bg-green-200 flex items-center justify-center">
+                                                    <iconify-icon icon="lucide:edit"></iconify-icon>
                                                 </button>
                                             </a>
-                                            <form action="{{ route('user.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Are you sure?');">
+
+                                            <!-- Delete -->
+                                            <form method="POST" action="{{ route('user.destroy', $user->id) }}"
+                                                  onsubmit="return confirm('Are you sure?');" style="background:red !important;">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="remove-item-btn bg-danger-100  hover:bg-danger-200 text-danger-600font-medium w-10 h-10 flex justify-center items-center rounded-full">
-                                                    <iconify-icon icon="fluent:delete-24-regular" class="menu-icon"></iconify-icon>
+                                                <button class="w-10 h-10 rounded-full bg-red-100 text-red-600 hover:bg-red-200 flex items-center justify-center">
+                                                    <iconify-icon icon="fluent:delete-24-regular"></iconify-icon>
                                                 </button>
                                             </form>
 
-
-
                                         </div>
                                     </td>
+
                                 </tr>
                                 @endforeach
+
                             </tbody>
+
                         </table>
                     </div>
 
+                    <!-- Pagination -->
                     <div class="mt-4">
                         {{ $users->links('vendor.pagination.tailwind') }}
                     </div>
+
                 </div>
+
             </div>
         </div>
     </div>
+
 </div>
-<style></style>
+
+<!-- Copy Script -->
+<script>
+function copyMembershipCode(userId) {
+    const codeEl = document.getElementById(`membershipCode-${userId}`);
+    const btn = document.getElementById(`copyBtn-${userId}`);
+
+    const code = codeEl.textContent.trim();
+    const originalText = btn.innerHTML;
+
+    navigator.clipboard.writeText(code).then(() => {
+        btn.innerHTML = "✓ Copied!";
+        btn.style.background = "#22c55e";
+
+        setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.style.background = "#8AC304";
+        }, 2000);
+    });
+}
+</script>
+
 @endsection
