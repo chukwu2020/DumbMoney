@@ -12,21 +12,21 @@
                     <h3 class="text-center mb-4 text-[#0c3a30]">Verify Your Email</h3>
 
                     @if (session('success'))
-                        <div class="alert alert-success text-center">
-                            {{ session('success') }}
-                        </div>
+                    <div class="alert alert-success text-center">
+                        {{ session('success') }}
+                    </div>
                     @endif
 
                     @if (session('error'))
-                        <div class="alert alert-danger text-center">
-                            {{ session('error') }}
-                        </div>
+                    <div class="alert alert-danger text-center">
+                        {{ session('error') }}
+                    </div>
                     @endif
 
                     @if ($errors->any())
-                        <div class="alert alert-danger text-center">
-                            {{ $errors->first() }}
-                        </div>
+                    <div class="alert alert-danger text-center">
+                        {{ $errors->first() }}
+                    </div>
                     @endif
 
                     <form method="POST" action="{{ route('otp.submit') }}">
@@ -35,14 +35,14 @@
 
                         <div class="mb-3">
                             <label for="otp" class="form-label text-[#0c3a30]">
-                                Enter the OTP sent to<strong style="
+                                Enter the OTP sent to ( <strong style="
     display: inline-block;
     max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     vertical-align: bottom;
-">{{ $email }}</strong>
+">{{ $email }}</strong> )
 
                             </label>
                             <input type="text" name="otp" maxlength="6" class="form-control text-center" required placeholder="6-digit OTP">
@@ -57,7 +57,7 @@
                         @csrf
                         <input type="hidden" name="token" value="{{ $token }}">
                         <button type="submit" class="btn btn-link text-decoration-none text-[#0c3a30]">
-                            Didn't get the code? <span style="color: #0C3A30;">Resend OTP</span> 
+                            Didn't get the code? <span style="color: #0C3A30;">Resend OTP</span>
                         </button>
                     </form>
 

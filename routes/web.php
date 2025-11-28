@@ -202,6 +202,10 @@ Route::post('/admin/withdrawals/{id}/unapprove', [AdminController::class,'unappr
 
     });
 
+ 
+
+
+    
     // Plans management
     Route::prefix('plans')->group(function () {
         Route::get('/', [PlanController::class, 'planList'])->name('plan.list');
@@ -266,4 +270,38 @@ Route::post('/admin/withdrawals/{id}/unapprove', [AdminController::class,'unappr
         Route::patch('kyc/{id}/approve', [AdminController::class, 'approve'])->name('admin.kyc.approve');
         Route::patch('kyc/{id}/reject', [AdminController::class, 'reject'])->name('admin.kyc.reject');
     });
+    
+
+
+    // lives
+
+
+    // Admin Routes (inside admin middleware group)
+Route::middleware(['isAdmin'])->group(function () {
+    Route::post('/admin/generate-membership-code', [AdminController::class, 'generateMembershipCode'])
+        ->name('admin.generate.membership.code');
+});
+
+// User Routes (inside auth middleware)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/user/live', [UserController::class, 'user_live'])->name('user_live');
+    
+    Route::post('/user/activate-membership', [UserController::class, 'activateMembership'])
+        ->name('user.activate.membership');
+    
+    Route::post('/live-trading/start', [UserController::class, 'liveTradingStart'])
+        ->name('live.trading.start');
+    
+    Route::post('/live-trading/update', [UserController::class, 'liveTradingUpdate'])
+        ->name('live.trading.update');
+    
+    Route::post('/live-trading/claim', [UserController::class, 'liveTradingClaim'])
+        ->name('live.trading.claim');
+    
+    Route::post('/live-trading/message', [UserController::class, 'liveTradingSendMessage'])
+        ->name('live.trading.message');
+    
+    Route::get('/live-trading/messages', [UserController::class, 'liveTradingGetMessages'])
+        ->name('live.trading.messages');
+});
 });

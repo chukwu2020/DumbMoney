@@ -42,6 +42,10 @@
                     <iconify-icon icon="solar:home-smile-angle-outline"></iconify-icon>
                     <span>Dashboard</span>
                 </a>
+                   <a href="{{ route('user_live') }}" class="menu-link {{ request()->routeIs('user_live') ? 'active-link' : '' }}">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Join Live Trade</span>
+                </a>
             </li>
 
             <!-- APP -->

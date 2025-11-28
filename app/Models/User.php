@@ -4,11 +4,9 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -36,15 +34,10 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(UserProfile::class);
     }
     
-
     public function investments()
     {
         return $this->hasMany(Investment::class);
     }
-
-    // app/Models/User.php
-
-
 
     public function withdrawals()
     {
@@ -61,42 +54,31 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(WithdrawalCard::class);
     }
 
+    public function userKyc()
+    {
+        return $this->hasOne(UserKyc::class);
+    }
+
     // Role
     public function role()
     {
         return $this->role_as === '1' ? 'admin' : 'user';
     }
 
-    // Total invested
+    // Investment calculations
     public function getAmountInvestedAttribute()
     {
         return $this->investments()->sum('amount_invested');
     }
 
-    // Total interest earned (only from completed investments)
-    // public function getTotalInterestEarnedAttribute()
-    // {
-    //     return $this->investments()
-    //                 ->where('status', 'completed')
-    //                 ->sum('profit');
-    // }
-// public function getTotalInterestEarnedAttribute()
-// {
-//     return $this->investments
-//         ->where('status', 'completed')
-//         ->sum(function ($inv) {
-//             return $inv->total_profit;
-//         });
-// }
-public function getTotalInterestEarnedAttribute()
-{
-    return $this->investments()
-        ->where('status', 'completed')
-        ->get()
-        ->sum('total_profit');
-}
+    public function getTotalInterestEarnedAttribute()
+    {
+        return $this->investments()
+            ->where('status', 'completed')
+            ->get()
+            ->sum('total_profit');
+    }
 
-    // Total approved withdrawals
     public function getTotalWithdrawnAttribute()
     {
         return $this->withdrawals()
@@ -104,21 +86,76 @@ public function getTotalInterestEarnedAttribute()
                     ->sum('amount');
     }
 
-    // Total income = balance + interest
     public function getTotalIncomeAttribute()
     {
         return $this->available_balance + $this->total_interest_earned;
     }
 
-    // Total withdrawals (any status)
     public function getTotalWithdrawalsAttribute()
     {
         return $this->withdrawals()->sum('amount');
     }
 
-public function userKyc()
+    // MEMBERSHIP & ACCESS METHODS
+    /**
+     * Check if user has premium access ($25,000+ plan)
+     */
+    public function hasPremiumAccess()
+    {
+        return $this->investments()
+            ->where('status', 'completed')
+            ->where('amount_invested', '>=', 25000)
+            ->exists();
+    }
+
+    /**
+     * Get user's total investment amount
+     */
+    public function getTotalInvestmentAmount()
+    {
+        return $this->investments()
+            ->where('status', 'completed')
+            ->sum('amount_invested');
+    }
+
+    /**
+     * Check if user has approved deposit
+     */
+  
+
+/**
+ * Check if user has approved deposit (status = 1)
+ */
+public function hasApprovedDeposit()
 {
-    return $this->hasOne(UserKyc::class);
+    return $this->deposits()->where('status', 1)->exists();
 }
 
+/**
+ * Check if user has active membership
+ */
+public function hasActiveMembership()
+{
+    return !empty($this->membership_code) && $this->has_membership == 1;
+}
+    /**
+     * Get user's highest investment amount
+     */
+    public function getHighestInvestmentAmount()
+    {
+        return $this->investments()
+            ->where('status', 'completed')
+            ->max('amount_invested') ?? 0;
+    }
+
+    /**
+     * Check if user has premium tier investment
+     */
+    public function hasPremiumTierInvestment()
+    {
+        return $this->investments()
+            ->where('status', 'completed')
+            ->where('amount_invested', '>=', 25000)
+            ->exists();
+    }
 }

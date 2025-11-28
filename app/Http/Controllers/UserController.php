@@ -14,6 +14,9 @@ use App\Models\WithdrawalCard;
 
 use App\Mail\OtpMail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
@@ -36,8 +39,8 @@ class UserController extends Controller
             'email'       => 'required|email|unique:users,email|max:255',
             'phone'       => 'required|string|max:20',
             'country' => 'nullable|string|max:100',
-          
-              'password'    => ['required', 'string', 'min:6', 'max:40', 'confirmed'],
+
+            'password'    => ['required', 'string', 'min:6', 'max:40', 'confirmed'],
             'referral_id' => 'nullable|string|max:255',
         ]);
 
@@ -66,7 +69,7 @@ class UserController extends Controller
         $user->phone = $request->phone;
         $user->country = $request->country;
         $user->password = Hash::make($request->password);
-        
+
         $user->role_as = '0';
         $user->email_verification_otp = $newOtp;
         $user->referred_by = $referredBy;
@@ -163,127 +166,394 @@ class UserController extends Controller
         return $masked . '@' . $domain;
     }
 
-  public function user_dashboard()
-{
-    $user = auth()->user();
+    public function user_dashboard()
+    {
+        $user = auth()->user();
 
-    $cardExists = WithdrawalCard::where('user_id', $user->id)->exists();
-    $totalInvested = Investment::where('user_id', $user->id)->sum('amount_invested');
-    $verification = $user->idverification;
-    // Deposits
-    $deposits = Deposit::where('user_id', $user->id)
-        ->latest()
-        ->take(5)
-        ->get()
-        ->map(function ($deposit) {
+        $cardExists = WithdrawalCard::where('user_id', $user->id)->exists();
+        $totalInvested = Investment::where('user_id', $user->id)->sum('amount_invested');
+        $verification = $user->idverification;
+        // Deposits
+        $deposits = Deposit::where('user_id', $user->id)
+            ->latest()
+            ->take(5)
+            ->get()
+            ->map(function ($deposit) {
+                return [
+                    'type' => 'Deposit',
+                    'amount' => $deposit->amount_deposited,
+                    'status' => $deposit->status ? 'Completed' : 'Pending',
+                    'date' => $deposit->created_at,
+                    'reference' => 'DEP-' . $deposit->id,
+                    'icon' => 'bank-transfer-in',
+                    'action_url' => null,
+                    'action_text' => null
+                ];
+            });
+
+        // Withdrawals
+        $withdrawals = Withdrawal::where('user_id', $user->id)
+            ->latest()
+            ->take(5)
+            ->get()
+            ->map(function ($withdrawal) {
+                return [
+                    'type' => 'Withdrawal',
+                    'amount' => $withdrawal->amount,
+
+
+
+                    'status' => match ($withdrawal->status) {
+                        'pending' => 'Pending',
+                        'completed' => 'Completed',
+                        'rejected' => 'Rejected',
+                        default => ucfirst($withdrawal->status),
+                    },
+
+
+                    'date' => $withdrawal->created_at,
+                    'reference' => 'WD-' . $withdrawal->id,
+                    'icon' => 'bank-transfer-out',
+                    'action_url' => null,
+                    'action_text' => null
+                ];
+            });
+
+        // Active Investments
+        $allInvestments = $user->investments()
+            ->where('status', 'active')
+            ->with('plan')
+            ->get();
+
+        $activeInvestments = $allInvestments->take(5)->map(function ($investment) {
             return [
-                'type' => 'Deposit',
-                'amount' => $deposit->amount_deposited,
-                'status' => $deposit->status ? 'Completed' : 'Pending',
-                'date' => $deposit->created_at,
-                'reference' => 'DEP-' . $deposit->id,
-                'icon' => 'bank-transfer-in',
-                'action_url' => null,
-                'action_text' => null
-            ];
-        });
-
-    // Withdrawals
-    $withdrawals = Withdrawal::where('user_id', $user->id)
-        ->latest()
-        ->take(5)
-        ->get()
-        ->map(function ($withdrawal) {
-            return [
-                'type' => 'Withdrawal',
-                'amount' => $withdrawal->amount,
-               
-            
-
-                'status' => match ($withdrawal->status) {
-    'pending' => 'Pending',
-    'completed' => 'Completed',
-    'rejected' => 'Rejected',
-    default => ucfirst($withdrawal->status),
-},
-
-
-                'date' => $withdrawal->created_at,
-                'reference' => 'WD-' . $withdrawal->id,
-                'icon' => 'bank-transfer-out',
-                'action_url' => null,
-                'action_text' => null
-            ];
-        });
-
-    // Active Investments
-    $allInvestments = $user->investments()
-        ->where('status', 'active')
-        ->with('plan')
-        ->get();
-
-    $activeInvestments = $allInvestments->take(5)->map(function ($investment) {
-        return [
-            'type' => 'Investment Active',
-            'amount' => $investment->amount_invested,
-            'status' => 'Active',
-            'date' => $investment->created_at,
-            'reference' => 'INV-' . $investment->id,
-            'icon' => 'chart-line',
-            'plan_name' => $investment->plan->name ?? 'N/A',
-            'action_url' => null,
-            'action_text' => null
-        ];
-    });
-
-    // Matured Investments (ready for withdrawal)
-    $maturedInvestments = Investment::with('plan')
-        ->where('user_id', $user->id)
-        ->where('status', 'completed')
-        ->latest()
-        ->get()
-        ->filter(fn($inv) => $inv->is_withdrawable)
-        ->take(5)
-        ->map(function ($investment) {
-            return [
-                'type' => 'Investment Matured',
-                'amount' => $investment->amount_invested + $investment->total_profit,
-                'status' => 'Ready to Withdraw',
-                'date' => $investment->updated_at,
-                'reference' => 'MAT-' . $investment->id,
-                'icon' => 'cash-check',
+                'type' => 'Investment Active',
+                'amount' => $investment->amount_invested,
+                'status' => 'Active',
+                'date' => $investment->created_at,
+                'reference' => 'INV-' . $investment->id,
+                'icon' => 'chart-line',
                 'plan_name' => $investment->plan->name ?? 'N/A',
-                'action_url' => route('investments.withdraw', $investment->id),
-                'action_text' => 'Withdraw Now'
+                'action_url' => null,
+                'action_text' => null
             ];
         });
 
-    // Combine all activities
-    $activities = collect();
-    $recentActivities = $activities
-        ->merge($deposits)
-        ->merge($withdrawals)
-        ->merge($activeInvestments)
-        ->merge($maturedInvestments)
-        ->sortByDesc('date')
-        ->take(3);
+        // Matured Investments (ready for withdrawal)
+        $maturedInvestments = Investment::with('plan')
+            ->where('user_id', $user->id)
+            ->where('status', 'completed')
+            ->latest()
+            ->get()
+            ->filter(fn($inv) => $inv->is_withdrawable)
+            ->take(5)
+            ->map(function ($investment) {
+                return [
+                    'type' => 'Investment Matured',
+                    'amount' => $investment->amount_invested + $investment->total_profit,
+                    'status' => 'Ready to Withdraw',
+                    'date' => $investment->updated_at,
+                    'reference' => 'MAT-' . $investment->id,
+                    'icon' => 'cash-check',
+                    'plan_name' => $investment->plan->name ?? 'N/A',
+                    'action_url' => route('investments.withdraw', $investment->id),
+                    'action_text' => 'Withdraw Now'
+                ];
+            });
 
-    if (session('certShowAt') && session('certShowAt') < now()->timestamp) {
-        session()->forget('certShowAt');
+        // Combine all activities
+        $activities = collect();
+        $recentActivities = $activities
+            ->merge($deposits)
+            ->merge($withdrawals)
+            ->merge($activeInvestments)
+            ->merge($maturedInvestments)
+            ->sortByDesc('date')
+            ->take(3);
+
+        if (session('certShowAt') && session('certShowAt') < now()->timestamp) {
+            session()->forget('certShowAt');
+        }
+        $overlayCountToday = session('overlayCountToday', 0);
+
+        // Finally, return view with ALL variables
+        return view('dashboard.index', compact(
+            'user',
+            'cardExists',
+            'totalInvested',
+            'recentActivities',
+            'overlayCountToday',
+            'allInvestments',
+            'verification'
+        ));
     }
-    $overlayCountToday = session('overlayCountToday', 0);
 
-    // Finally, return view with ALL variables
-    return view('dashboard.index', compact(
-        'user',
-        'cardExists',
-        'totalInvested',
-        'recentActivities',
-        'overlayCountToday',
-        'allInvestments',
-        'verification'
-    ));
+
+
+    // lives
+
+  // Add these methods to UserController.php
+
+public function user_live()
+{
+    $session = DB::table('live_trading_sessions')
+        ->where('user_id', auth()->id())
+        ->where('is_active', true)
+        ->first();
+
+    $messages = DB::table('live_trading_messages')
+        ->join('users', 'live_trading_messages.user_id', '=', 'users.id')
+        ->select('live_trading_messages.*', 'users.name as user_name')
+        ->orderBy('live_trading_messages.created_at', 'desc')
+        ->limit(50)
+        ->get()
+        ->reverse();
+
+    return view('dashboard.livetrading', compact('session', 'messages'));
 }
+
+public function activateMembership(Request $request)
+{
+    $request->validate([
+        'membership_code' => 'required|string'
+    ]);
+
+    $user = Auth::user();
+    $inputCode = trim($request->membership_code);
+    
+    // 1. Check if already active
+    if ($user->has_membership) {
+        return response()->json([
+            'success' => false,
+            'message' => '✅ Your membership is already active!'
+        ], 422);
+    }
+    
+    // 2. Check if code matches user's assigned code
+    if ($user->membership_code !== $inputCode) {
+        return response()->json([
+            'success' => false,
+            'message' => '❌ This code does not match your account. Expected: ' . $user->membership_code
+        ], 422);
+    }
+    
+    // 3. Check if code exists in database
+    $validCode = DB::table('membership_codes')
+        ->where('code', $inputCode)
+        ->first();
+    
+    if (!$validCode) {
+        return response()->json([
+            'success' => false,
+            'message' => '❌ Code not found in database. Contact admin.'
+        ], 422);
+    }
+    
+    // 4. Check if code already used by someone else
+    if ($validCode->is_used && $validCode->used_by != $user->id) {
+        return response()->json([
+            'success' => false,
+            'message' => '❌ This code has been used by another user.'
+        ], 422);
+    }
+    
+    // 5. Activate membership
+    DB::table('membership_codes')
+        ->where('id', $validCode->id)
+        ->update([
+            'is_used' => true,
+            'used_by' => $user->id,
+            'used_at' => now()
+        ]);
+
+    $user->update([
+        'has_membership' => true
+    ]);
+
+    return response()->json([
+        'success' => true,
+        'message' => '🎉 Membership activated! Welcome to Live Trading!'
+    ]);
+}
+
+public function liveTradingStart(Request $request)
+{
+    // Check if user has approved deposit (status = 1)
+    $hasDeposit = auth()->user()->deposits()->where('status', 1)->exists();
+
+    if (!$hasDeposit) {
+        return response()->json([
+            'success' => false,
+            'message' => 'You need an approved deposit first.'
+        ], 403);
+    }
+
+    // Check for existing active session
+    $existingSession = DB::table('live_trading_sessions')
+        ->where('user_id', auth()->id())
+        ->where('is_active', true)
+        ->first();
+
+    if ($existingSession) {
+        return response()->json([
+            'success' => true,
+            'message' => 'Session already active.',
+            'session_id' => $existingSession->id
+        ]);
+    }
+
+    // Create new session
+    $sessionId = DB::table('live_trading_sessions')->insertGetId([
+        'user_id' => auth()->id(),
+        'started_at' => now(),
+        'last_activity' => now(),
+        'is_active' => true,
+        'watch_time_seconds' => 0,
+        'earnings' => 0,
+        'created_at' => now(),
+        'updated_at' => now()
+    ]);
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Session started!',
+        'session_id' => $sessionId
+    ]);
+}
+
+public function liveTradingUpdate(Request $request)
+{
+    $session = DB::table('live_trading_sessions')
+        ->where('user_id', auth()->id())
+        ->where('is_active', true)
+        ->first();
+
+    if (!$session) {
+        return response()->json([
+            'success' => false,
+            'message' => 'No active session.'
+        ], 404);
+    }
+
+    $newWatchTime = $session->watch_time_seconds + 60;
+    $newEarnings = ($newWatchTime / 60) * 0.01;
+
+    DB::table('live_trading_sessions')
+        ->where('id', $session->id)
+        ->update([
+            'watch_time_seconds' => $newWatchTime,
+            'earnings' => $newEarnings,
+            'last_activity' => now(),
+            'updated_at' => now()
+        ]);
+
+    return response()->json([
+        'success' => true,
+        'watch_time' => $newWatchTime,
+        'earnings' => number_format($newEarnings, 2)
+    ]);
+}
+
+public function liveTradingClaim(Request $request)
+{
+    $session = DB::table('live_trading_sessions')
+        ->where('user_id', auth()->id())
+        ->where('is_active', true)
+        ->first();
+
+    if (!$session || $session->earnings <= 0) {
+        return response()->json([
+            'success' => false,
+            'message' => 'No earnings to claim.'
+        ], 400);
+    }
+
+    $user = auth()->user();
+    $newBalance = $user->available_balance + $session->earnings;
+
+    DB::table('users')
+        ->where('id', $user->id)
+        ->update([
+            'available_balance' => $newBalance
+        ]);
+
+    DB::table('live_trading_sessions')
+        ->where('id', $session->id)
+        ->update([
+            'earnings' => 0,
+            'is_active' => false,
+            'ended_at' => now(),
+            'updated_at' => now()
+        ]);
+
+    return response()->json([
+        'success' => true,
+        'claimed' => number_format($session->earnings, 2),
+        'new_balance' => number_format($newBalance, 2)
+    ]);
+}
+
+public function liveTradingSendMessage(Request $request)
+{
+    $request->validate([
+        'message' => 'required|string|max:500'
+    ]);
+
+    DB::table('live_trading_messages')->insert([
+        'user_id' => auth()->id(),
+        'message' => $request->message,
+        'created_at' => now(),
+        'updated_at' => now()
+    ]);
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Message sent!'
+    ]);
+}
+
+public function liveTradingGetMessages()
+{
+    $messages = DB::table('live_trading_messages')
+        ->join('users', 'live_trading_messages.user_id', '=', 'users.id')
+        ->select(
+            'live_trading_messages.id',
+            'live_trading_messages.message',
+            'live_trading_messages.created_at',
+            'users.name as user_name'
+        )
+        ->orderBy('live_trading_messages.created_at', 'desc')
+        ->limit(50)
+        ->get()
+        ->reverse()
+        ->map(function ($msg) {
+            return [
+                'id' => $msg->id,
+                'message' => $msg->message,
+                'user_name' => $msg->user_name,
+                'time_ago' => Carbon::parse($msg->created_at)->diffForHumans()
+            ];
+        });
+
+    return response()->json([
+        'success' => true,
+        'messages' => $messages
+    ]);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -328,30 +598,30 @@ class UserController extends Controller
 
 
 
- //reinvestmet
-public function initiateReinvestment(Request $request)
-{
-    $user = auth()->user();
-    
-    // Validate user has sufficient balance
-    if ($user->available_balance <= 0) {
-        return redirect()->route('user_dashboard')->with('error', 'Insufficient balance for reinvestment');
+    //reinvestmet
+    public function initiateReinvestment(Request $request)
+    {
+        $user = auth()->user();
+
+        // Validate user has sufficient balance
+        if ($user->available_balance <= 0) {
+            return redirect()->route('user_dashboard')->with('error', 'Insufficient balance for reinvestment');
+        }
+
+        // Set reinvestment session flag with expiration
+        session([
+            'reinvestment_mode' => true,
+            'reinvestment_expires' => now()->addMinutes(30),
+            'reinvestment_balance' => $user->available_balance
+        ]);
+
+        return redirect()->route('user.deposit')->with('info', 'You are in reinvestment mode. Your available balance will be used.');
     }
-    
-    // Set reinvestment session flag with expiration
-    session([
-        'reinvestment_mode' => true,
-        'reinvestment_expires' => now()->addMinutes(30),
-        'reinvestment_balance' => $user->available_balance
-    ]);
-    
-    return redirect()->route('user.deposit')->with('info', 'You are in reinvestment mode. Your available balance will be used.');
-}
 
 
-public function rules_regulations(){
- 
-     return view('dashboard.informations.rules_guildelines');
-}
+    public function rules_regulations()
+    {
 
+        return view('dashboard.informations.rules_guildelines');
+    }
 }

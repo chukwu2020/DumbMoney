@@ -134,10 +134,26 @@
                 </h6>
             </a>
 
-            <ul class="flex items-center space-x-2">
-                <li class="text-gray-400">-</li>
-                <li class="font-medium text-[#9EDD05]">MarketMind</li>
-            </ul>
+         <ul class="flex items-center space-x-2">
+
+    <li>
+        <span class="h-2.5 w-2.5 rounded-full bg-red-600 animate-[blink_1s_ease-in-out_infinite]"></span>
+    </li>
+
+    
+
+    <li class="font-medium text-[#9EDD05]">
+        <a href="{{ route('user_live') }}">Live Trading</a>
+    </li>
+</ul>
+
+<style>
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+</style>
+
         </div>
 
 

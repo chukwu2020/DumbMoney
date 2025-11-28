@@ -16,12 +16,14 @@ use App\Notifications\IDVerificationSubmitted;
 use App\Notifications\TransactionNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str; // ✅ ADDED THIS IMPORT
 
 class AdminController extends Controller
 {
     public function userIndex(Request $request)
     {
-        $query = User::with(['investments', 'profile', 'withdrawalCard']) // eager load all needed
+        $query = User::with(['investments', 'profile', 'withdrawalCard'])
             ->where('role_as', 0);
 
         if ($request->filled('search')) {
@@ -43,17 +45,16 @@ class AdminController extends Controller
 
         $users = $query->paginate(10);
 
-        // Optional: calculate total invested manually (you already eager loaded 'investments')
         foreach ($users as $user) {
             $user->total_invested = $user->investments->sum('amount_invested');
         }
 
         return view('admin.users.index', compact('users'));
-    }   
+    }
 
-    public function  hiddenuser(Request $request)
+    public function hiddenuser(Request $request)
     {
-        $query = User::with(['investments', 'profile', 'withdrawalCard']) // eager load all needed
+        $query = User::with(['investments', 'profile', 'withdrawalCard'])
             ->where('role_as', 0);
 
         if ($request->filled('search')) {
@@ -75,13 +76,12 @@ class AdminController extends Controller
 
         $users = $query->paginate(10);
 
-        // Optional: calculate total invested manually (you already eager loaded 'investments')
         foreach ($users as $user) {
             $user->total_invested = $user->investments->sum('amount_invested');
         }
 
         return view('admin.users.indexmain', compact('users'));
-    } 
+    }
 
     public function userDestroy($id)
     {
@@ -91,14 +91,11 @@ class AdminController extends Controller
         return redirect()->route('user.index')->with('success', 'User deleted successfully.');
     }
 
-
     public function edit($id)
     {
         $user = User::findOrFail($id);
         return view('admin.users.edit', compact('user'));
     }
-
-
 
     public function pendingDeposits()
     {
@@ -118,20 +115,16 @@ class AdminController extends Controller
             ->get();
 
         return view('admin.deposits.approve', compact('deposits'));
-        //   return view('admin.deposits.approved', compact('deposits'));
     }
-
 
     public function rejectDeposit($id)
     {
         $deposit = Deposit::findOrFail($id);
 
-        // Make sure it's not already approved
         if ($deposit->status === 1) {
             return back()->with('error', 'You cannot reject an already approved deposit.');
         }
 
-        // Delete the deposit entirely
         $deposit->delete();
 
         return back()->with('success', 'Deposit rejected and removed successfully.');
@@ -141,7 +134,6 @@ class AdminController extends Controller
     {
         $deposit = Deposit::findOrFail($id);
 
-        // ✅ Prevent double-approval
         if ($deposit->status === 1) {
             return redirect()->back()->with('error', 'This deposit has already been approved.');
         }
@@ -173,7 +165,7 @@ class AdminController extends Controller
 
         $user->notify(new TransactionNotification(
             'Deposit Approved',
-            'Your deposit of $' . number_format($deposit->amount_deposited, 2) . ' has been approved and investestment started successfully.'
+            'Your deposit of $' . number_format($deposit->amount_deposited, 2) . ' has been approved and investment started successfully.'
         ));
 
         return redirect()->back()->with('success', 'Deposit approved and investment started');
@@ -191,21 +183,66 @@ class AdminController extends Controller
         return view('admin.deposits.withdrawal_approved', compact('approvedWithdrawals', 'withdrawalCards'));
     }
 
-    // ✅ UPDATED: Unapprove with admin note
     public function unapproveBalanceWithdrawal(Request $request, $id)
+    {
+        $withdrawal = Withdrawal::findOrFail($id);
+
+        $withdrawal->user->available_balance += $withdrawal->amount;
+        $withdrawal->user->save();
+
+        $withdrawal->status = 'failed';
+        $withdrawal->admin_note = $request->admin_note;
+        $withdrawal->save();
+
+        return redirect()->back()->with('success', 'Withdrawal has been unapproved and marked as failed.');
+    }
+
+    // ✅ FIXED: Generate Membership Code
+   
+// Add this to AdminController.php
+
+public function generateMembershipCode(Request $request)
 {
-    $withdrawal = Withdrawal::findOrFail($id);
+    $request->validate([
+        'user_id' => 'required|exists:users,id'
+    ]);
 
-    // Restore balance to user
-    $withdrawal->user->available_balance += $withdrawal->amount;
-    $withdrawal->user->save();
+    $user = User::findOrFail($request->user_id);
+    
+    // Check if user already has a code
+    if ($user->membership_code) {
+        return response()->json([
+            'success' => false,
+            'message' => 'User already has code: ' . $user->membership_code
+        ], 400);
+    }
 
-    // Mark withdrawal as failed
-    $withdrawal->status = 'failed';
-    $withdrawal->admin_note = $request->admin_note; // note from modal
-    $withdrawal->save();
-
-    return redirect()->back()->with('success', 'Withdrawal has been unapproved and marked as failed.');
+    // Generate unique code
+    do {
+        $membershipCode = 'VIP' . date('Y') . strtoupper(Str::random(6));
+    } while (DB::table('membership_codes')->where('code', $membershipCode)->exists());
+    
+    // Insert into membership_codes table
+    DB::table('membership_codes')->insert([
+        'code' => $membershipCode,
+        'is_used' => false,
+        'used_by' => null,
+        'used_at' => null,
+        'created_at' => now(),
+        'updated_at' => now()
+    ]);
+    
+    // Assign to user (but don't activate yet)
+    $user->update([
+        'membership_code' => $membershipCode,
+        'has_membership' => false
+    ]);
+    
+    return response()->json([
+        'success' => true,
+        'membership_code' => $membershipCode,
+        'user_name' => $user->name
+    ]);
 }
 
     public function withdrawaldestroy($id)
@@ -230,7 +267,6 @@ class AdminController extends Controller
 
         $user = User::findOrFail($id);
         $user->available_balance = $request->input('available_balance');
-
         $user->save();
 
         return redirect()->route('user.index')->with('success', 'User balance updated successfully.');
@@ -253,7 +289,6 @@ class AdminController extends Controller
 
     public function adminViewWithdrawals()
     {
-        // Eager load user and profile to avoid N+1 queries
         $withdrawals = Withdrawal::with(['user.profile', 'user.withdrawalCard'])
             ->where('status', 'pending')
             ->orderBy('created_at', 'desc')
@@ -266,13 +301,12 @@ class AdminController extends Controller
     {
         $withdrawal = Withdrawal::findOrFail($id);
 
-        // ✅ Skip if already approved
         if ($withdrawal->status === 'approved') {
             return back()->with('error', 'This withdrawal has already been approved.');
         }
 
         $withdrawal->status = 'approved';
-        $withdrawal->admin_note = null; // Clear any previous rejection notes
+        $withdrawal->admin_note = null;
         $withdrawal->save();
 
         $user = $withdrawal->user;
@@ -285,7 +319,6 @@ class AdminController extends Controller
         return back()->with('success', 'Withdrawal approved successfully.');
     }
 
-    // ✅ UPDATED: Reject with admin note
     public function rejectBalanceWithdrawal(Request $request, $id)
     {
         $request->validate([
@@ -298,17 +331,14 @@ class AdminController extends Controller
             return back()->with('error', 'Only pending withdrawals can be rejected.');
         }
 
-        // Refund the user
         $user = $withdrawal->user;
         $user->available_balance += $withdrawal->amount;
         $user->save();
 
-        // Update withdrawal status with admin note
         $withdrawal->status = 'rejected';
         $withdrawal->admin_note = $request->admin_note;
         $withdrawal->save();
 
-        // Notify the user with the reason
         $user->notify(new TransactionNotification(
             'Withdrawal Rejected',
             'Your withdrawal request of $' . number_format($withdrawal->amount, 2) . ' has been rejected. Reason: ' . $request->admin_note
@@ -317,15 +347,12 @@ class AdminController extends Controller
         return back()->with('success', 'Withdrawal rejected, amount refunded to user, and notification sent.');
     }
 
-    // message
     public function index()
     {
         $messages = ContactUSMessage::orderBy('created_at', 'desc')->paginate(20);
-
         return view('admin.contactUs.index', compact('messages'));
     }
-    
-    // contact us
+
     public function destroy($id)
     {
         $message = Message::findOrFail($id);
@@ -334,7 +361,6 @@ class AdminController extends Controller
         return redirect()->route('admin.messages.index')->with('success', 'Message deleted successfully.');
     }
 
-    //profile
     public function profile()
     {
         $user = User::with('profile')->find(auth()->id());
@@ -343,7 +369,6 @@ class AdminController extends Controller
 
     public function updateProfile(Request $request)
     {
-        /** @var \App\Models\User $user */
         $user = auth()->user();
 
         if ($request->hasFile('profile_pic')) {
@@ -351,18 +376,15 @@ class AdminController extends Controller
             $filename = time() . '_' . $file->getClientOriginalName();
             $file->move(public_path('uploads'), $filename);
 
-            // Create or update profile
             $profile = $user->profile ?? new \App\Models\UserProfile();
             $profile->user_id = $user->id;
             $profile->profile_pic = $filename;
             $profile->save();
         }
 
-        // Update name, phone, address, etc.
         $user->update([
             'name' => $request->input('name'),
             'phone' => $request->input('phone'),
-            // do not update email if it's readonly
         ]);
 
         if ($user->profile) {
@@ -376,7 +398,6 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Profile updated successfully.');
     }
 
-    // admin verify identity
     public function kycindex()
     {
         $kycs = UserKyc::with('user')->latest()->get();
