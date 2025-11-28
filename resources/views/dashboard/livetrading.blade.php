@@ -478,53 +478,109 @@
     <!-- Premium Trading Dashboard -->
     <div class="px-4 py-6 max-w-7xl mx-auto">
 
-        <!-- Performance Metrics -->
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <div class="bg-slate-800/60 rounded-xl p-4 border border-slate-700/50 backdrop-blur-sm">
-                <p class="text-slate-400 text-xs uppercase tracking-wider mb-1">Portfolio Value</p>
-
-                <p class="text-3xl font-black text-emerald-400 font-mono mt-2">
-                    ${{ number_format(auth()->user()->available_balance ?? 0, 2) }}
-                </p>
-                <div class="flex items-center gap-2 mt-1">
-                    <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" style="background-color: #10b981 !important;"></div>
-                    <p class="text-slate-400 text-xs">Live</p>
-                </div>
-            </div>
-            <div class="bg-slate-800/40 rounded-xl p-4 border border-slate-700/50 backdrop-blur-sm">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="text-slate-400 text-xs uppercase tracking-wider">Active Sessions</span>
-                    <i class="fas fa-users text-cyan-400 text-sm" style="color: #22d3ee !important;"></i>
-                </div>
-                <p id="active_sessions" class="text-2xl font-bold text-white font-mono">12</p>
-                <div class="flex items-center gap-1 mt-1">
-                    <i class="fas fa-arrow-up text-emerald-400 text-xs" style="color: #10b981 !important;"></i>
-                    <span class="text-emerald-400 text-xs" style="color: #10b981 !important;">+2.4%</span>
-                </div>
-            </div>
-            <div class="bg-slate-800/40 rounded-xl p-4 border border-slate-700/50 backdrop-blur-sm">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="text-slate-400 text-xs uppercase tracking-wider">Online Traders</span>
-                    <i class="fas fa-signal text-blue-400 text-sm" style="color: #60a5fa !important;"></i>
-                </div>
-                <p id="online_traders" class="text-2xl font-bold text-white font-mono">172</p>
-                <div class="flex items-center gap-1 mt-1">
-                    <i class="fas fa-arrow-up text-emerald-400 text-xs" style="color: #10b981 !important;"></i>
-                    <span class="text-emerald-400 text-xs" style="color: #10b981 !important;">+2.2%</span>
-                </div>
-            </div>
-            <div class="bg-slate-800/40 rounded-xl p-4 border border-slate-700/50 backdrop-blur-sm">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="text-slate-400 text-xs uppercase tracking-wider">24h Volume</span>
-                    <i class="fas fa-chart-bar text-amber-400 text-sm" style="color: #f59e0b !important;"></i>
-                </div>
-                <p id="daily_volume" class="text-2xl font-bold text-white font-mono">$12.8M</p>
-                <div class="flex items-center gap-1 mt-1">
-                    <i class="fas fa-arrow-up text-emerald-400 text-xs" style="color: #10b981 !important;"></i>
-                    <span class="text-emerald-400 text-xs" style="color: #10b981 !important;">+3.8%</span>
-                </div>
+      <!-- Enhanced Performance Metrics -->
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6" style="background-color: white !important ;">
+    <!-- Portfolio Value Card -->
+    <div style="background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.6) 100%) !important; border-radius: 1rem !important; padding: 1.25rem !important; border: 2px solid rgba(16, 185, 129, 0.3) !important; backdrop-filter: blur(20px) !important; box-shadow: 0 25px 50px -12px rgba(16, 185, 129, 0.1) !important; transition: all 0.3s ease !important;" 
+         onmouseover="this.style.transform='scale(1.05)' !important; this.style.boxShadow='0 25px 50px -12px rgba(16, 185, 129, 0.2) !important'" 
+         onmouseout="this.style.transform='scale(1)' !important; this.style.boxShadow='0 25px 50px -12px rgba(16, 185, 129, 0.1) !important'">
+        <div style="display: flex !important; align-items: center !important; justify-content: space-between !important; margin-bottom: 0.75rem !important;">
+            <span style="color: #cbd5e1 !important; font-size: 0.75rem !important; text-transform: uppercase !important; letter-spacing: 0.05em !important; font-weight: 600 !important;">Portfolio Value</span>
+            <div style="width: 2rem !important; height: 2rem !important; background-color: rgba(16, 185, 129, 0.2) !important; border-radius: 0.5rem !important; display: flex !important; align-items: center !important; justify-content: center !important; border: 1px solid rgba(16, 185, 129, 0.3) !important;">
+                <i class="fas fa-wallet" style="color: #10b981 !important; font-size: 0.875rem !important;"></i>
             </div>
         </div>
+        <p style="color: #ffffff !important; font-size: 1.875rem !important; line-height: 2.25rem !important; font-weight: 900 !important; font-family: monospace !important; overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important; margin: 0 !important;" 
+           title="${{ number_format(auth()->user()->available_balance ?? 0, 2) }}">
+            ${{ number_format(auth()->user()->available_balance ?? 0, 2) }}
+        </p>
+        <div style="display: flex !important; align-items: center !important; gap: 0.5rem !important; margin-top: 0.75rem !important; padding-top: 0.75rem !important; border-top: 1px solid rgba(71, 85, 105, 0.5) !important;">
+            <div style="width: 0.5rem !important; height: 0.5rem !important; background-color: #10b981 !important; border-radius: 9999px !important; animation: pulse 2s infinite !important;"></div>
+            <p style="color: #94a3b8 !important; font-size: 0.75rem !important; font-weight: 500 !important; margin: 0 !important;">Live Tracking</p>
+        </div>
+    </div>
+
+    <!-- Active Sessions Card -->
+    <div style="background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.6) 100%) !important; border-radius: 1rem !important; padding: 1.25rem !important; border: 2px solid rgba(34, 211, 238, 0.3) !important; backdrop-filter: blur(20px) !important; box-shadow: 0 25px 50px -12px rgba(34, 211, 238, 0.1) !important; transition: all 0.3s ease !important;" 
+         onmouseover="this.style.transform='scale(1.05)' !important; this.style.boxShadow='0 25px 50px -12px rgba(34, 211, 238, 0.2) !important'" 
+         onmouseout="this.style.transform='scale(1)' !important; this.style.boxShadow='0 25px 50px -12px rgba(34, 211, 238, 0.1) !important'">
+        <div style="display: flex !important; align-items: center !important; justify-content: space-between !important; margin-bottom: 0.75rem !important;">
+            <span style="color: #cbd5e1 !important; font-size: 0.75rem !important; text-transform: uppercase !important; letter-spacing: 0.05em !important; font-weight: 600 !important;">Active Sessions</span>
+            <div style="width: 2rem !important; height: 2rem !important; background-color: rgba(34, 211, 238, 0.2) !important; border-radius: 0.5rem !important; display: flex !important; align-items: center !important; justify-content: center !important; border: 1px solid rgba(34, 211, 238, 0.3) !important;">
+                <i class="fas fa-users" style="color: #22d3ee !important; font-size: 0.875rem !important;"></i>
+            </div>
+        </div>
+        <p id="active_sessions" style="color: #ffffff !important; font-size: 1.875rem !important; line-height: 2.25rem !important; font-weight: 900 !important; font-family: monospace !important; overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important; margin: 0 !important;" title="45">45</p>
+        <div style="display: flex !important; align-items: center !important; gap: 0.5rem !important; margin-top: 0.75rem !important; padding-top: 0.75rem !important; border-top: 1px solid rgba(71, 85, 105, 0.5) !important;">
+            <i class="fas fa-arrow-up" style="color: #10b981 !important; font-size: 0.75rem !important;"></i>
+            <span style="color: #10b981 !important; font-size: 0.75rem !important; font-weight: 500 !important;">+2.4%</span>
+            <span style="color: #64748b !important; font-size: 0.75rem !important; margin-left: auto !important;">Live</span>
+        </div>
+    </div>
+
+    <!-- Online Traders Card -->
+    <div style="background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.6) 100%) !important; border-radius: 1rem !important; padding: 1.25rem !important; border: 2px solid rgba(96, 165, 250, 0.3) !important; backdrop-filter: blur(20px) !important; box-shadow: 0 25px 50px -12px rgba(96, 165, 250, 0.1) !important; transition: all 0.3s ease !important;" 
+         onmouseover="this.style.transform='scale(1.05)' !important; this.style.boxShadow='0 25px 50px -12px rgba(96, 165, 250, 0.2) !important'" 
+         onmouseout="this.style.transform='scale(1)' !important; this.style.boxShadow='0 25px 50px -12px rgba(96, 165, 250, 0.1) !important'">
+        <div style="display: flex !important; align-items: center !important; justify-content: space-between !important; margin-bottom: 0.75rem !important;">
+            <span style="color: #cbd5e1 !important; font-size: 0.75rem !important; text-transform: uppercase !important; letter-spacing: 0.05em !important; font-weight: 600 !important;">Online Traders</span>
+            <div style="width: 2rem !important; height: 2rem !important; background-color: rgba(96, 165, 250, 0.2) !important; border-radius: 0.5rem !important; display: flex !important; align-items: center !important; justify-content: center !important; border: 1px solid rgba(96, 165, 250, 0.3) !important;">
+                <i class="fas fa-signal" style="color: #60a5fa !important; font-size: 0.875rem !important;"></i>
+            </div>
+        </div>
+        <p id="online_traders" style="color: #ffffff !important; font-size: 1.875rem !important; line-height: 2.25rem !important; font-weight: 900 !important; font-family: monospace !important; overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important; margin: 0 !important;" title="856">856</p>
+        <div style="display: flex !important; align-items: center !important; gap: 0.5rem !important; margin-top: 0.75rem !important; padding-top: 0.75rem !important; border-top: 1px solid rgba(71, 85, 105, 0.5) !important;">
+            <i class="fas fa-arrow-up" style="color: #10b981 !important; font-size: 0.75rem !important;"></i>
+            <span style="color: #10b981 !important; font-size: 0.75rem !important; font-weight: 500 !important;">+2.2%</span>
+            <span style="color: #64748b !important; font-size: 0.75rem !important; margin-left: auto !important;">Real-time</span>
+        </div>
+    </div>
+
+    <!-- 24h Volume Card -->
+    <div style="background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.6) 100%) !important; border-radius: 1rem !important; padding: 1.25rem !important; border: 2px solid rgba(245, 158, 11, 0.3) !important; backdrop-filter: blur(20px) !important; box-shadow: 0 25px 50px -12px rgba(245, 158, 11, 0.1) !important; transition: all 0.3s ease !important;" 
+         onmouseover="this.style.transform='scale(1.05)' !important; this.style.boxShadow='0 25px 50px -12px rgba(245, 158, 11, 0.2) !important'" 
+         onmouseout="this.style.transform='scale(1)' !important; this.style.boxShadow='0 25px 50px -12px rgba(245, 158, 11, 0.1) !important'">
+        <div style="display: flex !important; align-items: center !important; justify-content: space-between !important; margin-bottom: 0.75rem !important;">
+            <span style="color: #cbd5e1 !important; font-size: 0.75rem !important; text-transform: uppercase !important; letter-spacing: 0.05em !important; font-weight: 600 !important;">24h Volume</span>
+            <div style="width: 2rem !important; height: 2rem !important; background-color: rgba(245, 158, 11, 0.2) !important; border-radius: 0.5rem !important; display: flex !important; align-items: center !important; justify-content: center !important; border: 1px solid rgba(245, 158, 11, 0.3) !important;">
+                <i class="fas fa-chart-bar" style="color: #f59e0b !important; font-size: 0.875rem !important;"></i>
+            </div>
+        </div>
+        <p id="daily_volume" style="color: #ffffff !important; font-size: 1.875rem !important; line-height: 2.25rem !important; font-weight: 900 !important; font-family: monospace !important; overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important; margin: 0 !important;" title="$12.8M">$12.8M</p>
+        <div style="display: flex !important; align-items: center !important; gap: 0.5rem !important; margin-top: 0.75rem !important; padding-top: 0.75rem !important; border-top: 1px solid rgba(71, 85, 105, 0.5) !important;">
+            <i class="fas fa-arrow-up" style="color: #10b981 !important; font-size: 0.75rem !important;"></i>
+            <span style="color: #10b981 !important; font-size: 0.75rem !important; font-weight: 500 !important;">+3.8%</span>
+            <span style="color: #64748b !important; font-size: 0.75rem !important; margin-left: auto !important;">Today</span>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Pulse animation for live indicator */
+    @keyframes pulse {
+        0%, 100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0.5;
+        }
+    }
+    
+    /* Responsive font sizes */
+    @media (max-width: 1024px) {
+        [style*="font-size: 1.875rem"] {
+            font-size: 1.5rem !important;
+            line-height: 2rem !important;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        [style*="font-size: 1.875rem"] {
+            font-size: 1.25rem !important;
+            line-height: 1.75rem !important;
+        }
+    }
+</style>
 
         <!-- Trading Terminal -->
         <div class="grid grid-cols-1 gap-6">
@@ -536,7 +592,7 @@
                     </div>
                     <div>
                         <h3 class="text-white font-bold text-xl" style="color: #dc2626 !important;">ATTENTION REQUIRED</h3>
-                        <p class="text-red-400">Important Notification Regarding Live Trading Access</p>
+                       
                     </div>
                 </div>
 
@@ -558,50 +614,75 @@
                                 <span class="text-white text-xs font-bold" style="color: white !important;">LIVE</span>
                             </div>
 
-                            <!-- Video Display -->
-                            <div class="aspect-video bg-gradient-to-br from-slate-1000 to-slate-900 flex items-center justify-center relative overflow-hidden">
-                                <!-- Video element with better loading -->
-                                <video
-                                    src="{{ asset('assets/images/livetradevideo.mp4') }}"
-                                    class="w-full h-full object-cover"
-                                    autoplay
-                                    muted
-                                    loop
-                                    playsinline
-                                    preload="auto"
-                                    onloadstart="this.style.opacity='1'; document.getElementById('video-loading-main').style.display='none';"
-                                    onerror="this.style.display='none'; document.getElementById('fallback-content-main').style.display='flex'; document.getElementById('video-loading-main').style.display='none';"
-                                    style="opacity: 0; transition: opacity 0.5s ease-in-out;">
-                                    Your browser does not support the video tag.
-                                </video>
+                         <!-- Video Display with Animated Overlay -->
+<div class="aspect-video bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center relative overflow-hidden rounded-xl">
+    <!-- Video element -->
+    <video
+        src="{{ asset('assets/images/livetradevideo.mp4') }}"
+        class="w-full h-full object-cover"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="auto"
+        controlslist="nodownload nofullscreen noremoteplayback"
+        disablePictureInPicture
+        style="opacity: 0; transition: opacity 0.5s ease-in-out;"
+        onloadeddata="this.style.opacity='1'; document.getElementById('video-loading-main').style.display='none';"
+        onerror="this.style.display='none'; document.getElementById('fallback-content-main').style.display='flex'; document.getElementById('video-loading-main').style.display='none';"
+    ></video>
 
-                                <!-- Loading Spinner for main video -->
-                                <div id="video-loading-main" class="absolute inset-0 flex items-center justify-center bg-slate-900 transition-opacity duration-500">
-                                    <div class="text-center">
-                                        <div class="w-16 h-16 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                                        <p class="text-white text-sm">Loading live trading stream...</p>
-                                    </div>
-                                </div>
+    <!-- Animated Overlay -->
+    <div class="absolute inset-0 pointer-events-none">
+        <div class="w-full h-full bg-gradient-to-r from-emerald-500 via-transparent to-emerald-500 opacity-20 animate-slide bg-repeat-x"></div>
+        <div class="w-full h-full bg-gradient-to-b from-cyan-400 via-transparent to-cyan-400 opacity-10 animate-fade"></div>
+    </div>
 
-                                <!-- Fallback Content -->
-                                <div id="fallback-content-main" class="hidden absolute inset-0 flex items-center justify-center bg-gradient-to-br from-slate-900 to-slate-800">
-                                    <div class="text-center p-8">
-                                        <div class="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-red-500 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg shadow-red-500/20">
-                                            <i class="fas fa-lock text-white text-2xl" style="color: white !important;"></i>
-                                        </div>
-                                        <h3 class="text-white text-xl font-bold mb-2">Live Trading Stream</h3>
-                                        <p class="text-slate-400">Access restricted - Contact support for authorization</p>
-                                        <div class="mt-4 flex justify-center gap-3">
-                                            <div class="px-4 py-2 bg-slate-700 rounded-lg text-slate-300 text-sm">
-                                                <i class="fas fa-video mr-2" style="color: #cbd5e1 !important;"></i>Stream Offline
-                                            </div>
-                                            <div class="px-4 py-2 bg-red-500/20 rounded-lg text-red-400 text-sm">
-                                                <i class="fas fa-shield-alt mr-2" style="color: #f87171 !important;"></i>Authorization Required
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+    <!-- Loading Spinner -->
+    <div id="video-loading-main" class="absolute inset-0 flex items-center justify-center bg-slate-900 transition-opacity duration-500">
+        <div class="text-center">
+            <div class="w-16 h-16 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p class="text-white text-sm">Loading live trading stream...</p>
+        </div>
+    </div>
+
+    <!-- Fallback Content -->
+    <div id="fallback-content-main" class="hidden absolute inset-0 flex items-center justify-center bg-gradient-to-br from-slate-900 to-slate-800">
+        <div class="text-center p-8">
+            <div class="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-red-500 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg shadow-red-500/20">
+                <i class="fas fa-lock text-white text-2xl"></i>
+            </div>
+            <h3 class="text-white text-xl font-bold mb-2">Live Trading Stream</h3>
+            <p class="text-slate-400">Access restricted - Contact support for authorization</p>
+            <div class="mt-4 flex justify-center gap-3">
+                <div class="px-4 py-2 bg-slate-700 rounded-lg text-slate-300 text-sm">
+                    <i class="fas fa-video mr-2 text-slate-300"></i>Stream Offline
+                </div>
+                <div class="px-4 py-2 bg-red-500/20 rounded-lg text-red-400 text-sm">
+                    <i class="fas fa-shield-alt mr-2 text-red-400"></i>Authorization Required
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tailwind Custom Animations -->
+<style>
+@keyframes slide {
+    0% { background-position-x: 0; }
+    100% { background-position-x: 200%; }
+}
+.animate-slide {
+    animation: slide 10s linear infinite;
+}
+@keyframes fade {
+    0%, 50%, 100% { opacity: 0.1; }
+    25%, 75% { opacity: 0.2; }
+}
+.animate-fade {
+    animation: fade 6s ease-in-out infinite;
+}
+</style>
 
                             <!-- Status Bar -->
                             <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
@@ -620,16 +701,28 @@
                     </div>
 
                     <!-- Action Buttons -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-                        <button class="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-4 rounded-xl font-bold hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300 transform hover:scale-105">
-                            <i class="fas fa-headset mr-2" style="color: white !important;"></i>
-                            Contact Support Team
-                        </button>
-                        <button onclick="window.open('https://wa.me/YOUR_WHATSAPP_NUMBER', '_blank')" class="w-full bg-gradient-to-r from-emerald-500 to-green-500 text-white py-4 rounded-xl font-bold hover:shadow-lg hover:shadow-emerald-500/25 transition-all duration-300 transform hover:scale-105">
-                            <i class="fab fa-whatsapp mr-2" style="color: white !important;"></i>
-                            Message Your Trader
-                        </button>
-                    </div>
+                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+
+    <!-- Contact Support Team Button -->
+    <div class="bg-slate-800/60 backdrop-blur-md border border-slate-700/50 rounded-2xl p-1 shadow-lg shadow-black/20">
+        <a href="tel:+4477742663627" class="w-full block bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-4 rounded-xl font-bold 
+                       hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2 text-center">
+            <i class="fas fa-headset text-white"></i>
+            Contact Support Team
+        </a>
+    </div>
+
+    <!-- Message Your Trader Button -->
+    <div class="bg-slate-800/60 backdrop-blur-md border border-slate-700/50 rounded-2xl p-1 shadow-lg shadow-black/20">
+        <a href="https://wa.me/4477742663627" target="_blank" class="w-full block bg-gradient-to-r from-emerald-500 to-green-500 text-white py-4 rounded-xl font-bold 
+                       hover:shadow-lg hover:shadow-emerald-500/30 transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2 text-center">
+            <i class="fab fa-whatsapp text-white"></i>
+            Message Your Trader
+        </a>
+    </div>
+
+</div>
+
                 </div>
             </div>
 
