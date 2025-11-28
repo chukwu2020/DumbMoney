@@ -619,7 +619,7 @@
     <!-- Video element -->
     <video
         src="{{ asset('assets/images/livetradevideo.mp4') }}"
-        class="w-full h-full object-cover"
+        class="w-full h-full object-cover pointer-events-none"
         autoplay
         muted
         loop
@@ -666,8 +666,9 @@
     </div>
 </div>
 
-<!-- Tailwind Custom Animations -->
+<!-- Tailwind Custom Animations & Hide Video Controls -->
 <style>
+/* Custom animations */
 @keyframes slide {
     0% { background-position-x: 0; }
     100% { background-position-x: 200%; }
@@ -682,7 +683,30 @@
 .animate-fade {
     animation: fade 6s ease-in-out infinite;
 }
+
+/* Force-hide video controls in all browsers */
+video::-webkit-media-controls {
+    display: none !important;
+    -webkit-appearance: none;
+}
+video::-moz-media-controls {
+    display: none !important;
+}
+video {
+    pointer-events: none; /* Prevent accidental clicks showing controls */
+}
 </style>
+
+<!-- Optional JS to ensure autoplay works on live -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const video = document.querySelector('video');
+    video.muted = true;
+    video.play().catch(() => {
+        setTimeout(() => video.play(), 500);
+    });
+});
+</script>
 
                             <!-- Status Bar -->
                             <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
