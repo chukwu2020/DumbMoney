@@ -1,6 +1,11 @@
 @extends('layout.admin')
 @section('content')
 
+<style>
+    * {
+        color: black !important;
+    }
+</style>
 <div class="dashboard-main-body" style="background: linear-gradient(135deg, #0C3A30 0%, #1a5c4a 50%, #0C3A30 100%); min-height: 100vh;">
     <div class="flex flex-wrap items-center justify-between gap-2 mb-6">
         <h6 class="font-semibold mb-0 text-white text-2xl">⏳ Pending Deposits</h6>
@@ -105,7 +110,7 @@
                                             <form method="POST" action="{{ route('admin.approve.deposit', $deposit->id) }}" 
                                                   onsubmit="this.querySelector('button').disabled = true;">
                                                 @csrf
-                                                <button type="submit" class="px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-lg font-semibold text-sm shadow-md transition-all duration-300 transform hover:scale-105">
+                                                <button type="submit" class="px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-lg font-semibold text-sm shadow-md transition-all duration-300 transform hover:scale-105" style="background-color: #6ea003 !important;">
                                                     ✓ Approve
                                                 </button>
                                             </form>
@@ -115,7 +120,7 @@
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" 
-                                                        class="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white rounded-lg font-semibold text-sm shadow-md transition-all duration-300 transform hover:scale-105">
+                                                        class="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white rounded-lg font-semibold text-sm shadow-md transition-all duration-300 transform hover:scale-105"  style="background-color: red !important;">
                                                     ✗ Reject
                                                 </button>
                                             </form>

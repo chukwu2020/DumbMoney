@@ -243,4 +243,49 @@ function copyMembershipCode(userId) {
 }
 </script>
 
+
+<script>
+function generateMembershipCode(userId) {
+
+    // Disable button while loading
+    const btn = event.target;
+    const oldHtml = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = "Generating...";
+
+    fetch("{{ route('admin.generate.membership.code') }}", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": "{{ csrf_token() }}"
+        },
+        body: JSON.stringify({ user_id: userId })
+    })
+    .then(response => response.json())
+    .then(data => {
+
+        if (data.success) {
+
+            // Reload the page so the generated code appears
+            location.reload();
+
+        } else {
+
+            // Restore button
+            btn.disabled = false;
+            btn.innerHTML = oldHtml;
+
+            alert(data.message);
+        }
+
+    })
+    .catch(err => {
+        console.error(err);
+        btn.disabled = false;
+        btn.innerHTML = oldHtml;
+        alert("Something went wrong.");
+    });
+}
+</script>
+
 @endsection
