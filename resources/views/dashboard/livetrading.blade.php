@@ -614,99 +614,50 @@
                                 <span class="text-white text-xs font-bold" style="color: white !important;">LIVE</span>
                             </div>
 
-                         <!-- Video Display with Animated Overlay -->
-<div class="aspect-video bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center relative overflow-hidden rounded-xl">
-    <!-- Video element -->
-    <video
-        src="{{ asset('assets/images/livetradevideo.mp4') }}"
-        class="w-full h-full object-cover pointer-events-none"
-        autoplay
-        muted
-        loop
-        playsinline
-        preload="auto"
-        controlslist="nodownload nofullscreen noremoteplayback"
-        disablePictureInPicture
-        style="opacity: 0; transition: opacity 0.5s ease-in-out;"
-        onloadeddata="this.style.opacity='1'; document.getElementById('video-loading-main').style.display='none';"
-        onerror="this.style.display='none'; document.getElementById('fallback-content-main').style.display='flex'; document.getElementById('video-loading-main').style.display='none';"
-    ></video>
+                            <!-- Video Display -->
+                            <div class="aspect-video bg-gradient-to-br from-slate-1000 to-slate-900 flex items-center justify-center relative overflow-hidden">
+                                <!-- Video element with better loading -->
+                                <video
+                                    src="{{ asset('assets/images/livetradevideo.mp4') }}"
+                                    class="w-full h-full object-cover"
+                                    autoplay
+                                    muted
+                                    loop
+                                    playsinline
+                                    preload="auto"
+                                    onloadstart="this.style.opacity='1'; document.getElementById('video-loading-main').style.display='none';"
+                                    onerror="this.style.display='none'; document.getElementById('fallback-content-main').style.display='flex'; document.getElementById('video-loading-main').style.display='none';"
+                                    style="opacity: 0; transition: opacity 0.5s ease-in-out;">
+                                    Your browser does not support the video tag.
+                                </video>
 
-    <!-- Animated Overlay -->
-    <div class="absolute inset-0 pointer-events-none">
-        <div class="w-full h-full bg-gradient-to-r from-emerald-500 via-transparent to-emerald-500 opacity-20 animate-slide bg-repeat-x"></div>
-        <div class="w-full h-full bg-gradient-to-b from-cyan-400 via-transparent to-cyan-400 opacity-10 animate-fade"></div>
-    </div>
+                                <!-- Loading Spinner for main video -->
+                                <div id="video-loading-main" class="absolute inset-0 flex items-center justify-center bg-slate-900 transition-opacity duration-500">
+                                    <div class="text-center">
+                                        <div class="w-16 h-16 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                                        <p class="text-white text-sm">Loading live trading stream...</p>
+                                    </div>
+                                </div>
 
-    <!-- Loading Spinner -->
-    <div id="video-loading-main" class="absolute inset-0 flex items-center justify-center bg-slate-900 transition-opacity duration-500">
-        <div class="text-center">
-            <div class="w-16 h-16 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <p class="text-white text-sm">Loading live trading stream...</p>
-        </div>
-    </div>
-
-    <!-- Fallback Content -->
-    <div id="fallback-content-main" class="hidden absolute inset-0 flex items-center justify-center bg-gradient-to-br from-slate-900 to-slate-800">
-        <div class="text-center p-8">
-            <div class="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-red-500 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg shadow-red-500/20">
-                <i class="fas fa-lock text-white text-2xl"></i>
-            </div>
-            <h3 class="text-white text-xl font-bold mb-2">Live Trading Stream</h3>
-            <p class="text-slate-400">Access restricted - Contact support for authorization</p>
-            <div class="mt-4 flex justify-center gap-3">
-                <div class="px-4 py-2 bg-slate-700 rounded-lg text-slate-300 text-sm">
-                    <i class="fas fa-video mr-2 text-slate-300"></i>Stream Offline
-                </div>
-                <div class="px-4 py-2 bg-red-500/20 rounded-lg text-red-400 text-sm">
-                    <i class="fas fa-shield-alt mr-2 text-red-400"></i>Authorization Required
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Tailwind Custom Animations & Hide Video Controls -->
-<style>
-/* Custom animations */
-@keyframes slide {
-    0% { background-position-x: 0; }
-    100% { background-position-x: 200%; }
-}
-.animate-slide {
-    animation: slide 10s linear infinite;
-}
-@keyframes fade {
-    0%, 50%, 100% { opacity: 0.1; }
-    25%, 75% { opacity: 0.2; }
-}
-.animate-fade {
-    animation: fade 6s ease-in-out infinite;
-}
-
-/* Force-hide video controls in all browsers */
-video::-webkit-media-controls {
-    display: none !important;
-    -webkit-appearance: none;
-}
-video::-moz-media-controls {
-    display: none !important;
-}
-video {
-    pointer-events: none; /* Prevent accidental clicks showing controls */
-}
-</style>
-
-<!-- Optional JS to ensure autoplay works on live -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const video = document.querySelector('video');
-    video.muted = true;
-    video.play().catch(() => {
-        setTimeout(() => video.play(), 500);
-    });
-});
-</script>
+                                <!-- Fallback Content -->
+                                <div id="fallback-content-main" class="hidden absolute inset-0 flex items-center justify-center bg-gradient-to-br from-slate-900 to-slate-800">
+                                    <div class="text-center p-8">
+                                        <div class="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-red-500 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg shadow-red-500/20">
+                                            <i class="fas fa-lock text-white text-2xl" style="color: white !important;"></i>
+                                        </div>
+                                        <h3 class="text-white text-xl font-bold mb-2">Live Trading Stream</h3>
+                                        <p class="text-slate-400">Access restricted - Contact support for authorization</p>
+                                        <div class="mt-4 flex justify-center gap-3">
+                                            <div class="px-4 py-2 bg-slate-700 rounded-lg text-slate-300 text-sm">
+                                                <i class="fas fa-video mr-2" style="color: #cbd5e1 !important;"></i>Stream Offline
+                                            </div>
+                                            <div class="px-4 py-2 bg-red-500/20 rounded-lg text-red-400 text-sm">
+                                                <i class="fas fa-shield-alt mr-2" style="color: #f87171 !important;"></i>Authorization Required
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             <!-- Status Bar -->
                             <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
