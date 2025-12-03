@@ -541,7 +541,20 @@ public function liveTradingGetMessages()
     ]);
 }
 
+public function checkMembership()
+{
+    $user = auth()->user();
 
+    return response()->json([
+        'locked' => $user->membership_locked || !$user->membership_code
+    ]);
+}
+
+
+public function lockedPage()
+{
+    return view('dashboard.lockedpage');
+}
 
 
 

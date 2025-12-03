@@ -271,6 +271,7 @@ Route::post('/admin/withdrawals/{id}/unapprove', [AdminController::class,'unappr
         Route::patch('kyc/{id}/reject', [AdminController::class, 'reject'])->name('admin.kyc.reject');
     });
     
+Route::patch('/admin/membership/lock/{user}', [AdminController::class, 'toggleMembershipLock'])->name('admin.membership.lock');
 
 
     // lives
@@ -283,6 +284,8 @@ Route::middleware(['isAdmin'])->group(function () {
 });
 
 // User Routes (inside auth middleware)
+
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/user/live', [UserController::class, 'user_live'])->name('user_live');
     
@@ -303,5 +306,13 @@ Route::middleware(['auth'])->group(function () {
     
     Route::get('/live-trading/messages', [UserController::class, 'liveTradingGetMessages'])
         ->name('live.trading.messages');
+
+       Route::get('/check-membership-status', [UserController::class, 'checkMembership'])->name('check.membership');
+Route::get('/membership-locked', [UserController::class, 'lockedPage'])
+    ->middleware('auth')
+    ->name('membership.locked');
 });
+
+
+
 });

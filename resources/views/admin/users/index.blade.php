@@ -45,6 +45,7 @@
                                     <th  style="background:#0C3A30 !important;" class="text-white py-3">Available Balance</th>
                                     <th  style="background:#0C3A30 !important;"class="text-white py-3">Investment Status</th>
                                     <th  style="background:#0C3A30 !important;"class="text-white py-3 text-center">Membership Code</th>
+                                    <th  style="background:#0C3A30 !important;"class="text-white py-3 text-center">control Code</th>
                                     <th  style="background:#0C3A30 !important;"class="text-white py-3 text-center">Status</th>
                                     <th  style="background:#0C3A30 !important;"class="text-white py-3 text-center">Action</th>
                                 </tr>
@@ -163,6 +164,24 @@
                                         @endif
 
                                     </td>
+<!-- Membership Control Column -->
+<td class="text-center">
+
+    @if($user->membership_code)
+        <form method="POST" action="{{ route('admin.membership.lock', $user->id) }}">
+            @csrf
+            @method('PATCH')
+            <button type="submit"
+                class="w-10 h-10 rounded-full bg-yellow-100 text-yellow-600 hover:bg-yellow-200 flex items-center justify-center mx-auto"
+                title="{{ $user->membership_locked ? 'Unlock Membership' : 'Lock Membership' }}">
+                <iconify-icon icon="{{ $user->membership_locked ? 'mdi:lock-open' : 'mdi:lock' }}"></iconify-icon>
+            </button>
+        </form>
+    @else
+        <span class="text-xs text-gray-400">No code</span>
+    @endif
+
+</td>
 
                                     <!-- Active / Inactive -->
                                     <td class="text-center">

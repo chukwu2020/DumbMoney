@@ -199,6 +199,8 @@ class AdminController extends Controller
 
     // ✅ FIXED: Generate Membership Code
    
+
+
 // Add this to AdminController.php
 
 public function generateMembershipCode(Request $request)
@@ -244,6 +246,20 @@ public function generateMembershipCode(Request $request)
         'user_name' => $user->name
     ]);
 }
+
+// live
+
+public function toggleMembershipLock(User $user)
+{
+    $user->membership_locked = !$user->membership_locked;
+    $user->save();
+
+    $status = $user->membership_locked ? 'locked' : 'unlocked';
+
+    return back()->with('success', "Membership code has been {$status}.");
+}
+
+
 
     public function withdrawaldestroy($id)
     {

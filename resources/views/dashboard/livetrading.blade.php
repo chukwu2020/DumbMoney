@@ -1388,4 +1388,19 @@ const chatCache = {
     }
 </style>
 
+
+<script>
+setInterval(function() {
+    fetch("{{ route('check.membership') }}")
+        .then(response => response.json())
+        .then(data => {
+            if (data.locked) {
+                // Redirect to the locked page
+                window.location.href = "{{ route('membership.locked') }}";
+            }
+        });
+}, 5000); // check every 5 seconds
+</script>
+
 @endsection
+
