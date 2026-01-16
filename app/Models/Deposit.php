@@ -13,6 +13,8 @@ class Deposit extends Model
     /**
      * Relationship with User
      */
+
+    protected $guarded = [];
     public function user()
     {
         return $this->belongsTo(User::class);

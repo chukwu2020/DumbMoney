@@ -2,8 +2,7 @@
 
 @section('content')
 
-<div class="dashboard-main-body"
-    >
+<div class="dashboard-main-body">
 
     <!-- Header -->
     <div class="flex flex-wrap items-center justify-between gap-2 mb-6 mt-7">
@@ -24,97 +23,173 @@
     <div class="grid grid-cols-1 3xl:grid-cols-12 gap-6 mt-6">
         <div class="2xl:col-span-12 3xl:col-span-8">
             <div class="w-full">
-                <div class="card-body p-6 bg-white shadow rounded-lg"  style="background-image: url('assets/images/hero/hero-image-1.svg');
-            min-height: 100vh;
-            background-repeat: no-repeat;
-            background-size: cover;">
-                    <div class="flex items-center justify-between mb-5">
-                        <h6 class="font-bold text-lg text-gray-800">Recent Deposits</h6>
-                    </div>
+                <div class="card-body p-6 bg-white shadow rounded-lg"
+                     style="background-image: url('assets/images/hero/hero-image-1.svg');
+                            min-height: 100vh;
+                            background-repeat: no-repeat;
+                            background-size: cover;">
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mt-6">
+                    <h6 class="font-bold text-lg text-gray-800 mb-5">Recent Deposits</h6>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                         @forelse ($deposits as $key => $deposit)
+
                             @php
-                                $status = $deposit->status ? 'approved' : 'pending';
+                                $status = match($deposit->status) {
+                                    1 => 'approved',
+                                    2 => 'failed',
+                                    default => 'pending',
+                                };
+
                                 $badgeClass = match($status) {
                                     'approved' => 'badge-approved',
-                                    'pending' => 'badge-pending',
-                                    default => 'badge-default'
+                                    'failed' => 'badge-failed',
+                                    default => 'badge-pending',
                                 };
                             @endphp
 
                             <div class="bg-white border border-gray-100 rounded-2xl shadow-xl p-5 w-full">
+
+                                <!-- Header -->
                                 <div class="flex items-center justify-between mb-4">
-                                    <h4 class="text-base font-semibold text-gray-800">#{{ $key + 1 }}</h4>
-                                    <span class="text-xs font-medium px-2 py-1 rounded-full {{ $badgeClass }}">
-                                        {{ ucfirst($status) }}
+                                    <h4 class="text-base font-semibold text-gray-800">
+                                        Deposit #{{ $key + 1 }}
+                                    </h4>
+
+                                    <span class="text-xs font-semibold px-3 py-1 rounded-full {{ $badgeClass }}">
+                                        {{ strtoupper($status) }}
                                     </span>
                                 </div>
 
+                                <!-- Details -->
                                 <div class="space-y-2 text-sm text-gray-700">
                                     <div class="flex justify-between">
                                         <span class="font-medium">Plan:</span>
                                         <span>{{ $deposit->plan->name }}</span>
                                     </div>
+
                                     <div class="flex justify-between">
                                         <span class="font-medium">Wallet:</span>
                                         <span>{{ $deposit->wallet->crypto_name }}</span>
                                     </div>
+
                                     <div class="flex justify-between">
                                         <span class="font-medium">Amount:</span>
-                                        <span class="text-emerald-600 font-semibold">${{ number_format($deposit->amount_deposited, 2) }}</span>
+                                        <span class="text-emerald-600 font-semibold">
+                                            ${{ number_format($deposit->amount_deposited, 2) }}
+                                        </span>
                                     </div>
+
                                     <div class="flex justify-between">
                                         <span class="font-medium">Date:</span>
                                         <span>{{ $deposit->created_at->format('d M Y') }}</span>
                                     </div>
                                 </div>
+
+                                <!-- FAILED NOTE -->
+                                @if($deposit->status === 2 && $deposit->rejection_note)
+                                    <div class="mt-4 bg-red-50 border border-red-200 rounded-xl p-3">
+                                        <div class="flex items-center justify-between">
+                                            <p class="text-xs font-semibold text-red-600">
+                                                ❌ Deposit Failed
+                                            </p>
+
+                                            <button
+                                                data-note="{{ $deposit->rejection_note }}"
+                                                onclick="openNoteModal(this)"
+                                                class="text-xs text-red-600 font-semibold hover:underline">
+                                                View More
+                                            </button>
+                                        </div>
+
+                                        <p class="text-sm text-gray-700 mt-2 line-clamp-2">
+                                            {{ $deposit->rejection_note }}
+                                        </p>
+                                    </div>
+                                @endif
+
                             </div>
+
                         @empty
                             <div class="col-span-full text-center py-10 text-gray-500">
-                                <iconify-icon icon="mdi:inbox-remove-outline" class="text-4xl text-gray-300 mb-3"></iconify-icon>
+                                <iconify-icon icon="mdi:inbox-remove-outline"
+                                              class="text-4xl text-gray-300 mb-3"></iconify-icon>
                                 <p>No deposit history found.</p>
-                              
-                                  <a href="{{ route('user.deposit') }}" class="mt-3 inline-block text-sm text-primary-600 hover:text-primary-800 font-medium">
-                                      Make your first deposit
+
+                                <a href="{{ route('user.deposit') }}"
+                                   class="mt-3 inline-block text-sm text-primary-600 font-medium hover:underline">
+                                    Make your first deposit
                                 </a>
                             </div>
                         @endforelse
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Status Badge Styles -->
+<!-- FAILED NOTE MODAL -->
+<div id="noteModal" class="fixed inset-0 bg-black bg-opacity-80 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6">
+        <h3 class="text-xl font-bold text-red-600 mb-3">
+            Deposit Failed – Reason
+        </h3>
+
+        <p id="noteContent"
+           class="text-gray-700 text-sm leading-relaxed whitespace-pre-line"></p>
+
+        <div class="text-right mt-5">
+            <button onclick="closeNoteModal()"
+                    class="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900">
+                Close
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+function openNoteModal(button) {
+    document.getElementById('noteContent').innerText =
+        button.getAttribute('data-note');
+
+    const modal = document.getElementById('noteModal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+function closeNoteModal() {
+    const modal = document.getElementById('noteModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
+</script>
+
 <style>
-    .badge-approved {
-        background-color: #d1fae5; /* Tailwind's bg-green-100 */
-        color: #065f46;           /* Tailwind's text-green-800 */
-        padding: 0.25rem 0.5rem;
-        border-radius: 9999px;
-        font-weight: 500;
-        font-size: 0.75rem;
-    }
+.badge-approved {
+    background-color: #d1fae5;
+    color: #065f46;
+}
 
-    .badge-pending {
-        background-color: #fef3c7; /* Tailwind's bg-yellow-100 */
-        color: #92400e;            /* Tailwind's text-yellow-800 */
-        padding: 0.25rem 0.5rem;
-        border-radius: 9999px;
-        font-weight: 500;
-        font-size: 0.75rem;
-    }
+.badge-pending {
+    background-color: #fef3c7;
+    color: #92400e;
+}
 
-    .badge-default {
-        background-color: #f3f4f6;
-        color: #374151;
-        padding: 0.25rem 0.5rem;
-        border-radius: 9999px;
-        font-weight: 500;
-        font-size: 0.75rem;
-    }
+.badge-failed {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.badge-approved,
+.badge-pending,
+.badge-failed {
+    padding: 0.25rem 0.6rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
 </style>
 
 @endsection

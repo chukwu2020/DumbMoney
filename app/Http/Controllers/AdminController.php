@@ -117,18 +117,32 @@ class AdminController extends Controller
         return view('admin.deposits.approve', compact('deposits'));
     }
 
-    public function rejectDeposit($id)
-    {
-        $deposit = Deposit::findOrFail($id);
+   
+public function rejectDeposit(Request $request, $id)
+{
+    $request->validate([
+        'rejection_note' => 'required|string|min:5',
+    ]);
 
-        if ($deposit->status === 1) {
-            return back()->with('error', 'You cannot reject an already approved deposit.');
-        }
+    $deposit = Deposit::findOrFail($id);
 
-        $deposit->delete();
-
-        return back()->with('success', 'Deposit rejected and removed successfully.');
+    if ($deposit->status === 1) {
+        return back()->with('error', 'Cannot reject approved deposit.');
     }
+
+    $deposit->update([
+        'status' => 2, // rejected
+        'rejection_note' => $request->rejection_note,
+    ]);
+
+    // Optional notification
+    $deposit->user->notify(new TransactionNotification(
+        'Deposit Rejected',
+        'Your deposit was rejected. Please check the reason in your dashboard.'
+    ));
+
+    return back()->with('success', 'Deposit rejected with reason.');
+}
 
     public function approveDeposit($id)
     {
