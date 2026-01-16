@@ -94,17 +94,18 @@
                                                 ❌ Deposit Failed
                                             </p>
 
+                                        
+                                        </div>
+
+                                        <p class="text-sm text-gray-700 mt-2 line-clamp-2">
+                                            {{ $deposit->rejection_note }}
+                                        </p>
                                             <button
                                                 data-note="{{ $deposit->rejection_note }}"
                                                 onclick="openNoteModal(this)"
                                                 class="text-xs text-red-600 font-semibold hover:underline">
                                                 View More
                                             </button>
-                                        </div>
-
-                                        <p class="text-sm text-gray-700 mt-2 line-clamp-2">
-                                            {{ $deposit->rejection_note }}
-                                        </p>
                                     </div>
                                 @endif
 
@@ -142,7 +143,9 @@
 
         <div class="text-right mt-5">
             <button onclick="closeNoteModal()"
-                    class="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900">
+                    class="px-4 py-2  rounded-lg"      style="background-color: #8bc905; color: #0C3A30; text-decoration: none;"
+                            onmouseover="this.style.backgroundColor='#7dbb00'"
+                            onmouseout="this.style.backgroundColor='#8bc905'">
                 Close
             </button>
         </div>
