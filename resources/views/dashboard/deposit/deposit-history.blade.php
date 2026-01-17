@@ -88,7 +88,7 @@
                             </div>
 
                             <!-- FAILED NOTE -->
-                            @if($deposit->status === 2 && $deposit->rejection_note)
+                            @if($deposit->status == 2 && $deposit->rejection_note)
                             <div class="mt-4 bg-red-50 border border-red-200 rounded-xl p-3">
                                 <div class="flex items-center justify-between">
                                     <p class="text-xs font-semibold text-red-600">
