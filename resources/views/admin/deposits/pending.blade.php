@@ -116,14 +116,14 @@
                                                     <form method="POST"
                                                           action="{{ route('admin.approve.deposit', $deposit->id) }}">
                                                         @csrf
-                                                        <button class="btn btn-sm btn-success">
+                                                        <button class="btn btn-sm btn-success" style="background-color: greenyellow; color:black;">
                                                             Approve
                                                         </button>
                                                     </form>
 
                                                     <button
                                                         onclick="openRejectModal('{{ route('admin.reject.deposit', $deposit->id) }}')"
-                                                        class="btn btn-sm btn-danger">
+                                                        class="btn btn-sm btn-danger" style="background-color: red; color:black;">
                                                         Reject
                                                     </button>
                                                 </div>
