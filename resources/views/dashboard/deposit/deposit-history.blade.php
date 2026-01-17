@@ -52,7 +52,7 @@
 
                             <!-- Header -->
                             <div class="flex items-center justify-between mb-4">
-                               
+
                                 <h4 class="text-base font-semibold text-gray-800">
                                     Deposit #{{ $deposit->id }}
                                 </h4>
@@ -98,15 +98,20 @@
 
                                 </div>
 
-                                <p class="text-sm text-gray-700 mt-2 line-clamp-2">
+
+                                <p class="text-sm text-gray-700 mt-2 line-clamp-1">
                                     {{ $deposit->rejection_note }}
                                 </p>
+
+                                @if(strlen($deposit->rejection_note) > 60)
                                 <button
                                     data-note="{{ $deposit->rejection_note }}"
                                     onclick="openNoteModal(this)"
-                                    class="text-xs text-red-600 font-semibold hover:underline">
+                                    class="text-xs text-red-600 font-semibold hover:underline mt-1">
                                     View More
                                 </button>
+                                @endif
+
                             </div>
                             @endif
 
