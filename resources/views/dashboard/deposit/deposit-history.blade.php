@@ -34,19 +34,24 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                         @forelse ($deposits as $key => $deposit)
 
-                        @php
-                        $status = match($deposit->status) {
-                        1 => 'approved',
-                        2 => 'failed',
-                        default => 'pending',
-                        };
+               
 
-                        $badgeClass = match($status) {
-                        'approved' => 'badge-approved',
-                        'failed' => 'badge-failed',
-                        default => 'badge-pending',
-                        };
-                        @endphp
+@php
+$status = match ((int) $deposit->status) {
+    1 => 'approved',
+    2 => 'failed',
+    default => 'pending',
+};
+
+$badgeClass = match ($status) {
+    'approved' => 'badge-approved',
+    'failed' => 'badge-failed',
+    default => 'badge-pending',
+};
+@endphp
+
+
+
 
                         <div class="bg-white border border-gray-100 rounded-2xl shadow-xl p-5 w-full">
 
@@ -60,6 +65,9 @@
                                 <span class="text-xs font-semibold px-3 py-1 rounded-full {{ $badgeClass }}">
                                     {{ strtoupper($status) }}
                                 </span>
+
+
+                                
                             </div>
 
                             <!-- Details -->

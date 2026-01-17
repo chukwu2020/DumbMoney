@@ -15,6 +15,10 @@ class Deposit extends Model
      */
 
     protected $guarded = [];
+
+    protected $casts = [
+        'status' => 'integer',
+    ];
     public function user()
     {
         return $this->belongsTo(User::class);
