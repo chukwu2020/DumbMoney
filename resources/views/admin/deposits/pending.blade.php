@@ -176,7 +176,7 @@
                         class="btn btn-secondary">
                     Cancel
                 </button>
-                <button class="btn btn-danger">
+                <button class="btn btn-danger" style="background-color: red; color:black;">
                     Reject
                 </button>
             </div>
