@@ -1,148 +1,146 @@
 @extends('layout.admin')
 @section('content')
 
-<div class="min-h-screen bg-gradient-to-br from-[#0C3A30] via-[#1a5c4a] to-[#0C3A30] overflow-hidden">
-    <div class="p-4 md:p-6 max-w-full overflow-x-hidden">
+<div class="dashboard-main-body">
 
-        {{-- HEADER --}}
-        <div class="flex flex-wrap items-center justify-between gap-2 mb-6">
-            <h6 class="font-semibold text-white text-2xl">⏳ Pending Deposits</h6>
+    {{-- HEADER --}}
+    <div class="flex flex-wrap items-center justify-between gap-2 mb-6">
+        <h6 class="font-semibold mb-0">Pending Deposits</h6>
 
-            <ul class="flex items-center gap-2 text-sm">
-                <li>
-                    <a href="{{ route('admin_dashboard') }}"
-                       class="flex items-center gap-2 text-[#8AC304] hover:text-white transition">
-                        <iconify-icon icon="solar:home-smile-angle-outline"></iconify-icon>
-                        Dashboard
-                    </a>
-                </li>
-                <li class="text-white">/</li>
-                <li class="text-gray-300">Pending Deposits</li>
-            </ul>
-        </div>
+        <ul class="flex items-center gap-[6px]">
+            <li class="font-medium">
+                <a href="{{ route('admin_dashboard') }}"
+                   class="flex items-center gap-2 hover:text-primary-600">
+                    <iconify-icon icon="solar:home-smile-angle-outline" class="icon text-lg"></iconify-icon>
+                    Dashboard
+                </a>
+            </li>
+            <li>-</li>
+            <li class="font-medium">Deposits</li>
+        </ul>
+    </div>
 
-        {{-- CARD --}}
-        <div class="bg-white rounded-2xl shadow-xl overflow-hidden max-w-full">
+    {{-- CONTENT --}}
+    <div class="grid grid-cols-1 2xl:grid-cols-12 gap-6">
+        <div class="col-span-12">
+            <div class="card border-0 h-full">
 
-            {{-- CARD HEADER --}}
-            <div class="bg-gradient-to-r from-[#8AC304] to-[#6ea003] p-5 flex items-center justify-between">
-                <h5 class="text-white font-bold text-xl">📋 Pending Deposits</h5>
-                <span class="bg-white text-[#0C3A30] px-4 py-1 rounded-full font-bold text-sm">
-                    {{ $deposits->count() }} Pending
-                </span>
-            </div>
+                {{-- CARD HEADER --}}
+                <div class="card-header">
+                    <div class="flex items-center flex-wrap gap-2 justify-between">
+                        <h6 class="font-bold text-lg mb-0">Pending Deposits</h6>
+                        <span class="badge bg-warning">
+                            {{ $deposits->count() }} Pending
+                        </span>
+                    </div>
+                </div>
 
-            {{-- CARD BODY --}}
-            <div class="p-4 md:p-6">
-                @if($deposits->count())
+                {{-- CARD BODY --}}
+                <div class="card-body p-6">
+                    @if($deposits->count())
 
-                    {{-- TABLE WRAPPER --}}
-                    <div class="relative overflow-x-auto max-w-full border border-gray-200 rounded-xl">
-                        <table class="w-full whitespace-nowrap text-sm">
-
-                            <thead class="bg-[#0C3A30] text-white uppercase tracking-wider text-xs sticky top-0 z-10">
-                                <tr>
-                                    <th class="px-4 py-3">#</th>
-                                    <th class="px-4 py-3">User</th>
-                                    <th class="px-4 py-3">Email</th>
-                                    <th class="px-4 py-3">Plan</th>
-                                    <th class="px-4 py-3">Proof</th>
-                                    <th class="px-4 py-3">Country</th>
-                                    <th class="px-4 py-3">Amount</th>
-                                    <th class="px-4 py-3">Wallet</th>
-                                    <th class="px-4 py-3">Membership</th>
-                                    <th class="px-4 py-3">Date</th>
-                                    <th class="px-4 py-3">Actions</th>
-                                </tr>
-                            </thead>
-
-                            <tbody class="divide-y">
-                                @foreach($deposits as $deposit)
-                                    <tr class="hover:bg-gray-50">
-
-                                        <td class="px-4 py-3">{{ $loop->iteration }}</td>
-                                        <td class="px-4 py-3 font-medium">{{ $deposit->user->name }}</td>
-
-                                        <td class="px-4 py-3 text-gray-600">
-                                            {{ $deposit->user->email }}
-                                        </td>
-
-                                        <td class="px-4 py-3">
-                                            <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">
-                                                {{ $deposit->plan->name }}
-                                            </span>
-                                        </td>
-
-                                        <td class="px-4 py-3">
-                                            @if($deposit->proof)
-                                                <img src="{{ Storage::url($deposit->proof) }}"
-                                                     class="w-12 h-12 rounded-lg cursor-pointer hover:scale-110 transition"
-                                                     onclick="openModal('{{ Storage::url($deposit->proof) }}')">
-                                            @else
-                                                <span class="text-gray-400 text-xs">No proof</span>
-                                            @endif
-                                        </td>
-
-                                        <td class="px-4 py-3">{{ $deposit->user->country }}</td>
-
-                                        <td class="px-4 py-3 font-bold text-[#8AC304]">
-                                            ${{ number_format($deposit->amount_deposited, 2) }}
-                                        </td>
-
-                                        <td class="px-4 py-3">
-                                            <strong>{{ $deposit->wallet->crypto_name }}</strong>
-                                            <div class="text-gray-500 font-mono text-xs">
-                                                {{ Str::limit($deposit->wallet->wallet_address, 12) }}
-                                            </div>
-                                        </td>
-
-                                        <td class="px-4 py-3">
-                                            @if($deposit->user->membership_code)
-                                                <span class="text-green-600 font-mono font-bold text-xs">
-                                                    {{ $deposit->user->membership_code }}
-                                                </span>
-                                            @else
-                                                <button
-                                                    onclick="generateMembershipCode({{ $deposit->user->id }})"
-                                                    class="px-3 py-1 bg-[#8AC304] text-white rounded text-xs">
-                                                    Generate
-                                                </button>
-                                            @endif
-                                        </td>
-
-                                        <td class="px-4 py-3 text-gray-600">
-                                            {{ $deposit->created_at->format('d M Y') }}
-                                        </td>
-
-                                        <td class="px-4 py-3">
-                                            <div class="flex flex-wrap gap-2">
-                                                <form method="POST"
-                                                      action="{{ route('admin.approve.deposit', $deposit->id) }}">
-                                                    @csrf
-                                                    <button class="px-3 py-1 bg-green-600 text-white rounded text-xs">
-                                                        Approve
-                                                    </button>
-                                                </form>
-
-                                                <button
-                                                    onclick="openRejectModal('{{ route('admin.reject.deposit', $deposit->id) }}')"
-                                                    class="px-3 py-1 bg-red-600 text-white rounded text-xs">
-                                                    Reject
-                                                </button>
-                                            </div>
-                                        </td>
-
+                        <div class="overflow-x-auto">
+                            <table class="min-w-[1100px] w-full table bordered-table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>User</th>
+                                        <th>Email</th>
+                                        <th>Plan</th>
+                                        <th>Proof</th>
+                                        <th>Country</th>
+                                        <th>Amount ($)</th>
+                                        <th>Wallet</th>
+                                        <th>Membership</th>
+                                        <th>Date</th>
+                                        <th>Actions</th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                                </thead>
 
-                @else
-                    <div class="text-center py-12 text-gray-500">
-                        📭 No pending deposits
-                    </div>
-                @endif
+                                <tbody>
+                                    @foreach($deposits as $deposit)
+                                        <tr>
+
+                                            <td>{{ $loop->iteration }}</td>
+
+                                            <td>{{ $deposit->user->name }}</td>
+
+                                            <td>{{ $deposit->user->email }}</td>
+
+                                            <td>{{ $deposit->plan->name }}</td>
+
+                                            <td>
+                                                @if($deposit->proof)
+                                                    <img src="{{ Storage::url($deposit->proof) }}"
+                                                         alt="Proof"
+                                                         style="width:60px;height:60px;cursor:pointer"
+                                                         onclick="openModal('{{ Storage::url($deposit->proof) }}')">
+                                                @else
+                                                    <span class="text-gray-400">No proof</span>
+                                                @endif
+                                            </td>
+
+                                            <td>{{ $deposit->user->country }}</td>
+
+                                            <td>
+                                                <strong class="text-success">
+                                                    ${{ number_format($deposit->amount_deposited, 2) }}
+                                                </strong>
+                                            </td>
+
+                                            <td>
+                                                <strong>{{ $deposit->wallet->crypto_name }}</strong><br>
+                                                <small class="text-muted">
+                                                    {{ $deposit->wallet->wallet_address }}
+                                                </small>
+                                            </td>
+
+                                            <td>
+                                                @if($deposit->user->membership_code)
+                                                    <span class="text-success font-mono">
+                                                        {{ $deposit->user->membership_code }}
+                                                    </span>
+                                                @else
+                                                    <button
+                                                        onclick="generateMembershipCode({{ $deposit->user->id }})"
+                                                        class="btn btn-sm btn-primary">
+                                                        Generate
+                                                    </button>
+                                                @endif
+                                            </td>
+
+                                            <td>{{ $deposit->created_at->format('d M, Y') }}</td>
+
+                                            <td>
+                                                <div class="flex gap-2">
+                                                    <form method="POST"
+                                                          action="{{ route('admin.approve.deposit', $deposit->id) }}">
+                                                        @csrf
+                                                        <button class="btn btn-sm btn-success">
+                                                            Approve
+                                                        </button>
+                                                    </form>
+
+                                                    <button
+                                                        onclick="openRejectModal('{{ route('admin.reject.deposit', $deposit->id) }}')"
+                                                        class="btn btn-sm btn-danger">
+                                                        Reject
+                                                    </button>
+                                                </div>
+                                            </td>
+
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                    @else
+                        <div class="text-center py-12 text-gray-500">
+                            No pending deposits found.
+                        </div>
+                    @endif
+                </div>
             </div>
         </div>
     </div>
@@ -150,30 +148,35 @@
 
 {{-- IMAGE MODAL --}}
 <div id="imageModal"
-     class="fixed inset-0 bg-black/90 hidden items-center justify-center z-50"
+     class="fixed inset-0 bg-black bg-opacity-80 z-50 hidden items-center justify-center p-4"
      onclick="closeModal()">
-    <img id="modalImage" class="max-h-[90vh] rounded-xl">
+    <img id="modalImage"
+         class="max-w-full max-h-full rounded-lg shadow-lg object-contain"
+         onclick="event.stopPropagation();">
 </div>
 
 {{-- REJECT MODAL --}}
-<div id="rejectModal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50">
-    <div class="bg-white rounded-xl p-6 w-[90%] max-w-md">
-        <h3 class="text-red-600 font-bold text-xl mb-4">Reject Deposit</h3>
+<div id="rejectModal"
+     class="fixed inset-0 bg-black bg-opacity-70 z-50 hidden items-center justify-center">
+    <div class="bg-white rounded-lg p-6 w-full max-w-md">
+        <h4 class="text-danger font-bold mb-3">Reject Deposit</h4>
 
         <form method="POST" id="rejectForm">
             @csrf
             @method('DELETE')
 
-            <textarea name="rejection_note" required
-                      class="w-full border rounded-lg p-3 text-sm"
+            <textarea name="rejection_note"
+                      class="form-control"
+                      required
                       placeholder="Reason for rejection..."></textarea>
 
             <div class="flex justify-end gap-3 mt-4">
-                <button type="button" onclick="closeRejectModal()"
-                        class="px-4 py-2 bg-gray-300 rounded">
+                <button type="button"
+                        onclick="closeRejectModal()"
+                        class="btn btn-secondary">
                     Cancel
                 </button>
-                <button class="px-4 py-2 bg-red-600 text-white rounded">
+                <button class="btn btn-danger">
                     Reject
                 </button>
             </div>
