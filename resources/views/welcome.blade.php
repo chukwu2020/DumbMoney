@@ -281,7 +281,7 @@
                                 <span class="text-primary">MarketMind</span> AI <span class="text-highlight">Convergence</span> Platform
                             </h1>
                             <p class="lead text-white-80 mb-4" style="color: white !important;">
-                                Next-gen algorithmic trading across crypto, forest assets, and real estate markets with deep learning execution.
+                                Next-gen algorithmic trading across crypto, forex assets, and real estate markets with deep learning execution.
                             </p>
 
                             <div class="d-flex flex-wrap gap-3 mb-5">
