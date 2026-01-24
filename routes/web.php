@@ -308,6 +308,12 @@ Route::middleware(['auth'])->group(function () {
         ->name('live.trading.messages');
 
        Route::get('/check-membership-status', [UserController::class, 'checkMembership'])->name('check.membership');
+
+    //    user terms , privacy settings 
+        Route::get('/terms and privacy policy  ', [UserController::class, 'terms_privacy'])->name('terms.privacy');
+
+            Route::get('/terms $ privacy settings', [planController::class, 'terms_privacyhome'])->name('terms.privacy');
+
 Route::get('/membership-locked', [UserController::class, 'lockedPage'])
     ->middleware('auth')
     ->name('membership.locked');

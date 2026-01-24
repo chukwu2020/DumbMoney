@@ -7,6 +7,13 @@ use Illuminate\Http\Request;
 
 class PlanController extends Controller
 {
+
+
+    // terms$policy 
+    public function terms_privacy()
+{
+    return view(' dashboard.terms_privacy');
+}
     //
 
     public function addPlan()

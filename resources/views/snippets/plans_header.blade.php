@@ -1,5 +1,6 @@
 @extends('layout.app')
 @section('content')
+
 <div class="pricing-plan-area ptb-120" style="background-image: url(assets/images/hero/hero-image-1.svg)">
     <div class="container">
         <div class="section-title">

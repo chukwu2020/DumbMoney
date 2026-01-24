@@ -558,10 +558,12 @@ public function lockedPage()
 
 
 
+// terms and conditions
 
-
-
-
+public function terms_privacyhome()
+{
+    return view(' snippets.hometermsprivacy');
+}
 
 
 
