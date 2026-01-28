@@ -34,9 +34,12 @@ use Illuminate\Support\Facades\Cache;
 |--------------------------------------------------------------------------
 */
 
-// --- Public Routes ---
+
 Route::get('/', function () {
-    $plans = Plan::orderBy('created_at', 'DESC')->get();
+    $plans = Cache::remember('homepage_plans', 60, function () {
+        return Plan::latest()->get();
+    });
+
     return view('welcome', compact('plans'));
 });
 

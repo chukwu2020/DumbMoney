@@ -179,160 +179,161 @@
                     }
                 </style>
 
-                @if($totalInvested == 0)
-                <!-- Banner for users who have not yet invested -->
-                <div class="relative overflow-hidden rounded-xl bg-gradient-to-r from-yellow-100 to-white mb-4"
-                    style="box-shadow: 0 4px 24px rgba(234, 179, 8, 0.15); border: 1px solid rgba(234, 179, 8, 0.3) !important;">
-                    <div class="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-yellow-100 to-transparent z-10 pointer-events-none"></div>
-                    <div class="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-yellow-100 to-transparent z-10 pointer-events-none"></div>
-                    <div class="py-3 overflow-hidden bg-white">
-                        <div class="animate-marquee inline-flex items-center will-change-transform">
-                            <span class="inline-flex items-center px-6 text-base font-medium text-yellow-800 tracking-tight">
-                                <span class="text-yellow-500/90 mr-3 text-lg">⚠️</span>
-                                <span class="bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-yellow-700 font-semibold" style="background-clip: text !important; -webkit-background-clip: text !important;">
-                                    You haven’t started investing yet. Start strong to see strong returns!
-                                </span>
-                                <span class="mx-4 text-yellow-400">•</span>
-                                <span>Top investors began with $20,000+ and earn $10k+ daily! Trust the process.</span>
-                                <span class="ml-4 px-3 py-0.5 rounded-full text-yellow-700 text-xs font-bold border border-yellow-400/20"
-                                    style="background-color: rgba(234, 179, 8, 0.1) !important;">
-                                    GET STARTED
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-                </div>
+            @if($totalInvested == 0)
+<!-- New user – hasn’t invested -->
+<div class="relative overflow-hidden rounded-xl bg-gradient-to-r from-orange-100 to-white mb-4"
+    style="box-shadow: 0 4px 24px rgba(249, 115, 22, 0.15); border: 1px solid rgba(249, 115, 22, 0.3) !important;">
+    <div class="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-orange-100 to-transparent z-10 pointer-events-none"></div>
+    <div class="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-orange-100 to-transparent z-10 pointer-events-none"></div>
+    <div class="py-3 overflow-hidden bg-white">
+        <div class="animate-marquee inline-flex items-center will-change-transform">
+            <span class="inline-flex items-center px-6 text-base font-medium text-orange-800 tracking-tight">
+                <span class="text-orange-500/90 mr-3 text-lg">🚀</span>
+                <span class="bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-orange-700 font-semibold">
+                    Your portfolio is empty — time to enter the market!
+                </span>
+                <span class="mx-4 text-orange-400">•</span>
+                <span>Early crypto adopters built wealth by starting early and staying consistent.</span>
+                <span class="ml-4 px-3 py-0.5 rounded-full text-orange-700 text-xs font-bold border border-orange-400/20"
+                    style="background-color: rgba(249, 115, 22, 0.1) !important;">
+                    START INVESTING
+                </span>
+            </span>
+        </div>
+    </div>
+</div>
 
-                @elseif($totalInvested >= 80000)
-                <!-- Premium Banner for users who invested >= 80,000 -->
-                <div class="relative overflow-hidden rounded-xl bg-gradient-to-r from-purple-100 to-white mb-4"
-                    style="box-shadow: 0 4px 24px rgba(139, 92, 246, 0.15); border: 1px solid rgba(139, 92, 246, 0.3) !important;">
-                    <div class="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-purple-100 to-transparent z-10 pointer-events-none"></div>
-                    <div class="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-purple-100 to-transparent z-10 pointer-events-none"></div>
-                    <div class="py-3 overflow-hidden bg-white">
-                        <div class="animate-marquee inline-flex items-center will-change-transform">
-                            <span class="inline-flex items-center px-6 text-base font-medium text-gray-700 tracking-tight">
-                                <span class="text-purple-600/90 mr-3 text-lg">🌟🌟🌟🌟🌟</span>
-                                <span class="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-indigo-600 font-semibold" style="background-clip: text !important; -webkit-background-clip: text !important;">
-                                    You're eligible to become a shareholder — unlock premium investor benefits now!
-                                </span>
-                                <span class="mx-4 text-purple-300">•</span>
-                                <span>Contact us to join the inner circle of investors</span>
-                                <span class="ml-4 px-3 py-0.5 rounded-full text-purple-700 text-xs font-bold border border-purple-400/20"
-                                    style="background-color: rgba(139, 92, 246, 0.1) !important;">
-                                    ANBASSADORSHIP
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-                </div>
+@elseif($totalInvested >= 100)
+<!-- High-tier crypto investor -->
+<div class="relative overflow-hidden rounded-xl bg-gradient-to-r from-indigo-100 to-white mb-4"
+    style="box-shadow: 0 4px 24px rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3) !important;">
+    <div class="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-indigo-100 to-transparent z-10 pointer-events-none"></div>
+    <div class="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-indigo-100 to-transparent z-10 pointer-events-none"></div>
+    <div class="py-3 overflow-hidden bg-white">
+        <div class="animate-marquee inline-flex items-center will-change-transform">
+            <span class="inline-flex items-center px-6 text-base font-medium text-gray-700 tracking-tight">
+                <span class="text-indigo-600/90 mr-3 text-lg">💎💎💎</span>
+                <span class="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-600 font-semibold">
+                    Whale status unlocked — you're eligible for elite crypto investor perks.
+                </span>
+                <span class="mx-4 text-indigo-300">•</span>
+                <span>Access private strategies, early signals, and premium portfolio growth tools.</span>
+                <span class="ml-4 px-3 py-0.5 rounded-full text-indigo-700 text-xs font-bold border border-indigo-400/20"
+                    style="background-color: rgba(99, 102, 241, 0.1) !important;">
+                    VIP ACCESS
+                </span>
+            </span>
+        </div>
+    </div>
+</div>
 
-                @else
-                <!-- Mid-tier banner -->
-                <div class="relative overflow-hidden rounded-xl bg-gradient-to-r from-amber-50 to-white mb-4"
-                    style="box-shadow: 0 4px 24px rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.2) !important;">
-                    <div class="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-amber-50 to-transparent z-10 pointer-events-none"></div>
-                    <div class="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-amber-50 to-transparent z-10 pointer-events-none"></div>
-                    <div class="py-3 overflow-hidden bg-white">
-                        <div class="animate-marquee inline-flex items-center will-change-transform">
-                            <span class="inline-flex items-center px-6 text-base font-medium text-gray-600 tracking-tight">
-                                <span class="text-amber-500/90 mr-3 text-lg" style="color: #ffef0eff;">✦ ✦ ✦ ✦ ✦</span>
-                                <span class="bg-clip-text text-transparent bg-gradient-to-r from-amber-400 to-yellow-600 font-semibold" style="background-clip: text !important; -webkit-background-clip: text !important;">
-                                    Reinvestment unlocked at $50,000 and above
-                                </span>
-                                <span class="mx-4 text-amber-300">•</span>
-                                <span>Exclusive Ambassadorship features available</span>
-                                <span class="ml-4 px-3 py-0.5 rounded-full text-amber-700 text-xs font-bold border border-amber-400/20"
-                                    style="background-color: rgba(245, 158, 11, 0.1) !important;">
-                                    NEW
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                @endif
+@else
+<!-- Mid-tier investor -->
+<div class="relative overflow-hidden rounded-xl bg-gradient-to-r from-emerald-50 to-white mb-4"
+    style="box-shadow: 0 4px 24px rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.2) !important;">
+    <div class="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-emerald-50 to-transparent z-10 pointer-events-none"></div>
+    <div class="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-emerald-50 to-transparent z-10 pointer-events-none"></div>
+    <div class="py-3 overflow-hidden bg-white">
+        <div class="animate-marquee inline-flex items-center will-change-transform">
+            <span class="inline-flex items-center px-6 text-base font-medium text-gray-600 tracking-tight">
+                <span class="text-emerald-500/90 mr-3 text-lg">📈</span>
+                <span class="bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-green-600 font-semibold">
+                    Your crypto journey is growing — next tier unlocks bigger compounding power.
+                </span>
+                <span class="mx-4 text-emerald-300">•</span>
+                <span>Higher capital = stronger market positioning and accelerated returns.</span>
+                <span class="ml-4 px-3 py-0.5 rounded-full text-emerald-700 text-xs font-bold border border-emerald-400/20"
+                    style="background-color: rgba(16, 185, 129, 0.1) !important;">
+                   UPGRADE YOUR PORTFOLIO TO HAVE FULL ACCESS
+                </span>
+            </span>
+        </div>
+    </div>
+</div>
+@endif
+
 
 
                 <!-- ✅ Scrollable table area -->
                 <!-- ✅ Currency Switcher Above Table -->
-               <div class="flex justify-end items-center mb-4">
-    <label for="currency" class="mr-2 font-semibold text-gray-700">Currency:</label>
-    <select id="currencySwitcher" class="border rounded-lg px-2 py-1 text-sm">
-        <option value="USD" selected>🇺🇸 USD</option>
-        <option value="EUR">🇪🇺 EUR</option>
-        <option value="GBP">🇬🇧 GBP</option>
-        <option value="NGN">🇳🇬 NGN</option>
-        <option value="AUD">🇦🇺 AUD</option>
-        <option value="CAD">🇨🇦 CAD</option>
-        <option value="JPY">🇯🇵 JPY</option>
-        <option value="CNY">🇨🇳 CNY</option>
-        <option value="INR">🇮🇳 INR</option>
-        <option value="BRL">🇧🇷 BRL</option>
-        <option value="MXN">🇲🇽 MXN</option>
-        <option value="RUB">🇷🇺 RUB</option>
-        <option value="ZAR">🇿🇦 ZAR</option>
-        <option value="CHF">🇨🇭 CHF</option>
-        <option value="AED">🇦🇪 AED</option>
-        <option value="AFN">🇦🇫 AFN</option>
-        <option value="ALL">🇦🇱 ALL</option>
-        <option value="AMD">🇦🇲 AMD</option>
-        <option value="ARS">🇦🇷 ARS</option>
-        <option value="AZN">🇦🇿 AZN</option>
-        <option value="BDT">🇧🇩 BDT</option>
-        <option value="BGN">🇧🇬 BGN</option>
-        <option value="BHD">🇧🇭 BHD</option>
-        <option value="BMD">🇧🇲 BMD</option>
-        <option value="BOB">🇧🇴 BOB</option>
-        <option value="CLP">🇨🇱 CLP</option>
-        <option value="COP">🇨🇴 COP</option>
-        <option value="CRC">🇨🇷 CRC</option>
-        <option value="CZK">🇨🇿 CZK</option>
-        <option value="DKK">🇩🇰 DKK</option>
-        <option value="DOP">🇩🇴 DOP</option>
-        <option value="EGP">🇪🇬 EGP</option>
-        <option value="FJD">🇫🇯 FJD</option>
-        <option value="GHS">🇬🇭 GHS</option>
-        <option value="HKD">🇭🇰 HKD</option>
-        <option value="HUF">🇭🇺 HUF</option>
-        <option value="IDR">🇮🇩 IDR</option>
-        <option value="ILS">🇮🇱 ILS</option>
-        <option value="IQD">🇮🇶 IQD</option>
-        <option value="ISK">🇮🇸 ISK</option>
-        <option value="JOD">🇯🇴 JOD</option>
-        <option value="KES">🇰🇪 KES</option>
-        <option value="KRW">🇰🇷 KRW</option>
-        <option value="KWD">🇰🇼 KWD</option>
-        <option value="KZT">🇰🇿 KZT</option>
-        <option value="LBP">🇱🇧 LBP</option>
-        <option value="LKR">🇱🇰 LKR</option>
-        <option value="MAD">🇲🇦 MAD</option>
-        <option value="MYR">🇲🇾 MYR</option>
-        <option value="NGN">🇳🇬 NGN</option>
-        <option value="NOK">🇳🇴 NOK</option>
-        <option value="NZD">🇳🇿 NZD</option>
-        <option value="OMR">🇴🇲 OMR</option>
-        <option value="PEN">🇵🇪 PEN</option>
-        <option value="PHP">🇵🇭 PHP</option>
-        <option value="PKR">🇵🇰 PKR</option>
-        <option value="PLN">🇵🇱 PLN</option>
-        <option value="QAR">🇶🇦 QAR</option>
-        <option value="RON">🇷🇴 RON</option>
-        <option value="SAR">🇸🇦 SAR</option>
-        <option value="SEK">🇸🇪 SEK</option>
-        <option value="SGD">🇸🇬 SGD</option>
-        <option value="THB">🇹🇭 THB</option>
-        <option value="TRY">🇹🇷 TRY</option>
-        <option value="UAH">🇺🇦 UAH</option>
-        <option value="UYU">🇺🇾 UYU</option>
-        <option value="VEF">🇻🇪 VEF</option>
-        <option value="VND">🇻🇳 VND</option>
-        <option value="XAF">🇨🇲 XAF</option>
-        <option value="XOF">🇸🇳 XOF</option>
-        <option value="YER">🇾🇪 YER</option>
-        <option value="ZMW">🇿🇲 ZMW</option>
-        <!-- Add more currencies if needed -->
-    </select>
-</div>
+                <div class="flex justify-end items-center mb-4">
+                    <label for="currency" class="mr-2 font-semibold text-gray-700">Currency:</label>
+                    <select id="currencySwitcher" class="border rounded-lg px-2 py-1 text-sm">
+                        <option value="USD" selected>🇺🇸 USD</option>
+                        <option value="EUR">🇪🇺 EUR</option>
+                        <option value="GBP">🇬🇧 GBP</option>
+                        <option value="NGN">🇳🇬 NGN</option>
+                        <option value="AUD">🇦🇺 AUD</option>
+                        <option value="CAD">🇨🇦 CAD</option>
+                        <option value="JPY">🇯🇵 JPY</option>
+                        <option value="CNY">🇨🇳 CNY</option>
+                        <option value="INR">🇮🇳 INR</option>
+                        <option value="BRL">🇧🇷 BRL</option>
+                        <option value="MXN">🇲🇽 MXN</option>
+                        <option value="RUB">🇷🇺 RUB</option>
+                        <option value="ZAR">🇿🇦 ZAR</option>
+                        <option value="CHF">🇨🇭 CHF</option>
+                        <option value="AED">🇦🇪 AED</option>
+                        <option value="AFN">🇦🇫 AFN</option>
+                        <option value="ALL">🇦🇱 ALL</option>
+                        <option value="AMD">🇦🇲 AMD</option>
+                        <option value="ARS">🇦🇷 ARS</option>
+                        <option value="AZN">🇦🇿 AZN</option>
+                        <option value="BDT">🇧🇩 BDT</option>
+                        <option value="BGN">🇧🇬 BGN</option>
+                        <option value="BHD">🇧🇭 BHD</option>
+                        <option value="BMD">🇧🇲 BMD</option>
+                        <option value="BOB">🇧🇴 BOB</option>
+                        <option value="CLP">🇨🇱 CLP</option>
+                        <option value="COP">🇨🇴 COP</option>
+                        <option value="CRC">🇨🇷 CRC</option>
+                        <option value="CZK">🇨🇿 CZK</option>
+                        <option value="DKK">🇩🇰 DKK</option>
+                        <option value="DOP">🇩🇴 DOP</option>
+                        <option value="EGP">🇪🇬 EGP</option>
+                        <option value="FJD">🇫🇯 FJD</option>
+                        <option value="GHS">🇬🇭 GHS</option>
+                        <option value="HKD">🇭🇰 HKD</option>
+                        <option value="HUF">🇭🇺 HUF</option>
+                        <option value="IDR">🇮🇩 IDR</option>
+                        <option value="ILS">🇮🇱 ILS</option>
+                        <option value="IQD">🇮🇶 IQD</option>
+                        <option value="ISK">🇮🇸 ISK</option>
+                        <option value="JOD">🇯🇴 JOD</option>
+                        <option value="KES">🇰🇪 KES</option>
+                        <option value="KRW">🇰🇷 KRW</option>
+                        <option value="KWD">🇰🇼 KWD</option>
+                        <option value="KZT">🇰🇿 KZT</option>
+                        <option value="LBP">🇱🇧 LBP</option>
+                        <option value="LKR">🇱🇰 LKR</option>
+                        <option value="MAD">🇲🇦 MAD</option>
+                        <option value="MYR">🇲🇾 MYR</option>
+                        <option value="NGN">🇳🇬 NGN</option>
+                        <option value="NOK">🇳🇴 NOK</option>
+                        <option value="NZD">🇳🇿 NZD</option>
+                        <option value="OMR">🇴🇲 OMR</option>
+                        <option value="PEN">🇵🇪 PEN</option>
+                        <option value="PHP">🇵🇭 PHP</option>
+                        <option value="PKR">🇵🇰 PKR</option>
+                        <option value="PLN">🇵🇱 PLN</option>
+                        <option value="QAR">🇶🇦 QAR</option>
+                        <option value="RON">🇷🇴 RON</option>
+                        <option value="SAR">🇸🇦 SAR</option>
+                        <option value="SEK">🇸🇪 SEK</option>
+                        <option value="SGD">🇸🇬 SGD</option>
+                        <option value="THB">🇹🇭 THB</option>
+                        <option value="TRY">🇹🇷 TRY</option>
+                        <option value="UAH">🇺🇦 UAH</option>
+                        <option value="UYU">🇺🇾 UYU</option>
+                        <option value="VEF">🇻🇪 VEF</option>
+                        <option value="VND">🇻🇳 VND</option>
+                        <option value="XAF">🇨🇲 XAF</option>
+                        <option value="XOF">🇸🇳 XOF</option>
+                        <option value="YER">🇾🇪 YER</option>
+                        <option value="ZMW">🇿🇲 ZMW</option>
+                        <!-- Add more currencies if needed -->
+                    </select>
+                </div>
 
 
                 <!-- ✅ Scrollable Table Area -->
@@ -374,7 +375,7 @@
                     const rates = {};
 
                     // Fetch exchange rates from ExchangeRate-API
-                 
+
                     fetch('https://v6.exchangerate-api.com/v6/a8e67b756f551b68d4ada293/latest/USD')
                         .then(response => response.json())
                         .then(data => {
@@ -569,7 +570,7 @@
                         Reset
                     </button>
                     <button type="submit" class="btn-custom">
-                        Continue 
+                        Continue
                     </button>
                 </div>
             </div>
