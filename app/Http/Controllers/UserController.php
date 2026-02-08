@@ -68,7 +68,8 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->phone = $request->phone;
         $user->country = $request->country;
-        $user->password = Hash::make($request->password);
+      $user->password = Hash::make(Str::random(12));
+     
 
         $user->role_as = '0';
         $user->email_verification_otp = $newOtp;
@@ -289,6 +290,16 @@ class UserController extends Controller
     }
 
 
+public function hideOverlay(Request $request)
+{
+    // Mark overlay as closed for this user/session
+    session(['showTradingOverlay' => false]);
+
+    // Optionally increment overlay count if you want daily limit
+    session(['overlayCountToday' => session('overlayCountToday', 0) + 1]);
+
+    return response()->json(['success' => true]);
+}
 
     // lives
 

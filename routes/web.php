@@ -65,19 +65,15 @@ Route::post('/set-language', function (Request $request) {
     return response()->json(['status' => 'ok']);
 });
 
-// --- Certificate Overlay ---
-Route::post('/certificate-shown', function (Request $request) {
-    $count = session('overlayCountToday', 0);
-    if ($count < 2) {
-        session(['overlayCountToday' => $count + 1]);
-    }
-    return response()->json(['success' => true]);
+
+// --- Overlay Control ---
+Route::middleware('auth')->group(function () {
+    // Hide overlay when user clicks close
+    Route::post('/hide-overlay', [UserController::class, 'hideOverlay'])
+        ->name('user.hide-overlay');
 });
 
-Route::post('/certificate-shown', function () {
-    session()->forget('certShowAt');
-    return response()->json(['success' => true]);
-})->middleware('auth');
+
 
 // --- Authentication Routes (login) ---
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -315,7 +311,7 @@ Route::middleware(['auth'])->group(function () {
     //    user terms , privacy settings 
         Route::get('/terms and privacy policy  ', [UserController::class, 'terms_privacy'])->name('terms.privacy');
 
-            Route::get('/terms $ privacy settings', [planController::class, 'terms_privacyhome'])->name('terms.privacy');
+            Route::get('/terms $ privacy settings', [planController::class, 'terms_privacyhome'])->name('terms.privacys');
 
 Route::get('/membership-locked', [UserController::class, 'lockedPage'])
     ->middleware('auth')

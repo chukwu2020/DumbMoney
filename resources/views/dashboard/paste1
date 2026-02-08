@@ -1,10 +1,51 @@
 <!-- china -->
-https://discord.gg/hu-zi-guan-bi-866899985705336842
+<!-- Certificate Overlay -->
+    <div
+        x-data="{
+        showCert: false,
+        init() {
+            setTimeout(() => {
+                this.showCert = true;
+            }, 60000);
+        },
+        closeCert() {
+            this.showCert = false;
+        }
+    }"
+        x-init="init()"
+        x-show="showCert"
+        x-cloak
+        class="fixed inset-0 z-40 bg-black/80 flex items-center justify-center px-4"
+        style="backdrop-filter: blur(4px);">
+        <div class="relative w-full max-w-3xl text-center p-4">
+            <img src="{{ asset('assets/images/certificate.jpg') }}"
+                alt="Certificate"
+                class="mx-auto object-contain rounded-lg shadow-2xl"
+                style="max-height: 60vh; max-width: 80%; width: auto;" />
+            <div class="mt-2 space-y-2 px-4">
+                <p class="text-base text-[#0C3A30] font-medium">
+                    Recognized <span class="font-semibold">Government</span> Approved Certification
+                </p>
+            </div>
+            <button
+                @click="closeCert"
+                class="hover:text-red-500 text-[140px] font-bold rounded-full p-1 z-50 transition-all"
+                style="width: 2.5rem; height: 2.5rem; color: #8bc905 !important; background-color: #0C3A30; box-shadow: 0 0 15px rgba(139, 201, 5, 0.64);">&times;</button>
+        </div>
+    </div>
+
+<!-- Add x-cloak style at the very top -->
+<style>
+    [x-cloak] {
+        display: none !important;
+    }
+</style>
 
 
-<!-- german server  -->
-
-https://discord.gg/extendedtraders
 
 
-https://discord.gg/crypto-germany-822176034555691140
+
+
+
+
+So here is what I actually wanted to do now. You know, earlier, if a user logs in and it says for a minute or before a minute, it appears. Now I want to change everything now. I no longer want the image that appears because it doesn't look magnificent. Do you understand? Already, the image is overlaid to the screen. It covers the whole screen, which is okay for me. Then, now this is what I want to, what I want to do. I want to write a text there. I want, instead of the image, I want a text. You know, a text that, you know, that will check if a user, you know, a text that will check if a user have deposited or have not. Something like this. Hello, here, username, you know, this is the right time to join the market. The market entry is already on position. Join the market now. But maybe if the user have already deposited, it will tell the user, hello, if you are already on the market, or if the user have deposited for the first time, it will tell the user to deposit again. It will tell the user, hello, if you have deposited for the first time, okay, or maybe after, I don't know, I just want something that will justify the host of either have deposited for the first time. It tells the user to be upgraded to the next plan. Do you understand? Whether a user is still trading or, you know. After trading, let's that be a good write-up that will be here. Do you understand? And also that they will give a user a direction, but on this particular direction, if the things pop out, after the user has read the whole stuff finished, then the user will see something like, learn how to deposit, sorry, learn how to fund your account. Then the user will now click on the button, learn how to fund your account. You now expand the text will now pop out too. The text will now pop out, then they will give the user the direction on how to deposit. First of all, click on your deposit button. Once you have done that, you would see the available plans. Now, select the actual trading plan tier you want. Select the wallet address you would like to copy. I mean, on your exchange, select the address you already held on your, I mean, if you are holding USDT, select it here. Select it. Now after selecting it, copy, input the amount, input the amount you want for start off for the trade. Note that each trading plan tier has its own minimum and maximum amount. So select it, then continue. Then if the case are continued, it will take the user to the next page. On that page, the user will only have to copy the wallet address, which You or she have already selected previously, then head over to his or her exchange, then deposit, then withdraw to the wallet address, then get the screenshot, then below on his page, you would see where to put the screenshot, then submit. Submit then wait for confirmation to start, to be able to start trading. So this is the whole thing, how everything works. I hope you did something nice for me. Thank you.

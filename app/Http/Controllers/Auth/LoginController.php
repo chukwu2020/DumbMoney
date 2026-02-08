@@ -54,44 +54,43 @@ class LoginController extends Controller
     /**
      * Handle what happens after successful authentication.
      */
-    protected function authenticated(Request $request, $user)
-    {
-        session()->forget('clearCertOverlay');
-        session()->put('clearCertOverlay', true);
+ protected function authenticated(Request $request, $user)
+{
+    $today = now()->toDateString();
 
-        $today = now()->toDateString();
-        $shownToday = session("certShownDate") === $today;
-        $count = session("certShownCount", 0);
-
-        if (!$shownToday || $count < 2) {
-            session([
-                'certShowAt' => now()->addMinute()->timestamp,
-                'certShownDate' => $today,
-                'certShownCount' => $shownToday ? $count + 1 : 1,
-            ]);
-        }
-
-        if (is_null($user->email_verified_at)) {
-            Auth::logout();
-
-            return redirect()->route('login')->withErrors([
-                'email' => 'You must verify your email address before logging in.'
-            ]);
-        }
-
-        if ($user->role_as == 1) { // Admin
-            return redirect()->route('admin_dashboard');
-        } elseif ($user->role_as == 0) { // User
-            return redirect()->route('user_dashboard');
-            
-
-        } else {
-            Auth::logout();
-            return redirect()->route('login')->withErrors([
-                'role_as' => 'Your account role is not valid.'
-            ]);
-        }
+    if (session('overlayDate') !== $today) {
+        session([
+            'overlayDate' => $today,
+            'overlayCount' => 0,
+        ]);
     }
+
+    $overlayCount = session('overlayCount', 0);
+
+    if ($overlayCount < 2 && !session()->has('overlayShownThisLogin')) {
+        session([
+            'showTradingOverlay' => true,
+            'overlayShowAt' => now()->addSeconds(40)->timestamp,
+            'overlayCount' => $overlayCount + 1,
+            'overlayShownThisLogin' => true,
+        ]);
+    } else {
+        session()->forget('showTradingOverlay');
+    }
+
+    if (is_null($user->email_verified_at)) {
+        Auth::logout();
+        return redirect()->route('login')->withErrors([
+            'email' => 'You must verify your email address before logging in.'
+        ]);
+    }
+
+    return redirect()->route(
+        $user->role_as == 1 ? 'admin_dashboard' : 'user_dashboard'
+    );
+}
+
+
 
     /**
      * Create a new controller instance.

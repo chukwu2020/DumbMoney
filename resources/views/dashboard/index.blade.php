@@ -1,53 +1,940 @@
 @extends('layout.user')
 
 @section('content')
-<!-- Add x-cloak style at the very top -->
-<style>
-    [x-cloak] { display: none !important; }
-</style>
+
 
 <div class="main-content">
+    @if(session('showTradingOverlay') && now()->timestamp >= session('overlayShowAt'))
+    @php
+    $deposits = $user->deposits;
+    $depositCount = $deposits->count();
+    $hasDeposited = $depositCount > 0;
+    $isFirstDeposit = $depositCount === 1;
+    $tradingPlan = optional($user->activePlan())->name;
+    @endphp
 
-<!-- Certificate Overlay -->
-<div
-    x-data="{
-        showCert: false,
-        init() {
-            setTimeout(() => {
-                this.showCert = true;
-            }, 60000);
-        },
-        closeCert() {
-            this.showCert = false;
-        }
-    }"
-    x-init="init()"
-    x-show="showCert"
-    x-cloak
-    class="fixed inset-0 z-40 bg-black/80 flex items-center justify-center px-4"
-    style="backdrop-filter: blur(4px);">
-    <div class="relative w-full max-w-3xl text-center p-4">
-        <img src="{{ asset('assets/images/certificate.jpg') }}"
-            alt="Certificate"
-            class="mx-auto object-contain rounded-lg shadow-2xl"
-            style="max-height: 60vh; max-width: 80%; width: auto;" />
-        <div class="mt-2 space-y-2 px-4">
-            <p class="text-base text-[#0C3A30] font-medium">
-                Recognized <span class="font-semibold">Government</span> Approved Certification
-            </p>
+    <!-- Full-Screen Overlay -->
+    <div id="trading-overlay" class="trading-overlay-wrapper">
+        <!-- Dark Trading Background -->
+        <div class="trading-overlay-backdrop"></div>
+
+        <!-- Content Container -->
+        <div class="trading-overlay-container">
+
+            <!-- Close Button -->
+                <button
+                    type="button"
+                    id="overlay-close"
+                    class="trading-close-btn"
+                    aria-label="Close">
+
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+
+                <!-- Main Trading Card -->
+                <div class="trading-card">
+
+                    <!-- Header with Live Indicator -->
+                    <div class="trading-header">
+                        <div class="trading-header-content">
+                            <div class="live-pulse-container">
+                                <span class="live-pulse"></span>
+                                <span class="live-text">LIVE</span>
+                            </div>
+                            <h2 class="trading-header-title">Mirror Trading Active</h2>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Content -->
+                    <div class="trading-content">
+
+                        <!-- Trader Profile -->
+                        <div class="trader-profile">
+                            <div class="trader-avatar-container">
+                                <div class="trader-avatar">👤</div>
+                                <span class="online-badge"></span>
+                            </div>
+                            <div>
+                                <h3 class="trader-name">Welcome, {{ $user->name }}</h3>
+                                <p class="trader-status">
+                                    <span class="status-dot"></span>
+                                    Ready to mirror profitable trades
+                                </p>
+                            </div>
+                        </div>
+
+
+
+                        <!-- Alert Message -->
+                        <div class="trading-alert">
+                            <div class="alert-header">
+                                <div class="alert-icon-wrapper">
+                                    @if(!$hasDeposited)
+                                    <span class="alert-icon"></span>
+                                    @elseif($isFirstDeposit)
+                                    <span class="alert-icon">⭐</span>
+                                    @else
+                                    <span class="alert-icon">📊</span>
+                                    @endif
+                                </div>
+                                <div class="alert-content">
+                                    @if(!$hasDeposited)
+                                    <div class="alert-title">Premium Entry Detected!</div>
+                                    <p class="alert-text">Mirror trades in real-time. Volume surge detected across major pairs. </p>
+                                    @elseif($isFirstDeposit && $tradingPlan)
+                                    <div class="alert-title">Strong Start - {{ $tradingPlan }}</div>
+                                    <p class="alert-text">You're mirroring profitable signals! Scale up your capital to maximize returns on high-probability setups. 🚀</p>
+                                    @elseif($depositCount > 1)
+                                    <div class="alert-title">{{ $depositCount }}x Active Positions</div>
+                                    <p class="alert-text">Excellent consistency! Premium mirror opportunities available. Advanced strategies unlocked for your tier. 📊</p>
+                                    @else
+                                    <div class="alert-title">Trading Session Active</div>
+                                    <p class="alert-text">Market conditions optimal. Professional traders executing high-probability entries. Mirror their moves now. ⚡</p>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="action-hint">
+                                <span class="hint-icon"></span>
+                                <span class="hint-text">
+                                    @if(!$hasDeposited)
+                                    Fund account to start mirroring trades and go live
+                                    @elseif($isFirstDeposit && $tradingPlan)
+                                    Upgrade for advanced signals
+                                    @else
+                                    Scale capital for bigger wins
+                                    @endif
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- CTA Button -->
+                        <a href="{{ route('user.deposit') }}" class="trading-cta-btn">
+                            <span class="btn-icon">
+                                @if(!$hasDeposited)⚡
+                                @elseif($isFirstDeposit && $tradingPlan)🚀
+                                @else📈
+                                @endif
+                            </span>
+                            <span class="btn-text">
+                                @if(!$hasDeposited)
+                                Activate Mirror Trading
+                                @elseif($isFirstDeposit && $tradingPlan)
+                                Upgrade Trading Tier
+                                @else
+                                Scale Capital
+                                @endif
+                            </span>
+                        </a>
+
+                        <!-- Quick Funding Guide -->
+                        <div class="funding-guide">
+                            <button onclick="toggleGuide()" class="guide-toggle">
+                                <div class="guide-toggle-left">
+
+                                    <span class="guide-title">Quick Funding Guide</span>
+                                </div>
+                                <svg id="guide-arrow" class="guide-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+
+                            <div id="guide-content" class="guide-content">
+                                <div class="guide-steps">
+
+                                    <div class="guide-step">
+                                        <div class="step-number">1</div>
+                                        <div class="step-info">
+                                            <div class="step-title">Click Deposit Button</div>
+                                            <div class="step-detail">View all available trading plans and their profit tiers</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="guide-step">
+                                        <div class="step-number">2</div>
+                                        <div class="step-info">
+                                            <div class="step-title">Select Trading Plan</div>
+                                            <div class="step-detail">Choose the tier matching your capital. Higher capital = Higher profits</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="guide-step">
+                                        <div class="step-number">3</div>
+                                        <div class="step-info">
+                                            <div class="step-title">Select Wallet Address</div>
+                                            <div class="step-detail">Pick crypto you hold on exchange (USDT, BTC, ETH, etc.)</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="guide-step">
+                                        <div class="step-number">4</div>
+                                        <div class="step-info">
+                                            <div class="step-title">Enter Amount & Continue</div>
+                                            <div class="step-detail">Input deposit amount for selected plan, click "Continue"</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="guide-step">
+                                        <div class="step-number">5</div>
+                                        <div class="step-info">
+                                            <div class="step-title">Copy Wallet Address</div>
+                                            <div class="step-detail">Next page shows wallet address - copy it carefully</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="guide-step">
+                                        <div class="step-number">6</div>
+                                        <div class="step-info">
+                                            <div class="step-title">Open Crypto Exchange</div>
+                                            <div class="step-detail">Launch Binance, Coinbase, or your preferred exchange</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="guide-step">
+                                        <div class="step-number">7</div>
+                                        <div class="step-info">
+                                            <div class="step-title">Click Withdraw</div>
+                                            <div class="step-detail">Select matching crypto, paste copied wallet address</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="guide-step">
+                                        <div class="step-number">8</div>
+                                        <div class="step-info">
+                                            <div class="step-title">Complete & Screenshot</div>
+                                            <div class="step-detail">Send crypto, capture transaction confirmation screenshot</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="guide-step">
+                                        <div class="step-number">9</div>
+                                        <div class="step-info">
+                                            <div class="step-title">Upload Proof</div>
+                                            <div class="step-detail">Return to platform, upload screenshot below copy section</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="guide-step">
+                                        <div class="step-number">10</div>
+                                        <div class="step-info">
+                                            <div class="step-title">Submit & Wait</div>
+                                            <div class="step-detail">Click "Submit" - get notified when deposit confirms</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="guide-note warning-note">
+                                        <span class="note-icon">⏱️</span>
+                                        <div>
+                                            <strong>Processing Time:</strong> 1-10 minutes depending on network. Trading activates instantly after approval.
+                                        </div>
+                                    </div>
+
+                                    <div class="guide-note tip-note">
+                                        <span class="note-icon">💡</span>
+                                        <div>
+                                            <strong>Pro Tip:</strong> Triple-check wallet address! Bigger capital = Exponentially higher mirror trading profits!
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                </div>
         </div>
-        <button
-            @click="closeCert"
-            class="hover:text-red-500 text-[140px] font-bold rounded-full p-1 z-50 transition-all"
-            style="width: 2.5rem; height: 2.5rem; color: #8bc905 !important; background-color: #0C3A30; box-shadow: 0 0 15px rgba(139, 201, 5, 0.64);">&times;</button>
     </div>
-</div>
 
-<!-- Main Dashboard Content -->
-<div class="dashboard-main-body space-y-6">
+    <style>
+        /* Overlay Wrapper */
+        .trading-overlay-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            animation: overlayFadeIn 0.4s ease;
+            overflow-y: auto;
+        }
+
+        .trading-overlay-wrapper {
+            display: none;
+        }
+
+
+        @keyframes overlayFadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Dark Trading Backdrop */
+        .trading-overlay-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: none;
+            backdrop-filter: blur(12px);
+            z-index: 1;
+        }
+
+        /* Content Container */
+        .trading-overlay-container {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 580px;
+            margin: auto;
+            padding: 60px 0 20px 0;
+        }
+
+        /* Close Button */
+        .trading-close-btn {
+            position: absolute;
+            top: 10px;
+            right: 0;
+            width: 44px;
+            height: 44px;
+            background: #8bc905;
+            border: 2px solid rgba(139, 201, 5, 0.3);
+            border-radius: 50%;
+            color: #0C3A30;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(139, 201, 5, 0.4);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .trading-close-btn:hover {
+            background: #a0db06;
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 0 0 30px rgba(139, 201, 5, 0.6);
+        }
+
+        /* Main Trading Card */
+        .trading-card {
+            background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.7), 0 0 40px rgba(139, 201, 5, 0.15);
+            animation: cardSlideUp 0.5s ease;
+            border: 1px solid rgba(139, 201, 5, 0.2);
+        }
+
+        @keyframes cardSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Header with Live Indicator */
+        .trading-header {
+            background: linear-gradient(135deg, #8bc905 0%, #6a9b01 100%);
+            padding: 1.25rem 1.5rem;
+            border-bottom: 3px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .trading-header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .live-pulse-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 0.375rem 0.75rem;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .live-pulse {
+            width: 8px;
+            height: 8px;
+            background: #ff4444;
+            border-radius: 50%;
+            animation: pulse-animation 1.5s infinite;
+            box-shadow: 0 0 10px #ff4444;
+        }
+
+        @keyframes pulse-animation {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.3);
+                opacity: 0.7;
+            }
+        }
+
+        .live-text {
+            color: white;
+            font-weight: 700;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+        }
+
+        .trading-header-title {
+            flex: 1;
+            font-size: 1.375rem;
+            font-weight: 800;
+            color: white;
+            margin: 0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .trading-emoji {
+            font-size: 1.75rem;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+
+        .market-status {
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+            font-size: 0.8125rem;
+            color: rgba(255, 255, 255, 0.95);
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-weight: 600;
+        }
+
+        .status-divider {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Content */
+        .trading-content {
+            padding: 1.75rem;
+        }
+
+        /* Trader Profile */
+        .trader-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border-radius: 12px;
+            border: 1px solid #e9ecef;
+        }
+
+        .trader-avatar-container {
+            position: relative;
+        }
+
+        .trader-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8bc905 0%, #6a9b01 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.875rem;
+            box-shadow: 0 4px 12px rgba(139, 201, 5, 0.25);
+        }
+
+        .online-badge {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 14px;
+            height: 14px;
+            background: #10b981;
+            border: 3px solid white;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+        }
+
+        .trader-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0C3A30;
+            margin: 0 0 0.25rem 0;
+        }
+
+        .trader-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin: 0;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background: #10b981;
+            border-radius: 50%;
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        /* Trading Stats */
+        .trading-stats {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.25rem;
+            background: linear-gradient(135deg, #0C3A30 0%, #0a2f27 100%);
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 16px rgba(12, 58, 48, 0.3);
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+        }
+
+        .stat-icon {
+            font-size: 1.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.6875rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.125rem;
+        }
+
+        .stat-value {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: #8bc905;
+            text-shadow: 0 0 10px rgba(139, 201, 5, 0.3);
+        }
+
+        .stat-divider {
+            width: 1px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Trading Alert */
+        .trading-alert {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border: 2px solid #bbf7d0;
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .alert-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 0.875rem;
+        }
+
+        .alert-icon-wrapper {
+            flex-shrink: 0;
+        }
+
+        .alert-icon {
+            font-size: 2rem;
+            display: block;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-title {
+            font-size: 1.0625rem;
+            font-weight: 700;
+            color: #0C3A30;
+            margin-bottom: 0.5rem;
+        }
+
+        .alert-text {
+            font-size: 0.9375rem;
+            color: #374151;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .action-hint {
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+            padding: 0.75rem 1rem;
+            background: rgba(139, 201, 5, 0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(139, 201, 5, 0.2);
+        }
+
+        .hint-icon {
+            font-size: 1.25rem;
+        }
+
+        .hint-text {
+            font-weight: 700;
+            color: #0C3A30;
+            font-size: 0.9375rem;
+        }
+
+        /* CTA Button */
+        .trading-cta-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            width: 100%;
+            padding: 1.125rem 1.5rem;
+            background: linear-gradient(135deg, #8bc905 0%, #6a9b01 100%);
+            color: #0C3A30;
+            font-weight: 800;
+            font-size: 1.0625rem;
+            text-align: center;
+            border-radius: 12px;
+            text-decoration: none;
+            box-shadow: 0 6px 20px rgba(139, 201, 5, 0.4);
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .trading-cta-btn:hover {
+            background: linear-gradient(135deg, #a0db06 0%, #8bc905 100%);
+            box-shadow: 0 8px 28px rgba(139, 201, 5, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .btn-icon {
+            font-size: 1.375rem;
+        }
+
+        /* Funding Guide */
+        .funding-guide {
+            border-top: 2px solid #e9ecef;
+            padding-top: 1.5rem;
+        }
+
+        .guide-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border: 1px solid #e9ecef;
+            padding: 1rem 1.25rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .guide-toggle:hover {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border-color: #8bc905;
+            box-shadow: 0 2px 8px rgba(139, 201, 5, 0.15);
+        }
+
+        .guide-toggle-left {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .guide-icon {
+            font-size: 1.375rem;
+        }
+
+        .guide-title {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #0C3A30;
+        }
+
+        .guide-arrow {
+            width: 24px;
+            height: 24px;
+            color: #6b7280;
+            transition: transform 0.3s ease;
+        }
+
+        .guide-arrow.rotated {
+            transform: rotate(180deg);
+        }
+
+        .guide-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .guide-content.expanded {
+            max-height: 1600px;
+        }
+
+        .guide-steps {
+            padding-top: 1rem;
+        }
+
+        .guide-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 0.875rem;
+            margin-bottom: 0.625rem;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+            transition: all 0.2s ease;
+        }
+
+        .guide-step:hover {
+            border-color: #8bc905;
+            box-shadow: 0 2px 8px rgba(139, 201, 5, 0.1);
+        }
+
+        .step-number {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #8bc905 0%, #6a9b01 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.875rem;
+            box-shadow: 0 2px 8px rgba(139, 201, 5, 0.3);
+        }
+
+        .step-info {
+            flex: 1;
+        }
+
+        .step-title {
+            font-weight: 700;
+            font-size: 0.9375rem;
+            color: #0C3A30;
+            margin-bottom: 0.25rem;
+        }
+
+        .step-detail {
+            font-size: 0.875rem;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+
+        .guide-note {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        .warning-note {
+            background: #fef3c7;
+            border: 1px solid #fde68a;
+            color: #92400e;
+        }
+
+        .tip-note {
+            background: #dbeafe;
+            border: 1px solid #93c5fd;
+            color: #1e40af;
+        }
+
+        .note-icon {
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .guide-note strong {
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Footer */
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .trading-overlay-wrapper {
+                padding: 0.5rem;
+            }
+
+            .trading-overlay-container {
+                padding: 50px 0 15px 0;
+            }
+
+            .trading-close-btn {
+                width: 40px;
+                height: 40px;
+            }
+
+            .trading-content {
+                padding: 1.5rem 1.25rem;
+            }
+
+            .trading-header {
+                padding: 1rem 1.25rem;
+            }
+
+            .trading-header-title {
+                font-size: 1.125rem;
+            }
+
+            .trader-name {
+                font-size: 1.125rem;
+            }
+
+            .trading-stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .stat-divider {
+                width: 100%;
+                height: 1px;
+            }
+
+            .stat-item {
+                width: 100%;
+            }
+
+            .market-status {
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+
+   <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const overlay = document.getElementById('trading-overlay');
+    if (!overlay) return;
+
+    const closeBtn = overlay.querySelector('#overlay-close');
+    const guideBtn = overlay.querySelector('.guide-toggle');
+    const guideContent = overlay.querySelector('#guide-content');
+    const guideArrow = overlay.querySelector('#guide-arrow');
+
+    // SHOW OVERLAY (server already delayed it)
+    overlay.style.display = 'flex';
+
+    // Lock background scroll
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+
+    function closeOverlay() {
+        overlay.remove();
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.width = '';
+    }
+
+    // Close when user clicks close button (with server update)
+    closeBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        try {
+            await fetch('{{ route("user.hide-overlay") }}', { 
+                method: 'POST', 
+                headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' } 
+            });
+        } catch (err) {
+            console.error(err);
+        }
+
+        closeOverlay();
+    });
+
+    // Optional: ESC key closes overlay
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeOverlay();
+        }
+    });
+
+    // Funding guide toggle
+    guideBtn?.addEventListener('click', () => {
+        guideContent.classList.toggle('expanded');
+        guideArrow.classList.toggle('rotated');
+    });
+});
+</script>
 
 
 
+    @endif
+
+
+
+
+
+
+
+
+
+
+    <!-- Main Dashboard Content -->
+    <div class="dashboard-main-body space-y-6">
 
 
         <!-- Header with Breadcrumb -->
@@ -134,25 +1021,32 @@
                 </h6>
             </a>
 
-         <ul class="flex items-center space-x-2">
+            <ul class="flex items-center space-x-2">
 
-    <li>
-        <span class="h-2.5 w-2.5 rounded-full bg-red-600 animate-[blink_1s_ease-in-out_infinite]"></span>
-    </li>
+                <li>
+                    <span class="h-2.5 w-2.5 rounded-full bg-red-600 animate-[blink_1s_ease-in-out_infinite]"></span>
+                </li>
 
-    
 
-    <li class="font-semibold mb-0 flex items-center space-x-2 " style="color: #0C3A30;">
-        <a href="{{ route('user_live') }}">Live Trading</a>
-    </li>
-</ul>
 
-<style>
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
-}
-</style>
+                <li class="font-semibold mb-0 flex items-center space-x-2 " style="color: #0C3A30;">
+                    <a href="{{ route('user_live') }}">Live Trading</a>
+                </li>
+            </ul>
+
+            <style>
+                @keyframes blink {
+
+                    0%,
+                    100% {
+                        opacity: 1;
+                    }
+
+                    50% {
+                        opacity: 0;
+                    }
+                }
+            </style>
 
         </div>
 
@@ -217,357 +1111,208 @@
         </script>
 
 
-      <!-- Community Activity Feed -->
+
+
+
+     <!-- Community Activity Feed -->
 @php
 $user = auth()->user();
 $hasMadeDeposit = $user->deposits()->exists();
 @endphp
 
-<!-- Minimal Activity Ticker -->
-<div class="relative overflow-hidden py-1 bg-gray-50/50">
-    <div class="max-w-4xl mx-auto px-4">
-        <div id="activityFeed" class="relative h-8 overflow-hidden"></div>
+<!-- ================== ACTIVITY TICKER ================== -->
+<div class="activity-ticker-wrapper">
+    <div class="activity-ticker-container">
+        <div id="activityFeed" class="activity-feed"></div>
     </div>
 </div>
 
 <style>
+    .activity-ticker-wrapper {
+        width: 100%;
+        background: transparent;
+        margin: 0.5rem 0;
+        padding: 0;
+    }
+
+    .activity-ticker-container {
+        max-width: 100%;
+        padding: 0.2rem 1rem;
+    }
+
+    .activity-feed {
+        position: relative;
+        min-height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: visible;
+    }
+
+    .activity-item {
+        position: absolute;
+        width: 100%;
+        padding: 0.2rem 1rem;
+        font-size: 0.875rem;
+        color: #374151;
+        line-height: 1.2;
+        text-align: center;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 0.375rem;
+    }
+
+    .activity-item strong {
+        color: #0C3A30;
+        font-weight: 700;
+        font-size: 0.95rem;
+    }
+
+    .activity-separator {
+        color: #cbd5e1;
+    }
+
+    .activity-time {
+        color: #9ca3af;
+        font-size: 0.8125rem;
+    }
+
     .activity-enter {
-        animation: enter 0.8s ease-out forwards;
+        animation: fadeSlideIn 0.8s ease-out forwards;
     }
 
     .activity-exit {
-        animation: exit 0.6s ease-in forwards;
+        animation: fadeSlideOut 0.6s ease-in forwards;
     }
 
-    @keyframes enter {
-        0% {
-            opacity: 0;
-            transform: translateX(40px);
-        }
-
-        80% {
-            opacity: 1;
-            transform: translateX(-2px);
-        }
-
-        100% {
-            opacity: 1;
-            transform: translateX(0);
-        }
+    @keyframes fadeSlideIn {
+        0% { opacity: 0; transform: translateX(40px); }
+        100% { opacity: 1; transform: translateX(0); }
     }
 
-    @keyframes exit {
-        0% {
-            opacity: 1;
-            transform: translateX(0);
-        }
+    @keyframes fadeSlideOut {
+        0% { opacity: 1; transform: translateX(0); }
+        100% { opacity: 0; transform: translateX(-40px); }
+    }
 
-        100% {
-            opacity: 0;
-            transform: translateX(-40px);
-        }
+    @media (max-width: 768px) {
+        .activity-ticker-wrapper { margin: 0.4rem 0; }
+        .activity-ticker-container { padding: 0; }
+        .activity-feed { min-height: 45px; }
+        .activity-item { font-size: 0.8125rem; padding: 0.2rem 0.5rem; }
+        .activity-item strong { font-size: 0.88rem; }
+    }
+
+    @media (max-width: 480px) {
+        .activity-feed { min-height: 50px; }
+        .activity-item { font-size: 0.75rem; }
+        .activity-item strong { font-size: 0.82rem; }
     }
 </style>
 
 <script>
-    const activities = [
-        {
-            name: "Liam",
-            action: "earned",
-            amount: "$4,200 profit",
-            emoji: "📈"
-        },
-        {
-            name: "Sophie",
-            action: "deposited",
-            amount: "$12,000",
-            emoji: "💰"
-        },
-        {
-            name: "Chen Wei",
-            action: "earned",
-            amount: "$2,800 profit",
-            emoji: "📈"
-        },
-        {
-            name: "Isabelle",
-            action: "deposited",
-            amount: "$7,500",
-            emoji: "💰"
-        },
-        {
-            name: "Yuki Tanaka",
-            action: "earned",
-            amount: "$6,100 profit",
-            emoji: "📈"
-        },
-        {
-            name: "Ivan Petrov",
-            action: "deposited",
-            amount: "$15,000",
-            emoji: "💰"
-        },
-        {
-            name: "Olivia",
-            action: "earned",
-            amount: "$5,000 profit",
-            emoji: "📈"
-        },
-        {
-            name: "Emily",
-            action: "started",
-            plan: "Ambassadorship Plan",
-            emoji: "🚀"
-        },
-        {
-            name: "Thomas Müller",
-            action: "earned",
-            amount: "$3,700 profit",
-            emoji: "📈"
-        },
-        {
-            name: "Lucas",
-            action: "deposited",
-            amount: "$20,000",
-            emoji: "💰"
-        },
-        {
-            name: "Charlotte",
-            action: "upgraded",
-            tier: "VIP Tier",
-            emoji: "🌟"
-        },
-        {
-            name: "Mei Ling",
-            action: "earned",
-            amount: "$2,500 profit",
-            emoji: "📈"
-        },
-        {
-            name: "Dmitri",
-            action: "deposited",
-            amount: "$10,500",
-            emoji: "💰"
-        },
-        {
-            name: "Arthur",
-            action: "earned",
-            amount: "$6,400 profit",
-            emoji: "📈"
-        },
-        {
-            name: "Sophia Dubois",
-            action: "deposited",
-            amount: "$18,000",
-            emoji: "💰"
-        },
-        {
-            name: "Elena Ivanova",
-            action: "earned",
-            amount: "$3,200 profit",
-            emoji: "📈"
-        },
-        {
-            name: "Mateo",
-            action: "deposited",
-            amount: "$9,000",
-            emoji: "💰"
-        },
-        {
-            name: "Amélie",
-            action: "earned",
-            amount: "$4,800 profit",
-            emoji: "📈"
-        },
-        {
-            name: "Sebastian",
-            action: "started",
-            plan: "Premium Plan",
-            emoji: "✨"
-        },
-        {
-            name: "Victor",
-            action: "deposited",
-            amount: "$11,700",
-            emoji: "💰"
-        },
-        {
-            name: "Noah",
-            action: "earned",
-            amount: "$7,200 profit",
-            emoji: "📈"
-        },
-        {
-            name: "Ava",
-            action: "deposited",
-            amount: "$6,300",
-            emoji: "💰"
-        },
-        {
-            name: "James",
-            action: "earned",
-            amount: "$8,100 profit",
-            emoji: "📈"
-        },
-        {
-            name: "Harper",
-            action: "deposited",
-            amount: "$14,500",
-            emoji: "💰"
-        },
-        {
-            name: "Benjamin",
-            action: "started",
-            plan: "Starter Plan",
-            emoji: "🚀"
-        },
-        {
-            name: "Scarlett",
-            action: "earned",
-            amount: "$5,700 profit",
-            emoji: "📈"
-        },
-        {
-            name: "Leo",
-            action: "deposited",
-            amount: "$21,000",
-            emoji: "💰"
-        },
-        {
-            name: "Wyatt",
-            action: "milestone",
-            emoji: "🏆"
-        },
-        {
-            name: "Gabriel",
-            action: "deposited",
-            amount: "$17,400",
-            emoji: "💰"
-        },
-        {
-            name: "Natalie",
-            action: "earned",
-            amount: "$4,100 profit",
-            emoji: "📈"
-        },
-        {
-            name: "Caleb",
-            action: "upgraded",
-            tier: "Platinum Tier",
-            emoji: "🌟"
-        }
+    /* ------------------ HELPERS ------------------ */
+    const timeLabels = ['just now', '1m ago', '2m ago', '3m ago', '5m ago', '8m ago', '10m ago'];
+    const tradePairs = ['BTC/USD', 'USDT', 'NASDAQ', 'TESLA', 'SPX', 'XAU/USD', 'ETH/USD', 'SOL/USD'];
+
+    const randomItem = arr => arr[Math.floor(Math.random() * arr.length)];
+    const randomTime = () => randomItem(timeLabels);
+    const randomPair = () => randomItem(tradePairs);
+
+    /* ------------------ USERS ------------------ */
+    const names = [
+        "Wei Chen", "Jia Hao", "Yun Lin", "Bo Yang", "Zhi Wei", "Kai Hsu", "Ming Jie",
+        "Li Wang", "Xiao Zhang", "Jun Liu", "Mei Ling", "Chen Wei", "Hui Fang",
+        "Yuki Tanaka", "Hiroshi Sato", "Akira Yamamoto", "Kenji Nakamura", "Takeshi Ito",
+        "Min-jun Kim", "Ji-woo Park", "Sung-ho Lee", "Hye-jin Choi",
+        "Julien Moreau", "Lucas Bernard", "Antoine Lefevre", "Théo Dubois", "Maxime Martin",
+        "Sophie Laurent", "Amélie Petit", "Camille Rousseau", "Emma Girard", "Léa Simon",
+        "Oliver Grant", "James Walker", "Henry Collins", "William Turner", "Benjamin Hayes",
+        "Alexander Reed", "Daniel Brooks", "Michael Cooper", "Ryan Mitchell",
+        "Emily Johnson", "Sophia Anderson", "Emma Wilson", "Olivia Martinez", "Isabella Garcia",
+        "Charlotte Thompson", "Ava Robinson", "Mia Clark", "Amelia Lewis"
     ];
 
-    @if(!$hasMadeDeposit)
-    // Add marketing messages for users who haven't deposited
-    const marketingMessages = [
-        {
-            action: "marketing",
-            emoji: "📈",
-            highlight: "VOLUME SPIKING 300% - BREAKOUT IMMINENT",
-            text: "{{ $user->name }}, fund account to start copying smart money moves",
-            subtext: "Wyckoff accumulation - ideal entry zone",
-            cta: "📊 Fund & Follow Trades"
-        },
-        {
-            action: "marketing",
-            emoji: "🚀",
-            highlight: "INSTITUTIONAL MONEY FLOWING IN",
-            text: "{{ $user->name }}, leverage confirmed reversals",
-            subtext: "Major support confirmed - high probability setup",
-            cta: "💎 Start Trading"
-        },
-        {
-            action: "marketing",
-            emoji: "⚡",
-            highlight: "MOMENTUM SHIFT DETECTED",
-            text: "{{ $user->name }}, capture trending opportunities",
-            subtext: "Golden cross forming - bullish signal active",
-            cta: "🎯 Fund Now"
+    // Shuffle names to mix East Asian and English names naturally
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
         }
-    ];
-    @endif
-
-    let cycleIndex = 0;
-    const actionTypes = ['deposited', 'earned', 'milestone'@if(!$hasMadeDeposit), 'marketing'@endif];
-
-    function getNextActionType() {
-        const current = actionTypes[cycleIndex % actionTypes.length];
-        cycleIndex++;
-        return current;
+        return array;
     }
+
+    const mixedNames = shuffleArray(names);
+    let nameIndex = 0;
+    const randomName = () => {
+        const name = mixedNames[nameIndex % mixedNames.length];
+        nameIndex++;
+        return name;
+    };
+
+    /* ------------------ ACTIVITIES ------------------ */
+    const activities = [
+        { action: "earned", amount: "$6,400" },
+        { action: "earned", amount: "$9,200" },
+        { action: "earned", amount: "$11,500" },
+        { action: "deposited", amount: "$18,000" },
+        { action: "started", plan: "mirroring trades" },
+        { action: "upgraded", tier: "To The Next Plan" }
+    ];
+
+    /* ------------------ FEED LOGIC ------------------ */
+    let cycleIndex = 0;
+    const actionTypes = ['earned', 'deposited', 'started', 'upgraded'];
 
     function getNextActivity() {
-        const type = getNextActionType();
-
-        @if(!$hasMadeDeposit)
-        // Show marketing message every 4th cycle for non-depositors
-        if (type === 'marketing') {
-            return marketingMessages[Math.floor(Math.random() * marketingMessages.length)];
-        }
-        @endif
-
-        const filtered = activities.filter(a => {
-            if (type === 'milestone') return a.action !== 'deposited' && a.action !== 'earned';
-            return a.action === type;
-        });
-
-        return filtered[Math.floor(Math.random() * filtered.length)];
+        const type = actionTypes[cycleIndex++ % actionTypes.length];
+        return randomItem(activities.filter(a => a.action === type));
     }
 
+    /* ------------------ RENDER ------------------ */
     function showActivity() {
         const feed = document.getElementById('activityFeed');
-        const activity = getNextActivity();
+        if (!feed) return;
 
-        const element = document.createElement('div');
-        element.className = 'absolute top-0 left-0 w-full activity-enter text-sm text-gray-700';
+        const activity = getNextActivity();
+        const el = document.createElement('div');
+        el.className = 'activity-item activity-enter';
+
+        const name = randomName();
+        const pair = randomPair();
+        const time = randomTime();
 
         let content = '';
-        
-        @if(!$hasMadeDeposit)
-        if (activity.action === 'marketing') {
-            content = `
-                <span style="color: #6366f1;">${activity.emoji}</span>
-                <span style="color: #059669; font-weight: 600;">${activity.highlight}</span>
-                <span style="color: #cbd5e1; padding: 0 6px;">•</span>
-                <span style="color: #334155;">${activity.text}</span>
-                <span style="color: #cbd5e1; padding: 0 6px;">•</span>
-                <span style="color: #334155;">${activity.subtext}</span>
-                <span style="color: #cbd5e1; padding: 0 6px;">•</span>
-                <a href="{{ route('user.deposit') }}" style="background: #059669; color: white; padding: 3px 12px; border-radius: 4px; font-weight: 600; font-size: 11px; text-decoration: none; display: inline-block; margin-left: 4px;">
-                    ${activity.cta}
-                </a>
-            `;
-        } else
-        @endif
-        if (activity.action === 'deposited') {
-            content = `${activity.emoji} ${activity.name} deposited <span class="font-medium">${activity.amount}</span>`;
-        } else if (activity.action === 'earned') {
-            content = `${activity.emoji} ${activity.name} earned <span class="font-medium">${activity.amount}</span>`;
+
+        if (activity.action === 'earned') {
+            content = `<strong>${name}</strong> earned <strong>${activity.amount}</strong> on <strong>${pair}</strong> <span class="activity-separator">•</span> <span class="activity-time">${time}</span>`;
+        } else if (activity.action === 'deposited') {
+            content = `<strong>${name}</strong> deposited <strong>${activity.amount}</strong> into <strong>${pair}</strong> <span class="activity-separator">•</span> <span class="activity-time">${time}</span>`;
         } else if (activity.action === 'started') {
-            content = `${activity.emoji} ${activity.name} started <span class="font-medium">${activity.plan}</span>`;
+            content = `<strong>${name}</strong> started <strong>${activity.plan}</strong> <span class="activity-separator">•</span> <span class="activity-time">${time}</span>`;
         } else if (activity.action === 'upgraded') {
-            content = `${activity.emoji} ${activity.name} upgraded to <span class="font-medium">${activity.tier}</span>`;
-        } else {
-            content = `${activity.emoji} ${activity.name} reached a milestone`;
+            content = `<strong>${name}</strong> upgraded to <strong>${activity.tier}</strong> <span class="activity-separator">•</span> <span class="activity-time">${time}</span>`;
         }
 
-        element.innerHTML = content;
-        feed.appendChild(element);
+        el.innerHTML = content;
+        feed.appendChild(el);
 
         setTimeout(() => {
-            element.classList.remove('activity-enter');
-            element.classList.add('activity-exit');
-            setTimeout(() => element.remove(), 600);
-        }, 3500);
+            el.classList.remove('activity-enter');
+            el.classList.add('activity-exit');
+            setTimeout(() => el.remove(), 600);
+        }, 4500);
     }
 
-    // Initial activity
-    showActivity();
-
-    // Show new activity every 4–6 seconds
-    setInterval(showActivity, Math.random() * 2000 + 4000);
+    document.addEventListener('DOMContentLoaded', function() {
+        showActivity();
+        setInterval(showActivity, Math.random() * 2000 + 4500);
+    });
 </script>
+
+<!-- ================== END ACTIVITY TICKER ================== -->
 
 
 
@@ -641,202 +1386,276 @@ $hasMadeDeposit = $user->deposits()->exists();
 
 
 
-@php
-use Carbon\Carbon;
-
-$allInvestments = auth()->user()->investments()
-    ->where('status','active')
-    ->with('plan')
-    ->orderBy('created_at', 'desc')
-    ->get();
-
-$totalEarnedAll = 0;
-$displayCount = min(2, count($allInvestments));
-
-// Load daily earnings from cache or default to empty array
-$dailyEarnings = Cache::remember('user_'.auth()->id().'_daily_earnings', now()->addDay(), fn() => []);
-@endphp
-
-<div class="investment-performance-card bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden w-full max-w-md mx-auto"
-    style="border-top: 4px solid #8bc905; background-image: url('assets/images/hero/hero-image-1.svg'); background-size: cover; background-position: center;">
-    <div class="p-5">
-        <!-- Header -->
-        <div class="flex justify-between items-start mb-4">
-            <div>
-                <h3 class="text-lg font-semibold text-gray-800">PROFIT PERFORMANCE</h3>
-                <h6 class="text-xs text-gray-500 mt-1"> 
-                    <span class="pulse-dot me-2"></span>
-                    Live Updates
-                </h6>
-                <style>
-                    .pulse-dot {
-                        width: 6px;
-                        height: 6px;
-                        background-color: var(--primary-accent);
-                        border-radius: 50%;
-                        display: inline-block;
-                        animation: pulseAnim 1.5s infinite;
-                        box-shadow: 0 0 0 rgba(187, 255, 40, 0.4);
-                    }
-
-                    @keyframes pulseAnim {
-                        0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(139, 201, 5, 0.7); }
-                        70% { transform: scale(1.5); box-shadow: 0 0 0 10px rgba(139, 201, 5, 0.7); }
-                        100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(139, 201, 5, 0.7); }
-                    }
-                </style>
-            </div>
-        </div>
-
-        <div id="investmentContainer" class="space-y-3">
-            @foreach($allInvestments->take($displayCount) as $investment)
             @php
-                $startDate = $investment->created_at;
-                $now = now();
-                $duration = $investment->plan->duration;
-                $rate = $investment->plan->interest_rate;
-                $amount = $investment->amount_invested;
+            use Carbon\Carbon;
 
-                $projectedTotal = $amount * (1 + $rate / 100);
-                $projectedProfit = $amount * $rate / 100;
+            $allInvestments = auth()->user()->investments()
+            ->where('status','active')
+            ->with('plan')
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-                $daysCompleted = max(0, $now->diffInDays($startDate));
-                $currentDay = min($daysCompleted + 1, $duration);
-                $isLongTerm = $duration > 28;
+            $totalEarnedAll = 0;
+            $displayCount = min(2, count($allInvestments));
 
-                // Fluctuation color and icons
-                if (mt_rand(1, 100) <= 90) {
-                    $fluctuation=round(mt_rand(-53, 150)/100, 2);
-                } else {
-                    $fluctuation=round(mt_rand(151, 10000)/100, 2);
-                }
-
-                $fluctuation = ($fluctuation==0) ? 0.01 : $fluctuation;
-                $isPositive = $fluctuation >= 0;
-                $fluctuationDisplay = abs($fluctuation);
-
-                $trendColor = $isPositive ? 'text-green-600' : 'text-red-600';
-                $borderLeftColor = $isPositive ? 'border-green-500' : 'border-red-500';
-                $progressBarColor = $isPositive ? 'bg-green-500' : 'bg-red-500';
-
-                // Earnings
-                $totalEarned = 0;
-                $minimumFirstDay = $projectedProfit * 0.10;
-
-                if ($duration === 1) {
-                    $totalEarned = $projectedProfit;
-                    $currentDay = 1;
-                } elseif (!$isLongTerm) {
-                    if ($currentDay === 1) {
-                        $totalEarned = $minimumFirstDay;
-                    } else {
-                        $progressRatio = min(1, ($currentDay - 1)/($duration-1));
-                        $totalEarned = $minimumFirstDay + ($projectedProfit - $minimumFirstDay) * $progressRatio;
-                    }
-                } else {
-                    $totalWeeks = ceil($duration / 7);
-                    $weeksCompleted = floor($daysCompleted / 7);
-                    if ($weeksCompleted === 0) {
-                        $totalEarned = 0;
-                        $currentDay = 1;
-                    } else {
-                        $progressRatio = min(1, $weeksCompleted / $totalWeeks);
-                        $totalEarned = $projectedProfit * $progressRatio;
-                        $currentDay = min($weeksCompleted * 7 + 1, $duration);
-                    }
-                }
-
-                $totalEarned = round($totalEarned,2);
-                $dailyEarnings[$investment->id] = $totalEarned;
-                $totalEarnedAll += $totalEarned;
-                $displayPercentage = min(100, round(($totalEarned/$projectedProfit)*100));
+            // Load daily earnings from cache or default to empty array
+            $dailyEarnings = Cache::remember('user_'.auth()->id().'_daily_earnings', now()->addDay(), fn() => []);
             @endphp
 
-            <!-- Single Investment Card -->
-            <div class="investment-item bg-white rounded-lg p-3 border-l-4 {{ $borderLeftColor }} shadow-sm hover:shadow-md transition-shadow">
-                <div class="flex justify-between items-center">
-                    <span class="text-sm font-medium text-gray-800">{{ strtoupper($investment->plan->name) }}</span>
-                    <span class="text-xs font-bold {{ $trendColor }} flex items-center {{ $isPositive ? 'animate-fluctuation-up' : 'animate-fluctuation-down' }}" id="fluctuation-{{ $investment->id }}">
-                        @if($isPositive)
-                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
-                        </svg>
-                        @else
-                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
-                        </svg>
-                        @endif
-                        {{ $fluctuationDisplay }}%
-                    </span>
-                </div>
+            <div class="investment-performance-card bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden w-full max-w-md mx-auto"
+                style="border-top: 4px solid #8bc905; background-image: url('assets/images/hero/hero-image-1.svg'); background-size: cover; background-position: center;">
+                <div class="p-5">
+                    <!-- Header -->
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-800">PROFIT PERFORMANCE</h3>
+                            <h6 class="text-xs text-gray-500 mt-1">
+                                <span class="pulse-dot me-2"></span>
+                                Live Updates
+                            </h6>
+                           <style>
+.pulse-dot {
+    width: 6px;               /* Dot size */
+    height: 6px;
+    background-color: #EE1325; /* Bright red */
+    border-radius: 50%;
+    display: inline-block;
+    animation: pulseAnim 1.2s infinite;
+    box-shadow: 0 0 0 rgba(238, 19, 37, 0.4);
+}
 
-                <div class="flex justify-between items-center mt-2">
-                    <span class="text-xs text-gray-500">Day {{ $currentDay }} of {{ $duration }}</span>
-                    <span class="text-xs font-medium">
-                        <span class="{{ $totalEarned>0?'text-gray-800':'text-gray-500' }}">${{ number_format($totalEarned,2) }}</span>
-                        <span class="mx-1 text-gray-300">/</span>
-                        <span class="text-gray-700">${{ number_format($projectedProfit,2) }}</span>
-                    </span>
-                </div>
-
-                <!-- Progress Bar -->
-                <div class="w-full bg-gray-100 rounded-full h-1.5 mt-2">
-                    <div class="h-1.5 rounded-full {{ $progressBarColor }}" style="width: {{ $displayPercentage }}%"></div>
-                </div>
-            </div>
-            @endforeach
-        </div>
-
-        @php
-        Cache::put('user_'.auth()->id().'_daily_earnings', $dailyEarnings, now()->addDay());
-        $totalProjectedAll = $allInvestments->sum(fn($inv) => ($inv->amount_invested * $inv->plan->interest_rate)/100);
-        @endphp
-
-        <!-- Summary -->
-        <div class="mt-4 pt-4 border-t border-gray-200">
-       
-            <div class="flex justify-between items-center">
-                <span class="text-sm font-medium text-gray-600">Profit Earned</span>
-                <span class="text-xl font-bold text-green-600">${{ number_format($totalEarnedAll,2) }}</span>
-            </div>
-        </div>
-    </div>
-</div>
-
-<style>
-    @keyframes fluctuationUp {0%,100%{transform:translateY(0);}50%{transform:translateY(-2px);}}
-    @keyframes fluctuationDown {0%,100%{transform:translateY(0);}50%{transform:translateY(2px);}}
-    .animate-fluctuation-up {animation: fluctuationUp 1.5s ease-in-out infinite;}
-    .animate-fluctuation-down {animation: fluctuationDown 1.5s ease-in-out infinite;}
-    .text-green-600 {color:#16a34a !important;}
-    .text-red-600 {color:#dc2626 !important;}
-    .investment-performance-card {border-top-width:4px;border-top-color:#8bc905;}
-    .investment-item {transition: all 0.2s ease;}
-    .investment-item:hover {transform: translateY(-1px);box-shadow: 0 4px 6px rgba(0,0,0,0.05);}
+@keyframes pulseAnim {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(238, 19, 37, 0.4);
+    }
+    70% {
+        transform: scale(1.2);               /* Smaller pulse scale */
+        box-shadow: 0 0 0 6px rgba(238, 19, 37, 0.3); /* Subtle glow */
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(238, 19, 37, 0.4);
+    }
+}
 </style>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const refreshFluctuations = () => {
-        fetch('/user/fluctuations-json?refresh=' + new Date().getTime(), {
-            headers: {'X-Requested-With': 'XMLHttpRequest'},
-            cache: 'no-store'
-        })
-        .then(res => res.json())
-        .then(data => {
-            for (const id in data) {
-                const span = document.getElementById('fluctuation-' + id);
-                if (span) {
-                    span.innerHTML = data[id].html;
-                    span.className = data[id].class;
+                        </div>
+                    </div>
+
+                    <div id="investmentContainer" class="space-y-3">
+
+                        @if($allInvestments->isEmpty())
+                        <!-- EMPTY STATE -->
+                        <div class="bg-gray-50 border border-dashed border-gray-300 rounded-lg p-4 text-center">
+                            <h4 class="text-sm font-semibold text-gray-700 mb-1">
+                                No Active Trades Yet
+                            </h4>
+                            <p class="text-s text-gray-500 leading-relaxed">
+                                Fund Account To Start Mirroring Trades And Go Live
+                            </p>
+
+
+                        </div>
+                        @else
+                        @foreach($allInvestments->take($displayCount) as $investment)
+                        @php
+                        $startDate = $investment->created_at;
+                        $now = now();
+                        $duration = $investment->plan->duration;
+                        $rate = $investment->plan->interest_rate;
+                        $amount = $investment->amount_invested;
+
+                        $projectedTotal = $amount * (1 + $rate / 100);
+                        $projectedProfit = $amount * $rate / 100;
+
+                        $daysCompleted = max(0, $now->diffInDays($startDate));
+                        $currentDay = min($daysCompleted + 1, $duration);
+                        $isLongTerm = $duration > 28;
+
+                        // Fluctuation color and icons
+                        if (mt_rand(1, 100) <= 90) {
+                            $fluctuation=round(mt_rand(-53, 150)/100, 2);
+                            } else {
+                            $fluctuation=round(mt_rand(151, 10000)/100, 2);
+                            }
+
+                            $fluctuation=($fluctuation==0) ? 0.01 : $fluctuation;
+                            $isPositive=$fluctuation>= 0;
+                            $fluctuationDisplay = abs($fluctuation);
+
+                            $trendColor = $isPositive ? 'text-green-600' : 'text-red-600';
+                            $borderLeftColor = $isPositive ? 'border-green-500' : 'border-red-500';
+                            $progressBarColor = $isPositive ? 'bg-green-500' : 'bg-red-500';
+
+                            // Earnings
+                            $totalEarned = 0;
+                            $minimumFirstDay = $projectedProfit * 0.10;
+
+                            if ($duration === 1) {
+                            $totalEarned = $projectedProfit;
+                            $currentDay = 1;
+                            } elseif (!$isLongTerm) {
+                            if ($currentDay === 1) {
+                            $totalEarned = $minimumFirstDay;
+                            } else {
+                            $progressRatio = min(1, ($currentDay - 1)/($duration-1));
+                            $totalEarned = $minimumFirstDay + ($projectedProfit - $minimumFirstDay) * $progressRatio;
+                            }
+                            } else {
+                            $totalWeeks = ceil($duration / 7);
+                            $weeksCompleted = floor($daysCompleted / 7);
+                            if ($weeksCompleted === 0) {
+                            $totalEarned = 0;
+                            $currentDay = 1;
+                            } else {
+                            $progressRatio = min(1, $weeksCompleted / $totalWeeks);
+                            $totalEarned = $projectedProfit * $progressRatio;
+                            $currentDay = min($weeksCompleted * 7 + 1, $duration);
+                            }
+                            }
+
+                            $totalEarned = round($totalEarned,2);
+                            $dailyEarnings[$investment->id] = $totalEarned;
+                            $totalEarnedAll += $totalEarned;
+                            $displayPercentage = min(100, round(($totalEarned/$projectedProfit)*100));
+                            @endphp
+
+                            <!-- Single Investment Card -->
+                            <div class="investment-item bg-white rounded-lg p-3 border-l-4 {{ $borderLeftColor }} shadow-sm hover:shadow-md transition-shadow">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm font-medium text-gray-800">{{ strtoupper($investment->plan->name) }}</span>
+                                    <span class="text-xs font-bold {{ $trendColor }} flex items-center {{ $isPositive ? 'animate-fluctuation-up' : 'animate-fluctuation-down' }}" id="fluctuation-{{ $investment->id }}">
+                                        @if($isPositive)
+                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                                        </svg>
+                                        @else
+                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                                        </svg>
+                                        @endif
+                                        {{ $fluctuationDisplay }}%
+                                    </span>
+                                </div>
+
+                                <div class="flex justify-between items-center mt-2">
+                                    <span class="text-xs text-gray-500">Day {{ $currentDay }} of {{ $duration }}</span>
+                                    <span class="text-xs font-medium">
+                                        <span class="{{ $totalEarned>0?'text-gray-800':'text-gray-500' }}">${{ number_format($totalEarned,2) }}</span>
+                                        <span class="mx-1 text-gray-300">/</span>
+                                        <span class="text-gray-700">${{ number_format($projectedProfit,2) }}</span>
+                                    </span>
+                                </div>
+
+                                <!-- Progress Bar -->
+                                <div class="w-full bg-gray-100 rounded-full h-1.5 mt-2">
+                                    <div class="h-1.5 rounded-full {{ $progressBarColor }}" style="width: {{ $displayPercentage }}%"></div>
+                                </div>
+                            </div>
+                            @endforeach
+                            @endif
+
+                    </div>
+
+                    @php
+                    Cache::put('user_'.auth()->id().'_daily_earnings', $dailyEarnings, now()->addDay());
+                    $totalProjectedAll = $allInvestments->sum(fn($inv) => ($inv->amount_invested * $inv->plan->interest_rate)/100);
+                    @endphp
+
+                    <!-- Summary -->
+                    <div class="mt-4 pt-4 border-t border-gray-200">
+
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-medium text-gray-600">Profit Earned</span>
+                            <span class="text-xl font-bold text-green-600">${{ number_format($totalEarnedAll,2) }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <style>
+                @keyframes fluctuationUp {
+
+                    0%,
+                    100% {
+                        transform: translateY(0);
+                    }
+
+                    50% {
+                        transform: translateY(-2px);
+                    }
                 }
-            }
-        });
-    };
-    setInterval(refreshFluctuations, 5000);
-    document.addEventListener('visibilitychange', () => { if(!document.hidden) refreshFluctuations(); });
-});
-</script>
+
+                @keyframes fluctuationDown {
+
+                    0%,
+                    100% {
+                        transform: translateY(0);
+                    }
+
+                    50% {
+                        transform: translateY(2px);
+                    }
+                }
+
+                .animate-fluctuation-up {
+                    animation: fluctuationUp 1.5s ease-in-out infinite;
+                }
+
+                .animate-fluctuation-down {
+                    animation: fluctuationDown 1.5s ease-in-out infinite;
+                }
+
+                .text-green-600 {
+                    color: #16a34a !important;
+                }
+
+                .text-red-600 {
+                    color: #dc2626 !important;
+                }
+
+                .investment-performance-card {
+                    border-top-width: 4px;
+                    border-top-color: #8bc905;
+                }
+
+                .investment-item {
+                    transition: all 0.2s ease;
+                }
+
+                .investment-item:hover {
+                    transform: translateY(-1px);
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+                }
+            </style>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const refreshFluctuations = () => {
+                        fetch('/user/fluctuations-json?refresh=' + new Date().getTime(), {
+                                headers: {
+                                    'X-Requested-With': 'XMLHttpRequest'
+                                },
+                                cache: 'no-store'
+                            })
+                            .then(res => res.json())
+                            .then(data => {
+                                for (const id in data) {
+                                    const span = document.getElementById('fluctuation-' + id);
+                                    if (span) {
+                                        span.innerHTML = data[id].html;
+                                        span.className = data[id].class;
+                                    }
+                                }
+                            });
+                    };
+                    setInterval(refreshFluctuations, 5000);
+                    document.addEventListener('visibilitychange', () => {
+                        if (!document.hidden) refreshFluctuations();
+                    });
+                });
+            </script>
 
 
 

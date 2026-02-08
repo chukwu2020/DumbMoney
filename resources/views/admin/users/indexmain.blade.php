@@ -36,14 +36,15 @@
                                         <th style="background-color: #0C3A30; color:aliceblue;">Country</th>
                                     <th scope="col"style="background-color: #0C3A30; color:aliceblue;">Email</th>
                                     <th scope="col" style="background-color: #0C3A30; color:aliceblue;">Join Date</th>
+                                   
                                     <!-- <th scope="col">Card PIN</th> -->
                                     <th scope="col"style="background-color: #0C3A30; color:aliceblue;"> Amount Invested</th>
                                     <th scope="col"style="background-color: #0C3A30; color:aliceblue;"> Available balance</th>
 
 
 
-                                    <th scope="col" class="text-center">Status</th>
-                                    <th scope="col" class="text-center">Action</th>
+                                    <th scope="col" class="text-center" style="background-color: #0C3A30; color:aliceblue;">Status</th>
+                                    <th scope="col" class="text-center"style="background-color: #0C3A30; color:aliceblue;">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -76,6 +77,7 @@
                                       <td>{{ $user->country }}</td>
                                     <td>{{ $user->email }}</td>
                                     <td>{{ $user->created_at->format('d M Y') }}</td>
+                                    
                                     <td>${{ number_format($user->total_invested, 2) }}</td>
 
  

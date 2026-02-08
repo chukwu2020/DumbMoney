@@ -158,4 +158,13 @@ public function hasActiveMembership()
             ->where('amount_invested', '>=', 25000)
             ->exists();
     }
+
+
+    // App\Models\User.php
+
+public function activePlan()
+{
+    return $this->hasOne(Investment::class)->where('status', 'Active');
+}
+
 }
