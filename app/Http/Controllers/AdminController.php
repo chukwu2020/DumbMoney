@@ -453,7 +453,7 @@ public function toggleMembershipLock(User $user)
         $user = $kyc->user;
         $user->notify(new TransactionNotification(
             'KYC Approved',
-            'Your KYC documents have been reviewed and approved. You have unlocked additional features for your investments.'
+            'Your KYC documents have been reviewed and approved. You have unlocked additional features for your trading.'
         ));
 
         return redirect()->back()->with('success', 'KYC approved.');

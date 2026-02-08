@@ -10,7 +10,7 @@
     <table class="min-w-full divide-y divide-gray-200 text-sm">
         <thead class="bg-gray-100 text-gray-700">
             <tr>
-                <th class="px-4 py-2 text-left font-semibold">User</th>
+                <th class="px-4 py-2 text-left font-semibold">User </th>
                 <th class="px-4 py-2 text-left font-semibold">Country</th>
                 <th class="px-4 py-2 text-left font-semibold">Status</th>
                 <th class="px-4 py-2 text-left font-semibold">Document</th>

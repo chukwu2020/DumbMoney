@@ -21,7 +21,7 @@
         <div class="mb-4">
             <label class="block mb-2 font-medium">Upload Sefie Of Yourself</label>
             <input type="file" name="utility_bill" required class="w-full border p-2 rounded">
-            @error('sefie') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
+            @error('utility_bill') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
         </div>
 
         <div class="flex justify-center mt-6">

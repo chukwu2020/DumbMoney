@@ -34,6 +34,7 @@
                                     <th>Status</th>
                                     <th>Submitted</th>
                                     <th>ID Document</th>
+                                     <th>selfie</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -75,6 +76,17 @@
                                                  onclick="openModal('{{ Storage::url($kyc->id_document) }}')">
                                         @else
                                             <span class="text-gray-400">No ID</span>
+                                        @endif
+                                    </td>
+
+                                     <td class="px-4 py-3 whitespace-nowrap">
+                                        @if ($kyc->utility_bill)
+                                            <img src="{{ Storage::url($kyc->utility_bill) }}"
+                                                 alt="photo"
+                                                 class="w-[60px] h-[60px] object-cover rounded cursor-pointer"
+                                                 onclick="openModal('{{ Storage::url($kyc->utility_bill) }}')">
+                                        @else
+                                            <span class="text-gray-400">No photo</span>
                                         @endif
                                     </td>
                                     <td class="px-4 py-3 whitespace-nowrap text-sm font-medium">
