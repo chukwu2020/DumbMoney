@@ -8,7 +8,6 @@ use App\Models\Investment;
 use App\Models\Plan;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class DepositController extends Controller
@@ -19,155 +18,196 @@ class DepositController extends Controller
         $plans = Plan::where('status', 'active')->get();
         $wallets = Wallet::all();
 
-        // Pass reinvestmentMode flag to view
         $reinvestmentMode = $this->checkReinvestmentMode();
 
-        return view('dashboard.deposit.create-deposit', compact('plans', 'wallets', 'reinvestmentMode'));
+        return view(
+            'dashboard.deposit.create-deposit',
+            compact('plans', 'wallets', 'reinvestmentMode')
+        );
     }
 
-    // Handle user deposit input
+    // Handle deposit input
     public function userMakeDeposit(Request $request)
     {
-        try {
-            $request->validate([
-                'plan_id' => 'required|exists:plans,id',
-                'wallet_id' => 'required|exists:wallets,id',
-                'amount' => 'required|numeric|min:1',
-            ]);
+        $request->validate([
+            'plan_id'    => 'required|exists:plans,id',
+            'wallet_id'  => 'required|exists:wallets,id',
+            'amount'     => 'required|numeric|min:0.01',     // entered amount (any currency)
+            'amount_usd' => 'required|numeric|min:0.01',     // converted USD (truth)
+        ]);
 
-            $user = auth()->user();
-            $plan = Plan::findOrFail($request->plan_id);
+        $user = auth()->user();
+        $plan = Plan::findOrFail($request->plan_id);
 
-            // Check amount limits
-            if ($request->amount < $plan->minimum_amount || $request->amount > $plan->maximum_amount) {
-                return back()->with('error', "Deposit amount must be between {$plan->minimum_amount} and {$plan->maximum_amount}.");
-            }
+        $amountUSD = round($request->amount_usd, 2);
 
-            // Handle reinvestment mode
-            if ($this->checkReinvestmentMode()) {
-                if ($request->amount > $user->available_balance) {
-                    return back()->with('error', 'Reinvestment amount exceeds your available balance');
-                }
-
-                // Create investment directly
-                Investment::create([
-                    'user_id' => $user->id,
-                    'plan_id' => $plan->id,
-                    'amount_invested' => $request->amount,
-                    'expected_profit' => ($request->amount * $plan->interest_rate) / 100,
-                    'status' => 'active',
-                    'start_date' => now(),
-                    'end_date' => now()->addDays($plan->duration),
-                    'is_reinvestment' => true
-                ]);
-
-                // Deduct from balance
-                $user->decrement('available_balance', $request->amount);
-
-                // Clear reinvestment session
-                session()->forget(['reinvestment_mode', 'reinvestment_expires', 'reinvestment_balance']);
-
-                return redirect()->route('user_dashboard')->with('success', 'Reinvestment successful!');
-            }
-
-            // Normal deposit flow: store session and redirect to confirm
-            Session::put('deposit_details', [
-                'user_id' => $user->id,
-                'plan_id' => $request->plan_id,
-                'wallet_id' => $request->wallet_id,
-                'amount_deposited' => $request->amount,
-            ]);
-
-            return redirect()->route('deposit.confirm');
-        } catch (\Exception $e) {
-            return back()->with('error', $e->getMessage());
+        // ✅ Validate PLAN LIMITS IN USD ONLY
+        if (
+            $amountUSD < $plan->minimum_amount ||
+            $amountUSD > $plan->maximum_amount
+        ) {
+            return back()->with(
+                'error',
+                "Deposit must be between \${$plan->minimum_amount} and \${$plan->maximum_amount} USD."
+            );
         }
+
+        /**
+         * =========================
+         * REINVESTMENT MODE
+         * =========================
+         */
+        if ($this->checkReinvestmentMode()) {
+
+            if ($amountUSD > $user->available_balance) {
+                return back()->with(
+                    'error',
+                    'Reinvestment amount exceeds your available balance.'
+                );
+            }
+
+            Investment::create([
+                'user_id'           => $user->id,
+                'plan_id'           => $plan->id,
+                'amount_invested'   => $amountUSD,
+                'expected_profit'   => ($amountUSD * $plan->interest_rate) / 100,
+                'status'            => 'active',
+                'start_date'        => now(),
+                'end_date'          => now()->addDays($plan->duration),
+                'is_reinvestment'   => true,
+            ]);
+
+            $user->decrement('available_balance', $amountUSD);
+
+            session()->forget([
+                'reinvestment_mode',
+                'reinvestment_expires',
+                'reinvestment_balance',
+            ]);
+
+            return redirect()
+                ->route('user_dashboard')
+                ->with('success', 'Reinvestment successful!');
+        }
+
+        /**
+         * =========================
+         * NORMAL DEPOSIT FLOW
+         * =========================
+         */
+        Session::put('deposit_details', [
+            'user_id'          => $user->id,
+            'plan_id'          => $plan->id,
+            'wallet_id'        => $request->wallet_id,
+
+            // ✅ ALWAYS USD (core logic)
+            'amount_deposited' => $amountUSD,
+
+            // ✅ UI / audit only
+            'original_amount' => $request->amount,
+            'currency'        => $request->currency ?? 'USD',
+        ]);
+
+        return redirect()->route('deposit.confirm');
     }
 
-    // Confirm deposit step
+    // Confirm deposit page
     public function confirmDeposit()
     {
         if (!Session::has('deposit_details')) {
-            return redirect()->route('user.deposit')->withErrors(['error' => 'No deposit session found.']);
+            return redirect()
+                ->route('user.deposit')
+                ->withErrors(['error' => 'No deposit session found.']);
         }
 
         $depositDetails = Session::get('deposit_details');
-        $wallet = Wallet::find($depositDetails['wallet_id']);
+        $wallet = Wallet::findOrFail($depositDetails['wallet_id']);
 
-        return view('dashboard.deposit.confirm-deposit', compact('wallet'));
+        return view(
+            'dashboard.deposit.confirm-deposit',
+            compact('wallet', 'depositDetails')
+        );
     }
 
-    // Submit deposit with proof
+    // Submit deposit proof
     public function submitDeposit(Request $request)
     {
-        try {
-            if (!Session::has('deposit_details')) {
-                return redirect()->route('dashboard.deposit.deposit-history')->with('error', 'Deposit not successful!');
-            }
-
-            $request->validate([
-                'proof' => 'required|image|mimes:jpeg,png,jpg|max:5120',
-            ]);
-
-            $depositDetails = Session::get('deposit_details');
-
-            // Store proof image
-            $proofPath = $request->file('proof')->store('proofs', 'public');
-
-            $deposit = new Deposit();
-            $deposit->user_id = $depositDetails['user_id'];
-            $deposit->plan_id = $depositDetails['plan_id'];
-            $deposit->wallet_id = $depositDetails['wallet_id'];
-            $deposit->amount_deposited = $depositDetails['amount_deposited'];
-            $deposit->status = 0;
-            $deposit->proof = $proofPath;
-            $deposit->save();
-
-            Session::forget('deposit_details');
-
-            // Notify user (optional)
-            $user = User::find($deposit->user_id);
-            $user->notify(new \App\Notifications\TransactionNotification(
-                'Deposit Submitted',
-                'Your deposit of $' . number_format($deposit->amount_deposited, 2) . ' has been received and is awaiting approval.'
-            ));
-
-            return redirect()->route('dashboard.deposit.deposit-history')->with('success', 'Deposit submitted successfully. Awaiting approval.');
-        } catch (\Exception $e) {
-            return back()->with('error', $e->getMessage());
+        if (!Session::has('deposit_details')) {
+            return redirect()
+                ->route('dashboard.deposit.deposit-history')
+                ->with('error', 'Deposit session expired.');
         }
+
+        $request->validate([
+            'proof' => 'required|image|mimes:jpeg,png,jpg|max:5120',
+        ]);
+
+        $depositDetails = Session::get('deposit_details');
+
+        $proofPath = $request->file('proof')->store('proofs', 'public');
+
+        $deposit = Deposit::create([
+            'user_id'          => $depositDetails['user_id'],
+            'plan_id'          => $depositDetails['plan_id'],
+            'wallet_id'        => $depositDetails['wallet_id'],
+            'amount_deposited' => $depositDetails['amount_deposited'], // USD
+            'original_amount'  => $depositDetails['original_amount'] ?? null,
+            'currency'         => $depositDetails['currency'] ?? 'USD',
+            'proof'            => $proofPath,
+            'status'           => 0,
+        ]);
+
+        Session::forget('deposit_details');
+
+        $user = User::find($deposit->user_id);
+        $user->notify(
+            new \App\Notifications\TransactionNotification(
+                'Deposit Submitted',
+                'Your deposit of $' . number_format($deposit->amount_deposited, 2) .
+                ' USD is awaiting approval.'
+            )
+        );
+
+        return redirect()
+            ->route('dashboard.deposit.deposit-history')
+            ->with('success', 'Deposit submitted successfully.');
     }
 
-    // Show deposit history
+    // Deposit history
     public function depositHistory()
     {
         $deposits = Deposit::with(['plan', 'wallet'])
             ->where('user_id', auth()->id())
-            ->orderBy('created_at', 'desc')
+            ->latest()
             ->get();
 
-        return view('dashboard.deposit.deposit-history', compact('deposits'));
+        return view(
+            'dashboard.deposit.deposit-history',
+            compact('deposits')
+        );
     }
 
-    // Helper: Check reinvestment mode status and clean expired sessions
+    // Reinvestment mode checker
     protected function checkReinvestmentMode()
     {
-        if (session('reinvestment_mode') && session('reinvestment_expires') > now()) {
+        if (
+            session('reinvestment_mode') &&
+            session('reinvestment_expires') > now()
+        ) {
             return true;
         }
 
-        // Clean expired sessions
-        if (session('reinvestment_expires') && session('reinvestment_expires') <= now()) {
-            session()->forget(['reinvestment_mode', 'reinvestment_expires', 'reinvestment_balance']);
+        if (
+            session('reinvestment_expires') &&
+            session('reinvestment_expires') <= now()
+        ) {
+            session()->forget([
+                'reinvestment_mode',
+                'reinvestment_expires',
+                'reinvestment_balance',
+            ]);
         }
 
         return false;
     }
 }
-
-
-
-
-
-
-
