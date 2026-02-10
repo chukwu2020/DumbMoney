@@ -183,14 +183,6 @@
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
 
-    /* HIDDEN RATE DISPLAY SECTION */
-    .rate-info,
-    .rate-card,
-    .rate-display-section {
-        display: none !important;
-        visibility: hidden !important;
-    }
-
     /* Submit button states */
     #submitBtn {
         transition: all 0.3s ease;
@@ -287,6 +279,60 @@
             background-position: -200% 0;
         }
     }
+
+    .currency-selector {
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        font-weight: 600;
+        color: #0C3A30;
+        background: white;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .currency-selector:hover {
+        border-color: #9EDD05;
+    }
+
+    /* Enhanced dropdown option styling */
+    .currency-selector option {
+        background-color: white !important;
+        color: #0C3A30;
+        padding: 2px;
+        font-weight: 600;
+    }
+
+    .currency-selector option:hover {
+        background-color: #8AC304 !important;
+        color: white !important;
+    }
+
+    .currency-selector option:checked {
+        background-color: #9EDD05 !important;
+        color: #0C3A30 !important;
+    }
+
+    .currency-display {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        background: #f8faf7;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+    }
+
+    .currency-symbol {
+        font-weight: 700;
+        color: #0C3A30;
+    }
+
+    .amount-in-currency {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #059669;
+    }
 </style>
 
 <div class="dashboard-main-body">
@@ -305,6 +351,25 @@
             <li>-</li>
             <li class="font-medium">Confirm Deposit</li>
         </ul>
+    </div>
+
+    <!-- Currency Selector -->
+    <div class="flex justify-end mb-4">
+        <select id="currencySelector" class="currency-selector">
+            <option value="USD" selected>USD</option>
+            <option value="EUR">🇪🇺 EUR</option>
+            <option value="GBP">🇬🇧 GBP</option>
+            <option value="NGN">🇳🇬 NGN</option>
+            <option value="AUD">🇦🇺 AUD</option>
+            <option value="CAD">🇨🇦 CAD</option>
+            <option value="TWD">🇹🇼 TWD</option>
+            <option value="JPY">🇯🇵 JPY</option>
+            <option value="CNY">🇨🇳 CNY</option>
+            <option value="INR">🇮🇳 INR</option>
+            <option value="BRL">🇧🇷 BRL</option>
+            <option value="MXN">🇲🇽 MXN</option>
+            <option value="ZAR">🇿🇦 ZAR</option>
+        </select>
     </div>
 
     <!-- Status Messages -->
@@ -359,9 +424,21 @@
                         <p class="font-semibold">{{ $plan->name }}</p>
                     </div>
                     <div>
-                        <p class="text-sm text-gray-500">Amount To Send</p>
+                        <p class="text-sm text-gray-500">Amount To Send (USD)</p>
                         <p class="font-semibold">
-                            ${{ number_format($amount, 2) }} ≈
+                            ${{ number_format($amount, 2) }}
+                        </p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">Amount in Selected Currency</p>
+                        <div class="currency-display">
+                            <span id="currencySymbolDisplay" class="currency-symbol">$</span>
+                            <span id="amountInCurrency" class="amount-in-currency">{{ number_format($amount, 2) }}</span>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">Crypto Amount</p>
+                        <p class="font-semibold">
                             <span id="cryptoAmountDisplay" class="text-blue-600 font-bold">
                                 <span class="crypto-amount-loading"></span>
                             </span>
@@ -374,7 +451,9 @@
                     </div>
                     <div>
                         <p class="text-sm text-gray-500">Total Profit</p>
-                        <p class="font-semibold profit-badge">+${{ number_format($profit, 2) }}</p>
+                        <p class="font-semibold profit-badge">
+                            +<span id="profitInCurrency">${{ number_format($profit, 2) }}</span>
+                        </p>
                     </div>
                     <div>
                         <p class="text-sm text-gray-500">Earnings Frequency</p>
@@ -385,43 +464,6 @@
                                 Weekly Profit
                             @endif
                         </p>
-                    </div>
-                    <div>
-                        
-                    </div>
-                    
-                    <!-- HIDDEN RATE DISPLAY SECTION -->
-                    <div class="md:col-span-2 rate-display-section" style="display: none !important;">
-                        <div id="rateCard" class="rate-card loading" style="display: none !important;">
-                            <div class="flex items-center justify-between mb-2">
-                                <div class="flex items-center">
-                                    <span class="loading-spinner mr-2"></span>
-                                    <span id="rateText" class="font-semibold">Fetching live {{ strtoupper($wallet->crypto_name) }} rate...</span>
-                                </div>
-                                <small id="lastUpdated" class="text-gray-500"></small>
-                            </div>
-                            
-                            <div id="priceDisplay" class="mb-2" style="display: none;">
-                                <span class="price-display">1 {{ strtoupper($wallet->crypto_name) }} = </span>
-                                <span id="currentPrice" class="price-display">$0.00</span>
-                                <span id="priceChange" class="change-indicator"></span>
-                            </div>
-                            
-                            <div id="conversionDisplay" class="crypto-conversion" style="display: none;">
-                                <div class="flex justify-between items-center">
-                                    <span class="text-sm text-gray-600">You will send:</span>
-                                    <span id="exactAmount" class="font-bold text-lg"></span>
-                                </div>
-                            
-                            </div>
-                            
-                            <div class="mt-2 pt-2 border-t border-gray-200">
-                                <div class="flex justify-between items-center text-xs">
-                                    <span id="rateSource" class="text-gray-500">📡 Fetching from multiple sources...</span>
-                                    <span id="fetchTime" class="text-gray-500"></span>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -549,17 +591,21 @@
 
 <script>
     // ========================================
-    // IMPROVED CRYPTOCURRENCY RATE SYSTEM
+    // CONFIGURATION
     // ========================================
-
     const CONFIG = {
         cryptoName: '{{ $wallet->crypto_name ?? "BTC" }}',
         amountUSD: {{ $amount ?? 0 }},
+        profitUSD: {{ $profit ?? 0 }},
         sessionDuration: 30 * 60,
-        updateInterval: 60000, // 1 minute for background updates
+        updateInterval: 60000,
         retryDelay: 3000,
         maxRetries: 3
     };
+
+    // Exchange rates storage
+    const fiatRates = {};
+    let currentCurrency = 'USD';
 
     let globalState = {
         currentRate: null,
@@ -569,25 +615,85 @@
         fetchInProgress: false
     };
 
-    // Initialize system when DOM is ready
+    // ========================================
+    // INITIALIZATION
+    // ========================================
     document.addEventListener('DOMContentLoaded', function() {
-        console.log(`🚀 Initializing for ${CONFIG.cryptoName.toUpperCase()}`);
+        console.log(`🚀 Initializing confirm deposit page`);
         
         initializeTimers();
         loadCryptoLogos();
         loadPartnerLogos();
-        
-        // Start immediate rate fetching (background process)
+        fetchFiatRates();
         fetchCryptoRateAndCalculate();
         
-        // Set up periodic background updates
+        // Currency selector event
+        document.getElementById('currencySelector').addEventListener('change', function() {
+            currentCurrency = this.value;
+            updateCurrencyDisplay();
+        });
+        
         setInterval(fetchCryptoRateAndCalculate, CONFIG.updateInterval);
     });
 
     // ========================================
-    // ENHANCED CRYPTO SYMBOL NORMALIZATION
+    // FIAT CURRENCY CONVERSION
     // ========================================
+    async function fetchFiatRates() {
+        try {
+            const response = await fetch('https://v6.exchangerate-api.com/v6/a8e67b756f551b68d4ada293/latest/USD');
+            const data = await response.json();
+            
+            if (data.result === 'success') {
+                Object.assign(fiatRates, data.conversion_rates);
+                console.log('✅ Fiat rates loaded');
+            }
+        } catch (error) {
+            console.error('❌ Failed to load fiat rates:', error);
+            // Set default rates
+            Object.assign(fiatRates, {
+                USD: 1, EUR: 0.92, GBP: 0.79, NGN: 1500, AUD: 1.52,
+                CAD: 1.36, TWD: 31.5, JPY: 149, CNY: 7.24, INR: 83,
+                BRL: 4.97, MXN: 17.1, ZAR: 18.5
+            });
+        }
+    }
 
+    function getCurrencySymbol(currency) {
+        const symbols = {
+            USD: '$', EUR: '€', GBP: '£', NGN: '₦', AUD: 'A$', CAD: 'C$',
+            TWD: 'NT$', JPY: '¥', CNY: '¥', INR: '₹', BRL: 'R$',
+            MXN: 'MX$', ZAR: 'R'
+        };
+        return symbols[currency] || currency + ' ';
+    }
+
+    function updateCurrencyDisplay() {
+        const rate = fiatRates[currentCurrency] || 1;
+        const symbol = getCurrencySymbol(currentCurrency);
+        
+        // Update amount in selected currency
+        const amountConverted = CONFIG.amountUSD * rate;
+        document.getElementById('currencySymbolDisplay').textContent = symbol;
+        document.getElementById('amountInCurrency').textContent = formatNumber(amountConverted);
+        
+        // Update profit in selected currency
+        const profitConverted = CONFIG.profitUSD * rate;
+        document.getElementById('profitInCurrency').textContent = symbol + formatNumber(profitConverted);
+        
+        console.log(`💱 Updated to ${currentCurrency}: ${symbol}${formatNumber(amountConverted)}`);
+    }
+
+    function formatNumber(num) {
+        return num.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    }
+
+    // ========================================
+    // CRYPTO FUNCTIONS (from original)
+    // ========================================
     function normalizeCryptoSymbol(input) {
         const normalized = input.toString().trim().toUpperCase();
         
@@ -634,10 +740,6 @@
         return mappings[normalizedSymbol] || mappings['BTC'];
     }
 
-    // ========================================
-    // BACKGROUND RATE FETCHING & CALCULATION
-    // ========================================
-
     async function fetchCryptoRateAndCalculate() {
         if (globalState.fetchInProgress) return;
 
@@ -650,15 +752,12 @@
             const rateData = await fetchFromCoinGecko(cryptoSymbol);
             
             if (rateData && rateData.price > 0) {
-                // Calculate accurate crypto amount
                 const cryptoAmount = calculateAccurateCryptoAmount(CONFIG.amountUSD, rateData.price, cryptoSymbol);
                 
-                // Update global state
                 globalState.currentRate = rateData;
                 globalState.lastUpdate = Date.now();
                 globalState.retryCount = 0;
                 
-                // Update only the visible crypto amount display
                 updateCryptoAmountDisplay(cryptoAmount, cryptoSymbol);
                 
                 console.log(`✅ ${cryptoSymbol} rate: $${rateData.price} | Amount: ${cryptoAmount.formatted}`);
@@ -675,7 +774,6 @@
         }
     }
 
-    // Simplified CoinGecko API fetch
     async function fetchFromCoinGecko(cryptoSymbol) {
         const apiMappings = getCryptoApiMappings(cryptoSymbol);
         
@@ -711,7 +809,6 @@
         }
     }
 
-    // Fallback to Binance API
     async function fetchFromBinance(cryptoSymbol) {
         const binanceSymbols = {
             'BTC': 'BTCUSDT', 'ETH': 'ETHUSDT', 'LTC': 'LTCUSDT',
@@ -754,19 +851,12 @@
         }
     }
 
-    // ========================================
-    // ACCURATE CALCULATION FUNCTIONS
-    // ========================================
-
     function calculateAccurateCryptoAmount(usdAmount, cryptoPrice, cryptoSymbol) {
         const apiMappings = getCryptoApiMappings(cryptoSymbol);
         const precision = apiMappings.precision || 6;
         
-        // High-precision calculation
         const exactAmount = usdAmount / cryptoPrice;
         const preciseAmount = parseFloat(exactAmount.toFixed(precision));
-        
-        console.log(`🧮 Calculation: ${usdAmount} ÷ ${cryptoPrice} = ${preciseAmount} ${cryptoSymbol}`);
         
         return {
             amount: preciseAmount,
@@ -778,33 +868,24 @@
         const apiMappings = getCryptoApiMappings(cryptoSymbol);
         const displayPrecision = precision || apiMappings.precision || 6;
         
-        // Format with appropriate decimal places
         let formatted = amount.toFixed(displayPrecision);
         
-        // Remove trailing zeros but keep at least 2 decimal places for small amounts
         const minDecimals = amount < 1 ? Math.min(4, displayPrecision) : 2;
         formatted = parseFloat(formatted).toFixed(minDecimals);
         
-        // Add thousands separators for better readability
         return parseFloat(formatted).toLocaleString('en-US', {
             minimumFractionDigits: minDecimals,
             maximumFractionDigits: displayPrecision
         });
     }
 
-    // ========================================
-    // SIMPLIFIED UI UPDATE (VISIBLE ONLY)
-    // ========================================
-
     function updateCryptoAmountDisplay(cryptoAmount, cryptoSymbol) {
         const cryptoAmountDisplay = document.getElementById('cryptoAmountDisplay');
         
         if (cryptoAmountDisplay) {
-            // Update only the visible crypto amount with success styling
             cryptoAmountDisplay.innerHTML = `<span class="text-green-600 font-bold">${cryptoAmount.formatted}</span>`;
         }
         
-        // Log for debugging but don't show to user
         console.log(`💰 Updated display: ${cryptoAmount.formatted} ${cryptoSymbol}`);
     }
 
@@ -812,7 +893,6 @@
         globalState.retryCount++;
         console.log(`🔄 Error handled (retry ${globalState.retryCount}/${CONFIG.maxRetries})`);
         
-        // Use cached data if available and recent (within 10 minutes)
         if (globalState.currentRate && globalState.lastUpdate && 
             (Date.now() - globalState.lastUpdate < 600000)) {
             
@@ -821,7 +901,6 @@
             console.log('⚠️ Using cached rate data');
             
         } else {
-            // Use smart fallback rates
             const fallbackRate = getSmartFallbackRate(cryptoSymbol);
             const fallbackAmount = calculateAccurateCryptoAmount(CONFIG.amountUSD, fallbackRate, cryptoSymbol);
             
@@ -833,7 +912,6 @@
             console.log('🚫 Using offline fallback rate');
         }
         
-        // Schedule retry if under limit
         if (globalState.retryCount < CONFIG.maxRetries) {
             const retryDelay = CONFIG.retryDelay * globalState.retryCount;
             setTimeout(fetchCryptoRateAndCalculate, retryDelay);
@@ -841,7 +919,6 @@
     }
 
     function getSmartFallbackRate(cryptoSymbol) {
-        // Updated fallback rates (December 2024)
         const fallbackRates = {
             'BTC': 95000, 'ETH': 3600, 'LTC': 105, 'USDT': 1.00,
             'BNB': 650, 'ADA': 1.20, 'DOT': 8.50, 'XRP': 0.65,
@@ -852,9 +929,8 @@
     }
 
     // ========================================
-    // UTILITY FUNCTIONS
+    // UTILITY FUNCTIONS (from original)
     // ========================================
-
     function showMessage(message, type = 'info') {
         const statusDiv = document.getElementById('statusMessages');
         if (!statusDiv) return;
@@ -902,10 +978,6 @@
         });
     }
 
-    // ========================================
-    // TIMER FUNCTIONS
-    // ========================================
-
     function initializeTimers() {
         let timeLeft = CONFIG.sessionDuration;
 
@@ -920,7 +992,7 @@
                 if (timer) timer.textContent = timeString;
             });
 
-            if (timeLeft <= 300) { // 5 minutes warning
+            if (timeLeft <= 300) {
                 document.querySelectorAll('.timer-display').forEach(el => {
                     el.style.color = '#dc3545';
                 });
@@ -942,10 +1014,6 @@
         updateTimers();
         setInterval(updateTimers, 1000);
     }
-
-    // ========================================
-    // LOGO FUNCTIONS
-    // ========================================
 
     function loadCryptoLogos() {
         const cryptoLogoContainer = document.getElementById('cryptoLogoContainer');
@@ -975,10 +1043,7 @@
         if (trustWalletLogoEl) trustWalletLogoEl.src = trustWalletLogo;
     }
 
-    // ========================================
-    // FORM SUBMISSION HANDLING
-    // ========================================
-
+    // Form submission (from original code)
     document.addEventListener('DOMContentLoaded', function() {
         const depositForm = document.getElementById('depositForm');
         const submitBtn = document.getElementById('submitBtn');
@@ -989,7 +1054,6 @@
             return;
         }
 
-        // File validation
         fileInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file && !validateFile(file)) {
@@ -998,7 +1062,6 @@
             }
         });
 
-        // Form submission
         depositForm.addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -1010,12 +1073,10 @@
             const file = fileInput.files[0];
             if (!validateFile(file)) return;
 
-            // Update button state
             submitBtn.disabled = true;
             submitBtn.className = 'submitting';
             submitBtn.innerHTML = `<span class="loading-spinner mr-2"></span>Processing...`;
 
-            // Submit form
             submitFormData();
         });
 
@@ -1044,7 +1105,7 @@
                     
                     setTimeout(() => {
                         window.location.href = '{{ route("user.deposit-history") }}';
-                    },  1500);
+                    }, 1500);
                     
                 } else {
                     let errorMessage = 'Submission failed. Please try again.';
@@ -1072,7 +1133,7 @@
 
         function validateFile(file) {
             const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'application/pdf'];
-            const maxSize = 10 * 1024 * 1024; // 10MB
+            const maxSize = 10 * 1024 * 1024;
 
             if (!allowedTypes.includes(file.type)) {
                 showMessage('Invalid file type. Please upload PNG, JPG, WEBP, or PDF files only.', 'error');
@@ -1088,10 +1149,7 @@
         }
     });
 
-    // ========================================
-    // NETWORK STATUS MONITORING
-    // ========================================
-
+    // Network monitoring
     window.addEventListener('online', function() {
         globalState.isOnline = true;
         console.log('🌐 Connection restored');
@@ -1105,16 +1163,6 @@
         globalState.isOnline = false;
         console.log('🚫 Connection lost - using cached data');
     });
-
-    // Performance monitoring
-    if (typeof performance !== 'undefined') {
-        window.addEventListener('load', function() {
-            setTimeout(() => {
-                const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
-                console.log(`⚡ Page loaded in ${loadTime}ms`);
-            }, 0);
-        });
-    }
 </script>
 
 @endsection
