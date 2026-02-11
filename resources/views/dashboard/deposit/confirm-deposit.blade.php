@@ -1,6 +1,7 @@
 @extends('layout.user')
 
 @section('content')
+
 <style>
     .crypto-icon {
         width: 24px;
@@ -356,7 +357,7 @@
     <!-- Currency Selector -->
     <div class="flex justify-end mb-4">
         <select id="currencySelector" class="currency-selector">
-            <option value="USD" selected>USD</option>
+            <option value="USD" selected>💵 USD</option>
             <option value="EUR">🇪🇺 EUR</option>
             <option value="GBP">🇬🇧 GBP</option>
             <option value="NGN">🇳🇬 NGN</option>
@@ -415,7 +416,7 @@
             <div class="card rounded-xl p-2 shadow-sm wallet-card" style="background-image: url(assets/images/hero/hero-image-1.svg); background-repeat: no-repeat; background-size: cover; background-position:center;">
                 <h6 class="text-lg font-bold text-primary-dark mb-2">
                     <iconify-icon icon="solar:chart-square-outline" class="mr-2"></iconify-icon>
-                    Investment Summary
+                   Trading Summary
                 </h6>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -442,7 +443,7 @@
                             <span id="cryptoAmountDisplay" class="text-blue-600 font-bold">
                                 <span class="crypto-amount-loading"></span>
                             </span>
-                            <span id="cryptoSymbol">{{ strtoupper($wallet->crypto_name) }}</span>
+                            <span id="cryptoSymbol"> {{ strtoupper($wallet->crypto_name) }} </span>
                         </p>
                     </div>
                     <div>
@@ -569,7 +570,8 @@
                             name="proof"
                             class="form-control rounded-lg"
                             id="proof"
-                            placeholder="Proof" />
+                            placeholder="Proof"
+                            accept="image/*,application/pdf" />
                         <span class="text-danger">@error('proof'){{ $message }}@enderror</span>
                     </div>
 
@@ -619,7 +621,7 @@
     // INITIALIZATION
     // ========================================
     document.addEventListener('DOMContentLoaded', function() {
-        console.log(`🚀 Initializing confirm deposit page`);
+        console.log('🚀 Page loaded - Initializing...');
         
         initializeTimers();
         loadCryptoLogos();
@@ -627,14 +629,187 @@
         fetchFiatRates();
         fetchCryptoRateAndCalculate();
         
-        // Currency selector event
-        document.getElementById('currencySelector').addEventListener('change', function() {
-            currentCurrency = this.value;
-            updateCurrencyDisplay();
-        });
+        // Currency selector
+        const currencySelector = document.getElementById('currencySelector');
+        if (currencySelector) {
+            currencySelector.addEventListener('change', function() {
+                currentCurrency = this.value;
+                updateCurrencyDisplay();
+            });
+        }
         
+        // Form submission
+        setupFormSubmission();
+        
+        // Periodic updates
         setInterval(fetchCryptoRateAndCalculate, CONFIG.updateInterval);
     });
+
+    // ========================================
+    // FORM SUBMISSION SETUP
+    // ========================================
+    function setupFormSubmission() {
+        const depositForm = document.getElementById('depositForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const fileInput = document.getElementById('proof');
+
+        if (!depositForm) {
+            console.error('❌ Form not found');
+            return;
+        }
+
+        if (!submitBtn) {
+            console.error('❌ Submit button not found');
+            return;
+        }
+
+        if (!fileInput) {
+            console.error('❌ File input not found');
+            return;
+        }
+
+        console.log('✅ Form elements found and ready');
+
+        // File validation on change
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                console.log('📎 File selected:', file.name, file.type, file.size);
+                if (!validateFile(file)) {
+                    fileInput.value = '';
+                }
+            }
+        });
+
+        // Form submit handler
+      depositForm.addEventListener('submit', function(e) {
+    const fileInput = document.getElementById('proof');
+
+    if (!fileInput.files.length) {
+        e.preventDefault();
+        showMessage('Please upload payment proof screenshot', 'error');
+        return false;
+    }
+
+    const file = fileInput.files[0];
+
+    if (!validateFile(file)) {
+        e.preventDefault();
+        return false;
+    }
+
+    // Optional loading UI
+    const submitBtn = document.getElementById('submitBtn');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = 'Processing...';
+});
+
+        console.log('✅ Form submission handler attached');
+    }
+
+    async function submitFormData(form) {
+        console.log('🚀 Starting form submission...');
+        
+        const formData = new FormData(form);
+        const submitBtn = document.getElementById('submitBtn');
+        
+        // Log form data for debugging
+        for (let pair of formData.entries()) {
+            console.log('📝 Form field:', pair[0], '=', pair[1]);
+        }
+
+        // Get CSRF token
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || 
+                         document.querySelector('input[name="_token"]')?.value;
+        
+        console.log('🔑 CSRF Token:', csrfToken ? 'Found' : 'Missing');
+
+        try {
+            console.log('📡 Sending request to:', form.action);
+            
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json'
+                },
+                credentials: 'same-origin'
+            });
+
+            console.log('📥 Response status:', response.status);
+
+            if (response.ok) {
+                // Success
+                submitBtn.innerHTML = '✓ Success!';
+                submitBtn.style.backgroundColor = '#28a745';
+                submitBtn.style.borderColor = '#28a745';
+                
+                showMessage('Deposit submitted successfully! Redirecting...', 'success');
+                
+                console.log('✅ Submission successful, redirecting...');
+                
+                setTimeout(() => {
+                    window.location.href = '{{ route("user.deposit-history") }}';
+                }, 1500);
+                
+            } else {
+                // Error response
+                let errorMessage = 'Submission failed. Please try again.';
+                
+                try {
+                    const errorData = await response.json();
+                    console.log('❌ Error response:', errorData);
+                    errorMessage = errorData.message || errorData.error || errorMessage;
+                    
+                    if (errorData.errors) {
+                        const firstError = Object.values(errorData.errors)[0];
+                        if (Array.isArray(firstError) && firstError.length > 0) {
+                            errorMessage = firstError[0];
+                        }
+                    }
+                } catch (e) {
+                    console.error('❌ Could not parse error:', e);
+                    errorMessage = `Server error: ${response.status} ${response.statusText}`;
+                }
+                
+                throw new Error(errorMessage);
+            }
+
+        } catch (error) {
+            console.error('❌ Fetch error:', error);
+            throw error;
+        }
+    }
+
+    function resetSubmitButton(btn) {
+        btn.disabled = false;
+        btn.style.backgroundColor = '#9EDD05';
+        btn.style.borderColor = '#9EDD05';
+        btn.style.color = '#0C3A30';
+        btn.innerHTML = 'Submit Deposit';
+    }
+
+    function validateFile(file) {
+        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'application/pdf'];
+        const maxSize = 10 * 1024 * 1024; // 10MB
+
+        if (!allowedTypes.includes(file.type)) {
+            showMessage('Invalid file type. Please upload PNG, JPG, WEBP, or PDF files only.', 'error');
+            console.error('❌ Invalid file type:', file.type);
+            return false;
+        }
+
+        if (file.size > maxSize) {
+            showMessage('File too large. Maximum size is 10MB.', 'error');
+            console.error('❌ File too large:', file.size);
+            return false;
+        }
+
+        console.log('✅ File validation passed');
+        return true;
+    }
 
     // ========================================
     // FIAT CURRENCY CONVERSION
@@ -647,15 +822,16 @@
             if (data.result === 'success') {
                 Object.assign(fiatRates, data.conversion_rates);
                 console.log('✅ Fiat rates loaded');
+                updateCurrencyDisplay();
             }
         } catch (error) {
             console.error('❌ Failed to load fiat rates:', error);
-            // Set default rates
             Object.assign(fiatRates, {
                 USD: 1, EUR: 0.92, GBP: 0.79, NGN: 1500, AUD: 1.52,
                 CAD: 1.36, TWD: 31.5, JPY: 149, CNY: 7.24, INR: 83,
                 BRL: 4.97, MXN: 17.1, ZAR: 18.5
             });
+            updateCurrencyDisplay();
         }
     }
 
@@ -672,16 +848,18 @@
         const rate = fiatRates[currentCurrency] || 1;
         const symbol = getCurrencySymbol(currentCurrency);
         
-        // Update amount in selected currency
         const amountConverted = CONFIG.amountUSD * rate;
-        document.getElementById('currencySymbolDisplay').textContent = symbol;
-        document.getElementById('amountInCurrency').textContent = formatNumber(amountConverted);
+        const currencySymbolDisplay = document.getElementById('currencySymbolDisplay');
+        const amountInCurrency = document.getElementById('amountInCurrency');
         
-        // Update profit in selected currency
+        if (currencySymbolDisplay) currencySymbolDisplay.textContent = symbol;
+        if (amountInCurrency) amountInCurrency.textContent = formatNumber(amountConverted);
+        
         const profitConverted = CONFIG.profitUSD * rate;
-        document.getElementById('profitInCurrency').textContent = symbol + formatNumber(profitConverted);
+        const profitInCurrency = document.getElementById('profitInCurrency');
+        if (profitInCurrency) profitInCurrency.textContent = symbol + formatNumber(profitConverted);
         
-        console.log(`💱 Updated to ${currentCurrency}: ${symbol}${formatNumber(amountConverted)}`);
+        console.log(`💱 Currency: ${currentCurrency} ${symbol}${formatNumber(amountConverted)}`);
     }
 
     function formatNumber(num) {
@@ -692,7 +870,7 @@
     }
 
     // ========================================
-    // CRYPTO FUNCTIONS (from original)
+    // CRYPTO FUNCTIONS
     // ========================================
     function normalizeCryptoSymbol(input) {
         const normalized = input.toString().trim().toUpperCase();
@@ -724,7 +902,7 @@
             'BTC': { coingecko: 'bitcoin', precision: 8, name: 'Bitcoin' },
             'ETH': { coingecko: 'ethereum', precision: 6, name: 'Ethereum' },
             'LTC': { coingecko: 'litecoin', precision: 6, name: 'Litecoin' },
-            'USDT': { coingecko: 'tether', precision: 4, name: 'Tether' },
+            'USDT': { coingecko: 'tether', precision: 2, name: 'Tether' },
             'BNB': { coingecko: 'binancecoin', precision: 5, name: 'Binance Coin' },
             'ADA': { coingecko: 'cardano', precision: 4, name: 'Cardano' },
             'DOT': { coingecko: 'polkadot', precision: 4, name: 'Polkadot' },
@@ -740,13 +918,30 @@
         return mappings[normalizedSymbol] || mappings['BTC'];
     }
 
+    function isStableCoin(cryptoSymbol) {
+        const stableCoins = ['USDT', 'USDC', 'DAI', 'BUSD', 'TUSD'];
+        return stableCoins.includes(normalizeCryptoSymbol(cryptoSymbol));
+    }
+
     async function fetchCryptoRateAndCalculate() {
         if (globalState.fetchInProgress) return;
 
         globalState.fetchInProgress = true;
         const cryptoSymbol = normalizeCryptoSymbol(CONFIG.cryptoName);
         
-        console.log(`📊 Fetching live rate for ${cryptoSymbol}...`);
+        console.log(`📊 Fetching rate for ${cryptoSymbol}...`);
+
+        if (isStableCoin(cryptoSymbol)) {
+            console.log(`💵 ${cryptoSymbol} is stablecoin - 1:1`);
+            const cryptoAmount = {
+                amount: CONFIG.amountUSD,
+                formatted: formatCryptoAmount(CONFIG.amountUSD, cryptoSymbol, 2)
+            };
+            
+            updateCryptoAmountDisplay(cryptoAmount, cryptoSymbol);
+            globalState.fetchInProgress = false;
+            return;
+        }
 
         try {
             const rateData = await fetchFromCoinGecko(cryptoSymbol);
@@ -760,10 +955,10 @@
                 
                 updateCryptoAmountDisplay(cryptoAmount, cryptoSymbol);
                 
-                console.log(`✅ ${cryptoSymbol} rate: $${rateData.price} | Amount: ${cryptoAmount.formatted}`);
+                console.log(`✅ ${cryptoSymbol}: $${rateData.price} | ${cryptoAmount.formatted}`);
                 
             } else {
-                throw new Error('Invalid rate data');
+                throw new Error('Invalid rate');
             }
 
         } catch (error) {
@@ -793,7 +988,7 @@
             const coinData = data[apiMappings.coingecko];
             
             if (!coinData?.usd || coinData.usd <= 0) {
-                throw new Error('Invalid price data');
+                throw new Error('Invalid price');
             }
             
             return {
@@ -835,7 +1030,7 @@
             const data = await response.json();
             
             if (!data.lastPrice || parseFloat(data.lastPrice) <= 0) {
-                throw new Error('Invalid price data');
+                throw new Error('Invalid price');
             }
             
             return {
@@ -846,7 +1041,7 @@
             };
             
         } catch (error) {
-            console.warn('Binance also failed, using fallback rate');
+            console.warn('Binance failed, using fallback');
             throw error;
         }
     }
@@ -886,19 +1081,19 @@
             cryptoAmountDisplay.innerHTML = `<span class="text-green-600 font-bold">${cryptoAmount.formatted}</span>`;
         }
         
-        console.log(`💰 Updated display: ${cryptoAmount.formatted} ${cryptoSymbol}`);
+        console.log(`💰 Display: ${cryptoAmount.formatted} ${cryptoSymbol}`);
     }
 
     function handleRateError(cryptoSymbol) {
         globalState.retryCount++;
-        console.log(`🔄 Error handled (retry ${globalState.retryCount}/${CONFIG.maxRetries})`);
+        console.log(`🔄 Retry ${globalState.retryCount}/${CONFIG.maxRetries}`);
         
         if (globalState.currentRate && globalState.lastUpdate && 
             (Date.now() - globalState.lastUpdate < 600000)) {
             
             const cachedAmount = calculateAccurateCryptoAmount(CONFIG.amountUSD, globalState.currentRate.price, cryptoSymbol);
             updateCryptoAmountDisplay(cachedAmount, cryptoSymbol);
-            console.log('⚠️ Using cached rate data');
+            console.log('⚠️ Using cached rate');
             
         } else {
             const fallbackRate = getSmartFallbackRate(cryptoSymbol);
@@ -909,7 +1104,7 @@
                 cryptoAmountDisplay.innerHTML = `<span class="text-orange-600 font-bold">${fallbackAmount.formatted}</span>`;
             }
             
-            console.log('🚫 Using offline fallback rate');
+            console.log('🚫 Using fallback rate');
         }
         
         if (globalState.retryCount < CONFIG.maxRetries) {
@@ -929,11 +1124,14 @@
     }
 
     // ========================================
-    // UTILITY FUNCTIONS (from original)
+    // UTILITY FUNCTIONS
     // ========================================
     function showMessage(message, type = 'info') {
         const statusDiv = document.getElementById('statusMessages');
-        if (!statusDiv) return;
+        if (!statusDiv) {
+            console.warn('Status div not found');
+            return;
+        }
 
         const messageClass = type === 'success' ? 'success-message' : 
                            type === 'error' ? 'error-message' : 
@@ -954,6 +1152,7 @@
         `;
 
         statusDiv.innerHTML = messageHtml;
+        
         setTimeout(() => {
             if (statusDiv.innerHTML === messageHtml) {
                 statusDiv.innerHTML = '';
@@ -973,7 +1172,7 @@
                 btn.style.color = '';
             }, 2000);
         }).catch(err => {
-            console.error('Failed to copy:', err);
+            console.error('Copy failed:', err);
             showMessage('Failed to copy address', 'error');
         });
     }
@@ -1043,113 +1242,9 @@
         if (trustWalletLogoEl) trustWalletLogoEl.src = trustWalletLogo;
     }
 
-    // Form submission (from original code)
-    document.addEventListener('DOMContentLoaded', function() {
-        const depositForm = document.getElementById('depositForm');
-        const submitBtn = document.getElementById('submitBtn');
-        const fileInput = document.getElementById('proof');
-
-        if (!depositForm || !submitBtn || !fileInput) {
-            console.error('❌ Form elements not found');
-            return;
-        }
-
-        fileInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file && !validateFile(file)) {
-                fileInput.value = '';
-                return;
-            }
-        });
-
-        depositForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            if (!fileInput.files.length) {
-                showMessage('Please upload payment proof screenshot', 'error');
-                return;
-            }
-
-            const file = fileInput.files[0];
-            if (!validateFile(file)) return;
-
-            submitBtn.disabled = true;
-            submitBtn.className = 'submitting';
-            submitBtn.innerHTML = `<span class="loading-spinner mr-2"></span>Processing...`;
-
-            submitFormData();
-        });
-
-        async function submitFormData() {
-            try {
-                const formData = new FormData(depositForm);
-                const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || 
-                                 document.querySelector('input[name="_token"]')?.value;
-
-                const response = await fetch(depositForm.action, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRF-TOKEN': csrfToken,
-                        'Accept': 'application/json'
-                    },
-                    credentials: 'same-origin'
-                });
-
-                if (response.ok) {
-                    submitBtn.innerHTML = `<iconify-icon icon="solar:check-circle-bold" class="mr-2"></iconify-icon>Success!`;
-                    submitBtn.style.backgroundColor = '#28a745';
-                    
-                    showMessage('Deposit submitted successfully! Redirecting...', 'success');
-                    
-                    setTimeout(() => {
-                        window.location.href = '{{ route("user.deposit-history") }}';
-                    }, 1500);
-                    
-                } else {
-                    let errorMessage = 'Submission failed. Please try again.';
-                    try {
-                        const errorData = await response.json();
-                        errorMessage = errorData.message || errorMessage;
-                    } catch (e) {
-                        errorMessage = `Server error: ${response.status}`;
-                    }
-                    throw new Error(errorMessage);
-                }
-
-            } catch (error) {
-                console.error('Submission error:', error);
-                resetSubmitButton();
-                showMessage(error.message || 'Failed to submit deposit. Please try again.', 'error');
-            }
-        }
-
-        function resetSubmitButton() {
-            submitBtn.disabled = false;
-            submitBtn.className = '';
-            submitBtn.innerHTML = 'Submit Deposit';
-        }
-
-        function validateFile(file) {
-            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'application/pdf'];
-            const maxSize = 10 * 1024 * 1024;
-
-            if (!allowedTypes.includes(file.type)) {
-                showMessage('Invalid file type. Please upload PNG, JPG, WEBP, or PDF files only.', 'error');
-                return false;
-            }
-
-            if (file.size > maxSize) {
-                showMessage('File too large. Maximum size is 10MB.', 'error');
-                return false;
-            }
-
-            return true;
-        }
-    });
-
-    // Network monitoring
+    // ========================================
+    // NETWORK MONITORING
+    // ========================================
     window.addEventListener('online', function() {
         globalState.isOnline = true;
         console.log('🌐 Connection restored');
@@ -1161,7 +1256,7 @@
 
     window.addEventListener('offline', function() {
         globalState.isOnline = false;
-        console.log('🚫 Connection lost - using cached data');
+        console.log('🚫 Connection lost');
     });
 </script>
 

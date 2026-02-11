@@ -5,7 +5,7 @@
 <div class="w-full min-h-screen bg-cover bg-center bg-no-repeat">
     <div class="max-w-7xl mx-auto px-4 md:px-6 py-10 relative z-10" style="background-image: url(assets/images/hero/hero-image-1.svg); background-repeat: no-repeat; background-size: cover; background-position:center;">
         <div class="flex flex-wrap items-center justify-between gap-2 mb-6">
-            <h5 class="font-semibold text-lg md:text-xl" style="color: #0C3A30;">Investment</h5>
+            <h5 class="font-semibold text-lg md:text-xl" style="color: #0C3A30;">Active Trades</h5>
             <ul class="flex items-center gap-[6px]">
                 <li class="font-medium">
                     <a href="{{ route('user_dashboard') }}" class="flex items-center gap-2" onmouseover="this.style.color='#9EDD05';" onmouseout="this.style.color='#0C3A30';">
@@ -17,6 +17,7 @@
                 <li class="font-medium">Investment</li>
             </ul>
         </div>
+       
 
         @php
             $statusMap = [
@@ -117,7 +118,7 @@
                     <table class="w-full text-sm">
                         <tbody class="divide-y divide-gray-100">
                             <tr><th class="py-2 pr-2 text-gray-500">Amount</th><td class="py-2 text-gray-700">${{ number_format($investment->amount_invested, 2) }}</td></tr>
-                            <tr><th class="py-2 pr-2 text-gray-500">ROI</th><td class="py-2 text-gray-700">{{ $investment->plan->interest_rate ?? 0 }}%</td></tr>
+                            <tr><th class="py-2 pr-2 text-gray-500">ROE</th><td class="py-2 text-gray-700">{{ $investment->plan->interest_rate ?? 0 }}%</td></tr>
                             <tr><th class="py-2 pr-2 text-gray-500">Profit</th><td class="py-2 text-gray-700">${{ number_format($investment->total_profit, 2) }}</td></tr>
                             <tr><th class="py-2 pr-2 text-gray-500">Profit Taken</th><td class="py-2 text-gray-700">${{ number_format($investment->total_profit - $investment->available_profit, 2) }}</td></tr>
                             <tr><th class="py-2 pr-2 text-gray-500">Start Date</th><td class="py-2 text-gray-700">{{ \Carbon\Carbon::parse($investment->start_date)->format('M d, Y') }}</td></tr>

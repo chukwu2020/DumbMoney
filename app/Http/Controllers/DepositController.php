@@ -104,8 +104,8 @@ class DepositController extends Controller
             'amount_deposited' => $amountUSD,
 
             // ✅ UI / audit only
-            'original_amount' => $request->amount,
-            'currency'        => $request->currency ?? 'USD',
+        
+         
         ]);
 
         return redirect()->route('deposit.confirm');
@@ -151,8 +151,8 @@ class DepositController extends Controller
             'plan_id'          => $depositDetails['plan_id'],
             'wallet_id'        => $depositDetails['wallet_id'],
             'amount_deposited' => $depositDetails['amount_deposited'], // USD
-            'original_amount'  => $depositDetails['original_amount'] ?? null,
-            'currency'         => $depositDetails['currency'] ?? 'USD',
+            
+            
             'proof'            => $proofPath,
             'status'           => 0,
         ]);
@@ -169,8 +169,10 @@ class DepositController extends Controller
         );
 
         return redirect()
-            ->route('dashboard.deposit.deposit-history')
+            ->route('user.deposit-history')
+            
             ->with('success', 'Deposit submitted successfully.');
+            
     }
 
     // Deposit history

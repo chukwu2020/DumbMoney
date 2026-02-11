@@ -64,7 +64,7 @@
         </div>
         <div class="text-center mb-16">
             <h4 class="text-3xl md:text-5xl font-extrabold mt-3 mb-3 leading-tight plan-heading">
-                OUR PRICING PLANS
+               PRICING PLANS
             </h4>
         </div>
 
