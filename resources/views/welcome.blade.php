@@ -6116,13 +6116,13 @@
                             <!-- Title -->
                             <h3 class="fw-bold mb-2" style="color: #0C3A30; font-size: 1.35rem; line-height: 1.4;">
                                 <a href="/" class="text-decoration-none" style="color: #0C3A30; transition: color 0.2s;">
-                                    The Basics Of Financial Responsibility
+                                 The Foundations of Smart Trading
                                 </a>
                             </h3>
                             
                             <!-- Excerpt -->
                             <p class="text-secondary mb-3 small" style="color: #4A5C5A !important; line-height: 1.6;">
-                                Master the fundamentals of budgeting, saving, and spending — designed for beginners.
+                               Master the core principles of capital management, risk control, and disciplined investing  built for new traders.
                             </p>
                             
                             <!-- Read More -->
@@ -6189,19 +6189,21 @@
                         </div>
                         
                         <!-- Title -->
-                        <h3 class="fw-bold mb-3" style="color: #0C3A30; font-size: 1.65rem; line-height: 1.3;">
-                            <a href="/" class="text-decoration-none" style="color: #0C3A30; transition: color 0.2s;">
-                                Effective Financial Management: Crucial For Most Organizations
-                            </a>
-                        </h3>
+                     <h3 class="fw-bold mb-3" style="color: #0C3A30; font-size: 1.65rem; line-height: 1.3;">
+    <a href="/" class="text-decoration-none" style="color: #0C3A30; transition: color 0.2s;">
+        Smart Trading Strategies: The Edge Every Investor Needs
+    </a>
+</h3>
+
                         
                         <!-- Excerpt -->
-                        <p class="text-secondary mb-4" style="color: #4A5C5A !important; line-height: 1.7;">
-                            We're revolutionizing how businesses approach financial strategy. From cash flow optimization to AI-powered forecasting — discover the tools that separate market leaders from followers.
-                        </p>
+                     <p class="text-secondary mb-4" style="color: #4A5C5A !important; line-height: 1.7;">
+    We’re transforming how traders approach the markets. From precision copy trading to advanced risk management and AI-powered market insights — discover the strategies that separate consistent earners from the crowd.
+</p>
+
                         
                         <!-- Author & Read More -->
-                        <div class="d-flex align-items-center justify-content-between mt-auto">
+                        <!-- <div class="d-flex align-items-center justify-content-between mt-auto">
                             <div class="d-flex align-items-center gap-3">
                                 <div class="position-relative">
                                     <div class="rounded-circle d-flex align-items-center justify-content-center" 
@@ -6225,7 +6227,7 @@
                                     <i class="ri-arrow-right-up-line"></i>
                                 </span>
                             </a>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -6236,7 +6238,7 @@
         <!-- ========================================= -->
         <div class="text-center mt-5 pt-4" data-cues="slideInUp" data-duration="800">
             <div class="d-flex justify-content-center">
-                <a href="/blog" 
+                <a href="{{('login')}}" 
                    class="btn btn-lg px-5 py-3 rounded-pill fw-bold d-inline-flex align-items-center gap-3"
                    style="background: white; color: #0C3A30; border: 2px solid rgba(139,201,5,0.2); box-shadow: 0 15px 25px -8px rgba(0,0,0,0.05); transition: all 0.3s ease;">
                     <span>View All Articles</span>
@@ -6422,80 +6424,617 @@
         <!-- End Blog Area -->
 
         <!-- Start Faq Area -->
-        <div class="faq-area pb-80 pb-md-120 overflow-hidden mt-5 mb-5">
-            <div class="container">
-                <div class="row g-3 g-md-4 align-items-center">
-                    <div class="col-lg-6 col-md-12" data-cues="slideInRight" data-duration="800">
-                        <div class="question-card bg-color-9edd05 radius-30">
-                            <div class="section-heading">
-                                <span class="sub-title">FAQ</span>
-                                <h2>Frequently <span><img src="assets/images/svg/lines-4.svg" alt="image">Asked</span> Questions</h2>
-                                <p>With a robust suite of products ranging from digital banking and payment processing to wealth management and blockchain applications.</p>
-                            </div>
-                            <img class="radius-30" src="assets/images/blog/blog-image-4.jpg" alt="image">
+       <!-- Start Faq Area - Premium Redesign -->
+<div class="faq-area py-5 py-md-6 overflow-hidden position-relative"
+     style="background: linear-gradient(145deg, #ffffff, #f8fafc);">
+    
+    <!-- Premium Decorative Elements - Trading Inspired -->
+    <div class="position-absolute" style="top: -100px; right: -50px; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(139,201,5,0.03) 0%, transparent 70%);"></div>
+    <div class="position-absolute" style="bottom: -80px; left: -40px; width: 450px; height: 450px; border-radius: 50%; background: radial-gradient(circle, rgba(12,58,48,0.02) 0%, transparent 70%);"></div>
+    
+    <!-- Subtle Chart Pattern Overlay -->
+    <div class="position-absolute w-100 h-100 opacity-1" 
+         style="top: 0; left: 0; background-image: url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cpath d=\"M0 30 L60 30 M30 0 L30 60 M15 15 L45 45 M45 15 L15 45\" stroke=\"%238BC905\" stroke-width=\"0.5\" opacity=\"0.1\" /%3E%3C/svg%3E'); background-size: 40px 40px; pointer-events: none;"></div>
+    
+    <div class="container position-relative" style="max-width: 1280px; margin: 0 auto; z-index: 5;">
+        <div class="row g-5 align-items-center">
+            
+            <!-- ========================================= -->
+            <!-- LEFT COLUMN - PREMIUM FAQ IMAGE CARD -->
+            <!-- ========================================= -->
+            <div class="col-lg-6 col-md-12" data-cues="slideInRight" data-duration="800">
+                <div class="question-card-premium position-relative p-4 p-xl-5 rounded-5 h-100 d-flex flex-column"
+                     style="background: linear-gradient(145deg, #0C3A30, #0A2A23); border: 1px solid rgba(139,201,5,0.2); box-shadow: 0 30px 50px -20px rgba(12,58,48,0.3);">
+                    
+                    <!-- Decorative Pattern - Candlestick Inspired -->
+                    <div class="position-absolute w-100 h-100 opacity-5" 
+                         style="top: 0; left: 0; background-image: radial-gradient(circle at 20px 20px, rgba(139,201,5,0.1) 2px, transparent 2px); background-size: 40px 40px; pointer-events: none;"></div>
+                    
+                    <!-- Glowing Orb -->
+                    <div class="position-absolute" style="top: -50px; right: -30px; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, rgba(139,201,5,0.15) 0%, transparent 70%); filter: blur(40px);"></div>
+                    
+                    <!-- Section Header -->
+                    <div class="section-heading position-relative" style="z-index: 10;">
+                        <!-- Premium Badge -->
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <span class="badge px-4 py-2 rounded-pill fw-semibold d-inline-flex align-items-center gap-2" 
+                                  style="background: rgba(139,201,5,0.15); color: #8BC905; border: 1px solid rgba(139,201,5,0.3); backdrop-filter: blur(5px); letter-spacing: 0.5px;">
+                                <span style="display: inline-block; width: 8px; height: 8px; background: #8BC905; border-radius: 50%; box-shadow: 0 0 15px #8BC905; animation: pulse 2s infinite;"></span>
+                                FAQ — TRADING BASICS
+                            </span>
+                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.1);">
+                                <i class="ri-funds-line me-1"></i> 5 min read
+                            </span>
+                        </div>
+                        
+                        <!-- Main Headline -->
+                        <h2 class="display-5 fw-bold mb-3 text-white" style="line-height: 1.2; text-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+                            Frequently 
+                            <span style="color: #8BC905; position: relative; display: inline-block;">
+                                Asked
+                                <span class="position-absolute start-0 w-100" style="bottom: 0.1em; height: 8px; background: rgba(139,201,5,0.3); border-radius: 30px; filter: blur(2px);"></span>
+                            </span>
+                            Questions
+                        </h2>
+                        
+                        <!-- Description -->
+                        <p class="text-white-80 mb-4" style="line-height: 1.7; max-width: 450px;">
+                            Get answers about trading, account security, fees, and how our AI-powered platform helps you make smarter investment decisions.
+                        </p>
+                    </div>
+                    
+                    <!-- Premium Image with Overlay -->
+                    <div class="position-relative mt-auto rounded-4 overflow-hidden" style="z-index: 10; border: 1px solid rgba(139,201,5,0.2);">
+                        <img class="w-100 hover-zoom" 
+                             src="assets/images/blog/blog-image-4.jpg" 
+                             alt="Trading platform FAQ"
+                             style="display: block; transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); aspect-ratio: 16/9; object-fit: cover;">
+                        
+                        <!-- Gradient Overlay -->
+                        <div class="position-absolute bottom-0 start-0 w-100 p-3 d-flex align-items-center gap-2"
+                             style="background: linear-gradient(to top, rgba(12,58,48,0.95), transparent);">
+                            <span class="d-flex align-items-center gap-2">
+                                <span style="display: inline-block; width: 10px; height: 10px; background: #8BC905; border-radius: 50%; box-shadow: 0 0 15px #8BC905; animation: pulse 2s infinite;"></span>
+                                <span class="small text-white fw-semibold">LIVE SUPPORT 24/7</span>
+                            </span>
+                            <span class="ms-auto text-white-50 small">
+                                <i class="ri-customer-service-line"></i> Chat now
+                            </span>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-md-12" data-cues="slideInLeft" data-duration="800">
-                        <div class="faq-content">
-                            <div class="accordion" id="accordionFAQ">
-                                <div class="accordion-item">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBang" aria-expanded="false" aria-controls="collapseBang">
-                                        1. Why should I care about financial planning?
-                                    </button>
-                                    <div id="collapseBang" class="accordion-collapse collapse show" data-bs-parent="#accordionFAQ">
-                                        <div class="accordion-body">
-                                            <p>Our mission is to bridge the gap between traditional banking and modern offering innovative and seamless financial services that cater to the evolving needs of individuals and businesses alike. With a robust suite.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="accordion-item">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSunam" aria-expanded="false" aria-controls="collapseSunam">
-                                        2. What are the different types of investments?
-                                    </button>
-                                    <div id="collapseSunam" class="accordion-collapse collapse" data-bs-parent="#accordionFAQ">
-                                        <div class="accordion-body">
-                                            <p> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-                                        </div>
+                    
+                    <!-- Market Stats Ticker -->
+                    <div class="d-flex align-items-center gap-3 mt-3">
+                        <span class="small text-white-50"><i class="ri-funds-box-line" style="color: #8BC905;"></i> BTC $67,432</span>
+                        <span class="small text-white-50"><i class="ri-funds-box-line" style="color: #8BC905;"></i> ETH $3,245</span>
+                        <span class="small text-white-50"><i class="ri-funds-box-line" style="color: #8BC905;"></i> S&P 5,234</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ========================================= -->
+            <!-- RIGHT COLUMN - PREMIUM ACCORDION FAQ -->
+            <!-- ========================================= -->
+            <div class="col-lg-6 col-md-12" data-cues="slideInLeft" data-duration="800">
+                <div class="faq-content-premium ps-lg-4">
+                    <div class="accordion-premium d-flex flex-column gap-3" id="accordionFAQ">
+                        
+                        <!-- FAQ ITEM 1 - Trading Focused -->
+                        <div class="accordion-item-premium rounded-4 p-4" 
+                             style="background: white; border: 1px solid rgba(139,201,5,0.1); box-shadow: 0 10px 25px -10px rgba(0,0,0,0.05); transition: all 0.3s ease;">
+                            <button class="accordion-button-premium d-flex align-items-center justify-content-between w-100 border-0 bg-transparent collapsed" 
+                                    type="button" 
+                                    data-bs-toggle="collapse" 
+                                    data-bs-target="#collapseTrading1" 
+                                    aria-expanded="false"
+                                    style="color: #0C3A30; font-weight: 600; font-size: 1.1rem;">
+                                <span class="d-flex align-items-center gap-3">
+                                    <span class="d-flex align-items-center justify-content-center rounded-circle" 
+                                          style="width: 32px; height: 32px; background: rgba(139,201,5,0.1); color: #8BC905; font-weight: 700;">01</span>
+                                    Why should I trade with MarketMind AI?
+                                </span>
+                                <span class="accordion-icon rounded-circle d-flex align-items-center justify-content-center" 
+                                      style="width: 32px; height: 32px; background: rgba(139,201,5,0.1); color: #8BC905; transition: all 0.3s ease;">
+                                    <i class="ri-add-line" style="font-weight: bold;"></i>
+                                </span>
+                            </button>
+                            <div id="collapseTrading1" class="accordion-collapse collapse show" data-bs-parent="#accordionFAQ">
+                                <div class="accordion-body pt-3 ps-5">
+                                    <p class="text-secondary mb-0" style="color: #4A5C5A !important; line-height: 1.7;">
+                                        Our AI-powered execution engine analyzes market patterns in real-time, helping you identify opportunities faster. Zero commission trading, institutional-grade security, and personalized strategies based on your risk profile. Join 50,000+ traders already using our platform.
+                                    </p>
+                                    <div class="d-flex align-items-center gap-3 mt-3">
+                                        <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.08); color: #0C3A30; border: 1px solid rgba(139,201,5,0.15);">
+                                            ⚡ 0% commission
+                                        </span>
+                                        <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.08); color: #0C3A30; border: 1px solid rgba(139,201,5,0.15);">
+                                            🔒 insured up to $500K
+                                        </span>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        
+                        <!-- FAQ ITEM 2 - Investment Types -->
+                        <div class="accordion-item-premium rounded-4 p-4" 
+                             style="background: white; border: 1px solid rgba(139,201,5,0.1); box-shadow: 0 10px 25px -10px rgba(0,0,0,0.05); transition: all 0.3s ease;">
+                            <button class="accordion-button-premium d-flex align-items-center justify-content-between w-100 border-0 bg-transparent collapsed" 
+                                    type="button" 
+                                    data-bs-toggle="collapse" 
+                                    data-bs-target="#collapseTrading2" 
+                                    aria-expanded="false"
+                                    style="color: #0C3A30; font-weight: 600; font-size: 1.1rem;">
+                                <span class="d-flex align-items-center gap-3">
+                                    <span class="d-flex align-items-center justify-content-center rounded-circle" 
+                                          style="width: 32px; height: 32px; background: rgba(139,201,5,0.1); color: #8BC905; font-weight: 700;">02</span>
+                                    What can I invest in on your platform?
+                                </span>
+                                <span class="accordion-icon rounded-circle d-flex align-items-center justify-content-center" 
+                                      style="width: 32px; height: 32px; background: rgba(139,201,5,0.1); color: #8BC905; transition: all 0.3s ease;">
+                                    <i class="ri-add-line" style="font-weight: bold;"></i>
+                                </span>
+                            </button>
+                            <div id="collapseTrading2" class="accordion-collapse collapse" data-bs-parent="#accordionFAQ">
+                                <div class="accordion-body pt-3 ps-5">
+                                    <p class="text-secondary mb-3" style="color: #4A5C5A !important; line-height: 1.7;">
+                                        Stocks, ETFs, crypto, forex, commodities, and our exclusive AI-managed portfolios. Access global markets from a single dashboard:
+                                    </p>
+                                    <ul class="list-unstyled d-flex flex-wrap gap-2">
+                                        <li class="d-flex align-items-center gap-2">
+                                            <i class="ri-checkbox-circle-fill" style="color: #8BC905;"></i>
+                                            <span class="small">US Stocks</span>
+                                        </li>
+                                        <li class="d-flex align-items-center gap-2">
+                                            <i class="ri-checkbox-circle-fill" style="color: #8BC905;"></i>
+                                            <span class="small">Crypto (50+)</span>
+                                        </li>
+                                        <li class="d-flex align-items-center gap-2">
+                                            <i class="ri-checkbox-circle-fill" style="color: #8BC905;"></i>
+                                            <span class="small">Forex pairs</span>
+                                        </li>
+                                        <li class="d-flex align-items-center gap-2">
+                                            <i class="ri-checkbox-circle-fill" style="color: #8BC905;"></i>
+                                            <span class="small">ETFs</span>
+                                        </li>
+                                        <li class="d-flex align-items-center gap-2">
+                                            <i class="ri-checkbox-circle-fill" style="color: #8BC905;"></i>
+                                            <span class="small">AI Portfolios</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- FAQ ITEM 3 - Fees & Commissions -->
+                        <div class="accordion-item-premium rounded-4 p-4" 
+                             style="background: white; border: 1px solid rgba(139,201,5,0.1); box-shadow: 0 10px 25px -10px rgba(0,0,0,0.05); transition: all 0.3s ease;">
+                            <button class="accordion-button-premium d-flex align-items-center justify-content-between w-100 border-0 bg-transparent collapsed" 
+                                    type="button" 
+                                    data-bs-toggle="collapse" 
+                                    data-bs-target="#collapseTrading3" 
+                                    aria-expanded="false"
+                                    style="color: #0C3A30; font-weight: 600; font-size: 1.1rem;">
+                                <span class="d-flex align-items-center gap-3">
+                                    <span class="d-flex align-items-center justify-content-center rounded-circle" 
+                                          style="width: 32px; height: 32px; background: rgba(139,201,5,0.1); color: #8BC905; font-weight: 700;">03</span>
+                                    What are your trading fees?
+                                </span>
+                                <span class="accordion-icon rounded-circle d-flex align-items-center justify-content-center" 
+                                      style="width: 32px; height: 32px; background: rgba(139,201,5,0.1); color: #8BC905; transition: all 0.3s ease;">
+                                    <i class="ri-add-line" style="font-weight: bold;"></i>
+                                </span>
+                            </button>
+                            <div id="collapseTrading3" class="accordion-collapse collapse" data-bs-parent="#accordionFAQ">
+                                <div class="accordion-body pt-3 ps-5">
+                                    <p class="text-secondary mb-0" style="color: #4A5C5A !important; line-height: 1.7;">
+                                        0% commission on stocks and ETFs. Crypto spreads from 0.1%. Forex from 0.0 pips. No hidden fees, no account minimums. Premium AI strategies start at just $10/month.
+                                    </p>
+                                    <div class="mt-3 p-3 rounded-3" style="background: rgba(139,201,5,0.04); border: 1px dashed rgba(139,201,5,0.2);">
+                                        <span class="small fw-semibold" style="color: #0C3A30;">💰 Save an average of $347/year compared to traditional brokers</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- FAQ ITEM 4 - Security -->
+                        <div class="accordion-item-premium rounded-4 p-4" 
+                             style="background: white; border: 1px solid rgba(139,201,5,0.1); box-shadow: 0 10px 25px -10px rgba(0,0,0,0.05); transition: all 0.3s ease;">
+                            <button class="accordion-button-premium d-flex align-items-center justify-content-between w-100 border-0 bg-transparent collapsed" 
+                                    type="button" 
+                                    data-bs-toggle="collapse" 
+                                    data-bs-target="#collapseTrading4" 
+                                    aria-expanded="false"
+                                    style="color: #0C3A30; font-weight: 600; font-size: 1.1rem;">
+                                <span class="d-flex align-items-center gap-3">
+                                    <span class="d-flex align-items-center justify-content-center rounded-circle" 
+                                          style="width: 32px; height: 32px; background: rgba(139,201,5,0.1); color: #8BC905; font-weight: 700;">04</span>
+                                    How secure is my money?
+                                </span>
+                                <span class="accordion-icon rounded-circle d-flex align-items-center justify-content-center" 
+                                      style="width: 32px; height: 32px; background: rgba(139,201,5,0.1); color: #8BC905; transition: all 0.3s ease;">
+                                    <i class="ri-add-line" style="font-weight: bold;"></i>
+                                </span>
+                            </button>
+                            <div id="collapseTrading4" class="accordion-collapse collapse" data-bs-parent="#accordionFAQ">
+                                <div class="accordion-body pt-3 ps-5">
+                                    <p class="text-secondary mb-0" style="color: #4A5C5A !important; line-height: 1.7;">
+                                        Bank-grade 256-bit encryption, biometric authentication, and cold storage for crypto assets. Insured up to $500K through our partners. Regulated in multiple jurisdictions.
+                                    </p>
+                                    <div class="d-flex align-items-center gap-2 mt-3">
+                                        <i class="ri-shield-check-fill" style="color: #8BC905;"></i>
+                                        <span class="small">ISO 27001 certified</span>
+                                        <span class="mx-2">•</span>
+                                        <i class="ri-shield-check-fill" style="color: #8BC905;"></i>
+                                        <span class="small">PCI DSS compliant</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Still Have Questions? -->
+                    <div class="d-flex align-items-center justify-content-between mt-4 pt-3 p-4 rounded-4" 
+                         style="background: rgba(139,201,5,0.04); border: 1px solid rgba(139,201,5,0.1);">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="rounded-circle p-3" style="background: rgba(139,201,5,0.1);">
+                                <i class="ri-question-line fs-4" style="color: #8BC905;"></i>
+                            </div>
+                            <div>
+                                <span class="fw-semibold d-block" style="color: #0C3A30;">Still have questions?</span>
+                                <span class="small text-secondary">Our support team is online 24/7</span>
+                            </div>
+                        </div>
+                        <a href="#" class="btn px-4 py-2 rounded-pill fw-semibold"
+                           style="background: #8BC905; color: #0C3A30; border: none;">
+                            Chat Now <i class="ri-arrow-right-up-line ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Faq Area - Premium Redesign -->
+
+<!-- Start App Area - Premium Redesign -->
+<div class="app-area py-5 py-md-6 overflow-hidden position-relative"
+     style="background: linear-gradient(145deg, #f8fafc, #ffffff);">
+    
+    <!-- Premium Decorative Elements -->
+    <div class="position-absolute" style="top: -120px; left: -60px; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(139,201,5,0.03) 0%, transparent 70%);"></div>
+    <div class="position-absolute" style="bottom: -100px; right: -50px; width: 450px; height: 450px; border-radius: 50%; background: radial-gradient(circle, rgba(12,58,48,0.02) 0%, transparent 70%);"></div>
+    
+    <div class="container position-relative" style="max-width: 1280px; margin: 0 auto; z-index: 5;">
+        <div class="download-area-premium rounded-5 p-4 p-xl-5 position-relative overflow-hidden"
+             style="background: linear-gradient(145deg, #0C3A30, #062018); border: 1px solid rgba(139,201,5,0.2); box-shadow: 0 30px 60px -20px rgba(12,58,48,0.4);">
+            
+            <!-- Animated Grid Pattern -->
+            <div class="position-absolute w-100 h-100 opacity-5" 
+                 style="top: 0; left: 0; background-image: radial-gradient(circle at 30px 30px, rgba(139,201,5,0.15) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; animation: drift 30s infinite linear;"></div>
+            
+            <!-- Glowing Orbs -->
+            <div class="position-absolute" style="top: -80px; right: -40px; width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle, rgba(139,201,5,0.12) 0%, transparent 70%); filter: blur(50px);"></div>
+            <div class="position-absolute" style="bottom: -60px; left: -20px; width: 250px; height: 250px; border-radius: 50%; background: radial-gradient(circle, rgba(158,221,5,0.1) 0%, transparent 70%); filter: blur(40px);"></div>
+            
+            <div class="row g-5 align-items-center position-relative" style="z-index: 10;">
+                
+                <!-- ========================================= -->
+                <!-- LEFT COLUMN - APP CONTENT -->
+                <!-- ========================================= -->
+                <div class="col-lg-6 col-md-12" data-cues="slideInRight" data-duration="800">
+                    <div class="section-heading mb-0">
+                        
+                        <!-- Premium Badge -->
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <span class="badge px-4 py-2 rounded-pill fw-semibold d-inline-flex align-items-center gap-2" 
+                                  style="background: rgba(139,201,5,0.15); color: #8BC905; border: 1px solid rgba(139,201,5,0.3); backdrop-filter: blur(5px); letter-spacing: 0.5px;">
+                                <span style="display: inline-block; width: 8px; height: 8px; background: #8BC905; border-radius: 50%; box-shadow: 0 0 15px #8BC905; animation: pulse 2s infinite;"></span>
+                                DOWNLOAD OUR APP
+                            </span>
+                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.1);">
+                                <i class="ri-smartphone-line me-1"></i> iOS & Android
+                            </span>
+                        </div>
+                        
+                        <!-- Main Headline - Trading Focused -->
+                        <h2 class="display-5 fw-bold mb-3 text-white" style="line-height: 1.2; text-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+                            Experience The 
+                            <span style="color: #8BC905; position: relative; display: inline-block;">
+                                Future
+                                <span class="position-absolute start-0 w-100" style="bottom: 0.1em; height: 8px; background: rgba(139,201,5,0.3); border-radius: 30px; filter: blur(2px);"></span>
+                            </span>
+                            <br>Of Trading
+                        </h2>
+                        
+                        <!-- Description - Trading Focused -->
+                        <p class="text-white-80 mb-4" style="line-height: 1.7; max-width: 500px; font-size: 1.1rem;">
+                            Trade stocks, crypto, and forex from your pocket. Real-time charts, instant execution, and AI-powered insights — all in the palm of your hand.
+                        </p>
+                        
+                        <!-- App Features -->
+                        <div class="d-flex flex-wrap gap-3 mb-4">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="ri-checkbox-circle-fill" style="color: #8BC905;"></i>
+                                <span class="text-white-80 small">0% commission</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="ri-checkbox-circle-fill" style="color: #8BC905;"></i>
+                                <span class="text-white-80 small">Real-time quotes</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="ri-checkbox-circle-fill" style="color: #8BC905;"></i>
+                                <span class="text-white-80 small">Biometric login</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="ri-checkbox-circle-fill" style="color: #8BC905;"></i>
+                                <span class="text-white-80 small">Instant deposits</span>
+                            </div>
+                        </div>
+                        
+                        <!-- App Store Buttons - Premium -->
+                        <div class="app-btn-premium d-flex flex-wrap align-items-center gap-3 mt-4 mt-md-5">
+                            <a href="https://play.google.com/store/apps/category/FAMILY?hl=en" 
+                               target="_blank" 
+                               class="d-flex align-items-center gap-3 p-3 rounded-4 text-decoration-none"
+                               style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s ease;">
+                                <i class="ri-google-play-fill" style="color: white; font-size: 2rem;"></i>
+                                <div>
+                                    <span class="small text-white-50 d-block">GET IT ON</span>
+                                    <span class="fw-bold text-white">Google Play</span>
+                                </div>
+                            </a>
+                            <a href="https://www.apple.com/app-store/" 
+                               target="_blank" 
+                               class="d-flex align-items-center gap-3 p-3 rounded-4 text-decoration-none"
+                               style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s ease;">
+                                <i class="ri-apple-fill" style="color: white; font-size: 2rem;"></i>
+                                <div>
+                                    <span class="small text-white-50 d-block">Download on the</span>
+                                    <span class="fw-bold text-white">App Store</span>
+                                </div>
+                            </a>
+                        </div>
+                        
+                        <!-- QR Code / Rating -->
+                        <div class="d-flex align-items-center gap-4 mt-4">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="d-flex align-items-center">
+                                    <i class="ri-star-fill" style="color: #FFB800;"></i>
+                                    <i class="ri-star-fill" style="color: #FFB800;"></i>
+                                    <i class="ri-star-fill" style="color: #FFB800;"></i>
+                                    <i class="ri-star-fill" style="color: #FFB800;"></i>
+                                    <i class="ri-star-fill" style="color: #FFB800;"></i>
+                                </div>
+                                <span class="text-white-80 small">4.9 • 50K+ reviews</span>
+                            </div>
+                            <span class="text-white-50 small">|</span>
+                            <span class="text-white-80 small d-flex align-items-center gap-1">
+                                <i class="ri-qr-code-line" style="color: #8BC905;"></i> Scan to download
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ========================================= -->
+                <!-- RIGHT COLUMN - APP MOCKUP -->
+                <!-- ========================================= -->
+                <div class="col-lg-6 col-md-12" data-cues="slideInLeft" data-duration="800">
+                    <div class="app-image-premium position-relative text-center">
+                        
+                        <!-- Main App Image -->
+                        <div class="position-relative d-inline-block" style="transform: perspective(1000px) rotateY(5deg) rotateX(2deg); transition: transform 0.6s ease;">
+                            <img class="radius-4" 
+                                 src="assets/images/app/app-image-1.jpg" 
+                                 alt="Trading App Dashboard"
+                                 style="max-width: 100%; height: auto; border-radius: 24px; border: 4px solid rgba(139,201,5,0.2); box-shadow: 0 40px 70px -20px rgba(0,0,0,0.5);">
+                            
+                            <!-- Live Trading Badge -->
+                            <div class="position-absolute top-0 start-0 translate-middle-y ms-4" style="animation: float 6s ease-in-out infinite;">
+                                <span class="badge px-4 py-3 rounded-pill fw-semibold d-flex align-items-center gap-2"
+                                      style="background: #8BC905; color: #0C3A30; border: none; box-shadow: 0 15px 30px -8px rgba(139,201,5,0.4);">
+                                    <span style="display: inline-block; width: 10px; height: 10px; background: #0C3A30; border-radius: 50%; animation: pulse 2s infinite;"></span>
+                                    LIVE MARKETS
+                                </span>
+                            </div>
+                            
+                            <!-- Crypto Price Badge -->
+                            <div class="position-absolute bottom-0 end-0 translate-middle-y me-4" style="animation: float 7s ease-in-out infinite 1s;">
+                                <div class="d-flex align-items-center gap-2 bg-white/95 backdrop-blur rounded-pill py-3 px-4 shadow-lg"
+                                     style="border-left: 4px solid #8BC905;">
+                                    <i class="ri-funds-line" style="color: #8BC905;"></i>
+                                    <span class="fw-semibold small" style="color: #0C3A30;">BTC +2.34%</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Trust Indicators -->
+                        <div class="d-flex align-items-center justify-content-center gap-4 mt-4">
+                            <span class="text-white-80 small d-flex align-items-center gap-1">
+                                <i class="ri-shield-check-fill" style="color: #8BC905;"></i> Regulated
+                            </span>
+                            <span class="text-white-80 small d-flex align-items-center gap-1">
+                                <i class="ri-flashlight-fill" style="color: #8BC905;"></i> 0.1s execution
+                            </span>
+                            <span class="text-white-80 small d-flex align-items-center gap-1">
+                                <i class="ri-customer-service-fill" style="color: #8BC905;"></i> 24/7 support
+                            </span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- End Faq Area -->
+    </div>
+</div>
+<!-- End App Area - Premium Redesign -->
 
-        <!-- Start App Area -->
-        <div class="app-area pb-80 pb-md-120 overflow-hidden">
-            <div class="container">
-                <div class="download-area bg-color-edf1ee radius-30">
-                    <div class="row g-3 g-md-4 align-items-center">
-                        <div class="col-lg-6 col-md-12" data-cues="slideInRight" data-duration="800">
-                            <div class="section-heading mb-0">
-                                <span class="sub-title">DOWNLOAD OUR APP</span>
-                                <h2>Experience <span><img src="assets/images/svg/lines-1.svg" alt="image">The</span> Future Of Banking</h2>
-                                <p class="mb-4 mb-md-5">With a robust suite of products ranging from digital banking and payment processing to wealth management and blockchain applications.</p>
-
-                                <div class="app-btn">
-                                    <a href="https://play.google.com/store/apps/category/FAMILY?hl=en" target="_blank" class="me-2 me-md-3">
-                                        <img class="rounded-3" src="assets/images/app/app-image-2.jpg" alt="image">
-                                    </a>
-                                    <a href="https://www.apple.com/app-store/" target="_blank">
-                                        <img class="rounded-3" src="assets/images/app/app-image-3.jpg" alt="image">
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-12" data-cues="slideInLeft" data-duration="800">
-                            <div class="app-image">
-                                <img class="radius-30" src="assets/images/app/app-image-1.jpg" alt="image">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<style>
+    /* ============ PREMIUM FAQ & APP STYLES ============ */
+    
+    /* Animations */
+    @keyframes pulse {
+        0% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.8; transform: scale(0.95); box-shadow: 0 0 20px #8BC905; }
+        100% { opacity: 1; transform: scale(1); }
+    }
+    
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
+    }
+    
+    @keyframes drift {
+        0% { background-position: 0 0; }
+        100% { background-position: 80px 80px; }
+    }
+    
+    /* FAQ Accordion Styles */
+    .accordion-item-premium {
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    .accordion-item-premium:hover {
+        transform: translateX(8px);
+        border-color: rgba(139,201,5,0.3) !important;
+        box-shadow: 0 15px 35px -12px rgba(139,201,5,0.1) !important;
+    }
+    
+    .accordion-button-premium {
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .accordion-button-premium:hover .accordion-icon {
+        background: #8BC905 !important;
+        color: white !important;
+        transform: scale(1.1);
+    }
+    
+    .accordion-button-premium:hover span:first-child span {
+        background: rgba(139,201,5,0.2) !important;
+        color: #0C3A30 !important;
+    }
+    
+    .accordion-icon {
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    .accordion-button-premium[aria-expanded="true"] .accordion-icon {
+        background: #8BC905 !important;
+        color: white !important;
+        transform: rotate(45deg);
+    }
+    
+    .accordion-button-premium[aria-expanded="true"] .accordion-icon i {
+        transform: rotate(45deg);
+    }
+    
+    /* App Store Button Hover */
+    .app-btn-premium a {
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    .app-btn-premium a:hover {
+        transform: translateY(-5px);
+        background: rgba(139,201,5,0.15) !important;
+        border-color: rgba(139,201,5,0.4) !important;
+    }
+    
+    .app-btn-premium a:hover i {
+        transform: scale(1.1);
+        color: #8BC905 !important;
+    }
+    
+    .app-btn-premium a i {
+        transition: all 0.3s ease;
+    }
+    
+    /* App Image Hover */
+    .app-image-premium .position-relative {
+        transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    .app-image-premium:hover .position-relative {
+        transform: perspective(1000px) rotateY(8deg) rotateX(4deg) scale(1.02) !important;
+    }
+    
+    /* Question Card Hover */
+    .question-card-premium .hover-zoom {
+        transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    .question-card-premium:hover .hover-zoom {
+        transform: scale(1.03);
+    }
+    
+    .question-card-premium:hover {
+        box-shadow: 0 40px 70px -20px rgba(12,58,48,0.5) !important;
+    }
+    
+    /* Utilities */
+    .backdrop-blur {
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+    
+    .text-white-50 {
+        color: rgba(255, 255, 255, 0.6) !important;
+    }
+    
+    .text-white-80 {
+        color: rgba(255, 255, 255, 0.85) !important;
+    }
+    
+    .text-secondary {
+        color: #4A5C5A !important;
+    }
+    
+    /* Responsive */
+    @media (max-width: 991px) {
+        .question-card-premium {
+            margin-bottom: 30px;
+        }
+        
+        .faq-content-premium {
+            padding-left: 0 !important;
+        }
+        
+        .download-area-premium {
+            text-align: center;
+        }
+        
+        .app-btn-premium {
+            justify-content: center;
+        }
+        
+        .app-image-premium {
+            margin-top: 40px;
+        }
+    }
+    
+    @media (max-width: 767px) {
+        .accordion-item-premium {
+            padding: 1.25rem !important;
+        }
+        
+        .accordion-button-premium span:first-child {
+            font-size: 0.95rem;
+        }
+        
+        .app-btn-premium {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        
+        .app-btn-premium a {
+            justify-content: center;
+        }
+        
+        .display-5 {
+            font-size: 2rem;
+        }
+    }
+</style>
         <!-- End App Area -->
     </div>
     @endsection
