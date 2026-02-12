@@ -2677,288 +2677,972 @@
             }
         </style>
 
-        <!-- Start Services Area -->
-        <div class="services-area pt-100 pb-80 pt-md-120 pb-md-100 position-relative overflow-hidden">
-            <div class="container left-padding">
-                <div class="row align-items-center">
-                    <div class="col-xl-4 col-lg-12" data-cues="slideInLeft" data-duration="800">
-                        <div class="section-heading position-relative mb-0">
-                            <span class="sub-title">OUR SERVICES</span>
-                            <h2>Syncing <span><img src="assets/images/svg/lines-2.svg" alt="">Your</span> Finances</h2>
-                            <p class="mb-4 mb-md-5">With a robust suite of products ranging from digital banking and payment processing to wealth</p>
-
-                            <a href="{{route('our.services')}}" class="default-btn two">See All Services <i class="ri-arrow-right-up-line"></i></a>
-
-                            <div class="services-btn">
-                                <div class="swiper-button-next">
-                                    <i class="ri-arrow-right-line"></i>
-                                </div>
-                                <div class="swiper-button-prev">
-                                    <i class="ri-arrow-left-line"></i>
-                                </div>
-                            </div>
+       <!-- Start Services Area - Premium Redesign -->
+<div class="services-area py-5 py-md-6 position-relative overflow-hidden" 
+     style="background: linear-gradient(145deg, #ffffff, #f8fafc);">
+    
+    <!-- Premium Decorative Elements -->
+    <div class="position-absolute" style="top: -150px; left: -100px; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(139,201,5,0.03) 0%, transparent 70%); pointer-events: none;"></div>
+    <div class="position-absolute" style="bottom: -100px; right: -50px; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(12,58,48,0.02) 0%, transparent 70%); pointer-events: none;"></div>
+    
+    <!-- Subtle Pattern Overlay -->
+    <div class="position-absolute w-100 h-100 opacity-2" 
+         style="top: 0; left: 0; background-image: radial-gradient(circle at 30px 30px, #0C3A30 1px, transparent 1px); background-size: 60px 60px; pointer-events: none;"></div>
+    
+    <div class="container position-relative" style="max-width: 1280px; margin: 0 auto; z-index: 5;">
+        <div class="row g-5 align-items-center">
+            
+            <!-- ========================================= -->
+            <!-- LEFT COLUMN - SECTION HEADER & CONTROLS -->
+            <!-- ========================================= -->
+            <div class="col-xl-4 col-lg-12" data-cues="slideInLeft" data-duration="800">
+                <div class="section-heading position-relative mb-0 pe-xl-4">
+                    
+                    <!-- Premium Badge -->
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <span class="badge px-4 py-2 rounded-pill fw-semibold d-inline-flex align-items-center gap-2" 
+                              style="background: linear-gradient(145deg, #0C3A30, #0A2A23); color: white; border: 1px solid rgba(139,201,5,0.3); letter-spacing: 0.5px; box-shadow: 0 10px 20px -8px rgba(10,42,35,0.2);">
+                            <span style="display: inline-block; width: 8px; height: 8px; background: #8BC905; border-radius: 50%; box-shadow: 0 0 8px #8BC905; animation: pulse 2s infinite;"></span>
+                            OUR SERVICES
+                        </span>
+                        <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.1); color: #8BC905; border: 1px solid rgba(139,201,5,0.2);">
+                            ✦ 8+ SOLUTIONS
+                        </span>
+                    </div>
+                    
+                    <!-- Main Headline -->
+                    <h2 class="display-5 fw-bold mb-3" style="color: #0C3A30; line-height: 1.2; max-width: 400px;">
+                        Syncing 
+                        <span style="color: #8BC905; position: relative; display: inline-block;">
+                            Your Finances
+                            <span class="position-absolute start-0 w-100" style="bottom: 0.1em; height: 8px; background: rgba(139,201,5,0.25); border-radius: 30px; z-index: -1;"></span>
+                        </span>
+                    </h2>
+                    
+                    <!-- Description -->
+                    <p class="fs-6 text-secondary mb-4" style="color: #4A5C5A !important; line-height: 1.7; max-width: 350px;">
+                        Seamlessly connect your entire financial world  from payments and lending to wealth management  all in one intelligent platform.
+                    </p>
+                    
+                    <!-- CTA Button -->
+                    <a href="{{route('our.services')}}" class="btn btn-lg px-5 py-3 rounded-pill fw-bold d-inline-flex align-items-center gap-3 mb-4 mb-md-5"
+                       style="background: linear-gradient(145deg, #0C3A30, #0A2A23); color: white; border: none; box-shadow: 0 20px 30px -10px rgba(12,58,48,0.25); transition: all 0.3s;">
+                        <span>Explore All Services</span>
+                        <span class="rounded-circle bg-white/20 p-2 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                            <i class="ri-arrow-right-up-line" style="color: white; font-size: 1.2rem;"></i>
+                        </span>
+                    </a>
+                    
+                    <!-- Premium Navigation Controls -->
+                    <div class="services-btn d-flex align-items-center gap-3 mt-2">
+                        <span class="text-secondary small fw-semibold me-2" style="color: #4A5C5A !important;">SWIPE</span>
+                        <div class="swiper-button-prev-custom d-flex align-items-center justify-content-center rounded-circle" 
+                             style="width: 56px; height: 56px; background: white; border: 2px solid rgba(139,201,5,0.2); color: #0C3A30; box-shadow: 0 10px 20px -8px rgba(0,0,0,0.05); transition: all 0.3s; cursor: pointer;">
+                            <i class="ri-arrow-left-line fs-4"></i>
+                        </div>
+                        <div class="swiper-button-next-custom d-flex align-items-center justify-content-center rounded-circle" 
+                             style="width: 56px; height: 56px; background: #8BC905; border: none; color: white; box-shadow: 0 15px 25px -8px rgba(139,201,5,0.3); transition: all 0.3s; cursor: pointer;">
+                            <i class="ri-arrow-right-line fs-4"></i>
                         </div>
                     </div>
-                    <div class="col-xl-8 col-lg-12">
-                        <div class="services-items">
-                            <div class="swiper services-slide">
-                                <div class="swiper-wrapper">
-                                    <div class="swiper-slide">
-                                        <div class="services-card position-relative">
-
-
-                                            <img class="radius-30" src="assets/images/copytrading-animated.svg" alt="image">
-                                            <img style="z-index: 1500 !important;" class="radius-30" src="assets/images/copytrading-animated.svg" alt="image">
-                                            <div class="services-card-body bg-color-fffaeb radius-30">
-                                                <i class="flaticon-businessman-5 businessman"></i>
-                                                <h3>
-                                                    <a href="{{route('our.services')}}">Funds Remittance</a>
-                                                </h3>
-                                                <p class="mb-0">With a robust suite of products ranging from digital banking and payment processing.</p>
-                                                <a href="{{route('our.services')}}" class="read-more">Read More <i class="ri-arrow-right-up-line"></i></a>
+                    
+                    <!-- Slide Counter -->
+                    <div class="d-flex align-items-center gap-2 mt-4">
+                        <span class="fw-bold" style="color: #0C3A30; font-size: 1.2rem;" id="current-slide">01</span>
+                        <span style="color: #8BC905; font-size: 0.9rem;">/</span>
+                        <span style="color: #4A5C5A;" id="total-slides">06</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ========================================= -->
+            <!-- RIGHT COLUMN - PREMIUM SERVICE CARDS SLIDER -->
+            <!-- ========================================= -->
+            <div class="col-xl-8 col-lg-12" data-cues="slideInRight" data-duration="800">
+                <div class="services-items position-relative ps-xl-4">
+                    
+                    <!-- Gradient Edge Overlays -->
+                    <div class="position-absolute top-0 start-0 h-100" style="width: 60px; background: linear-gradient(90deg, #ffffff, transparent); z-index: 20; pointer-events: none;"></div>
+                    <div class="position-absolute top-0 end-0 h-100" style="width: 60px; background: linear-gradient(-90deg, #f8fafc, transparent); z-index: 20; pointer-events: none;"></div>
+                    
+                    <div class="swiper services-slide-premium">
+                        <div class="swiper-wrapper">
+                            
+                            <!-- SERVICE CARD 1 - Funds Remittance -->
+                            <div class="swiper-slide">
+                                <div class="service-card-premium position-relative" 
+                                     style="border-radius: 32px; background: white; box-shadow: 0 25px 40px -15px rgba(0,0,0,0.08); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); overflow: hidden;">
+                                    
+                                    <!-- Top Accent -->
+                                    <div style="height: 4px; background: linear-gradient(90deg, #8BC905, #0C3A30);"></div>
+                                    
+                                    <!-- Card Content -->
+                                    <div class="p-4 p-xl-5">
+                                        <!-- Icon & Badge -->
+                                        <div class="d-flex align-items-center justify-content-between mb-4">
+                                            <div class="d-flex align-items-center justify-content-center rounded-3" 
+                                                 style="width: 72px; height: 72px; background: rgba(139,201,5,0.1);">
+                                                <i class="flaticon-businessman-5" style="color: #8BC905; font-size: 2.5rem;"></i>
                                             </div>
+                                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.08); color: #0C3A30; border: 1px solid rgba(139,201,5,0.2);">
+                                                ⚡ FAST
+                                            </span>
                                         </div>
+                                        
+                                        <!-- Title -->
+                                        <h3 class="fw-bold mb-3" style="color: #0C3A30; font-size: 1.75rem;">
+                                            <a href="{{route('our.services')}}" class="text-decoration-none" style="color: #0C3A30;">Funds Remittance</a>
+                                        </h3>
+                                        
+                                        <!-- Description -->
+                                        <p class="text-secondary mb-4" style="color: #4A5C5A !important; line-height: 1.7;">
+                                            Send and receive money across borders instantly with zero hidden fees and real-time exchange rates.
+                                        </p>
+                                        
+                                        <!-- Feature Pills -->
+                                        <div class="d-flex flex-wrap gap-2 mb-4">
+                                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.06); color: #0C3A30; border: 1px solid rgba(139,201,5,0.15);">🌍 150+ Countries</span>
+                                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.06); color: #0C3A30; border: 1px solid rgba(139,201,5,0.15);">⚡ Instant Settlement</span>
+                                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.06); color: #0C3A30; border: 1px solid rgba(139,201,5,0.15);">🔒 Bank-Grade</span>
+                                        </div>
+                                        
+                                        <!-- Read More Link -->
+                                        <a href="{{route('our.services')}}" class="read-more d-inline-flex align-items-center gap-2 fw-semibold text-decoration-none"
+                                           style="color: #8BC905; transition: all 0.3s;">
+                                            Learn more
+                                            <span class="rounded-circle d-flex align-items-center justify-content-center" 
+                                                  style="width: 28px; height: 28px; background: rgba(139,201,5,0.1); color: #8BC905; transition: all 0.3s;">
+                                                <i class="ri-arrow-right-up-line"></i>
+                                            </span>
+                                        </a>
                                     </div>
-                                    <div class="swiper-slide" style="overflow: hidden;">
-                                        <div class="services-card position-relative">
-                                            <img class="radius-30" src="assets/images/service/service-image-6.jpg" alt="image">
-                                            <div class="services-card-body bg-color-fffaeb radius-30">
-                                                <i class="flaticon-browser-1 businessman"></i>
-                                                <h3>
-                                                    <a href="{{route('our.services')}}">Personal Loan</a>
-                                                </h3>
-                                                <p class="mb-0">With a robust suite of products ranging from digital banking and payment processing.</p>
-                                                <a href="{{route('our.services')}}" class="read-more">Read More <i class="ri-arrow-right-up-line"></i></a>
+                                    
+                                    <!-- Decorative Element -->
+                                    <div class="position-absolute bottom-0 end-0" style="width: 120px; height: 120px; background: radial-gradient(circle, rgba(139,201,5,0.05) 0%, transparent 70%); border-radius: 50%;"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- SERVICE CARD 2 - Personal Loan -->
+                            <div class="swiper-slide">
+                                <div class="service-card-premium position-relative" 
+                                     style="border-radius: 32px; background: white; box-shadow: 0 25px 40px -15px rgba(0,0,0,0.08); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); overflow: hidden;">
+                                    
+                                    <!-- Top Accent -->
+                                    <div style="height: 4px; background: linear-gradient(90deg, #0C3A30, #8BC905);"></div>
+                                    
+                                    <!-- Card Content -->
+                                    <div class="p-4 p-xl-5">
+                                        <!-- Icon & Badge -->
+                                        <div class="d-flex align-items-center justify-content-between mb-4">
+                                            <div class="d-flex align-items-center justify-content-center rounded-3" 
+                                                 style="width: 72px; height: 72px; background: rgba(139,201,5,0.1);">
+                                                <i class="flaticon-browser-1" style="color: #8BC905; font-size: 2.5rem;"></i>
                                             </div>
+                                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.08); color: #0C3A30; border: 1px solid rgba(139,201,5,0.2);">
+                                                🏆 POPULAR
+                                            </span>
                                         </div>
+                                        
+                                        <!-- Title -->
+                                        <h3 class="fw-bold mb-3" style="color: #0C3A30; font-size: 1.75rem;">
+                                            <a href="{{route('our.services')}}" class="text-decoration-none" style="color: #0C3A30;">Personal Loan</a>
+                                        </h3>
+                                        
+                                        <!-- Description -->
+                                        <p class="text-secondary mb-4" style="color: #4A5C5A !important; line-height: 1.7;">
+                                            Flexible financing tailored to your needs. Competitive rates, instant approval, and no prepayment penalties.
+                                        </p>
+                                        
+                                        <!-- Feature Pills -->
+                                        <div class="d-flex flex-wrap gap-2 mb-4">
+                                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.06); color: #0C3A30; border: 1px solid rgba(139,201,5,0.15);">💰 Up to $100K</span>
+                                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.06); color: #0C3A30; border: 1px solid rgba(139,201,5,0.15);">⚡ 5-min Approval</span>
+                                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.06); color: #0C3A30; border: 1px solid rgba(139,201,5,0.15);">📆 Flexible Terms</span>
+                                        </div>
+                                        
+                                        <!-- Read More Link -->
+                                        <a href="{{route('our.services')}}" class="read-more d-inline-flex align-items-center gap-2 fw-semibold text-decoration-none"
+                                           style="color: #8BC905; transition: all 0.3s;">
+                                            Learn more
+                                            <span class="rounded-circle d-flex align-items-center justify-content-center" 
+                                                  style="width: 28px; height: 28px; background: rgba(139,201,5,0.1); color: #8BC905; transition: all 0.3s;">
+                                                <i class="ri-arrow-right-up-line"></i>
+                                            </span>
+                                        </a>
                                     </div>
+                                    
+                                    <!-- Decorative Element -->
+                                    <div class="position-absolute bottom-0 end-0" style="width: 120px; height: 120px; background: radial-gradient(circle, rgba(139,201,5,0.05) 0%, transparent 70%); border-radius: 50%;"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- SERVICE CARD 3 - Wealth Management -->
+                            <div class="swiper-slide">
+                                <div class="service-card-premium position-relative" 
+                                     style="border-radius: 32px; background: white; box-shadow: 0 25px 40px -15px rgba(0,0,0,0.08); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); overflow: hidden;">
+                                    
+                                    <!-- Top Accent -->
+                                    <div style="height: 4px; background: linear-gradient(90deg, #8BC905, #0C3A30);"></div>
+                                    
+                                    <!-- Card Content -->
+                                    <div class="p-4 p-xl-5">
+                                        <!-- Icon & Badge -->
+                                        <div class="d-flex align-items-center justify-content-between mb-4">
+                                            <div class="d-flex align-items-center justify-content-center rounded-3" 
+                                                 style="width: 72px; height: 72px; background: rgba(139,201,5,0.1);">
+                                                <i class="flaticon-growth" style="color: #8BC905; font-size: 2.5rem;"></i>
+                                            </div>
+                                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.08); color: #0C3A30; border: 1px solid rgba(139,201,5,0.2);">
+                                                💎 PREMIUM
+                                            </span>
+                                        </div>
+                                        
+                                        <!-- Title -->
+                                        <h3 class="fw-bold mb-3" style="color: #0C3A30; font-size: 1.75rem;">
+                                            <a href="{{route('our.services')}}" class="text-decoration-none" style="color: #0C3A30;">Trading Management</a>
+                                        </h3>
+                                        
+                                        <!-- Description -->
+                                        <p class="text-secondary mb-4" style="color: #4A5C5A !important; line-height: 1.7;">
+                                            AI-powered investment strategies personalized to your goals. Grow your wealth with institutional-grade tools.
+                                        </p>
+                                        
+                                        <!-- Feature Pills -->
+                                        <div class="d-flex flex-wrap gap-2 mb-4">
+                                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.06); color: #0C3A30; border: 1px solid rgba(139,201,5,0.15);">🤖 AI-Powered</span>
+                                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.06); color: #0C3A30; border: 1px solid rgba(139,201,5,0.15);">📊 127% APY</span>
+                                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.06); color: #0C3A30; border: 1px solid rgba(139,201,5,0.15);">🔐 Secure</span>
+                                        </div>
+                                        
+                                        <!-- Read More Link -->
+                                        <a href="{{route('our.services')}}" class="read-more d-inline-flex align-items-center gap-2 fw-semibold text-decoration-none"
+                                           style="color: #8BC905; transition: all 0.3s;">
+                                            Learn more
+                                            <span class="rounded-circle d-flex align-items-center justify-content-center" 
+                                                  style="width: 28px; height: 28px; background: rgba(139,201,5,0.1); color: #8BC905; transition: all 0.3s;">
+                                                <i class="ri-arrow-right-up-line"></i>
+                                            </span>
+                                        </a>
+                                    </div>
+                                    
+                                    <!-- Decorative Element -->
+                                    <div class="position-absolute bottom-0 end-0" style="width: 120px; height: 120px; background: radial-gradient(circle, rgba(139,201,5,0.05) 0%, transparent 70%); border-radius: 50%;"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- SERVICE CARD 4 - Business Banking -->
+                            <div class="swiper-slide">
+                                <div class="service-card-premium position-relative" 
+                                     style="border-radius: 32px; background: white; box-shadow: 0 25px 40px -15px rgba(0,0,0,0.08); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); overflow: hidden;">
+                                    
+                                    <!-- Top Accent -->
+                                    <div style="height: 4px; background: linear-gradient(90deg, #0C3A30, #8BC905);"></div>
+                                    
+                                    <!-- Card Content -->
+                                    <div class="p-4 p-xl-5">
+                                        <!-- Icon & Badge -->
+                                        <div class="d-flex align-items-center justify-content-between mb-4">
+                                            <div class="d-flex align-items-center justify-content-center rounded-3" 
+                                                 style="width: 72px; height: 72px; background: rgba(139,201,5,0.1);">
+                                                <i class="flaticon-businessman-1" style="color: #8BC905; font-size: 2.5rem;"></i>
+                                            </div>
+                                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.08); color: #0C3A30; border: 1px solid rgba(139,201,5,0.2);">
+                                                🏢 BUSINESS
+                                            </span>
+                                        </div>
+                                        
+                                        <!-- Title -->
+                                        <h3 class="fw-bold mb-3" style="color: #0C3A30; font-size: 1.75rem;">
+                                            <a href="{{route('our.services')}}" class="text-decoration-none" style="color: #0C3A30;">Investments</a>
+                                        </h3>
+                                        
+                                        <!-- Description -->
+                                        <p class="text-secondary mb-4" style="color: #4A5C5A !important; line-height: 1.7;">
+                                            Complete financial toolkit for modern businesses. From payroll to invoices, we've got you covered.
+                                        </p>
+                                        
+                                        <!-- Feature Pills -->
+                                        <div class="d-flex flex-wrap gap-2 mb-4">
+                                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.06); color: #0C3A30; border: 1px solid rgba(139,201,5,0.15);">📈 Cash Flow</span>
+                                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.06); color: #0C3A30; border: 1px solid rgba(139,201,5,0.15);">📄 Invoicing</span>
+                                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.06); color: #0C3A30; border: 1px solid rgba(139,201,5,0.15);">👥 Payroll</span>
+                                        </div>
+                                        
+                                        <!-- Read More Link -->
+                                        <a href="{{route('our.services')}}" class="read-more d-inline-flex align-items-center gap-2 fw-semibold text-decoration-none"
+                                           style="color: #8BC905; transition: all 0.3s;">
+                                            Learn more
+                                            <span class="rounded-circle d-flex align-items-center justify-content-center" 
+                                                  style="width: 28px; height: 28px; background: rgba(139,201,5,0.1); color: #8BC905; transition: all 0.3s;">
+                                                <i class="ri-arrow-right-up-line"></i>
+                                            </span>
+                                        </a>
+                                    </div>
+                                    
+                                    <!-- Decorative Element -->
+                                    <div class="position-absolute bottom-0 end-0" style="width: 120px; height: 120px; background: radial-gradient(circle, rgba(139,201,5,0.05) 0%, transparent 70%); border-radius: 50%;"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- SERVICE CARD 5 - Blockchain -->
+                            <div class="swiper-slide">
+                                <div class="service-card-premium position-relative" 
+                                     style="border-radius: 32px; background: white; box-shadow: 0 25px 40px -15px rgba(0,0,0,0.08); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); overflow: hidden;">
+                                    
+                                    <!-- Top Accent -->
+                                    <div style="height: 4px; background: linear-gradient(90deg, #8BC905, #0C3A30);"></div>
+                                    
+                                    <!-- Card Content -->
+                                    <div class="p-4 p-xl-5">
+                                        <!-- Icon & Badge -->
+                                        <div class="d-flex align-items-center justify-content-between mb-4">
+                                            <div class="d-flex align-items-center justify-content-center rounded-3" 
+                                                 style="width: 72px; height: 72px; background: rgba(139,201,5,0.1);">
+                                                <i class="flaticon-blockchain" style="color: #8BC905; font-size: 2.5rem;"></i>
+                                            </div>
+                                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.08); color: #0C3A30; border: 1px solid rgba(139,201,5,0.2);">
+                                                ⛓️ BLOCKCHAIN
+                                            </span>
+                                        </div>
+                                        
+                                        <!-- Title -->
+                                        <h3 class="fw-bold mb-3" style="color: #0C3A30; font-size: 1.75rem;">
+                                            <a href="{{route('our.services')}}" class="text-decoration-none" style="color: #0C3A30;">Blockchain Solutions</a>
+                                        </h3>
+                                        
+                                        <!-- Description -->
+                                        <p class="text-secondary mb-4" style="color: #4A5C5A !important; line-height: 1.7;">
+                                            Enterprise-grade blockchain infrastructure for secure, transparent, and programmable financial applications.
+                                        </p>
+                                        
+                                        <!-- Feature Pills -->
+                                        <div class="d-flex flex-wrap gap-2 mb-4">
+                                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.06); color: #0C3A30; border: 1px solid rgba(139,201,5,0.15);">🔗 Smart Contracts</span>
+                                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.06); color: #0C3A30; border: 1px solid rgba(139,201,5,0.15);">🌐 DeFi</span>
+                                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.06); color: #0C3A30; border: 1px solid rgba(139,201,5,0.15);">🔐 Immutable</span>
+                                             <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.06); color: #0C3A30; border: 1px solid rgba(139,201,5,0.15);">🔐 Forex</span>
+                                        </div>
+                                        
+                                        <!-- Read More Link -->
+                                        <a href="{{route('our.services')}}" class="read-more d-inline-flex align-items-center gap-2 fw-semibold text-decoration-none"
+                                           style="color: #8BC905; transition: all 0.3s;">
+                                            Learn more
+                                            <span class="rounded-circle d-flex align-items-center justify-content-center" 
+                                                  style="width: 28px; height: 28px; background: rgba(139,201,5,0.1); color: #8BC905; transition: all 0.3s;">
+                                                <i class="ri-arrow-right-up-line"></i>
+                                            </span>
+                                        </a>
+                                    </div>
+                                    
+                                    <!-- Decorative Element -->
+                                    <div class="position-absolute bottom-0 end-0" style="width: 120px; height: 120px; background: radial-gradient(circle, rgba(139,201,5,0.05) 0%, transparent 70%); border-radius: 50%;"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- SERVICE CARD 6 - Payment Processing -->
+                            <div class="swiper-slide">
+                                <div class="service-card-premium position-relative" 
+                                     style="border-radius: 32px; background: white; box-shadow: 0 25px 40px -15px rgba(0,0,0,0.08); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); overflow: hidden;">
+                                    
+                                    <!-- Top Accent -->
+                                    <div style="height: 4px; background: linear-gradient(90deg, #0C3A30, #8BC905);"></div>
+                                    
+                                    <!-- Card Content -->
+                                    <div class="p-4 p-xl-5">
+                                        <!-- Icon & Badge -->
+                                        <div class="d-flex align-items-center justify-content-between mb-4">
+                                            <div class="d-flex align-items-center justify-content-center rounded-3" 
+                                                 style="width: 72px; height: 72px; background: rgba(139,201,5,0.1);">
+                                                <i class="flaticon-payment-method" style="color: #8BC905; font-size: 2.5rem;"></i>
+                                            </div>
+                                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.08); color: #0C3A30; border: 1px solid rgba(139,201,5,0.2);">
+                                                💳 PAYMENTS
+                                            </span>
+                                        </div>
+                                        
+                                        <!-- Title -->
+                                        <h3 class="fw-bold mb-3" style="color: #0C3A30; font-size: 1.75rem;">
+                                            <a href="{{route('our.services')}}" class="text-decoration-none" style="color: #0C3A30;">Payment Processing</a>
+                                        </h3>
+                                        
+                                        <!-- Description -->
+                                        <p class="text-secondary mb-4" style="color: #4A5C5A !important; line-height: 1.7;">
+                                            Accept payments seamlessly across web, mobile, and in-store. 99.99% uptime, 140+ currencies.
+                                        </p>
+                                        
+                                        <!-- Feature Pills -->
+                                        <div class="d-flex flex-wrap gap-2 mb-4">
+                                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.06); color: #0C3A30; border: 1px solid rgba(139,201,5,0.15);">💳 Card Processing</span>
+                                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.06); color: #0C3A30; border: 1px solid rgba(139,201,5,0.15);">📱 Mobile</span>
+                                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.06); color: #0C3A30; border: 1px solid rgba(139,201,5,0.15);">🔄 Mirroring Trades</span>
+                                        </div>
+                                        
+                                        <!-- Read More Link -->
+                                        <a href="{{route('our.services')}}" class="read-more d-inline-flex align-items-center gap-2 fw-semibold text-decoration-none"
+                                           style="color: #8BC905; transition: all 0.3s;">
+                                            Learn more
+                                            <span class="rounded-circle d-flex align-items-center justify-content-center" 
+                                                  style="width: 28px; height: 28px; background: rgba(139,201,5,0.1); color: #8BC905; transition: all 0.3s;">
+                                                <i class="ri-arrow-right-up-line"></i>
+                                            </span>
+                                        </a>
+                                    </div>
+                                    
+                                    <!-- Decorative Element -->
+                                    <div class="position-absolute bottom-0 end-0" style="width: 120px; height: 120px; background: radial-gradient(circle, rgba(139,201,5,0.05) 0%, transparent 70%); border-radius: 50%;"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    
+                    <!-- Mobile Pagination -->
+                    <div class="swiper-pagination-premium d-flex justify-content-center mt-4 d-xl-none"></div>
                 </div>
             </div>
         </div>
-        <!-- End Services Area -->
+    </div>
+</div>
+<!-- End Services Area - Premium Redesign -->
 
-        <!-- Start About Us Area -->
-        <div class="about-us-area pb-80 pb-md-120 overflow-hidden">
-            <div class="container">
-                <div class="about-top mb-4 mb-md-5">
-                    <div class="row align-items-center" data-cues="slideInUp" data-duration="800">
-                        <div class="col-lg-7 col-md-7">
-                            <div class="section-heading mb-0">
-                                <span class="sub-title">ABOUT US</span>
-                                <h2 class="mb-0">Leveraging Technology <span><img src="assets/images/svg/lines-3.svg" alt="image">For</span> Secure & Banking</h2>
-                            </div>
+<style>
+    /* ============ PREMIUM SERVICE CARD STYLES ============ */
+    
+    /* Card Hover Effects */
+    .service-card-premium {
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    .service-card-premium:hover {
+        transform: translateY(-12px);
+        box-shadow: 0 35px 50px -20px rgba(12,58,48,0.2) !important;
+    }
+    
+    .service-card-premium:hover .flaticon-businessman-5,
+    .service-card-premium:hover .flaticon-browser-1,
+    .service-card-premium:hover .flaticon-growth,
+    .service-card-premium:hover .flaticon-businessman-1,
+    .service-card-premium:hover .flaticon-blockchain,
+    .service-card-premium:hover .flaticon-payment-method {
+        transform: scale(1.1);
+        color: #0C3A30 !important;
+    }
+    
+    .service-card-premium .flaticon-businessman-5,
+    .service-card-premium .flaticon-browser-1,
+    .service-card-premium .flaticon-growth,
+    .service-card-premium .flaticon-businessman-1,
+    .service-card-premium .flaticon-blockchain,
+    .service-card-premium .flaticon-payment-method {
+        transition: all 0.3s ease;
+    }
+    
+    /* Read More Link Hover */
+    .read-more:hover {
+        gap: 12px !important;
+    }
+    
+    .read-more:hover span {
+        background: #8BC905 !important;
+        color: white !important;
+        transform: translateX(4px);
+    }
+    
+    .read-more span {
+        transition: all 0.3s ease;
+    }
+    
+    /* Navigation Controls Hover */
+    .swiper-button-prev-custom:hover,
+    .swiper-button-next-custom:hover {
+        transform: scale(1.1);
+    }
+    
+    .swiper-button-prev-custom:hover {
+        background: #0C3A30 !important;
+        color: white !important;
+        border-color: #0C3A30 !important;
+    }
+    
+    .swiper-button-next-custom:hover {
+        background: #7AB805 !important;
+        box-shadow: 0 20px 30px -8px rgba(139,201,5,0.4) !important;
+    }
+    
+    /* Button Hover */
+    .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 25px 35px -12px rgba(12,58,48,0.35) !important;
+    }
+    
+    .btn:hover .bg-white\/20 {
+        transform: translateX(4px);
+    }
+    
+    /* Swiper Customization */
+    .swiper-slide {
+        height: auto;
+    }
+    
+    .swiper-slide .service-card-premium {
+        height: 100%;
+    }
+    
+    /* Pagination */
+    .swiper-pagination-bullet {
+        background: rgba(139,201,5,0.3) !important;
+        width: 10px;
+        height: 10px;
+        opacity: 1;
+        transition: all 0.3s ease;
+    }
+    
+    .swiper-pagination-bullet-active {
+        background: #8BC905 !important;
+        width: 30px;
+        border-radius: 10px;
+        box-shadow: 0 0 15px #8BC905;
+    }
+    
+    /* Animations */
+    @keyframes pulse {
+        0% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.8; transform: scale(0.95); box-shadow: 0 0 12px #8BC905; }
+        100% { opacity: 1; transform: scale(1); }
+    }
+    
+    /* Responsive */
+    @media (max-width: 1199px) {
+        .section-heading {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .section-heading h2 {
+            max-width: 100% !important;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .section-heading p {
+            max-width: 500px !important;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .services-btn {
+            justify-content: center;
+        }
+        
+        #current-slide, #total-slides {
+            margin-left: auto;
+            margin-right: auto;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .service-card-premium .p-4 {
+            padding: 1.5rem !important;
+        }
+        
+        .service-card-premium h3 {
+            font-size: 1.5rem !important;
+        }
+    }
+</style>
+
+<script>
+    // Initialize Swiper for Premium Services
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof Swiper !== 'undefined') {
+            const servicesSwiper = new Swiper('.services-slide-premium', {
+                slidesPerView: 1,
+                spaceBetween: 24,
+                loop: true,
+                autoplay: {
+                    delay: 5000,
+                    disableOnInteraction: false,
+                },
+                pagination: {
+                    el: '.swiper-pagination-premium',
+                    clickable: true,
+                    dynamicBullets: true,
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next-custom',
+                    prevEl: '.swiper-button-prev-custom',
+                },
+                breakpoints: {
+                    640: {
+                        slidesPerView: 1.5,
+                        spaceBetween: 24,
+                    },
+                    768: {
+                        slidesPerView: 1.8,
+                        spaceBetween: 24,
+                    },
+                    1024: {
+                        slidesPerView: 2.2,
+                        spaceBetween: 24,
+                    },
+                    1200: {
+                        slidesPerView: 2.5,
+                        spaceBetween: 24,
+                    }
+                },
+                on: {
+                    slideChange: function() {
+                        // Update slide counter
+                        const current = document.getElementById('current-slide');
+                        const total = document.getElementById('total-slides');
+                        if (current && total) {
+                            let realIndex = this.realIndex + 1;
+                            current.innerText = realIndex < 10 ? '0' + realIndex : realIndex;
+                            total.innerText = this.slides.length < 10 ? '0' + this.slides.length : this.slides.length;
+                        }
+                    }
+                }
+            });
+            
+            // Set total slides initially
+            const totalEl = document.getElementById('total-slides');
+            if (totalEl && servicesSwiper) {
+                const totalSlides = servicesSwiper.slides.length;
+                totalEl.innerText = totalSlides < 10 ? '0' + totalSlides : totalSlides;
+            }
+        }
+    });
+</script>
+
+        <!-- Start About Us Area - Premium Redesign -->
+<div class="about-us-area py-5 py-md-6 overflow-hidden position-relative" 
+     style="background: linear-gradient(145deg, #ffffff, #f9fbf9);">
+    
+    <!-- Premium Decorative Elements -->
+    <div class="position-absolute" style="top: -200px; right: -100px; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(139,201,5,0.03) 0%, transparent 70%); pointer-events: none;"></div>
+    <div class="position-absolute" style="bottom: -150px; left: -80px; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(12,58,48,0.02) 0%, transparent 70%); pointer-events: none;"></div>
+    
+    <!-- Subtle Pattern Overlay -->
+    <div class="position-absolute w-100 h-100 opacity-1" 
+         style="top: 0; left: 0; background-image: url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%230C3A30\" fill-opacity=\"0.02\"%3E%3Cpath d=\"M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E'); background-size: 40px 40px; pointer-events: none;"></div>
+    
+    <div class="container position-relative" style="max-width: 1280px; margin: 0 auto; z-index: 5;">
+        
+        <!-- ========================================= -->
+        <!-- ABOUT TOP - PREMIUM HEADER SECTION -->
+        <!-- ========================================= -->
+        <div class="about-top mb-5" data-cues="slideInUp" data-duration="800">
+            <div class="row g-4 align-items-end">
+                <div class="col-lg-7 col-md-7">
+                    <div class="section-heading mb-0">
+                        <!-- Premium Badge -->
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <span class="badge px-4 py-2 rounded-pill fw-semibold d-inline-flex align-items-center gap-2" 
+                                  style="background: linear-gradient(145deg, #0C3A30, #0A2A23); color: white; border: 1px solid rgba(139,201,5,0.3); letter-spacing: 0.5px; box-shadow: 0 10px 20px -8px rgba(10,42,35,0.2);">
+                                <span style="display: inline-block; width: 8px; height: 8px; background: #8BC905; border-radius: 50%; box-shadow: 0 0 8px #8BC905; animation: pulse 2s infinite;"></span>
+                                ABOUT US
+                            </span>
+                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.1); color: #8BC905; border: 1px solid rgba(139,201,5,0.2);">
+                                ✦ SINCE 2020
+                            </span>
                         </div>
-                        <div class="col-lg-5 col-md-5">
-                            <div class="content">
-                                <p>By integrating advanced technology with financial expertise we provide a comprehensive suite of services that cater to both individuals and businesses</p>
-                            </div>
-                        </div>
+                        
+                        <!-- Main Headline -->
+                        <h2 class="display-5 fw-bold mb-0" style="color: #0C3A30; line-height: 1.2; max-width: 600px;">
+                            Leveraging Technology 
+                            <span style="color: #8BC905; position: relative; display: inline-block;">
+                                For Secure
+                                <span class="position-absolute start-0 w-100" style="bottom: 0.1em; height: 8px; background: rgba(139,201,5,0.25); border-radius: 30px; z-index: -1;"></span>
+                            </span>
+                            & Smart Banking
+                        </h2>
                     </div>
                 </div>
-
-                <div class="about-info bg-color-edf1ee radius-30">
-                    <div class="row g-3 g-md-4">
-                        <div class="col-lg-6" data-cues="slideInRight" data-duration="800">
-                            <div class="about-content">
-                                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link active" id="miss-tab" data-bs-toggle="tab" data-bs-target="#miss-tab-pane" type="button" role="tab" aria-controls="miss-tab-pane" aria-selected="true">Our Mission</button>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link" id="qua-tab" data-bs-toggle="tab" data-bs-target="#qua-tab-pane" type="button" role="tab" aria-controls="qua-tab-pane" aria-selected="false">Our Quality</button>
-                                    </li>
-                                </ul>
-                                <div class="tab-content" id="myTabContent">
-                                    <div class="tab-pane fade show active" id="miss-tab-pane" role="tabpanel" aria-labelledby="miss-tab" tabindex="0">
-                                        <div class="title">
-                                            <h2>Passionate For Your Financial Support Here</h2>
-                                            <p class="mb-0">With a robust suite of products ranging from digital banking and payment processing to wealth management and blockchain applications.</p>
-                                        </div>
-
-                                        <ul class="check">
-                                            <li>
-                                                <i class="ri-check-line"></i>
-                                                Pay Bills On Time Without Missing A Beat
-                                            </li>
-                                            <li>
-                                                <i class="ri-check-line"></i>
-                                                Create And Send Invoices In Seconds
-                                            </li>
-                                            <li>
-                                                <i class="ri-check-line"></i>
-                                                Control Your Cash Flow On Demand
-                                            </li>
-                                        </ul>
-
-                                        <a href="{{route('about.us')}}" class="default-btn mt-4 mt-md-5">More About Us <i class="ri-arrow-right-up-line"></i></a>
-                                    </div>
-                                    <div class="tab-pane fade" id="qua-tab-pane" role="tabpanel" aria-labelledby="qua-tab" tabindex="0">
-                                        <div class="title">
-                                            <h2>Financial For Your Passionate Support Here</h2>
-                                            <p class="mb-0">With a robust suite of products ranging from digital banking and payment processing to wealth management and blockchain applications.</p>
-                                        </div>
-
-                                        <ul class="check">
-                                            <li>
-                                                <i class="ri-check-line"></i>
-                                                Pay Bills On Time Without Missing A Beat
-                                            </li>
-                                            <li>
-                                                <i class="ri-check-line"></i>
-                                                Create And Send Invoices In Seconds
-                                            </li>
-                                            <li>
-                                                <i class="ri-check-line"></i>
-                                                Control Your Cash Flow On Demand
-                                            </li>
-                                        </ul>
-
-                                        <a href="{{route('about.us')}}" class="default-btn mt-4 mt-md-5">More About Us <i class="ri-arrow-right-up-line"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6" data-cues="slideInLeft" data-duration="800">
-                            <div class="about-image bg-color-ffffff radius-30">
-                                <img class="about-image-1" src="assets/images/frontpage-pricing-d.webp" alt="image">
-
-
-
-                            </div>
-                        </div>
+                
+                <div class="col-lg-5 col-md-5">
+                    <div class="content ps-lg-4">
+                        <p class="fs-5 text-secondary mb-0" style="color: #4A5C5A !important; line-height: 1.6; border-left: 4px solid #8BC905; padding-left: 20px;">
+                            "We blend advanced technology with financial expertise to deliver comprehensive solutions for individuals and businesses alike."
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- End About Us Area -->
 
-        <!-- Start Why Choose Us Area -->
-        <div class="why-choose-us-area mb-4 mb-md-5 overflow-hidden">
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-lg-6 col-md-12" data-cues="slideInRight" data-duration="800">
-                        <div class="choose-image position-relative">
-                            <img class="radius-30" src="assets/images/about/about-image-2.jpg" alt="image">
-                            <div class="paly-content">
-                                <a data-fslightbox="one" href="https://www.youtube.com/watch?v=Y7cpCDlRfV0" class="popup-btn">
-                                    <i class="flaticon-play-buttton"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-12" data-cues="slideInLeft" data-duration="800">
-                        <div class="why-choose-us-content">
-                            <div class="section-heading mb-0">
-                                <span class="sub-title">WHY CHOOSE US</span>
-                                <h2>Grow Your <span><img src="assets/images/svg/lines-1.svg" alt="image">Transaction</span> From Another Level</h2>
-                                <p class="mb-4 mb-md-5">With a robust suite of products ranging from digital banking and payment processing to wealth management and blockchain applications we empower our clients.</p>
-                                <a href="{{ route('about.us') }}" class="default-btn two">Learn More <i class="ri-arrow-right-up-line"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End Why Choose Us Area -->
-
-        <!-- Start Choose Card Area -->
-        <div class="choose-card-area pb-80 pb-md-120 mb-5">
-            <div class="container">
-                <div class="row g-3 g-md-4 justify-content-center" data-cues="slideInUp" data-duration="800">
-                    <div class="col-lg-4 col-md-6">
-                        <div class="choose-card bg-color-fffaeb radius-30">
-                            <i class="flaticon-money-5"></i>
-                            <h3>Global Payments</h3>
-                            <p>With a robust suite of products ranging from digital banking and payment processing.</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="choose-card bg-color-fffaeb radius-30">
-                            <i class="flaticon-dollar-symbol-1"></i>
-                            <h3>Revenue & Finance</h3>
-                            <p>With a robust suite of products ranging from digital banking and payment processing.</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="choose-card bg-color-fffaeb radius-30">
-                            <i class="flaticon-tablet"></i>
-                            <h3>Bank As A Service</h3>
-                            <p>With a robust suite of products ranging from digital banking and payment processing.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End Choose Card Area -->
-
-        <!-- Start How It Works Area -->
-        <div class="how-it-works-area bg-color-0c3a30 pt-100 pb-120 pt-md-120  -pb-md-100">
-            <div class="container">
-                <div class="about-top mb-4 mb-md-5">
-                    <div class="row align-items-center">
-                        <div class="col-lg-7 col-md-7" data-cues="slideInRight" data-duration="800">
-                            <div class="section-heading mb-0">
-                                <span class="sub-title text-white">HOW IT WORKS</span>
-                                <h2 class="text-white mb-0">Commitment To <span><img src="assets/images/svg/lines-1.svg" alt="image">Exceptional</span> Services And Solutions</h2>
-                            </div>
-                        </div>
-                        <div class="col-lg-5 col-md-5" data-cues="slideInLeft" data-duration="800">
-                            <div class="content">
-                                <p class="text-white">By integrating advanced technology with financial expertise we provide a comprehensive suite of services that cater to both individuals and businesses</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row align-items-center">
-                    <div class="col-xl-4 col-lg-12">
-                        <div class="works-btn">
-                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <!-- ========================================= -->
+        <!-- ABOUT INFO - PREMIUM TABBED CONTENT CARD -->
+        <!-- ========================================= -->
+        <div class="about-info position-relative" data-cues="slideInUp" data-duration="800">
+            
+            <!-- Premium Card Container -->
+            <div class="row g-0 rounded-5 overflow-hidden" 
+                 style="background: white; box-shadow: 0 30px 60px -20px rgba(12,58,48,0.12); border: 1px solid rgba(139,201,5,0.1);">
+                
+                <!-- ========================================= -->
+                <!-- LEFT COLUMN - TABBED CONTENT -->
+                <!-- ========================================= -->
+                <div class="col-lg-6" data-cues="slideInRight" data-duration="800">
+                    <div class="about-content h-100 p-4 p-xl-5 d-flex flex-column" 
+                         style="background: linear-gradient(145deg, #ffffff, #fafcf9);">
+                        
+                        <!-- Premium Tab Navigation -->
+                        <div class="d-flex align-items-center mb-4">
+                            <ul class="nav nav-tabs-premium d-flex gap-2 list-unstyled mb-0" id="myTab" role="tablist">
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link active" id="crea-tab" data-bs-toggle="tab" data-bs-target="#crea-tab-pane" type="button" role="tab" aria-controls="crea-tab-pane" aria-selected="true">Create Account <i class="ri-arrow-right-up-line"></i></button>
+                                    <button class="nav-link-premium active px-4 py-3 rounded-pill fw-semibold" 
+                                            id="miss-tab" 
+                                            data-bs-toggle="tab" 
+                                            data-bs-target="#miss-tab-pane" 
+                                            type="button" 
+                                            role="tab"
+                                            style="background: #0C3A30; color: white; border: none; transition: all 0.3s;">
+                                        <span class="d-flex align-items-center gap-2">
+                                            <i class="ri-compass-line"></i>
+                                            Our Mission
+                                        </span>
+                                    </button>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="use-tab" data-bs-toggle="tab" data-bs-target="#use-tab-pane" type="button" role="tab" aria-controls="use-tab-pane" aria-selected="false">User Confirmation <i class="ri-arrow-right-up-line"></i></button>
+                                    <button class="nav-link-premium px-4 py-3 rounded-pill fw-semibold" 
+                                            id="qua-tab" 
+                                            data-bs-toggle="tab" 
+                                            data-bs-target="#qua-tab-pane" 
+                                            type="button" 
+                                            role="tab"
+                                            style="background: rgba(139,201,5,0.08); color: #0C3A30; border: 1px solid rgba(139,201,5,0.2); transition: all 0.3s;">
+                                        <span class="d-flex align-items-center gap-2">
+                                            <i class="ri-star-line"></i>
+                                            Our Quality
+                                        </span>
+                                    </button>
                                 </li>
                             </ul>
                         </div>
-                    </div>
-                    <div class="col-xl-8 col-lg-12">
-                        <div class="tab-content" id="myTabContent">
-                            <div class="tab-pane fade show active" id="crea-tab-pane" role="tabpanel" aria-labelledby="crea-tab" tabindex="0">
-                                <div class="row g-3 g-md-4" data-cues="slideInUp" data-duration="800">
-                                    <div class="col-lg-6">
-                                        <div class="single-works-image">
-                                            <img class="radius-30" src="assets/images/about/about-image-3.jpg" alt="image">
+                        
+                        <!-- Tab Content -->
+                        <div class="tab-content-premium flex-grow-1" id="myTabContent">
+                            
+                            <!-- OUR MISSION TAB -->
+                            <div class="tab-pane-premium fade show active" id="miss-tab-pane" role="tabpanel">
+                                <div class="pe-xl-3">
+                                    <!-- Title -->
+                                    <h3 class="fw-bold mb-3" style="color: #0C3A30; font-size: 2rem; line-height: 1.2;">
+                                        Passionate About Your<br>Financial Success
+                                    </h3>
+                                    
+                                    <!-- Description -->
+                                    <p class="text-secondary mb-4" style="color: #4A5C5A !important; line-height: 1.7; font-size: 1.05rem;">
+                                        We're building the future of finance — where digital banking, payments, wealth management, and blockchain converge into one seamless, intelligent platform.
+                                    </p>
+                                    
+                                    <!-- Premium Check List -->
+                                    <ul class="list-unstyled d-flex flex-column gap-3 mb-4">
+                                        <li class="d-flex align-items-start gap-3">
+                                            <span class="d-flex align-items-center justify-content-center rounded-circle flex-shrink-0" 
+                                                  style="width: 28px; height: 28px; background: rgba(139,201,5,0.15); color: #8BC905;">
+                                                <i class="ri-check-line" style="font-size: 16px; font-weight: bold;"></i>
+                                            </span>
+                                            <span style="color: #0C3A30; font-size: 1.05rem;">
+                                                <strong>Pay bills</strong> on time without missing a beat
+                                            </span>
+                                        </li>
+                                        <li class="d-flex align-items-start gap-3">
+                                            <span class="d-flex align-items-center justify-content-center rounded-circle flex-shrink-0" 
+                                                  style="width: 28px; height: 28px; background: rgba(139,201,5,0.15); color: #8BC905;">
+                                                <i class="ri-check-line" style="font-size: 16px; font-weight: bold;"></i>
+                                            </span>
+                                            <span style="color: #0C3A30; font-size: 1.05rem;">
+                                                <strong>Create & send invoices</strong> in seconds
+                                            </span>
+                                        </li>
+                                        <li class="d-flex align-items-start gap-3">
+                                            <span class="d-flex align-items-center justify-content-center rounded-circle flex-shrink-0" 
+                                                  style="width: 28px; height: 28px; background: rgba(139,201,5,0.15); color: #8BC905;">
+                                                <i class="ri-check-line" style="font-size: 16px; font-weight: bold;"></i>
+                                            </span>
+                                            <span style="color: #0C3A30; font-size: 1.05rem;">
+                                                <strong>Control your cash flow</strong> on demand
+                                            </span>
+                                        </li>
+                                    </ul>
+                                    
+                                    <!-- Stats Row -->
+                                    <div class="d-flex gap-4 gap-xl-5 mt-4 mb-4 mb-md-5">
+                                        <div>
+                                            <span class="fw-bold fs-2" style="color: #8BC905;">$2.4B+</span>
+                                            <span class="d-block small text-secondary">Transactions</span>
+                                        </div>
+                                        <div style="width: 1px; height: 40px; background: rgba(0,0,0,0.1);"></div>
+                                        <div>
+                                            <span class="fw-bold fs-2" style="color: #8BC905;">150+</span>
+                                            <span class="d-block small text-secondary">Countries</span>
+                                        </div>
+                                        <div style="width: 1px; height: 40px; background: rgba(0,0,0,0.1);"></div>
+                                        <div>
+                                            <span class="fw-bold fs-2" style="color: #8BC905;">99.9%</span>
+                                            <span class="d-block small text-secondary">Uptime</span>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6">
-                                        <div class="single-works-card bg-color-29594b radius-30">
-                                            <i class="flaticon-payment-method-1 method"></i>
-                                            <h3 class="text-white">Create Account</h3>
-                                            <p class="text-white">With a robust suite of products ranging from digital banking and payment processing to wealth management and blockchain applications we empower our clients to navigate the complexities of the financial world with ease confidence</p>
-                                            <a href="/" class="default-btn two">Get Started <i class="ri-arrow-right-up-line"></i></a>
-                                        </div>
+                                    
+                                    <!-- CTA Button -->
+                                    <a href="{{route('about.us')}}" 
+                                       class="btn btn-lg px-5 py-3 rounded-pill fw-bold d-inline-flex align-items-center gap-3"
+                                       style="background: linear-gradient(145deg, #0C3A30, #0A2A23); color: white; border: none; box-shadow: 0 20px 30px -10px rgba(12,58,48,0.25); transition: all 0.3s;">
+                                        <span>More About Us</span>
+                                        <span class="rounded-circle bg-white/20 p-2 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                                            <i class="ri-arrow-right-up-line" style="color: white; font-size: 1.2rem;"></i>
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <!-- OUR QUALITY TAB -->
+                            <div class="tab-pane-premium fade" id="qua-tab-pane" role="tabpanel">
+                                <div class="pe-xl-3">
+                                    <!-- Title -->
+                                    <h3 class="fw-bold mb-3" style="color: #0C3A30; font-size: 2rem; line-height: 1.2;">
+                                        Uncompromising Quality,<br>Exceptional Service
+                                    </h3>
+                                    
+                                    <!-- Description -->
+                                    <p class="text-secondary mb-4" style="color: #4A5C5A !important; line-height: 1.7; font-size: 1.05rem;">
+                                        Every product we build meets the highest standards of security, reliability, and performance. We never compromise on quality.
+                                    </p>
+                                    
+                                    <!-- Premium Check List -->
+                                    <ul class="list-unstyled d-flex flex-column gap-3 mb-4">
+                                        <li class="d-flex align-items-start gap-3">
+                                            <span class="d-flex align-items-center justify-content-center rounded-circle flex-shrink-0" 
+                                                  style="width: 28px; height: 28px; background: rgba(139,201,5,0.15); color: #8BC905;">
+                                                <i class="ri-shield-check-line" style="font-size: 16px; font-weight: bold;"></i>
+                                            </span>
+                                            <span style="color: #0C3A30; font-size: 1.05rem;">
+                                                <strong>Bank-grade security</strong> with 256-bit encryption
+                                            </span>
+                                        </li>
+                                        <li class="d-flex align-items-start gap-3">
+                                            <span class="d-flex align-items-center justify-content-center rounded-circle flex-shrink-0" 
+                                                  style="width: 28px; height: 28px; background: rgba(139,201,5,0.15); color: #8BC905;">
+                                                <i class="ri-timer-line" style="font-size: 16px; font-weight: bold;"></i>
+                                            </span>
+                                            <span style="color: #0C3A30; font-size: 1.05rem;">
+                                                <strong>99.99% uptime SLA</strong> — always on, always reliable
+                                            </span>
+                                        </li>
+                                        <li class="d-flex align-items-start gap-3">
+                                            <span class="d-flex align-items-center justify-content-center rounded-circle flex-shrink-0" 
+                                                  style="width: 28px; height: 28px; background: rgba(139,201,5,0.15); color: #8BC905;">
+                                                <i class="ri-customer-service-line" style="font-size: 16px; font-weight: bold;"></i>
+                                            </span>
+                                            <span style="color: #0C3A30; font-size: 1.05rem;">
+                                                <strong>24/7 dedicated support</strong> from real humans
+                                            </span>
+                                        </li>
+                                    </ul>
+                                    
+                                    <!-- Quality Badges -->
+                                    <div class="d-flex flex-wrap gap-2 mt-4 mb-4 mb-md-5">
+                                        <span class="badge px-4 py-3 rounded-pill" style="background: rgba(139,201,5,0.08); color: #0C3A30; border: 1px solid rgba(139,201,5,0.2);">
+                                            ⭐ ISO 27001 Certified
+                                        </span>
+                                        <span class="badge px-4 py-3 rounded-pill" style="background: rgba(139,201,5,0.08); color: #0C3A30; border: 1px solid rgba(139,201,5,0.2);">
+                                            🔒 PCI DSS Compliant
+                                        </span>
+                                        <span class="badge px-4 py-3 rounded-pill" style="background: rgba(139,201,5,0.08); color: #0C3A30; border: 1px solid rgba(139,201,5,0.2);">
+                                            🌍 GDPR Ready
+                                        </span>
+                                    </div>
+                                    
+                                    <!-- CTA Button -->
+                                    <a href="{{route('about.us')}}" 
+                                       class="btn btn-lg px-5 py-3 rounded-pill fw-bold d-inline-flex align-items-center gap-3"
+                                       style="background: linear-gradient(145deg, #0C3A30, #0A2A23); color: white; border: none; box-shadow: 0 20px 30px -10px rgba(12,58,48,0.25); transition: all 0.3s;">
+                                        <span>More About Us</span>
+                                        <span class="rounded-circle bg-white/20 p-2 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                                            <i class="ri-arrow-right-up-line" style="color: white; font-size: 1.2rem;"></i>
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ========================================= -->
+                <!-- RIGHT COLUMN - PREMIUM IMAGE SHOWCASE -->
+                <!-- ========================================= -->
+                <div class="col-lg-6" data-cues="slideInLeft" data-duration="800">
+                    <div class="about-image h-100 position-relative" 
+                         style="background: linear-gradient(145deg, #0C3A30, #0A2A23); min-height: 550px;">
+                        
+                        <!-- Decorative Pattern -->
+                        <div class="position-absolute w-100 h-100 opacity-10" 
+                             style="background-image: radial-gradient(circle at 30px 30px, rgba(139,201,5,0.2) 1px, transparent 1px); background-size: 40px 40px;"></div>
+                        
+                        <!-- Glowing Orbs -->
+                        <div class="position-absolute" style="top: -50px; right: -50px; width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle, rgba(139,201,5,0.15) 0%, transparent 70%);"></div>
+                        <div class="position-absolute" style="bottom: -50px; left: -50px; width: 250px; height: 250px; border-radius: 50%; background: radial-gradient(circle, rgba(139,201,5,0.1) 0%, transparent 70%);"></div>
+                        
+                        <!-- Main Image -->
+                        <div class="position-relative z-2 h-100 d-flex align-items-center justify-content-center p-4 p-xl-5">
+                            <div class="position-relative" style="transform: perspective(1000px) rotateY(5deg) rotateX(2deg); transition: transform 0.6s ease;">
+                                <!-- Premium Card Mockup -->
+                                <div class="position-relative rounded-4 overflow-hidden shadow-2xl" 
+                                     style="border: 1px solid rgba(139,201,5,0.2); box-shadow: 0 40px 70px -20px rgba(0,0,0,0.4);">
+                                    <img class="about-image-1 img-fluid w-100" 
+                                         src="assets/images/frontpage-pricing-d.webp" 
+                                         alt="Premium Banking Dashboard"
+                                         style="transition: transform 0.6s ease; display: block;">
+                                    
+                                    <!-- Overlay Gradient -->
+                                    <div class="position-absolute bottom-0 start-0 w-100 p-4" 
+                                         style="background: linear-gradient(to top, rgba(12,58,48,0.9), transparent);">
+                                        <span class="badge px-4 py-2 rounded-pill" style="background: rgba(139,201,5,0.9); color: #0C3A30; font-weight: 600;">
+                                            <i class="ri-shield-check-line me-1"></i> Secure Trading Platform
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Floating Badge 1 -->
+                                <div class="position-absolute" style="top: -20px; left: -20px; animation: float 6s ease-in-out infinite;">
+                                    <div class="d-flex align-items-center gap-2 bg-white rounded-pill py-2 px-4 shadow-lg" 
+                                         style="border-left: 4px solid #8BC905;">
+                                        <i class="ri-shield-check-fill" style="color: #8BC905;"></i>
+                                        <span class="fw-semibold small" style="color: #0C3A30;">256-bit Encryption</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Floating Badge 2 -->
+                                <div class="position-absolute" style="bottom: 40px; right: -20px; animation: float 7s ease-in-out infinite; animation-delay: 1s;">
+                                    <div class="d-flex align-items-center gap-2 bg-white rounded-pill py-2 px-4 shadow-lg"
+                                         style="border-left: 4px solid #8BC905;">
+                                        <i class="ri-flashlight-fill" style="color: #8BC905;"></i>
+                                        <span class="fw-semibold small" style="color: #0C3A30;">Real-time Sync</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Floating Badge 3 -->
+                                <div class="position-absolute" style="top: 30%; right: -15px; animation: float 8s ease-in-out infinite; animation-delay: 2s;">
+                                    <div class="d-flex align-items-center gap-2 bg-white rounded-pill py-2 px-4 shadow-lg"
+                                         style="border-left: 4px solid #8BC905;">
+                                        <i class="ri-global-line" style="color: #8BC905;"></i>
+                                        <span class="fw-semibold small" style="color: #0C3A30;">150+ Countries</span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="use-tab-pane" role="tabpanel" aria-labelledby="use-tab" tabindex="0">
-                                <div class="row g-3 g-md-4" data-cues="slideInUp" data-duration="800">
-                                    <div class="col-lg-6">
-                                        <div class="single-works-image">
-                                            <img class="radius-30" src="assets/images/about/about-image-10.jpg" alt="image">
-                                        </div>
+                        </div>
+                        
+                        <!-- Stats Card Overlay -->
+                        <div class="position-absolute bottom-0 end-0 m-4 z-3" style="animation: float 5s ease-in-out infinite; animation-delay: 1.5s;">
+                            <div class="bg-white/95 backdrop-blur rounded-4 p-3 shadow-xl" 
+                                 style="border: 1px solid rgba(139,201,5,0.2); max-width: 200px;">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="rounded-circle p-2" style="background: rgba(139,201,5,0.15);">
+                                        <i class="ri-user-star-line fs-4" style="color: #8BC905;"></i>
                                     </div>
-                                    <div class="col-lg-6">
-                                        <div class="single-works-card bg-color-29594b radius-30">
-                                            <i class="flaticon-tablet method"></i>
-                                            <h3 class="text-white">User Confirmation</h3>
-                                            <p class="text-white">With a robust suite of products ranging from digital banking and payment processing to wealth management and blockchain applications we empower our clients to navigate the complexities of the financial world with ease confidence</p>
-                                            <a href="/" class="default-btn two">Get Started <i class="ri-arrow-right-up-line"></i></a>
-                                        </div>
+                                    <div>
+                                        <span class="small text-secondary">Trusted by</span>
+                                        <div class="fw-bold fs-4" style="color: white;">50K+</div>
+                                        <span class="small text-secondary">active users</span>
                                     </div>
                                 </div>
                             </div>
@@ -2967,175 +3651,2774 @@
                 </div>
             </div>
         </div>
+        
+        <!-- ========================================= -->
+        <!-- BOTTOM TRUST BADGES -->
+        <!-- ========================================= -->
+        <div class="row g-4 mt-5 pt-3" data-cues="slideInUp" data-duration="800">
+            <div class="col-12">
+                <div class="d-flex flex-wrap align-items-center justify-content-between gap-4 p-4 rounded-4" 
+                     style="background: rgba(139,201,5,0.03); border: 1px solid rgba(139,201,5,0.1);">
+                    <div class="d-flex align-items-center gap-3">
+                        <span class="fw-semibold" style="color: #0C3A30;">Trusted by industry leaders:</span>
+                    </div>
+                    <div class="d-flex flex-wrap align-items-center gap-4 gap-xl-5">
+                        <span style="color: #4A5C5A; font-weight: 600; opacity: 0.8;">PAYPAL</span>
+                        <span style="color: #4A5C5A; font-weight: 600; opacity: 0.8;">STRIPE</span>
+                        <span style="color: #4A5C5A; font-weight: 600; opacity: 0.8;">WISE</span>
+                        <span style="color: #4A5C5A; font-weight: 600; opacity: 0.8;">REVOLUT</span>
+                        <span style="color: #4A5C5A; font-weight: 600; opacity: 0.8;">ADYEN</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End About Us Area - Premium Redesign -->
+
+<style>
+    /* ============ PREMIUM ABOUT US STYLES ============ */
+    
+    /* Animations */
+    @keyframes pulse {
+        0% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.8; transform: scale(0.95); box-shadow: 0 0 15px #8BC905; }
+        100% { opacity: 1; transform: scale(1); }
+    }
+    
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
+    }
+    
+    /* Tab Navigation Premium */
+    .nav-link-premium {
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        cursor: pointer;
+        border: none;
+        font-size: 1rem;
+    }
+    
+    .nav-link-premium:hover {
+        transform: translateY(-2px);
+    }
+    
+    .nav-link-premium.active {
+        background: #0C3A30 !important;
+        color: white !important;
+        box-shadow: 0 10px 20px -8px rgba(12,58,48,0.3);
+    }
+    
+    .nav-link-premium:not(.active):hover {
+        background: rgba(139,201,5,0.15) !important;
+        border-color: rgba(139,201,5,0.3) !important;
+    }
+    
+    /* Tab Content */
+    .tab-pane-premium {
+        transition: opacity 0.3s ease;
+    }
+    
+    .tab-pane-premium.fade {
+        opacity: 0;
+        display: none;
+    }
+    
+    .tab-pane-premium.fade.show {
+        opacity: 1;
+        display: block;
+    }
+    
+    /* Image Container */
+    .about-image {
+        transition: all 0.5s ease;
+    }
+    
+    .about-image:hover .position-relative[style*="perspective"] {
+        transform: perspective(1000px) rotateY(7deg) rotateX(4deg) scale(1.02) !important;
+    }
+    
+    .about-image-1 {
+        transition: transform 0.6s ease;
+    }
+    
+    .about-image-1:hover {
+        transform: scale(1.03);
+    }
+    
+    /* Button Hover */
+    .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 25px 35px -12px rgba(12,58,48,0.35) !important;
+    }
+    
+    .btn:hover .bg-white\/20 {
+        transform: translateX(4px);
+    }
+    
+    /* Check List Items */
+    .list-unstyled li {
+        transition: transform 0.2s ease;
+    }
+    
+    .list-unstyled li:hover {
+        transform: translateX(5px);
+    }
+    
+    .list-unstyled li:hover .rounded-circle {
+        background: rgba(139,201,5,0.25) !important;
+        transform: scale(1.1);
+    }
+    
+    .list-unstyled li .rounded-circle {
+        transition: all 0.2s ease;
+    }
+    
+    /* Floating Badges */
+    .position-absolute .bg-white {
+        box-shadow: 0 15px 30px -12px rgba(0,0,0,0.15);
+        transition: all 0.3s ease;
+    }
+    
+    .position-absolute .bg-white:hover {
+        transform: scale(1.05);
+        box-shadow: 0 20px 35px -12px rgba(0,0,0,0.2);
+    }
+    
+    /* Utilities */
+    .backdrop-blur {
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+    
+    .shadow-2xl {
+        box-shadow: 0 35px 60px -15px rgba(0,0,0,0.3);
+    }
+    
+    .shadow-xl {
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.2);
+    }
+    
+    /* Responsive */
+    @media (max-width: 991px) {
+        .about-top .row {
+            text-align: center;
+        }
+        
+        .about-top .content p {
+            border-left: none !important;
+            padding-left: 0 !important;
+            margin-top: 15px;
+        }
+        
+        .about-content {
+            padding: 2rem !important;
+        }
+        
+        .about-image {
+            min-height: 450px !important;
+        }
+        
+        .nav-tabs-premium {
+            justify-content: center;
+        }
+    }
+    
+    @media (max-width: 767px) {
+        .about-content {
+            padding: 1.5rem !important;
+        }
+        
+        .about-image {
+            min-height: 400px !important;
+        }
+        
+        .d-flex.gap-4.gap-xl-5 {
+            flex-wrap: wrap;
+            gap: 1rem !important;
+        }
+    }
+</style>
+
+<script>
+    // Initialize Bootstrap Tabs (if not already initialized)
+    document.addEventListener('DOMContentLoaded', function() {
+        // Bootstrap 5 tabs initialization
+        const triggerTabList = [].slice.call(document.querySelectorAll('#myTab button'));
+        triggerTabList.forEach(function(triggerEl) {
+            const tabTrigger = new bootstrap.Tab(triggerEl);
+            
+            triggerEl.addEventListener('click', function(event) {
+                event.preventDefault();
+                
+                // Remove active class from all buttons
+                document.querySelectorAll('.nav-link-premium').forEach(btn => {
+                    btn.style.background = 'rgba(139,201,5,0.08)';
+                    btn.style.color = '#0C3A30';
+                    btn.style.border = '1px solid rgba(139,201,5,0.2)';
+                });
+                
+                // Add active class to clicked button
+                this.style.background = '#0C3A30';
+                this.style.color = 'white';
+                this.style.border = 'none';
+                
+                tabTrigger.show();
+            });
+        });
+    });
+</script>
+
+
+
+
+        <!-- Start Why Choose Us Area -->
+     <!-- Start Why Choose Us Area - Premium Redesign -->
+<div class="why-choose-us-area py-5 py-md-6 overflow-hidden position-relative"
+     style="background: linear-gradient(145deg, #ffffff, #f9fbf9);">
+    
+    <!-- Premium Decorative Elements -->
+    <div class="position-absolute" style="top: -200px; left: -100px; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(139,201,5,0.03) 0%, transparent 70%); pointer-events: none;"></div>
+    <div class="position-absolute" style="bottom: -150px; right: -80px; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(12,58,48,0.02) 0%, transparent 70%); pointer-events: none;"></div>
+    
+    <!-- Subtle Pattern Overlay -->
+    <div class="position-absolute w-100 h-100 opacity-1" 
+         style="top: 0; left: 0; background-image: url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%230C3A30\" fill-opacity=\"0.02\"%3E%3Cpath d=\"M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E'); background-size: 40px 40px; pointer-events: none;"></div>
+    
+    <div class="container position-relative" style="max-width: 1280px; margin: 0 auto; z-index: 5;">
+        <div class="row g-5 align-items-center">
+            
+            <!-- ========================================= -->
+            <!-- LEFT COLUMN - PREMIUM VIDEO SHOWCASE -->
+            <!-- ========================================= -->
+            <div class="col-lg-6 col-md-12" data-cues="slideInRight" data-duration="800">
+                <div class="choose-image position-relative p-3 p-xl-4">
+                    
+                    <!-- Premium Image Container -->
+                    <div class="position-relative rounded-5 overflow-hidden" 
+                         style="background: linear-gradient(145deg, #0C3A30, #0A2A23); box-shadow: 0 30px 50px -20px rgba(12,58,48,0.25); border: 1px solid rgba(139,201,5,0.15);">
+                        
+                        <!-- Glowing Overlay -->
+                        <div class="position-absolute w-100 h-100" 
+                             style="background: radial-gradient(circle at 70% 30%, rgba(139,201,5,0.15) 0%, transparent 70%); pointer-events: none; z-index: 2;"></div>
+                        
+                        <!-- Main Image -->
+                        <img class="radius-30 w-100 hover-zoom" 
+                             src="assets/images/about/about-image-2.jpg" 
+                             alt="Why Choose MarketMind AI"
+                             style="display: block; transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); aspect-ratio: 4/3; object-fit: cover;">
+                        
+                        <!-- Premium Gradient Overlay -->
+                        <div class="position-absolute bottom-0 start-0 w-100 h-50" 
+                             style="background: linear-gradient(to top, rgba(12,58,48,0.7), transparent); pointer-events: none; z-index: 3;"></div>
+                        
+                        <!-- Premium Play Button -->
+                        <div class="position-absolute top-50 start-50 translate-middle" style="z-index: 10;">
+                            <a data-fslightbox="one" 
+                               href="https://www.youtube.com/watch?v=Y7cpCDlRfV0" 
+                               class="popup-btn d-flex align-items-center justify-content-center rounded-circle text-decoration-none"
+                               style="width: 100px; height: 100px; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border: 2px solid rgba(139,201,5,0.5); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.3); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);">
+                                <div class="d-flex align-items-center justify-content-center" style="transform: translateX(3px);">
+                                    <i class="flaticon-play-buttton" style="color: #8BC905; font-size: 2.8rem; line-height: 1;"></i>
+                                </div>
+                            </a>
+                        </div>
+                        
+                        <!-- Pulse Rings Animation -->
+                        <div class="position-absolute top-50 start-50 translate-middle" style="z-index: 5;">
+                            <span class="position-absolute top-50 start-50 translate-middle" 
+                                  style="width: 120px; height: 120px; border-radius: 50%; background: rgba(139,201,5,0.2); animation: ping 2.5s infinite; pointer-events: none;"></span>
+                            <span class="position-absolute top-50 start-50 translate-middle" 
+                                  style="width: 150px; height: 150px; border-radius: 50%; background: rgba(139,201,5,0.1); animation: ping 2.5s infinite 0.5s; pointer-events: none;"></span>
+                        </div>
+                        
+                        <!-- Floating Badge - Trust Indicator -->
+                        <div class="position-absolute top-0 end-0 m-4" style="z-index: 15; animation: float 6s ease-in-out infinite;">
+                            <div class="d-flex align-items-center gap-2 bg-white/95 backdrop-blur rounded-pill py-2 px-4 shadow-lg" 
+                                 style="border-left: 4px solid #8BC905;">
+                                <i class="ri-shield-check-fill" style="color: #8BC905;"></i>
+                                <span class="fw-semibold small" style="color: #0C3A30;">Trusted by 50K+ users</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Floating Badge - Live Demo -->
+                        <div class="position-absolute bottom-0 start-0 m-4" style="z-index: 15; animation: float 7s ease-in-out infinite 1s;">
+                            <div class="d-flex align-items-center gap-2 bg-white/95 backdrop-blur rounded-pill py-2 px-4 shadow-lg"
+                                 style="border-left: 4px solid #8BC905;">
+                                <span class="d-flex align-items-center gap-2">
+                                    <span style="display: inline-block; width: 10px; height: 10px; background: #8BC905; border-radius: 50%; box-shadow: 0 0 15px #8BC905; animation: pulse 2s infinite;"></span>
+                                    <span class="fw-semibold small" style="color: #0C3A30;">Watch Demo</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Experience Badge -->
+                    <div class="position-absolute bottom-0 end-0 translate-middle-y me-5" style="z-index: 20; animation: float 8s ease-in-out infinite 1.5s;">
+                        <div class="bg-white rounded-4 p-3 shadow-xl d-flex align-items-center gap-3"
+                             style="border: 1px solid rgba(139,201,5,0.2);">
+                            <div class="rounded-circle p-2" style="background: rgba(139,201,5,0.15);">
+                                <i class="ri-star-fill fs-4" style="color: #8BC905;"></i>
+                            </div>
+                            <div>
+                                <span class="small text-secondary">4.9/5 Rating</span>
+                                <div class="fw-bold" style="color: #0C3A30;">2,500+ Reviews</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ========================================= -->
+            <!-- RIGHT COLUMN - PREMIUM CONTENT -->
+            <!-- ========================================= -->
+            <div class="col-lg-6 col-md-12" data-cues="slideInLeft" data-duration="800">
+                <div class="why-choose-us-content ps-lg-4">
+                    
+                    <!-- Section Header -->
+                    <div class="section-heading mb-0">
+                        
+                        <!-- Premium Badge -->
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <span class="badge px-4 py-2 rounded-pill fw-semibold d-inline-flex align-items-center gap-2" 
+                                  style="background: linear-gradient(145deg, #0C3A30, #0A2A23); color: white; border: 1px solid rgba(139,201,5,0.3); letter-spacing: 0.5px; box-shadow: 0 10px 20px -8px rgba(10,42,35,0.2);">
+                                <span style="display: inline-block; width: 8px; height: 8px; background: #8BC905; border-radius: 50%; box-shadow: 0 0 8px #8BC905; animation: pulse 2s infinite;"></span>
+                                WHY CHOOSE US
+                            </span>
+                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.1); color: #8BC905; border: 1px solid rgba(139,201,5,0.2);">
+                                ⚡ SINCE 2020
+                            </span>
+                        </div>
+                        
+                        <!-- Main Headline -->
+                        <h2 class="display-5 fw-bold mb-3" style="color: #0C3A30; line-height: 1.2;">
+                            Grow Your 
+                            <span style="color: #8BC905; position: relative; display: inline-block;">
+                                Transactions
+                                <span class="position-absolute start-0 w-100" style="bottom: 0.1em; height: 8px; background: rgba(139,201,5,0.25); border-radius: 30px; z-index: -1;"></span>
+                            </span>
+                            <br>To The Next Level
+                        </h2>
+                        
+                        <!-- Description -->
+                        <p class="fs-5 text-secondary mb-4" style="color: #4A5C5A !important; line-height: 1.7; max-width: 550px;">
+                       One platform. Smarter copy trading. Follow top-performing traders, mirror strategies in real time, and grow your portfolio with confidence. We empower you to trade smarter, manage risk better, and earn consistent ROE all in one powerful ecosystem.
+                        </p>
+                        
+                        <!-- Premium Feature Grid -->
+                        <div class="row g-3 mb-4 mb-md-5">
+                            <div class="col-sm-6">
+                                <div class="d-flex align-items-start gap-3 p-3 rounded-4" 
+                                     style="background: rgba(139,201,5,0.04); border: 1px solid rgba(139,201,5,0.1); transition: all 0.3s ease;">
+                                    <div class="rounded-circle p-2 flex-shrink-0" style="background: rgba(139,201,5,0.15);">
+                                        <i class="ri-flashlight-fill" style="color: #8BC905; font-size: 1.2rem;"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="fw-bold mb-1" style="color: #0C3A30; font-size: 1.1rem;">Lightning Fast</h4>
+                                        <p class="small text-secondary mb-0">Instant settlements, 24/7</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="d-flex align-items-start gap-3 p-3 rounded-4" 
+                                     style="background: rgba(139,201,5,0.04); border: 1px solid rgba(139,201,5,0.1); transition: all 0.3s ease;">
+                                    <div class="rounded-circle p-2 flex-shrink-0" style="background: rgba(139,201,5,0.15);">
+                                        <i class="ri-shield-check-fill" style="color: #8BC905; font-size: 1.2rem;"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="fw-bold mb-1" style="color: #0C3A30; font-size: 1.1rem;">Bank-Grade</h4>
+                                        <p class="small text-secondary mb-0">256-bit encryption</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="d-flex align-items-start gap-3 p-3 rounded-4" 
+                                     style="background: rgba(139,201,5,0.04); border: 1px solid rgba(139,201,5,0.1); transition: all 0.3s ease;">
+                                    <div class="rounded-circle p-2 flex-shrink-0" style="background: rgba(139,201,5,0.15);">
+                                        <i class="ri-global-line" style="color: #8BC905; font-size: 1.2rem;"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="fw-bold mb-1" style="color: #0C3A30; font-size: 1.1rem;">Global Reach</h4>
+                                        <p class="small text-secondary mb-0">150+ countries</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="d-flex align-items-start gap-3 p-3 rounded-4" 
+                                     style="background: rgba(139,201,5,0.04); border: 1px solid rgba(139,201,5,0.1); transition: all 0.3s ease;">
+                                    <div class="rounded-circle p-2 flex-shrink-0" style="background: rgba(139,201,5,0.15);">
+                                        <i class="ri-robot-fill" style="color: #8BC905; font-size: 1.2rem;"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="fw-bold mb-1" style="color: #0C3A30; font-size: 1.1rem;">AI-Powered (You Copy Admin Trades)</h4>
+                                        <p class="small text-secondary mb-0">Smart insights, better returns</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- CTA Button & Trust Indicators -->
+                        <div class="d-flex flex-wrap align-items-center gap-4">
+                            <a href="{{ route('about.us') }}" 
+                               class="btn btn-lg px-5 py-3 rounded-pill fw-bold d-inline-flex align-items-center gap-3"
+                               style="background: linear-gradient(145deg, #8BC905, #7AB805); color: #0C3A30; border: none; box-shadow: 0 20px 30px -10px rgba(139,201,5,0.3); transition: all 0.3s;">
+                                <span>Learn More</span>
+                                <span class="rounded-circle bg-white/20 p-2 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; background: rgba(12,58,48,0.1) !important;">
+                                    <i class="ri-arrow-right-up-line" style="color: #0C3A30; font-size: 1.2rem;"></i>
+                                </span>
+                            </a>
+                            
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="d-flex align-items-center">
+                                    <div class="rounded-circle border-2 border-white" style="width: 36px; height: 36px; background: linear-gradient(145deg, #0C3A30, #0A2A23); margin-right: -8px;"></div>
+                                    <div class="rounded-circle border-2 border-white" style="width: 36px; height: 36px; background: linear-gradient(145deg, #8BC905, #7AB805); margin-right: -8px;"></div>
+                                    <div class="rounded-circle border-2 border-white" style="width: 36px; height: 36px; background: linear-gradient(145deg, #0C3A30, #0A2A23);"></div>
+                                </div>
+                                <span class="small text-secondary">Join 50K+ users</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Trust Badges -->
+                        <div class="d-flex flex-wrap gap-3 mt-4 pt-3">
+                            <span class="d-flex align-items-center gap-2">
+                                <i class="ri-checkbox-circle-fill" style="color: #8BC905;"></i>
+                                <span class="small text-secondary">No hidden fees</span>
+                            </span>
+                            <span class="d-flex align-items-center gap-2">
+                                <i class="ri-checkbox-circle-fill" style="color: #8BC905;"></i>
+                                <span class="small text-secondary">FCA regulated</span>
+                            </span>
+                            <span class="d-flex align-items-center gap-2">
+                                <i class="ri-checkbox-circle-fill" style="color: #8BC905;"></i>
+                                <span class="small text-secondary">24/7 support</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Why Choose Us Area - Premium Redesign -->
+
+<style>
+    /* ============ PREMIUM WHY CHOOSE US STYLES ============ */
+    
+    /* Animations */
+    @keyframes pulse {
+        0% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.8; transform: scale(0.95); box-shadow: 0 0 15px #8BC905; }
+        100% { opacity: 1; transform: scale(1); }
+    }
+    
+    @keyframes ping {
+        0% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+        75%, 100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; }
+    }
+    
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
+    }
+    
+    /* Play Button Hover */
+    .popup-btn {
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    .popup-btn:hover {
+        transform: scale(1.15);
+        background: white !important;
+        border-color: #8BC905 !important;
+        box-shadow: 0 25px 50px -10px rgba(139,201,5,0.5) !important;
+    }
+    
+    .popup-btn:hover i {
+        color: #0C3A30 !important;
+        transform: scale(1.1);
+    }
+    
+    .popup-btn i {
+        transition: all 0.3s ease;
+    }
+    
+    /* Image Hover Effect */
+    .hover-zoom {
+        transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    .choose-image:hover .hover-zoom {
+        transform: scale(1.05);
+    }
+    
+    /* Feature Cards Hover */
+    .row .col-sm-6 .d-flex {
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    .row .col-sm-6 .d-flex:hover {
+        transform: translateY(-5px);
+        background: rgba(139,201,5,0.08) !important;
+        border-color: rgba(139,201,5,0.3) !important;
+        box-shadow: 0 10px 20px -8px rgba(139,201,5,0.15);
+    }
+    
+    .row .col-sm-6 .d-flex:hover .rounded-circle {
+        transform: scale(1.1);
+        background: rgba(139,201,5,0.25) !important;
+    }
+    
+    .row .col-sm-6 .d-flex .rounded-circle {
+        transition: all 0.3s ease;
+    }
+    
+    /* Button Hover */
+    .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 25px 35px -12px rgba(139,201,5,0.4) !important;
+    }
+    
+    .btn:hover .bg-white\/20 {
+        transform: translateX(4px) translateY(-2px);
+    }
+    
+    .bg-white\/20 {
+        transition: all 0.3s ease;
+    }
+    
+    /* Trust Badges Hover */
+    .d-flex.flex-wrap.gap-3 span {
+        transition: all 0.2s ease;
+    }
+    
+    .d-flex.flex-wrap.gap-3 span:hover {
+        transform: translateX(5px);
+    }
+    
+    .d-flex.flex-wrap.gap-3 span i {
+        transition: all 0.2s ease;
+    }
+    
+    .d-flex.flex-wrap.gap-3 span:hover i {
+        transform: scale(1.2);
+        color: #0C3A30 !important;
+    }
+    
+    /* User Avatars */
+    .rounded-circle.border-2 {
+        transition: all 0.3s ease;
+        border: 2px solid white;
+        box-shadow: 0 5px 15px -5px rgba(0,0,0,0.1);
+    }
+    
+    .d-flex.align-items-center:hover .rounded-circle {
+        transform: translateY(-3px);
+    }
+    
+    /* Floating Badges */
+    .position-absolute .bg-white\/95 {
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+    
+    .position-absolute .bg-white\/95:hover {
+        transform: scale(1.05);
+        box-shadow: 0 20px 35px -12px rgba(0,0,0,0.2) !important;
+    }
+    
+    /* Responsive */
+    @media (max-width: 991px) {
+        .why-choose-us-content {
+            text-align: center;
+            padding-left: 0 !important;
+        }
+        
+        .why-choose-us-content h2 {
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .why-choose-us-content p {
+            max-width: 550px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .d-flex.flex-wrap.align-items-center.gap-4 {
+            justify-content: center;
+        }
+        
+        .d-flex.flex-wrap.gap-3.mt-4 {
+            justify-content: center;
+        }
+        
+        .popup-btn {
+            width: 80px !important;
+            height: 80px !important;
+        }
+        
+        .popup-btn i {
+            font-size: 2.2rem !important;
+        }
+    }
+    
+    @media (max-width: 767px) {
+        .popup-btn {
+            width: 70px !important;
+            height: 70px !important;
+        }
+        
+        .popup-btn i {
+            font-size: 1.8rem !important;
+        }
+        
+        .position-absolute.bottom-0.end-0.translate-middle-y {
+            display: none;
+        }
+    }
+    
+    /* Utilities */
+    .backdrop-blur {
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+    
+    .shadow-xl {
+        box-shadow: 0 20px 40px -12px rgba(0,0,0,0.2);
+    }
+</style>
+        <!-- End Why Choose Us Area -->
+
+
+
+        <!-- Start Choose Card Area -->
+   <!-- Start Choose Card Area - Premium Redesign -->
+<div class="choose-card-area py-5 py-md-6 mb-5 overflow-hidden position-relative"
+     style="background: linear-gradient(145deg, #f8fafc, #ffffff);">
+    
+    <!-- Premium Decorative Elements -->
+    <div class="position-absolute" style="top: -100px; right: -50px; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(139,201,5,0.04) 0%, transparent 70%); pointer-events: none;"></div>
+    <div class="position-absolute" style="bottom: -80px; left: -40px; width: 350px; height: 350px; border-radius: 50%; background: radial-gradient(circle, rgba(12,58,48,0.03) 0%, transparent 70%); pointer-events: none;"></div>
+    
+    <!-- Subtle Grid Pattern -->
+    <div class="position-absolute w-100 h-100 opacity-1" 
+         style="top: 0; left: 0; background-image: linear-gradient(rgba(139,201,5,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(139,201,5,0.02) 1px, transparent 1px); background-size: 30px 30px; pointer-events: none;"></div>
+    
+    <div class="container position-relative" style="max-width: 1280px; margin: 0 auto; z-index: 5;">
+        
+        <!-- ========================================= -->
+        <!-- SECTION HEADER - MINIMAL & ELEGANT -->
+        <!-- ========================================= -->
+        <div class="text-center mb-5" data-cues="slideInUp" data-duration="800">
+            <div class="d-flex justify-content-center mb-3">
+                <span class="badge px-4 py-2 rounded-pill fw-semibold d-inline-flex align-items-center gap-2" 
+                      style="background: linear-gradient(145deg, #0C3A30, #0A2A23); color: white; border: 1px solid rgba(139,201,5,0.4); letter-spacing: 0.5px; box-shadow: 0 10px 20px -8px rgba(10,42,35,0.2);">
+                    <span style="display: inline-block; width: 8px; height: 8px; background: #8BC905; border-radius: 50%; box-shadow: 0 0 8px #8BC905; animation: pulse 2s infinite;"></span>
+                    WHY TRADERS CHOOSE US
+                </span>
+            </div>
+            
+            <h2 class="display-6 fw-bold mb-0 mx-auto" style="color: #0C3A30; max-width: 600px; line-height: 1.2;">
+                Trade Smarter in the<br><span style="color: #8BC905; position: relative; display: inline-block;">
+                    Modern Market
+                    <span class="position-absolute start-0 w-100" style="bottom: 0.1em; height: 8px; background: rgba(139,201,5,0.25); border-radius: 30px; z-index: -1;"></span>
+                </span>
+            </h2>
+        </div>
+        
+        <!-- ========================================= -->
+        <!-- PREMIUM FEATURE CARDS - 3 COLUMN GRID -->
+        <!-- ========================================= -->
+        <div class="row g-4 justify-content-center" data-cues="slideInUp" data-duration="800">
+            
+            <!-- CARD 1 - Lightning-Fast Execution -->
+            <div class="col-lg-4 col-md-6 d-flex">
+                <div class="choose-card-premium w-100 h-100 position-relative p-4 p-xl-5 rounded-4" 
+                     style="background: white; border: 1px solid rgba(139,201,5,0.1); box-shadow: 0 15px 35px -10px rgba(0,0,0,0.05); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); overflow: hidden;">
+                    
+                    <!-- Card Accent Gradient -->
+                    <div class="position-absolute top-0 start-0 w-100" style="height: 4px; background: linear-gradient(90deg, #8BC905, #0C3A30);"></div>
+                    
+                    <!-- Decorative Background Element -->
+                    <div class="position-absolute" style="bottom: -20px; right: -20px; width: 120px; height: 120px; background: radial-gradient(circle, rgba(139,201,5,0.05) 0%, transparent 70%); border-radius: 50%; pointer-events: none;"></div>
+                    
+                    <!-- Icon Container -->
+                    <div class="d-flex align-items-center justify-content-center rounded-3 mb-4" 
+                         style="width: 80px; height: 80px; background: linear-gradient(145deg, rgba(139,201,5,0.1), rgba(139,201,5,0.05)); border: 1px solid rgba(139,201,5,0.2); transition: all 0.3s ease;">
+                        <i class="flaticon-money-5" style="color: #8BC905; font-size: 2.8rem; line-height: 1; transition: all 0.3s ease;"></i>
+                    </div>
+                    
+                    <!-- Card Number Badge -->
+                    <span class="position-absolute top-0 end-0 m-4 fw-bold" style="color: rgba(139,201,5,0.15); font-size: 3rem; font-weight: 800; line-height: 1; z-index: 80;">01</span>
+                    
+                    <!-- Content -->
+                    <div class="position-relative" style="z-index: 2;">
+                        <h3 class="fw-bold mb-3" style="color: #0C3A30; font-size: 1.75rem;">Lightning-Fast Execution</h3>
+                        <p class="text-secondary mb-4" style="color: #4A5C5A !important; line-height: 1.7; font-size: 1.05rem;">
+                            Execute trades in milliseconds with institutional-grade infrastructure. Never miss a market opportunity with our ultra-low latency platform.
+                        </p>
+                        
+                        <!-- Feature Tags -->
+                        <div class="d-flex flex-wrap gap-2 mb-4">
+                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.08); color: #0C3A30; border: 1px solid rgba(139,201,5,0.15);">
+                                ⚡ <1ms Latency
+                            </span>
+                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.08); color: #0C3A30; border: 1px solid rgba(139,201,5,0.15);">
+                                🎯 99.9% Uptime
+                            </span>
+                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.08); color: #0C3A30; border: 1px solid rgba(139,201,5,0.15);">
+                                💎 Instant Fill
+                            </span>
+                        </div>
+                        
+                        <!-- Learn More Link -->
+                        <a href="#" class="d-inline-flex align-items-center gap-2 fw-semibold text-decoration-none"
+                           style="color: #8BC905; transition: all 0.3s ease;">
+                            Learn more
+                            <span class="rounded-circle d-flex align-items-center justify-content-center" 
+                                  style="width: 28px; height: 28px; background: rgba(139,201,5,0.1); color: #8BC905; transition: all 0.3s ease;">
+                                <i class="ri-arrow-right-up-line"></i>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CARD 2 - Advanced Trading Tools -->
+            <div class="col-lg-4 col-md-6 d-flex">
+                <div class="choose-card-premium w-100 h-100 position-relative p-4 p-xl-5 rounded-4" 
+                     style="background: white; border: 1px solid rgba(139,201,5,0.1); box-shadow: 0 15px 35px -10px rgba(0,0,0,0.05); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); overflow: hidden;">
+                    
+                    <!-- Card Accent Gradient -->
+                    <div class="position-absolute top-0 start-0 w-100" style="height: 4px; background: linear-gradient(90deg, #0C3A30, #8BC905);"></div>
+                    
+                    <!-- Decorative Background Element -->
+                    <div class="position-absolute" style="bottom: -20px; right: -20px; width: 120px; height: 120px; background: radial-gradient(circle, rgba(139,201,5,0.05) 0%, transparent 70%); border-radius: 50%; pointer-events: none;"></div>
+                    
+                    <!-- Popular Badge -->
+                    <span class="position-absolute top-0 end-0 m-4 px-3 py-2 rounded-pill small fw-bold d-inline-flex align-items-center gap-1"
+                          style="background: rgba(139,201,5,0.15); color: #0C3A30; border: 1px solid rgba(139,201,5,0.3); z-index: 10;">
+                        <span style="display: inline-block; width: 6px; height: 6px; background: #8BC905; border-radius: 50%; animation: pulse 2s infinite;"></span>
+                        POPULAR
+                    </span>
+                    
+                    <!-- Icon Container -->
+                    <div class="d-flex align-items-center justify-content-center rounded-3 mb-4" 
+                         style="width: 80px; height: 80px; background: linear-gradient(145deg, rgba(139,201,5,0.1), rgba(139,201,5,0.05)); border: 1px solid rgba(139,201,5,0.2); transition: all 0.3s ease;">
+                        <i class="flaticon-dollar-symbol-1" style="color: #8BC905; font-size: 2.8rem; line-height: 1; transition: all 0.3s ease;"></i>
+                    </div>
+                    
+                    <!-- Card Number Badge -->
+                    <span class="position-absolute top-0 end-0 m-4 fw-bold" style="color: rgba(139,201,5,0.15); font-size: 3rem; font-weight: 800; line-height: 1; z-index: 1;">02</span>
+                    
+                    <!-- Content -->
+                    <div class="position-relative" style="z-index: 2;">
+                        <h3 class="fw-bold mb-3" style="color: #0C3A30; font-size: 1.75rem;">Advanced Trading Tools</h3>
+                        <p class="text-secondary mb-4" style="color: #4A5C5A !important; line-height: 1.7; font-size: 1.05rem;">
+                            Access professional charting, technical indicators, and AI-powered market analysis. Trade like a pro with tools designed for both beginners and experts.
+                        </p>
+                        
+                        <!-- Feature Tags -->
+                        <div class="d-flex flex-wrap gap-2 mb-4">
+                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.08); color: #0C3A30; border: 1px solid rgba(139,201,5,0.15);">
+                                📊 50+ Indicators
+                            </span>
+                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.08); color: #0C3A30; border: 1px solid rgba(139,201,5,0.15);">
+                                🤖 AI Signals
+                            </span>
+                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.08); color: #0C3A30; border: 1px solid rgba(139,201,5,0.15);">
+                                📈 Live Charts
+                            </span>
+                        </div>
+                        
+                        <!-- Learn More Link -->
+                        <a href="#" class="d-inline-flex align-items-center gap-2 fw-semibold text-decoration-none"
+                           style="color: #8BC905; transition: all 0.3s ease;">
+                            Learn more
+                            <span class="rounded-circle d-flex align-items-center justify-content-center" 
+                                  style="width: 28px; height: 28px; background: rgba(139,201,5,0.1); color: #8BC905; transition: all 0.3s ease;">
+                                <i class="ri-arrow-right-up-line"></i>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CARD 3 - Copy Trading & Automation -->
+            <div class="col-lg-4 col-md-6 d-flex">
+                <div class="choose-card-premium w-100 h-100 position-relative p-4 p-xl-5 rounded-4" 
+                     style="background: linear-gradient(145deg, #0C3A30, #0A2A23); box-shadow: 0 20px 40px -15px rgba(12,58,48,0.3); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); overflow: hidden; border: 1px solid rgba(139,201,5,0.2);">
+                    
+                    <!-- Decorative Pattern -->
+                    <div class="position-absolute w-100 h-100 opacity-10" 
+                         style="top: 0; left: 0; background-image: radial-gradient(circle at 30px 30px, rgba(139,201,5,0.2) 1px, transparent 1px); background-size: 30px 30px; pointer-events: none;"></div>
+                    
+                    <!-- Glowing Orb -->
+                    <div class="position-absolute" style="top: -50px; right: -50px; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, rgba(139,201,5,0.15) 0%, transparent 70%);"></div>
+                    
+                    <!-- Premium Badge -->
+                    <span class="position-absolute top-0 end-0 m-4 px-3 py-2 rounded-pill small fw-bold d-inline-flex align-items-center gap-1"
+                          style="background: rgba(139,201,5,0.2); color: white; border: 1px solid rgba(139,201,5,0.3); backdrop-filter: blur(5px); z-index: 10;">
+                        <i class="ri-crown-fill" style="color: #FFD700;"></i>
+                        PREMIUM
+                    </span>
+                    
+                    <!-- Icon Container - Light Version for Dark Background -->
+                    <div class="d-flex align-items-center justify-content-center rounded-3 mb-4" 
+                         style="width: 80px; height: 80px; background: rgba(255,255,255,0.1); border: 1px solid rgba(139,201,5,0.3); backdrop-filter: blur(5px); transition: all 0.3s ease;">
+                        <i class="flaticon-tablet" style="color: #8BC905; font-size: 2.8rem; line-height: 1; transition: all 0.3s ease;"></i>
+                    </div>
+                    
+                    <!-- Card Number Badge - Light Version -->
+                    <span class="position-absolute top-0 end-0 m-4 fw-bold" style="color: rgba(139,201,5,0.2); font-size: 3rem; font-weight: 800; line-height: 1; z-index: 1;">03</span>
+                    
+                    <!-- Content - Light Text -->
+                    <div class="position-relative" style="z-index: 2;">
+                        <h3 class="fw-bold mb-3 text-white" style="font-size: 1.75rem;">Copy Trading & Automation</h3>
+                        <p class="text-white-80 mb-4" style="line-height: 1.7; font-size: 1.05rem; opacity: 0.9;">
+                            Mirror successful traders or automate your strategy with algorithmic trading. Let the experts work for you while you learn and earn.
+                        </p>
+                        
+                        <!-- Feature Tags - Light Version -->
+                        <div class="d-flex flex-wrap gap-2 mb-4">
+                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(139,201,5,0.3);">
+                                👥 Copy Pros
+                            </span>
+                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(139,201,5,0.3);">
+                                🤖 Auto-Trade
+                            </span>
+                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(139,201,5,0.3);">
+                                📱 24/7 Active
+                            </span>
+                        </div>
+                        
+                        <!-- Learn More Link - Light Version -->
+                        <a href="#" class="d-inline-flex align-items-center gap-2 fw-semibold text-decoration-none"
+                           style="color: #8BC905; transition: all 0.3s ease;">
+                            Learn more
+                            <span class="rounded-circle d-flex align-items-center justify-content-center" 
+                                  style="width: 28px; height: 28px; background: rgba(139,201,5,0.2); color: #8BC905; transition: all 0.3s ease;">
+                                <i class="ri-arrow-right-up-line"></i>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ========================================= -->
+        <!-- BOTTOM TRUST INDICATOR -->
+        <!-- ========================================= -->
+        <div class="row mt-5 pt-4" data-cues="slideInUp" data-duration="800">
+            <div class="col-12">
+                <div class="d-flex flex-wrap align-items-center justify-content-center gap-4 p-4 rounded-4" 
+                     style="background: rgba(139,201,5,0.03); border: 1px solid rgba(139,201,5,0.1);">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="d-flex align-items-center">
+                            <div class="rounded-circle border-2 border-white" style="width: 40px; height: 40px; background: linear-gradient(145deg, #0C3A30, #0A2A23); margin-right: -12px;"></div>
+                            <div class="rounded-circle border-2 border-white" style="width: 40px; height: 40px; background: linear-gradient(145deg, #8BC905, #7AB805); margin-right: -12px;"></div>
+                            <div class="rounded-circle border-2 border-white" style="width: 40px; height: 40px; background: linear-gradient(145deg, #0C3A30, #0A2A23); margin-right: -12px;"></div>
+                            <div class="rounded-circle border-2 border-white" style="width: 40px; height: 40px; background: linear-gradient(145deg, #8BC905, #7AB805);"></div>
+                        </div>
+                        <span class="fw-semibold" style="color: #0C3A30;">Join 50,000+ active traders</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="ri-star-fill" style="color: #FFB800;"></i>
+                        <i class="ri-star-fill" style="color: #FFB800;"></i>
+                        <i class="ri-star-fill" style="color: #FFB800;"></i>
+                        <i class="ri-star-fill" style="color: #FFB800;"></i>
+                        <i class="ri-star-fill" style="color: #FFB800;"></i>
+                        <span class="ms-2 text-secondary">4.9/5 from 2,500+ reviews</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Choose Card Area - Premium Redesign -->
+
+<style>
+    /* ============ PREMIUM CHOOSE CARD STYLES ============ */
+    
+    /* Animations */
+    @keyframes pulse {
+        0% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.8; transform: scale(0.95); box-shadow: 0 0 12px #8BC905; }
+        100% { opacity: 1; transform: scale(1); }
+    }
+    
+    /* Card Hover Effects */
+    .choose-card-premium {
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    .choose-card-premium:hover {
+        transform: translateY(-12px);
+        box-shadow: 0 30px 45px -15px rgba(12,58,48,0.15) !important;
+    }
+    
+    /* Light Card Hover */
+    .choose-card-premium:not([style*="background: linear-gradient(145deg, #0C3A30"]) {
+        border-color: rgba(139,201,5,0.3) !important;
+        box-shadow: 0 25px 40px -15px rgba(139,201,5,0.15) !important;
+    }
+    
+    .choose-card-premium:hover .d-flex.align-items-center.justify-content-center.rounded-3 {
+        transform: scale(1.1);
+        background: rgba(139,201,5,0.15) !important;
+        border-color: rgba(139,201,5,0.4) !important;
+    }
+    
+    .choose-card-premium:hover i {
+        transform: scale(1.1);
+        color: #0C3A30 !important;
+    }
+    
+    /* Dark Card Hover */
+    .choose-card-premium[style*="background: linear-gradient(145deg, #0C3A30"]:hover {
+        transform: translateY(-12px);
+        box-shadow: 0 35px 50px -15px rgba(12,58,48,0.4) !important;
+        border-color: rgba(139,201,5,0.4) !important;
+    }
+    
+    .choose-card-premium[style*="background: linear-gradient(145deg, #0C3A30"]:hover .d-flex.align-items-center.justify-content-center.rounded-3 {
+        background: rgba(255,255,255,0.15) !important;
+        border-color: rgba(139,201,5,0.5) !important;
+    }
+    
+    .choose-card-premium[style*="background: linear-gradient(145deg, #0C3A30"]:hover i {
+        color: white !important;
+        transform: scale(1.1);
+    }
+    
+    /* Icon Container */
+    .d-flex.align-items-center.justify-content-center.rounded-3 {
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    i.flaticon-money-5, 
+    i.flaticon-dollar-symbol-1, 
+    i.flaticon-tablet {
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    /* Learn More Link Hover */
+    a.d-inline-flex {
+        transition: all 0.3s ease;
+    }
+    
+    a.d-inline-flex:hover {
+        gap: 12px !important;
+    }
+    
+    a.d-inline-flex:hover span {
+        background: #8BC905 !important;
+        color: white !important;
+        transform: translateX(4px);
+    }
+    
+    a.d-inline-flex span {
+        transition: all 0.3s ease;
+    }
+    
+    /* Dark card link hover */
+    .choose-card-premium[style*="background: linear-gradient(145deg, #0C3A30"] a.d-inline-flex:hover span {
+        background: #8BC905 !important;
+        color: #0C3A30 !important;
+    }
+    
+    /* Badge hover */
+    .position-absolute.top-0.end-0.m-4.px-3.py-2 {
+        transition: all 0.3s ease;
+    }
+    
+    .position-absolute.top-0.end-0.m-4.px-3.py-2:hover {
+        transform: scale(1.05);
+    }
+    
+    /* Feature tags hover */
+    .badge {
+        transition: all 0.2s ease;
+    }
+    
+    .badge:hover {
+        background: rgba(139,201,5,0.15) !important;
+        transform: scale(1.05);
+        border-color: rgba(139,201,5,0.4) !important;
+    }
+    
+    /* Dark card tags hover */
+    .choose-card-premium[style*="background: linear-gradient(145deg, #0C3A30"] .badge:hover {
+        background: rgba(255,255,255,0.15) !important;
+        color: white !important;
+    }
+    
+    /* Responsive */
+    @media (max-width: 991px) {
+        .choose-card-premium {
+            padding: 2rem !important;
+        }
+        
+        h2.display-6 {
+            font-size: 2.2rem;
+        }
+    }
+    
+    @media (max-width: 767px) {
+        .choose-card-premium {
+            padding: 1.75rem !important;
+        }
+        
+        .d-flex.flex-wrap.align-items-center.justify-content-center.gap-4 {
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        h2.display-6 {
+            font-size: 1.8rem;
+        }
+        
+        .position-absolute.top-0.end-0.m-4.fw-bold {
+            font-size: 2.5rem !important;
+        }
+    }
+    
+    /* Utilities */
+    .text-white-80 {
+        color: rgba(255, 255, 255, 0.85);
+    }
+    
+    .backdrop-blur {
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+    }
+</style>
+<!-- End Choose Card Area - Premium Redesign -->
+
+<style>
+    /* ============ PREMIUM CHOOSE CARD STYLES ============ */
+    
+    /* Animations */
+    @keyframes pulse {
+        0% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.8; transform: scale(0.95); box-shadow: 0 0 12px #8BC905; }
+        100% { opacity: 1; transform: scale(1); }
+    }
+    
+    /* Card Hover Effects */
+    .choose-card-premium {
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    .choose-card-premium:hover {
+        transform: translateY(-12px);
+        box-shadow: 0 30px 45px -15px rgba(12,58,48,0.15) !important;
+    }
+    
+    /* Light Card Hover */
+    .choose-card-premium:not([style*="background: linear-gradient(145deg, #0C3A30"]) {
+        border-color: rgba(139,201,5,0.3) !important;
+        box-shadow: 0 25px 40px -15px rgba(139,201,5,0.15) !important;
+    }
+    
+    .choose-card-premium:hover .d-flex.align-items-center.justify-content-center.rounded-3 {
+        transform: scale(1.1);
+        background: rgba(139,201,5,0.15) !important;
+        border-color: rgba(139,201,5,0.4) !important;
+    }
+    
+    .choose-card-premium:hover i {
+        transform: scale(1.1);
+        color: #0C3A30 !important;
+    }
+    
+    /* Dark Card Hover */
+    .choose-card-premium[style*="background: linear-gradient(145deg, #0C3A30"]:hover {
+        transform: translateY(-12px);
+        box-shadow: 0 35px 50px -15px rgba(12,58,48,0.4) !important;
+        border-color: rgba(139,201,5,0.4) !important;
+    }
+    
+    .choose-card-premium[style*="background: linear-gradient(145deg, #0C3A30"]:hover .d-flex.align-items-center.justify-content-center.rounded-3 {
+        background: rgba(255,255,255,0.15) !important;
+        border-color: rgba(139,201,5,0.5) !important;
+    }
+    
+    .choose-card-premium[style*="background: linear-gradient(145deg, #0C3A30"]:hover i {
+        color: white !important;
+        transform: scale(1.1);
+    }
+    
+    /* Icon Container */
+    .d-flex.align-items-center.justify-content-center.rounded-3 {
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    i.flaticon-money-5, 
+    i.flaticon-dollar-symbol-1, 
+    i.flaticon-tablet {
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    /* Learn More Link Hover */
+    a.d-inline-flex {
+        transition: all 0.3s ease;
+    }
+    
+    a.d-inline-flex:hover {
+        gap: 12px !important;
+    }
+    
+    a.d-inline-flex:hover span {
+        background: #8BC905 !important;
+        color: white !important;
+        transform: translateX(4px);
+    }
+    
+    a.d-inline-flex span {
+        transition: all 0.3s ease;
+    }
+    
+    /* Dark card link hover */
+    .choose-card-premium[style*="background: linear-gradient(145deg, #0C3A30"] a.d-inline-flex:hover span {
+        background: #8BC905 !important;
+        color: #0C3A30 !important;
+    }
+    
+    /* Badge hover */
+    .position-absolute.top-0.end-0.m-4.px-3.py-2 {
+        transition: all 0.3s ease;
+    }
+    
+    .position-absolute.top-0.end-0.m-4.px-3.py-2:hover {
+        transform: scale(1.05);
+    }
+    
+    /* Feature tags hover */
+    .badge {
+        transition: all 0.2s ease;
+    }
+    
+    .badge:hover {
+        background: rgba(139,201,5,0.15) !important;
+        transform: scale(1.05);
+        border-color: rgba(139,201,5,0.4) !important;
+    }
+    
+    /* Dark card tags hover */
+    .choose-card-premium[style*="background: linear-gradient(145deg, #0C3A30"] .badge:hover {
+        background: rgba(255,255,255,0.15) !important;
+        color: white !important;
+    }
+    
+    /* Responsive */
+    @media (max-width: 991px) {
+        .choose-card-premium {
+            padding: 2rem !important;
+        }
+        
+        h2.display-6 {
+            font-size: 2.2rem;
+        }
+    }
+    
+    @media (max-width: 767px) {
+        .choose-card-premium {
+            padding: 1.75rem !important;
+        }
+        
+        .d-flex.flex-wrap.align-items-center.justify-content-center.gap-4 {
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        h2.display-6 {
+            font-size: 1.8rem;
+        }
+        
+        .position-absolute.top-0.end-0.m-4.fw-bold {
+            font-size: 2.5rem !important;
+        }
+    }
+    
+    /* Utilities */
+    .text-white-80 {
+        color: rgba(255, 255, 255, 0.85);
+    }
+    
+    .backdrop-blur {
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+    }
+</style>
+        <!-- End Choose Card Area -->
+
+        <!-- Start How It Works Area -->
+       <!-- Start How It Works Area - Premium Redesign -->
+<div class="how-it-works-area position-relative py-5 py-md-6 overflow-hidden" 
+     style="background: linear-gradient(145deg, #0C3A30, #062018);">
+    
+    <!-- Premium Decorative Elements -->
+    <div class="position-absolute" style="top: -200px; right: -100px; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(139,201,5,0.1) 0%, transparent 70%); pointer-events: none;"></div>
+    <div class="position-absolute" style="bottom: -150px; left: -80px; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(158,221,5,0.08) 0%, transparent 70%); pointer-events: none;"></div>
+    
+    <!-- Animated Grid Pattern -->
+    <div class="position-absolute w-100 h-100 opacity-5" 
+         style="top: 0; left: 0; background-image: radial-gradient(circle at 30px 30px, rgba(139,201,5,0.1) 1px, transparent 1px); background-size: 50px 50px; pointer-events: none; animation: drift 30s infinite linear;"></div>
+    
+    <!-- Glowing Orbs -->
+    <div class="position-absolute" style="top: 20%; left: 10%; width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle, rgba(139,201,5,0.05) 0%, transparent 70%); filter: blur(60px);"></div>
+    <div class="position-absolute" style="bottom: 10%; right: 15%; width: 250px; height: 250px; border-radius: 50%; background: radial-gradient(circle, rgba(158,221,5,0.05) 0%, transparent 70%); filter: blur(50px);"></div>
+    
+    <div class="container position-relative" style="max-width: 1280px; margin: 0 auto; z-index: 10;">
+        
+        <!-- ========================================= -->
+        <!-- SECTION HEADER - PREMIUM DARK THEME -->
+        <!-- ========================================= -->
+        <div class="about-top mb-5" data-cues="slideInUp" data-duration="800">
+            <div class="row g-4 align-items-end">
+                <div class="col-lg-7 col-md-7">
+                    <div class="section-heading mb-0">
+                        <!-- Premium Badge -->
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <span class="badge px-4 py-2 rounded-pill fw-semibold d-inline-flex align-items-center gap-2" 
+                                  style="background: rgba(139,201,5,0.15); color: #8BC905; border: 1px solid rgba(139,201,5,0.3); letter-spacing: 0.5px; backdrop-filter: blur(5px);">
+                                <span style="display: inline-block; width: 8px; height: 8px; background: #8BC905; border-radius: 50%; box-shadow: 0 0 15px #8BC905; animation: pulse 2s infinite;"></span>
+                                HOW IT WORKS
+                            </span>
+                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(5px);">
+                                ⚡ 3 SIMPLE STEPS
+                            </span>
+                        </div>
+                        
+                        <!-- Main Headline -->
+                        <h2 class="display-5 fw-bold mb-0 text-white" style="line-height: 1.2; max-width: 600px; text-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+                            Commitment To 
+                            <span style="color: #8BC905; position: relative; display: inline-block;">
+                                Exceptional
+                                <span class="position-absolute start-0 w-100" style="bottom: 0.1em; height: 8px; background: rgba(139,201,5,0.3); border-radius: 30px; z-index: 1; filter: blur(2px);"></span>
+                            </span>
+                            <br>Services & Solutions
+                        </h2>
+                    </div>
+                </div>
+                
+                <div class="col-lg-5 col-md-5">
+                    <div class="content ps-lg-4">
+                        <p class="fs-5 text-white-80 mb-0" style="line-height: 1.6; border-left: 4px solid #8BC905; padding-left: 20px;">
+                            Advanced technology meets financial expertise. One seamless platform for individuals and businesses to grow, manage, and move money smarter.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ========================================= -->
+        <!-- MAIN CONTENT - TABBED JOURNEY -->
+        <!-- ========================================= -->
+        <div class="row g-5 align-items-start">
+            
+            <!-- ========================================= -->
+            <!-- LEFT COLUMN - VERTICAL TAB NAVIGATION -->
+            <!-- ========================================= -->
+            <div class="col-xl-4 col-lg-12" data-cues="slideInRight" data-duration="800">
+                <div class="works-vertical-tabs h-100">
+                    <div class="d-flex flex-column gap-3" role="tablist">
+                        
+                        <!-- Tab 1 - Create Account -->
+                        <button class="works-tab-btn w-100 text-start d-flex align-items-center justify-content-between p-4 rounded-4 active" 
+                                id="crea-tab" 
+                                data-bs-toggle="tab" 
+                                data-bs-target="#crea-tab-pane" 
+                                type="button" 
+                                role="tab"
+                                style="background: rgba(139,201,5,0.15); border: 1px solid rgba(139,201,5,0.3); backdrop-filter: blur(10px); transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);">
+                            <div class="d-flex align-items-center gap-3">
+                                <span class="step-number d-flex align-items-center justify-content-center rounded-circle fw-bold" 
+                                      style="width: 48px; height: 48px; background: rgba(139,201,5,0.2); color: #8BC905; font-size: 1.3rem; border: 1px solid rgba(139,201,5,0.3);">01</span>
+                                <div>
+                                    <span class="d-block fw-bold text-white" style="font-size: 1.2rem;">Create Account</span>
+                                    <span class="small text-white-50">Get started in 2 minutes</span>
+                                </div>
+                            </div>
+                            <i class="ri-arrow-right-up-line fs-4" style="color: #8BC905; transition: all 0.3s ease;"></i>
+                        </button>
+                        
+                        <!-- Tab 2 - User Confirmation -->
+                        <button class="works-tab-btn w-100 text-start d-flex align-items-center justify-content-between p-4 rounded-4" 
+                                id="use-tab" 
+                                data-bs-toggle="tab" 
+                                data-bs-target="#use-tab-pane" 
+                                type="button" 
+                                role="tab"
+                                style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);">
+                            <div class="d-flex align-items-center gap-3">
+                                <span class="step-number d-flex align-items-center justify-content-center rounded-circle fw-bold" 
+                                      style="width: 48px; height: 48px; background: rgba(255,255,255,0.1); color: white; font-size: 1.3rem; border: 1px solid rgba(255,255,255,0.1);">02</span>
+                                <div>
+                                    <span class="d-block fw-bold text-white" style="font-size: 1.2rem;">User Confirmation</span>
+                                    <span class="small text-white-50">Secure identity verification</span>
+                                </div>
+                            </div>
+                            <i class="ri-arrow-right-up-line fs-4" style="color: white; opacity: 0.5; transition: all 0.3s ease;"></i>
+                        </button>
+                        
+                        <!-- Tab 3 - Start Investing (New) -->
+                        <button class="works-tab-btn w-100 text-start d-flex align-items-center justify-content-between p-4 rounded-4" 
+                                id="invest-tab" 
+                                data-bs-toggle="tab" 
+                                data-bs-target="#invest-tab-pane" 
+                                type="button" 
+                                role="tab"
+                                style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);">
+                            <div class="d-flex align-items-center gap-3">
+                                <span class="step-number d-flex align-items-center justify-content-center rounded-circle fw-bold" 
+                                      style="width: 48px; height: 48px; background: rgba(255,255,255,0.1); color: white; font-size: 1.3rem; border: 1px solid rgba(255,255,255,0.1);">03</span>
+                                <div>
+                                    <span class="d-block fw-bold text-white" style="font-size: 1.2rem;">Start Investing</span>
+                                    <span class="small text-white-50">AI-powered portfolio</span>
+                                </div>
+                            </div>
+                            <i class="ri-arrow-right-up-line fs-4" style="color: white; opacity: 0.5; transition: all 0.3s ease;"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Progress Indicator -->
+                    <div class="mt-5 pt-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="flex-grow-1" style="height: 2px; background: rgba(255,255,255,0.1);">
+                                <div class="h-100" style="width: 33%; background: #8BC905; box-shadow: 0 0 15px #8BC905;"></div>
+                            </div>
+                            <span class="small text-white-50">Step 1 of 3</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ========================================= -->
+            <!-- RIGHT COLUMN - TAB CONTENT (DYNAMIC) -->
+            <!-- ========================================= -->
+            <div class="col-xl-8 col-lg-12" data-cues="slideInLeft" data-duration="800">
+                <div class="tab-content" id="myTabContent">
+                    
+                    <!-- TAB 1 - CREATE ACCOUNT -->
+                    <div class="tab-pane fade show active" id="crea-tab-pane" role="tabpanel">
+                        <div class="row g-4 align-items-center">
+                            <!-- Left: Image -->
+                            <div class="col-lg-6">
+                                <div class="single-works-image position-relative">
+                                    <div class="position-relative rounded-5 overflow-hidden" 
+                                         style="border: 1px solid rgba(139,201,5,0.2); box-shadow: 0 30px 50px -20px rgba(0,0,0,0.4);">
+                                        <img class="w-100 hover-zoom" 
+                                             src="assets/images/about/about-image-3.jpg" 
+                                             alt="Create Account"
+                                             style="display: block; transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); aspect-ratio: 4/3; object-fit: cover;">
+                                        
+                                        <!-- Gradient Overlay -->
+                                        <div class="position-absolute bottom-0 start-0 w-100 p-3" 
+                                             style="background: linear-gradient(to top, rgba(12,58,48,0.9), transparent);">
+                                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.9); color: #0C3A30;">
+                                                <i class="ri-time-line me-1"></i> Takes just 2 minutes
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Floating Badge -->
+                                    <div class="position-absolute top-0 start-0 translate-middle-y ms-4" style="animation: float 6s ease-in-out infinite;">
+                                        <div class="d-flex align-items-center gap-2 bg-white rounded-pill py-2 px-4 shadow-lg">
+                                            <i class="ri-customer-service-fill" style="color: #8BC905;"></i>
+                                            <span class="fw-semibold small" style="color: #0C3A30;">Free signup</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Right: Content Card -->
+                            <div class="col-lg-6">
+                                <div class="single-works-card h-100 p-4 p-xl-5 rounded-4 d-flex flex-column"
+                                     style="background: rgba(41,89,75,0.3); backdrop-filter: blur(10px); border: 1px solid rgba(139,201,5,0.2); box-shadow: 0 20px 40px -15px rgba(0,0,0,0.3);">
+                                    
+                                    <!-- Icon -->
+                                    <div class="d-flex align-items-center justify-content-center rounded-3 mb-4" 
+                                         style="width: 80px; height: 80px; background: rgba(139,201,5,0.15); border: 1px solid rgba(139,201,5,0.3);">
+                                        <i class="flaticon-payment-method-1 method" style="color: #8BC905; font-size: 2.8rem; line-height: 1;"></i>
+                                    </div>
+                                    
+                                    <!-- Title -->
+                                    <h3 class="fw-bold mb-3 text-white" style="font-size: 1.8rem;">Create Your Account</h3>
+                                    
+                                    <!-- Description -->
+                                    <p class="text-white-80 mb-4" style="line-height: 1.7; opacity: 0.9;">
+                                        Sign up in under 2 minutes. No paperwork, no hidden fees. Just secure, instant access to our entire financial platform.
+                                    </p>
+                                    
+                                    <!-- Feature List -->
+                                    <ul class="list-unstyled d-flex flex-column gap-2 mb-4">
+                                        <li class="d-flex align-items-center gap-2">
+                                            <i class="ri-checkbox-circle-fill" style="color: #8BC905;"></i>
+                                            <span class="text-white-80">Free account, no minimum balance</span>
+                                        </li>
+                                        <li class="d-flex align-items-center gap-2">
+                                            <i class="ri-checkbox-circle-fill" style="color: #8BC905;"></i>
+                                            <span class="text-white-80">Instant virtual card issued</span>
+                                        </li>
+                                        <li class="d-flex align-items-center gap-2">
+                                            <i class="ri-checkbox-circle-fill" style="color: #8BC905;"></i>
+                                            <span class="text-white-80">Connect existing bank accounts</span>
+                                        </li>
+                                    </ul>
+                                    
+                                    <!-- CTA Button -->
+                                    <a href="/" class="btn w-100 py-3 rounded-pill fw-bold d-flex align-items-center justify-content-between px-4 mt-auto"
+                                       style="background: linear-gradient(145deg, #8BC905, #7AB805); color: #0C3A30; border: none; transition: all 0.3s;">
+                                        <span>Get Started Now</span>
+                                        <span class="rounded-circle bg-white/20 p-2 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                                            <i class="ri-arrow-right-up-line" style="color: #0C3A30; font-size: 1.2rem;"></i>
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- TAB 2 - USER CONFIRMATION -->
+                    <div class="tab-pane fade" id="use-tab-pane" role="tabpanel">
+                        <div class="row g-4 align-items-center">
+                            <!-- Left: Image -->
+                            <div class="col-lg-6">
+                                <div class="single-works-image position-relative">
+                                    <div class="position-relative rounded-5 overflow-hidden" 
+                                         style="border: 1px solid rgba(139,201,5,0.2); box-shadow: 0 30px 50px -20px rgba(0,0,0,0.4);">
+                                        <img class="w-100 hover-zoom" 
+                                             src="assets/images/about/about-image-10.jpg" 
+                                             alt="User Confirmation"
+                                             style="display: block; transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); aspect-ratio: 4/3; object-fit: cover;">
+                                        
+                                        <!-- Gradient Overlay -->
+                                        <div class="position-absolute bottom-0 start-0 w-100 p-3" 
+                                             style="background: linear-gradient(to top, rgba(12,58,48,0.9), transparent);">
+                                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.9); color: #0C3A30;">
+                                                <i class="ri-shield-check-line me-1"></i> Secure verification
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Floating Badge -->
+                                    <div class="position-absolute top-0 end-0 translate-middle-y me-4" style="animation: float 7s ease-in-out infinite;">
+                                        <div class="d-flex align-items-center gap-2 bg-white rounded-pill py-2 px-4 shadow-lg">
+                                            <i class="ri-fingerprint-line" style="color: #8BC905;"></i>
+                                            <span class="fw-semibold small" style="color: #0C3A30;">Biometric ready</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Right: Content Card -->
+                            <div class="col-lg-6">
+                                <div class="single-works-card h-100 p-4 p-xl-5 rounded-4 d-flex flex-column"
+                                     style="background: rgba(41,89,75,0.3); backdrop-filter: blur(10px); border: 1px solid rgba(139,201,5,0.2); box-shadow: 0 20px 40px -15px rgba(0,0,0,0.3);">
+                                    
+                                    <!-- Icon -->
+                                    <div class="d-flex align-items-center justify-content-center rounded-3 mb-4" 
+                                         style="width: 80px; height: 80px; background: rgba(139,201,5,0.15); border: 1px solid rgba(139,201,5,0.3);">
+                                        <i class="flaticon-tablet method" style="color: #8BC905; font-size: 2.8rem; line-height: 1;"></i>
+                                    </div>
+                                    
+                                    <!-- Title -->
+                                    <h3 class="fw-bold mb-3 text-white" style="font-size: 1.8rem;">Verify Your Identity</h3>
+                                    
+                                    <!-- Description -->
+                                    <p class="text-white-80 mb-4" style="line-height: 1.7; opacity: 0.9;">
+                                        Fast, secure KYC verification. Upload your ID and take a selfie — our AI verifies you in seconds, not days.
+                                    </p>
+                                    
+                                    <!-- Feature List -->
+                                    <ul class="list-unstyled d-flex flex-column gap-2 mb-4">
+                                        <li class="d-flex align-items-center gap-2">
+                                            <i class="ri-checkbox-circle-fill" style="color: #8BC905;"></i>
+                                            <span class="text-white-80">AI-powered ID verification</span>
+                                        </li>
+                                        <li class="d-flex align-items-center gap-2">
+                                            <i class="ri-checkbox-circle-fill" style="color: #8BC905;"></i>
+                                            <span class="text-white-80">Facial recognition available</span>
+                                        </li>
+                                        <li class="d-flex align-items-center gap-2">
+                                            <i class="ri-checkbox-circle-fill" style="color: #8BC905;"></i>
+                                            <span class="text-white-80">Approved in under 60 seconds</span>
+                                        </li>
+                                    </ul>
+                                    
+                                    <!-- CTA Button -->
+                                    <a href="/" class="btn w-100 py-3 rounded-pill fw-bold d-flex align-items-center justify-content-between px-4 mt-auto"
+                                       style="background: linear-gradient(145deg, #8BC905, #7AB805); color: #0C3A30; border: none; transition: all 0.3s;">
+                                        <span>Verify Now</span>
+                                        <span class="rounded-circle bg-white/20 p-2 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                                            <i class="ri-arrow-right-up-line" style="color: #0C3A30; font-size: 1.2rem;"></i>
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- TAB 3 - START INVESTING (NEW) -->
+                    <div class="tab-pane fade" id="invest-tab-pane" role="tabpanel">
+                        <div class="row g-4 align-items-center">
+                            <!-- Left: Image -->
+                            <div class="col-lg-6">
+                                <div class="single-works-image position-relative">
+                                    <div class="position-relative rounded-5 overflow-hidden" 
+                                         style="border: 1px solid rgba(139,201,5,0.2); box-shadow: 0 30px 50px -20px rgba(0,0,0,0.4);">
+                                        <img class="w-100 hover-zoom" 
+                                             src="assets/images/service/service-image-3.png" 
+                                             alt="Start Investing"
+                                             style="display: block; transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); aspect-ratio: 4/3; object-fit: cover;">
+                                        
+                                        <!-- Gradient Overlay -->
+                                        <div class="position-absolute bottom-0 start-0 w-100 p-3" 
+                                             style="background: linear-gradient(to top, rgba(12,58,48,0.9), transparent);">
+                                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.9); color: #0C3A30;">
+                                                <i class="ri-line-chart-line me-1"></i> AI-powered returns
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Floating Badge -->
+                                    <div class="position-absolute bottom-0 end-0 translate-middle-y me-4" style="animation: float 8s ease-in-out infinite;">
+                                        <div class="d-flex align-items-center gap-2 bg-white rounded-pill py-2 px-4 shadow-lg">
+                                            <i class="ri-flashlight-fill" style="color: #8BC905;"></i>
+                                            <span class="fw-semibold small" style="color: #0C3A30;">From $10</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Right: Content Card -->
+                            <div class="col-lg-6">
+                                <div class="single-works-card h-100 p-4 p-xl-5 rounded-4 d-flex flex-column"
+                                     style="background: rgba(41,89,75,0.3); backdrop-filter: blur(10px); border: 1px solid rgba(139,201,5,0.2); box-shadow: 0 20px 40px -15px rgba(0,0,0,0.3);">
+                                    
+                                    <!-- Icon -->
+                                    <div class="d-flex align-items-center justify-content-center rounded-3 mb-4" 
+                                         style="width: 80px; height: 80px; background: rgba(139,201,5,0.15); border: 1px solid rgba(139,201,5,0.3);">
+                                        <i class="flaticon-growth" style="color: #8BC905; font-size: 2.8rem; line-height: 1;"></i>
+                                    </div>
+                                    
+                                    <!-- Title -->
+                                    <h3 class="fw-bold mb-3 text-white" style="font-size: 1.8rem;">Start Investing</h3>
+                                    
+                                    <!-- Description -->
+                                    <p class="text-white-80 mb-4" style="line-height: 1.7; opacity: 0.9;">
+                                        Let our AI build a personalized portfolio tailored to your goals. Start with as little as $10 and watch your money grow.
+                                    </p>
+                                    
+                                    <!-- Feature List -->
+                                    <ul class="list-unstyled d-flex flex-column gap-2 mb-4">
+                                        <li class="d-flex align-items-center gap-2">
+                                            <i class="ri-checkbox-circle-fill" style="color: #8BC905;"></i>
+                                            <span class="text-white-80">AI-managed diversified portfolio</span>
+                                        </li>
+                                        <li class="d-flex align-items-center gap-2">
+                                            <i class="ri-checkbox-circle-fill" style="color: #8BC905;"></i>
+                                            <span class="text-white-80">Low fees, high transparency</span>
+                                        </li>
+                                        <li class="d-flex align-items-center gap-2">
+                                            <i class="ri-checkbox-circle-fill" style="color: #8BC905;"></i>
+                                            <span class="text-white-80">Withdraw anytime, no penalties</span>
+                                        </li>
+                                    </ul>
+                                    
+                                    <!-- CTA Button -->
+                                    <a href="/" class="btn w-100 py-3 rounded-pill fw-bold d-flex align-items-center justify-content-between px-4 mt-auto"
+                                       style="background: linear-gradient(145deg, #8BC905, #7AB805); color: #0C3A30; border: none; transition: all 0.3s;">
+                                        <span>Start Investing</span>
+                                        <span class="rounded-circle bg-white/20 p-2 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                                            <i class="ri-arrow-right-up-line" style="color: #0C3A30; font-size: 1.2rem;"></i>
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ========================================= -->
+        <!-- BOTTOM TRUST BADGES -->
+        <!-- ========================================= -->
+        <div class="row mt-5 pt-5" data-cues="slideInUp" data-duration="800">
+            <div class="col-12">
+                <div class="d-flex flex-wrap align-items-center justify-content-between gap-4 p-4 rounded-4" 
+                     style="background: rgba(255,255,255,0.05); border: 1px solid rgba(139,201,5,0.15); backdrop-filter: blur(10px);">
+                    <div class="d-flex align-items-center gap-3">
+                        <span class="fw-semibold text-white-80">Join 50,000+ users who started their journey:</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="ri-star-fill" style="color: #FFB800;"></i>
+                        <i class="ri-star-fill" style="color: #FFB800;"></i>
+                        <i class="ri-star-fill" style="color: #FFB800;"></i>
+                        <i class="ri-star-fill" style="color: #FFB800;"></i>
+                        <i class="ri-star-fill" style="color: #FFB800;"></i>
+                        <span class="ms-2 text-white-80">4.9/5 from 2,500+ reviews</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="small text-white-50">🚀 Avg. funding time: 2.4 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End How It Works Area - Premium Redesign -->
+
+<style>
+    /* ============ PREMIUM HOW IT WORKS STYLES ============ */
+    
+    /* Animations */
+    @keyframes pulse {
+        0% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.8; transform: scale(0.95); box-shadow: 0 0 20px #8BC905; }
+        100% { opacity: 1; transform: scale(1); }
+    }
+    
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
+    }
+    
+    @keyframes drift {
+        0% { background-position: 0 0; }
+        100% { background-position: 100px 100px; }
+    }
+    
+    /* Works Tab Buttons */
+    .works-tab-btn {
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .works-tab-btn:hover {
+        transform: translateX(8px);
+        background: rgba(139,201,5,0.15) !important;
+        border-color: rgba(139,201,5,0.4) !important;
+    }
+    
+    .works-tab-btn.active {
+        background: rgba(139,201,5,0.15) !important;
+        border-color: rgba(139,201,5,0.4) !important;
+        box-shadow: 0 10px 25px -8px rgba(139,201,5,0.2);
+    }
+    
+    .works-tab-btn.active .step-number {
+        background: rgba(139,201,5,0.3) !important;
+        color: white !important;
+        border-color: rgba(139,201,5,0.6) !important;
+    }
+    
+    .works-tab-btn.active i {
+        color: #8BC905 !important;
+        opacity: 1 !important;
+        transform: translateX(4px) translateY(-2px);
+    }
+    
+    .works-tab-btn i {
+        transition: all 0.3s ease;
+    }
+    
+    .works-tab-btn:hover i {
+        transform: translateX(4px) translateY(-2px);
+        color: #8BC905 !important;
+        opacity: 1 !important;
+    }
+    
+    .works-tab-btn .step-number {
+        transition: all 0.3s ease;
+    }
+    
+    .works-tab-btn:hover .step-number {
+        background: rgba(139,201,5,0.2) !important;
+        color: #8BC905 !important;
+        border-color: rgba(139,201,5,0.4) !important;
+    }
+    
+    /* Card Hover Effects */
+    .single-works-card {
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    .single-works-card:hover {
+        transform: translateY(-8px);
+        background: rgba(41,89,75,0.4) !important;
+        border-color: rgba(139,201,5,0.3) !important;
+        box-shadow: 0 30px 50px -20px rgba(0,0,0,0.4) !important;
+    }
+    
+    .single-works-card:hover .d-flex.align-items-center.justify-content-center.rounded-3 {
+        transform: scale(1.1);
+        background: rgba(139,201,5,0.2) !important;
+        border-color: rgba(139,201,5,0.5) !important;
+    }
+    
+    .single-works-card .d-flex.align-items-center.justify-content-center.rounded-3 {
+        transition: all 0.3s ease;
+    }
+    
+    /* Image Hover */
+    .hover-zoom {
+        transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    .single-works-image:hover .hover-zoom {
+        transform: scale(1.05);
+    }
+    
+    .single-works-image:hover .position-relative {
+        border-color: rgba(139,201,5,0.3) !important;
+    }
+    
+    /* Button Hover */
+    .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 20px 30px -10px rgba(139,201,5,0.3) !important;
+    }
+    
+    .btn:hover .bg-white\/20 {
+        transform: translateX(4px) translateY(-2px);
+    }
+    
+    .bg-white\/20 {
+        transition: all 0.3s ease;
+    }
+    
+    /* Floating Badges */
+    .position-absolute .bg-white {
+        transition: all 0.3s ease;
+        box-shadow: 0 15px 30px -10px rgba(0,0,0,0.2);
+    }
+    
+    .position-absolute .bg-white:hover {
+        transform: scale(1.05);
+        box-shadow: 0 20px 35px -10px rgba(0,0,0,0.25);
+    }
+    
+    /* Text Utilities */
+    .text-white-50 {
+        color: rgba(255, 255, 255, 0.6) !important;
+    }
+    
+    .text-white-80 {
+        color: rgba(255, 255, 255, 0.85) !important;
+    }
+    
+    .backdrop-blur {
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+    
+    /* Responsive */
+    @media (max-width: 1199px) {
+        .works-vertical-tabs {
+            margin-bottom: 40px;
+        }
+        
+        .works-tab-btn {
+            padding: 1.25rem !important;
+        }
+        
+        .about-top .row {
+            text-align: center;
+        }
+        
+        .about-top .content p {
+            border-left: none !important;
+            padding-left: 0 !important;
+            margin-top: 15px;
+        }
+    }
+    
+    @media (max-width: 767px) {
+        .works-tab-btn {
+            padding: 1rem !important;
+        }
+        
+        .works-tab-btn .step-number {
+            width: 40px !important;
+            height: 40px !important;
+            font-size: 1.1rem !important;
+        }
+        
+        .single-works-card {
+            padding: 1.5rem !important;
+        }
+        
+        .single-works-card h3 {
+            font-size: 1.5rem !important;
+        }
+        
+        .d-flex.flex-wrap.align-items-center.justify-content-between {
+            flex-direction: column;
+            text-align: center;
+        }
+    }
+</style>
+
+<script>
+    // Initialize Bootstrap Tabs with enhanced interaction
+    document.addEventListener('DOMContentLoaded', function() {
+        const tabBtns = document.querySelectorAll('.works-tab-btn');
+        const progressStep = document.querySelector('.flex-grow-1 .h-100');
+        const stepText = document.querySelector('.small.text-white-50');
+        
+        tabBtns.forEach((btn, index) => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all
+                tabBtns.forEach(b => {
+                    b.style.background = 'rgba(255,255,255,0.05)';
+                    b.style.borderColor = 'rgba(255,255,255,0.1)';
+                    b.classList.remove('active');
+                    
+                    // Reset step number style
+                    const stepNum = b.querySelector('.step-number');
+                    if (stepNum) {
+                        stepNum.style.background = 'rgba(255,255,255,0.1)';
+                        stepNum.style.color = 'white';
+                        stepNum.style.borderColor = 'rgba(255,255,255,0.1)';
+                    }
+                    
+                    // Reset icon
+                    const icon = b.querySelector('i.ri-arrow-right-up-line');
+                    if (icon) {
+                        icon.style.color = 'white';
+                        icon.style.opacity = '0.5';
+                    }
+                });
+                
+                // Add active class to current
+                this.style.background = 'rgba(139,201,5,0.15)';
+                this.style.borderColor = 'rgba(139,201,5,0.4)';
+                this.classList.add('active');
+                
+                // Update step number style
+                const stepNum = this.querySelector('.step-number');
+                if (stepNum) {
+                    stepNum.style.background = 'rgba(139,201,5,0.2)';
+                    stepNum.style.color = '#8BC905';
+                    stepNum.style.borderColor = 'rgba(139,201,5,0.4)';
+                }
+                
+                // Update icon
+                const icon = this.querySelector('i.ri-arrow-right-up-line');
+                if (icon) {
+                    icon.style.color = '#8BC905';
+                    icon.style.opacity = '1';
+                }
+                
+                // Update progress indicator
+                const step = index + 1;
+                if (progressStep) {
+                    progressStep.style.width = (step * 33.33) + '%';
+                }
+                if (stepText) {
+                    stepText.innerText = 'Step ' + step + ' of 3';
+                }
+            });
+        });
+    });
+</script>
         <!-- End How It Works Area -->
 
 
 
         <!-- Start Testimonials Area -->
-        <div class="testimonials-area pt-100 pb-80 pt-md-120 pb-md-100">
-            <div class="container">
-                <div class="about-top mb-4 mb-md-5">
-                    <div class="row align-items-center">
-                        <div class="col-lg-5 col-md-7" data-cues="slideInRight" data-duration="800">
-                            <div class="section-heading mb-0">
-                                <span class="sub-title">TESTIMONIALS</span>
-                                <h2 class="mb-0">Hear What Our <span><img src="assets/images/svg/lines-1.svg" alt="image">Clients</span> Say About Us</h2>
+       <!-- Start Testimonials Area - Premium Redesign -->
+<div class="testimonials-area py-5 py-md-6 overflow-hidden position-relative"
+     style="background: linear-gradient(145deg, #ffffff, #f9fbf9);">
+    
+    <!-- Premium Decorative Elements -->
+    <div class="position-absolute" style="top: -150px; right: -80px; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(139,201,5,0.03) 0%, transparent 70%); pointer-events: none;"></div>
+    <div class="position-absolute" style="bottom: -120px; left: -60px; width: 450px; height: 450px; border-radius: 50%; background: radial-gradient(circle, rgba(12,58,48,0.02) 0%, transparent 70%); pointer-events: none;"></div>
+    
+    <!-- Subtle Pattern Overlay -->
+    <div class="position-absolute w-100 h-100 opacity-1" 
+         style="top: 0; left: 0; background-image: radial-gradient(circle at 25px 25px, #8BC905 1px, transparent 1px); background-size: 50px 50px; opacity: 0.02; pointer-events: none;"></div>
+    
+    <div class="container position-relative" style="max-width: 1280px; margin: 0 auto; z-index: 5;">
+        
+        <!-- ========================================= -->
+        <!-- SECTION HEADER - PREMIUM -->
+        <!-- ========================================= -->
+        <div class="about-top mb-5" data-cues="slideInUp" data-duration="800">
+            <div class="row g-4 align-items-end">
+                <div class="col-lg-5 col-md-7">
+                    <div class="section-heading mb-0">
+                        <!-- Premium Badge -->
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <span class="badge px-4 py-2 rounded-pill fw-semibold d-inline-flex align-items-center gap-2" 
+                                  style="background: linear-gradient(145deg, #0C3A30, #0A2A23); color: white; border: 1px solid rgba(139,201,5,0.4); letter-spacing: 0.5px; box-shadow: 0 10px 20px -8px rgba(10,42,35,0.2);">
+                                <span style="display: inline-block; width: 8px; height: 8px; background: #8BC905; border-radius: 50%; box-shadow: 0 0 8px #8BC905; animation: pulse 2s infinite;"></span>
+                                TESTIMONIALS
+                            </span>
+                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.1); color: #8BC905; border: 1px solid rgba(139,201,5,0.2);">
+                                ⭐ 4.9/5 RATING
+                            </span>
+                        </div>
+                        
+                        <!-- Main Headline -->
+                        <h2 class="display-5 fw-bold mb-0" style="color: #0C3A30; line-height: 1.2; max-width: 500px;">
+                            Hear What Our 
+                            <span style="color: #8BC905; position: relative; display: inline-block;">
+                                Clients
+                                <span class="position-absolute start-0 w-100" style="bottom: 0.1em; height: 8px; background: rgba(139,201,5,0.25); border-radius: 30px; z-index: -1;"></span>
+                            </span>
+                            Say About Us
+                        </h2>
+                    </div>
+                </div>
+                
+                <div class="col-lg-7 col-md-5">
+                    <div class="content ps-lg-5">
+                        <p class="fs-5 text-secondary mb-0" style="color: #4A5C5A !important; line-height: 1.6; border-left: 4px solid #8BC905; padding-left: 20px;">
+                            Join 50,000+ individuals and businesses who trust us to move, manage, and grow their money every single day.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ========================================= -->
+        <!-- MAIN CONTENT - LEFT IMAGE | RIGHT TESTIMONIALS -->
+        <!-- ========================================= -->
+        <div class="row g-5 align-items-stretch">
+            
+            <!-- ========================================= -->
+            <!-- LEFT COLUMN - PREMIUM IMAGE SHOWCASE -->
+            <!-- ========================================= -->
+            <div class="col-lg-6 col-md-12" data-cues="slideInRight" data-duration="800">
+                <div class="testimonials-image h-100 position-relative p-3">
+                    <div class="position-relative h-100 rounded-5 overflow-hidden" 
+                         style="background: linear-gradient(145deg, #8BC905, #7AB805); box-shadow: 0 30px 50px -20px rgba(139,201,5,0.3);">
+                        
+                        <!-- Decorative Pattern -->
+                        <div class="position-absolute w-100 h-100 opacity-10" 
+                             style="background-image: radial-gradient(circle at 20px 20px, rgba(255,255,255,0.3) 1px, transparent 1px); background-size: 30px 30px; pointer-events: none;"></div>
+                        
+                        <!-- Main Image -->
+                        <img class="w-100 h-100" 
+                             src="assets/images/frontpage-pricing-d.webp" 
+                             alt="Happy clients"
+                             style="object-fit: cover; mix-blend-mode: overlay; opacity: 0.9;">
+                        
+                        <!-- Gradient Overlay -->
+                        
+                        
+                        <!-- Floating Trust Badges -->
+                        <div class="position-absolute top-0 start-0 m-4" style="animation: float 6s ease-in-out infinite; z-index: 10;">
+                            <div class="d-flex align-items-center gap-2 bg-white/95 backdrop-blur rounded-pill py-3 px-4 shadow-lg">
+                                <i class="ri-user-heart-fill" style="color: #8BC905;"></i>
+                                <span class="fw-bold" style="color: #0C3A30;">50K+</span>
+                                <span class="text-secondary small">happy clients</span>
                             </div>
                         </div>
-                        <div class="col-lg-7 col-md-5" data-cues="slideInLeft" data-duration="800">
-                            <div class="content">
-                                <p>By integrating advanced technology with financial expertise we provide a comprehensive suite of services that cater to both individuals and businesses</p>
+                        
+                        <div class="position-absolute bottom-0 end-0 m-4" style="animation: float 7s ease-in-out infinite 1s; z-index: 10;">
+                            <div class="d-flex align-items-center gap-2 bg-white/95 backdrop-blur rounded-pill py-3 px-4 shadow-lg">
+                                <i class="ri-star-fill" style="color: #FFB800;"></i>
+                                <span class="fw-bold" style="color: #0C3A30;">4.9</span>
+                                <span class="text-secondary small">/ 5.0</span>
                             </div>
+                        </div>
+                        
+                        <!-- Decorative Shapes -->
+                        <div class="position-absolute" style="top: 20%; left: 10%; animation: rotateSlow 20s linear infinite;">
+                            <img class="feature-shape-1" src="assets/images/shape/feature-shape-1.png" alt="shape" style="width: 60px; opacity: 0.6;">
+                        </div>
+                        <div class="position-absolute" style="bottom: 15%; right: 10%; animation: rotateSlow 25s linear infinite reverse;">
+                            <img class="feature-shape-2" src="assets/images/shape/feature-shape-1.png" alt="shape" style="width: 80px; opacity: 0.4;">
                         </div>
                     </div>
                 </div>
-                <div class="row" data-cues="slideInUp" data-duration="800">
-                    <div class="col-lg-6 col-md-12">
-                        <div class="testimonials-image bg-color-9edd05 radius-30 position-relative">
-                            <img class="about-image-2" src="assets/images/frontpage-pricing-d.webp" alt="image">
-                            <img class="feature-shape-1 rotate" src="assets/images/shape/feature-shape-1.png" alt="image">
-                            <img class="feature-shape-2 rotate" src="assets/images/shape/feature-shape-1.png" alt="image">
+            </div>
+            
+            <!-- ========================================= -->
+            <!-- RIGHT COLUMN - PREMIUM TESTIMONIAL CARDS -->
+            <!-- ========================================= -->
+            <div class="col-lg-6 col-md-12" data-cues="slideInLeft" data-duration="800">
+                <div class="testimonials-content d-flex flex-column gap-4 h-100">
+                    
+                    <!-- TESTIMONIAL CARD 1 - Community Founder -->
+                    <div class="testimonial-card-premium p-4 p-xl-5 rounded-4 position-relative"
+                         style="background: white; border: 1px solid rgba(139,201,5,0.1); box-shadow: 0 20px 40px -15px rgba(0,0,0,0.05); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);">
+                        
+                        <!-- Decorative Quote Icon -->
+                        <div class="position-absolute top-0 end-0 m-4" style="z-index: 2;">
+                            <img class="right-quote" src="assets/images/svg/right-quote.svg" alt="quote" style="width: 48px; height: 48px; opacity: 0.2;">
                         </div>
+                        
+                        <!-- Star Rating -->
+                        <div class="d-flex align-items-center gap-1 mb-3">
+                            <i class="flaticon-star-2" style="color: #FFB800; font-size: 1.4rem;"></i>
+                            <i class="flaticon-star-2" style="color: #FFB800; font-size: 1.4rem;"></i>
+                            <i class="flaticon-star-2" style="color: #FFB800; font-size: 1.4rem;"></i>
+                            <i class="flaticon-star-2" style="color: #FFB800; font-size: 1.4rem;"></i>
+                            <i class="flaticon-star-2" style="color: #FFB800; font-size: 1.4rem;"></i>
+                            <span class="ms-2 small fw-semibold" style="color: #0C3A30;">5.0</span>
+                        </div>
+                        
+                        <!-- Testimonial Text -->
+                        <p class="text-secondary mb-4" style="color: #4A5C5A !important; line-height: 1.7; font-size: 1.05rem; position: relative; z-index: 3;">
+                            "At MarketMind, we’re transforming the financial landscape with advanced trading and copy-trading technology. We bridge the gap between traditional markets and modern digital innovation — delivering a seamless, intelligent trading experience."
+                        </p>
+                        
+                        <!-- Author Info -->
+                        <div class="d-flex align-items-center justify-content-between mt-auto">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="position-relative">
+                                    <img class="user-image-4 rounded-circle" 
+                                         src="assets/images/user/user-image-4.jpg" 
+                                         alt="Sarah Chen"
+                                         style="width: 64px; height: 64px; object-fit: cover; border: 3px solid white; box-shadow: 0 10px 20px -8px rgba(0,0,0,0.1);">
+                                    <span class="position-absolute bottom-0 end-0 bg-success rounded-circle border-2 border-white" 
+                                          style="width: 16px; height: 16px; background: #8BC905 !important;"></span>
+                                </div>
+                                <div>
+                                    <h3 class="fw-bold mb-1" style="color: #0C3A30; font-size: 1.25rem;">Our Discord Community</h3>
+                                    <span class="small text-secondary">CEO & Founder, MarketMind Community</span>
+                                </div>
+                            </div>
+                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.1); color: #8BC905; border: 1px solid rgba(139,201,5,0.2);">
+                                Discord
+                            </span>
+                        </div>
+                        
+                        <!-- Top Accent -->
+                        <div class="position-absolute top-0 start-0 w-100" style="height: 4px; background: linear-gradient(90deg, #8BC905, #0C3A30); border-radius: 4px 4px 0 0;"></div>
                     </div>
-                    <div class="col-lg-6 col-md-12">
-                        <div class="testimonials-content">
-                            <div class="testimonials-card bg-color-fffaeb radius-30 mb-3 mb-md-4">
-                                <ul>
-                                    <li>
-                                        <i class="flaticon-star-2"></i>
-                                        <i class="flaticon-star-2"></i>
-                                        <i class="flaticon-star-2"></i>
-                                        <i class="flaticon-star-2"></i>
-                                        <i class="flaticon-star-2"></i>
-                                    </li>
-                                </ul>
-                                <p>“We are at the forefront of revolutionizing the financial landscape through cutting MarketMind solutions Our mission is to bridge the gap between traditional banking and modern technology, offering innovative and seamless financial services that cater to the evolving needs of individuals.”</p>
-
-                                <div class="flex-warp d-flex align-items-center justify-content-between">
-                                    <div class="d-flex gap-3 gap-md-4 align-items-center">
-                                        <img class="user-image-4 rounded-circle" src="assets/images/user/user-image-4.jpg" alt="image">
-                                        <div>
-                                            <h3>Our Discord Community Name</h3>
-                                            <span>CEO & Founder Of Our Community And On Discord Channels</span>
-                                        </div>
-                                    </div>
-                                    <img class="right-quote" src="assets/images/svg/right-quote.svg" alt="image">
+                    
+                    <!-- TESTIMONIAL CARD 2 - Investor -->
+                    <div class="testimonial-card-premium p-4 p-xl-5 rounded-4 position-relative"
+                         style="background: white; border: 1px solid rgba(139,201,5,0.1); box-shadow: 0 20px 40px -15px rgba(0,0,0,0.05); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);">
+                        
+                        <!-- Decorative Quote Icon -->
+                        <div class="position-absolute top-0 end-0 m-4" style="z-index: 2;">
+                            <img class="right-quote" src="assets/images/svg/right-quote.svg" alt="quote" style="width: 48px; height: 48px; opacity: 0.2;">
+                        </div>
+                        
+                        <!-- Star Rating -->
+                        <div class="d-flex align-items-center gap-1 mb-3">
+                            <i class="flaticon-star-2" style="color: #FFB800; font-size: 1.4rem;"></i>
+                            <i class="flaticon-star-2" style="color: #FFB800; font-size: 1.4rem;"></i>
+                            <i class="flaticon-star-2" style="color: #FFB800; font-size: 1.4rem;"></i>
+                            <i class="flaticon-star-2" style="color: #FFB800; font-size: 1.4rem;"></i>
+                            <i class="flaticon-star-2" style="color: #FFB800; font-size: 1.4rem;"></i>
+                            <span class="ms-2 small fw-semibold" style="color: #0C3A30;">5.0</span>
+                        </div>
+                        
+                        <!-- Testimonial Text -->
+                        <p class="text-secondary mb-4" style="color: #4A5C5A !important; line-height: 1.7; font-size: 1.05rem; position: relative; z-index: 3;">
+                            "I've been investing for over 15 years, and I've never seen a platform this intuitive. The Automated-powered insights alone have improved my returns by 23%. Finally, a trading company that actually delivers on its promises."
+                        </p>
+                        
+                        <!-- Author Info -->
+                        <div class="d-flex align-items-center justify-content-between mt-auto">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="position-relative">
+                                    <img class="user-image-4 rounded-circle" 
+                                         src="assets/images/user/user-image-5.jpg" 
+                                         alt="Kevin M. Rueda"
+                                         style="width: 64px; height: 64px; object-fit: cover; border: 3px solid white; box-shadow: 0 10px 20px -8px rgba(0,0,0,0.1);">
+                                    <span class="position-absolute bottom-0 end-0 bg-success rounded-circle border-2 border-white" 
+                                          style="width: 16px; height: 16px; background: #8BC905 !important;"></span>
+                                </div>
+                                <div>
+                                    <h3 class="fw-bold mb-1" style="color: #0C3A30; font-size: 1.25rem;">Kevin M. Rueda</h3>
+                                    <span class="small text-secondary">Angel Investor • 15+ years</span>
                                 </div>
                             </div>
-
-                            <div class="testimonials-card bg-color-fffaeb radius-30">
-                                <ul>
-                                    <li>
-                                        <i class="flaticon-star-2"></i>
-                                        <i class="flaticon-star-2"></i>
-                                        <i class="flaticon-star-2"></i>
-                                        <i class="flaticon-star-2"></i>
-                                        <i class="flaticon-star-2"></i>
-                                    </li>
-                                </ul>
-                                <p>“We are at the forefront of revolutionizing the financial landscape through cutting MarketMind solutions Our mission is to bridge the gap between traditional banking and modern technology, offering innovative and seamless financial services that cater to the evolving needs of individuals.”</p>
-
-                                <div class="flex-warp d-flex align-items-center justify-content-between">
-                                    <div class="d-flex gap-3 gap-md-4 align-items-center">
-                                        <img class="user-image-4 rounded-circle" src="assets/images/user/user-image-5.jpg" alt="image">
-                                        <div>
-                                            <h3>Kevin M. Rueda</h3>
-                                            <span>Investor</span>
-                                        </div>
-                                    </div>
-                                    <img class="right-quote" src="assets/images/svg/right-quote.svg" alt="image">
-                                </div>
+                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.1); color: #8BC905; border: 1px solid rgba(139,201,5,0.2);">
+                                ⚡ +23% returns
+                            </span>
+                        </div>
+                        
+                        <!-- Top Accent -->
+                        <div class="position-absolute top-0 start-0 w-100" style="height: 4px; background: linear-gradient(90deg, #0C3A30, #8BC905); border-radius: 4px 4px 0 0;"></div>
+                    </div>
+                    
+                    <!-- Trust Metrics Row -->
+                    <div class="d-flex align-items-center justify-content-between p-3 rounded-4" 
+                         style="background: rgba(139,201,5,0.04); border: 1px dashed rgba(139,201,5,0.2);">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="d-flex align-items-center">
+                                <div class="rounded-circle border-2 border-white" style="width: 36px; height: 36px; background: linear-gradient(145deg, #0C3A30, #0A2A23); margin-right: -10px;"></div>
+                                <div class="rounded-circle border-2 border-white" style="width: 36px; height: 36px; background: linear-gradient(145deg, #8BC905, #7AB805); margin-right: -10px;"></div>
+                                <div class="rounded-circle border-2 border-white" style="width: 36px; height: 36px; background: linear-gradient(145deg, #0C3A30, #0A2A23); margin-right: -10px;"></div>
+                                <div class="rounded-circle border-2 border-white" style="width: 36px; height: 36px; background: linear-gradient(145deg, #8BC905, #7AB805);"></div>
                             </div>
+                            <span class="fw-semibold small" style="color: #0C3A30;">Trusted by 50K+</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-1">
+                            <i class="ri-shield-check-fill" style="color: #8BC905;"></i>
+                            <span class="small text-secondary">Verified reviews</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        
+        <!-- ========================================= -->
+        <!-- BOTTOM PARTNER LOGOS / TRUST BADGES -->
+        <!-- ========================================= -->
+        <div class="row mt-5 pt-4" data-cues="slideInUp" data-duration="800">
+            <div class="col-12">
+                <div class="d-flex flex-wrap align-items-center justify-content-center gap-4 gap-xl-5 p-4 rounded-4" 
+                     style="background: white; border: 1px solid rgba(139,201,5,0.1); box-shadow: 0 10px 30px -10px rgba(0,0,0,0.03);">
+                    <span class="small text-secondary fw-semibold">Featured on:</span>
+                    <span style="color: #4A5C5A; font-weight: 600; opacity: 0.7;">MARKETMIND</span>
+                    <span style="color: #4A5C5A; font-weight: 600; opacity: 0.7;">KRACKENN</span>
+                    <span style="color: #4A5C5A; font-weight: 600; opacity: 0.7;">TRUSTWALLET</span>
+                    <span style="color: #4A5C5A; font-weight: 600; opacity: 0.7;">BINANCE</span>
+                    <span style="color: #4A5C5A; font-weight: 600; opacity: 0.7;">MT5 / MT4</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Testimonials Area - Premium Redesign -->
+
+<style>
+    /* ============ PREMIUM TESTIMONIALS STYLES ============ */
+    
+    /* Animations */
+    @keyframes pulse {
+        0% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.8; transform: scale(0.95); box-shadow: 0 0 15px #8BC905; }
+        100% { opacity: 1; transform: scale(1); }
+    }
+    
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
+    }
+    
+    @keyframes rotateSlow {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+    /* Testimonial Card Hover */
+    .testimonial-card-premium {
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .testimonial-card-premium:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 30px 50px -15px rgba(139,201,5,0.15) !important;
+        border-color: rgba(139,201,5,0.3) !important;
+    }
+    
+    .testimonial-card-premium:hover .right-quote {
+        transform: scale(1.1);
+        opacity: 0.3;
+    }
+    
+    .testimonial-card-premium .right-quote {
+        transition: all 0.3s ease;
+    }
+    
+    /* User Image Hover */
+    .testimonial-card-premium:hover .user-image-4 {
+        transform: scale(1.05);
+        border-color: #8BC905 !important;
+    }
+    
+    .user-image-4 {
+        transition: all 0.3s ease;
+    }
+    
+    /* Left Image Container Hover */
+    .testimonials-image .position-relative {
+        transition: all 0.5s ease;
+    }
+    
+    .testimonials-image:hover .position-relative {
+        transform: scale(1.02);
+        box-shadow: 0 40px 70px -20px rgba(139,201,5,0.4) !important;
+    }
+    
+    /* Star Rating */
+    .flaticon-star-2 {
+        transition: all 0.2s ease;
+    }
+    
+    .testimonial-card-premium:hover .flaticon-star-2 {
+        transform: scale(1.1);
+    }
+    
+    /* Floating Badges */
+    .position-absolute .bg-white\/95 {
+        transition: all 0.3s ease;
+    }
+    
+    .position-absolute .bg-white\/95:hover {
+        transform: scale(1.05);
+        box-shadow: 0 15px 30px -8px rgba(0,0,0,0.15) !important;
+    }
+    
+    /* Trust Metrics Row Hover */
+    .d-flex.align-items-center.justify-content-between.p-3 {
+        transition: all 0.3s ease;
+    }
+    
+    .d-flex.align-items-center.justify-content-between.p-3:hover {
+        background: rgba(139,201,5,0.08) !important;
+        border-color: rgba(139,201,5,0.3) !important;
+    }
+    
+    .d-flex.align-items-center .rounded-circle {
+        transition: all 0.3s ease;
+    }
+    
+    .d-flex.align-items-center:hover .rounded-circle {
+        transform: translateY(-3px);
+    }
+    
+    /* Partner Logos Hover */
+    .d-flex.flex-wrap span[style*="font-weight: 600"] {
+        transition: all 0.3s ease;
+        cursor: default;
+    }
+    
+    .d-flex.flex-wrap span[style*="font-weight: 600"]:hover {
+        opacity: 1 !important;
+        color: #0C3A30 !important;
+        transform: translateY(-2px);
+    }
+    
+    /* Responsive */
+    @media (max-width: 991px) {
+        .about-top .row {
+            text-align: center;
+        }
+        
+        .about-top .content p {
+            border-left: none !important;
+            padding-left: 0 !important;
+            margin-top: 15px;
+        }
+        
+        .testimonials-image {
+            margin-bottom: 30px;
+            height: 400px !important;
+        }
+        
+        .testimonials-content {
+            padding-left: 0 !important;
+        }
+    }
+    
+    @media (max-width: 767px) {
+        .testimonial-card-premium {
+            padding: 1.5rem !important;
+        }
+        
+        .d-flex.align-items-center.gap-3 {
+            flex-wrap: wrap;
+        }
+        
+        .position-absolute.top-0.end-0.m-4 {
+            position: relative !important;
+            top: auto !important;
+            right: auto !important;
+            margin: 0 0 15px 0 !important;
+            text-align: right;
+        }
+        
+        .testimonials-image {
+            height: 350px !important;
+        }
+        
+        .d-flex.flex-wrap.align-items-center.justify-content-center.gap-4 {
+            flex-direction: column;
+            text-align: center;
+        }
+    }
+    
+    /* Utilities */
+    .backdrop-blur {
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+    
+    .text-secondary {
+        color: #4A5C5A !important;
+    }
+</style>
         <!-- End Testimonials Area -->
 
         <!-- Start Blog Area -->
-        <div class="blog-area pb-80 pb-md-120 ">
-            <div class="container">
-                <div class="section-title">
-                    <span class="sub-title pt-100">LATEST BLOG</span>
-                    <h2>Smart Tools For <span><img src="assets/images/svg/lines-1.svg" alt="image">Creative</span> Financial Planning</h2>
-                </div>
-                <div class="row g-3 g-md-4" data-cues="slideInUp" data-duration="800">
-                    <div class="col-xl-6 col-lg-12 col-md-12">
-                        <div class="blog-card bg-color-edf1ee radius-30 mb-3 mb-md-4">
-                            <div class="row align-items-center">
-                                <div class="col-lg-5 col-md-5">
-                                    <div class="blog-image">
-                                        <a href="/" class="d-block">
-                                            <img src="assets/images/blog/blog-image-1.jpg" class="blog-image-1" alt="image">
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="col-lg-7 col-md-7">
-                                    <div class="blog-card-body">
-                                        <ul>
-                                            <li><i class="ri-calendar-2-line"></i> {{ \Carbon\Carbon::now()->format('M d, Y') }}</li>
-
-                                            <li><i class="ri-message-line"></i> No Comment</li>
-                                        </ul>
-                                        <h3>
-                                            <a href="/">How To Easily Understand Your Insurance Contract</a>
-                                        </h3>
-                                        <p>With a robust suite of products ranging from digital banking and payment processing.</p>
-                                        <a href="/" class="read-more">Read More <i class="ri-arrow-right-up-line"></i></a>
-                                    </div>
-                                </div>
-                            </div>
+       <!-- Start Blog Area - Premium Redesign -->
+<div class="blog-area py-5 py-md-6 overflow-hidden position-relative"
+     style="background: linear-gradient(145deg, #ffffff, #f9fbf9);">
+    
+    <!-- Premium Decorative Elements -->
+    <div class="position-absolute" style="top: -150px; left: -80px; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(139,201,5,0.03) 0%, transparent 70%); pointer-events: none;"></div>
+    <div class="position-absolute" style="bottom: -120px; right: -60px; width: 450px; height: 450px; border-radius: 50%; background: radial-gradient(circle, rgba(12,58,48,0.02) 0%, transparent 70%); pointer-events: none;"></div>
+    
+    <!-- Subtle Pattern Overlay -->
+    <div class="position-absolute w-100 h-100 opacity-1" 
+         style="top: 0; left: 0; background-image: linear-gradient(45deg, rgba(139,201,5,0.02) 25%, transparent 25%), linear-gradient(-45deg, rgba(139,201,5,0.02) 25%, transparent 25%); background-size: 30px 30px; pointer-events: none;"></div>
+    
+    <div class="container position-relative" style="max-width: 1280px; margin: 0 auto; z-index: 5;">
+        
+        <!-- ========================================= -->
+        <!-- SECTION HEADER - PREMIUM -->
+        <!-- ========================================= -->
+        <div class="text-center mb-5" data-cues="slideInUp" data-duration="800">
+            <div class="d-flex justify-content-center mb-3">
+                <span class="badge px-4 py-2 rounded-pill fw-semibold d-inline-flex align-items-center gap-2" 
+                      style="background: linear-gradient(145deg, #0C3A30, #0A2A23); color: white; border: 1px solid rgba(139,201,5,0.4); letter-spacing: 0.5px; box-shadow: 0 10px 20px -8px rgba(10,42,35,0.2);">
+                    <span style="display: inline-block; width: 8px; height: 8px; background: #8BC905; border-radius: 50%; box-shadow: 0 0 8px #8BC905; animation: pulse 2s infinite;"></span>
+                    LATEST INSIGHTS
+                </span>
+            </div>
+            
+            <h2 class="display-5 fw-bold mb-3 mx-auto" style="color: #0C3A30; max-width: 700px; line-height: 1.2;">
+                Smart Tools For 
+                <span style="color: #8BC905; position: relative; display: inline-block;">
+                    Creative
+                    <span class="position-absolute start-0 w-100" style="bottom: 0.1em; height: 8px; background: rgba(139,201,5,0.25); border-radius: 30px; z-index: -1;"></span>
+                </span>
+                Financial Planning
+            </h2>
+            
+            <p class="fs-5 text-secondary mx-auto" style="color: #4A5C5A !important; max-width: 600px; line-height: 1.6;">
+                Expert insights, guides, and strategies to help you make smarter financial decisions
+            </p>
+        </div>
+        
+        <!-- ========================================= -->
+        <!-- BLOG GRID - MIXED LAYOUT (2 HORIZONTAL + 1 VERTICAL) -->
+        <!-- ========================================= -->
+        <div class="row g-4" data-cues="slideInUp" data-duration="800">
+            
+            <!-- ========================================= -->
+            <!-- LEFT COLUMN - 2 HORIZONTAL CARDS -->
+            <!-- ========================================= -->
+            <div class="col-xl-6 col-lg-12 col-md-12">
+                <div class="d-flex flex-column gap-4 h-100">
+                    
+                    <!-- BLOG CARD 1 - Horizontal -->
+                    <div class="blog-card-horizontal d-flex flex-column flex-md-row align-items-stretch overflow-hidden rounded-4 w-100"
+                         style="background: white; border: 1px solid rgba(139,201,5,0.1); box-shadow: 0 15px 30px -10px rgba(0,0,0,0.05); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);">
+                        
+                        <!-- Image Container -->
+                        <div class="blog-image-wrapper position-relative" style="flex: 0 0 40%; min-height: 220px;">
+                            <a href="/" class="d-block h-100 w-100">
+                                <img src="assets/images/blog/blog-image-1.jpg" 
+                                     alt="Insurance Contract Guide"
+                                     style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease;"
+                                     class="blog-image-hover">
+                            </a>
+                            <!-- Category Badge -->
+                            <span class="position-absolute top-0 start-0 m-3 px-3 py-2 rounded-pill small fw-semibold"
+                                  style="background: rgba(139,201,5,0.9); color: #0C3A30; backdrop-filter: blur(5px); z-index: 2;">
+                                Insurance
+                            </span>
                         </div>
-
-                        <div class="blog-card bg-color-edf1ee radius-30">
-                            <div class="row align-items-center">
-                                <div class="col-lg-5 col-md-5">
-                                    <div class="blog-image">
-                                        <a href="/" class="d-block">
-                                            <img src="assets/images/blog/blog-image-2.jpg" class="blog-image-1" alt="image">
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="col-lg-7 col-md-7">
-                                    <div class="blog-card-body">
-                                        <ul>
-                                            <li><i class="ri-calendar-2-line"></i> {{ \Carbon\Carbon::now()->format('M d, Y') }}</li>
-
-                                            <li><i class="ri-message-line"></i> No Comment</li>
-                                        </ul>
-                                        <h3>
-                                            <a href="/">The Basics Of Financial Responsibility</a>
-                                        </h3>
-                                        <p>With a robust suite of products ranging from digital banking and payment processing.</p>
-                                        <a href="/" class="read-more">Read More <i class="ri-arrow-right-up-line"></i></a>
-                                    </div>
-                                </div>
+                        
+                        <!-- Content -->
+                        <div class="blog-card-body p-4 p-xl-4 d-flex flex-column flex-grow-1" style="flex: 1;">
+                            <!-- Meta -->
+                            <div class="d-flex align-items-center gap-3 mb-2">
+                                <span class="small d-flex align-items-center gap-1 text-secondary">
+                                    <i class="ri-calendar-2-line" style="color: #8BC905;"></i> 
+                                    {{ \Carbon\Carbon::now()->format('M d, Y') }}
+                                </span>
+                                <span class="small d-flex align-items-center gap-1 text-secondary">
+                                    <i class="ri-message-line" style="color: #8BC905;"></i> 
+                                    0 Comments
+                                </span>
+                                <span class="badge px-2 py-1 rounded-pill" style="background: rgba(139,201,5,0.1); color: #8BC905; font-size: 0.7rem;">
+                                    5 min read
+                                </span>
                             </div>
+                            
+                            <!-- Title -->
+                            <h3 class="fw-bold mb-2" style="color: #0C3A30; font-size: 1.35rem; line-height: 1.4;">
+                                <a href="/" class="text-decoration-none" style="color: #0C3A30; transition: color 0.2s;">
+                                    How To Easily Understand Your Trading Strategy
+                                </a>
+                            </h3>
+                            
+                            <!-- Excerpt -->
+                            <p class="text-secondary mb-3 small" style="color: #4A5C5A !important; line-height: 1.6;">
+                              Know exactly how your capital is managed, how returns are calculated, and what risks are involved  clearly explained, zero guesswork.
+                            </p>
+                            
+                            <!-- Read More -->
+                            <a href="/" class="read-more d-inline-flex align-items-center gap-2 fw-semibold text-decoration-none mt-auto"
+                               style="color: #8BC905; transition: all 0.3s ease;">
+                                Read Article
+                                <span class="rounded-circle d-flex align-items-center justify-content-center" 
+                                      style="width: 28px; height: 28px; background: rgba(139,201,5,0.1); color: #8BC905; transition: all 0.3s ease;">
+                                    <i class="ri-arrow-right-up-line"></i>
+                                </span>
+                            </a>
                         </div>
                     </div>
-                    <div class="col-xl-6 col-lg-12 col-md-12">
-                        <div class="single-blog bg-color-edf1ee radius-30">
-                            <a href="/" class="d-block">
-                                <img src="assets/images/blog/blog-image-3.jpg" class="blog-image-3" alt="image">
+                    
+                    <!-- BLOG CARD 2 - Horizontal -->
+                    <div class="blog-card-horizontal d-flex flex-column flex-md-row align-items-stretch overflow-hidden rounded-4 w-100"
+                         style="background: white; border: 1px solid rgba(139,201,5,0.1); box-shadow: 0 15px 30px -10px rgba(0,0,0,0.05); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);">
+                        
+                        <!-- Image Container -->
+                        <div class="blog-image-wrapper position-relative" style="flex: 0 0 40%; min-height: 220px;">
+                            <a href="/" class="d-block h-100 w-100">
+                                <img src="assets/images/blog/blog-image-2.jpg" 
+                                     alt="Financial Responsibility"
+                                     style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease;"
+                                     class="blog-image-hover">
                             </a>
-                            <div class="single-blog-card-body">
-                                <ul>
-                                    <li><i class="ri-calendar-2-line"></i> {{ \Carbon\Carbon::now()->format('M d, Y') }}</li>
-
-                                    <li><i class="ri-message-line"></i> No Comment</li>
-                                </ul>
-                                <h3>
-                                    <a href="/">Effective Financial Management Crucial For Most Organizations</a>
-                                </h3>
-                                <p>We are at the forefront of revolutionizing the financial landscape through cutting solutions Our mission is to bridge the gap between traditional banking.</p>
-                                <a href="/" class="read-more">Read More <i class="ri-arrow-right-up-line"></i></a>
+                            <!-- Category Badge -->
+                            <span class="position-absolute top-0 start-0 m-3 px-3 py-2 rounded-pill small fw-semibold"
+                                  style="background: rgba(139,201,5,0.9); color: #0C3A30; backdrop-filter: blur(5px); z-index: 2;">
+                                Finance 101
+                            </span>
+                        </div>
+                        
+                        <!-- Content -->
+                        <div class="blog-card-body p-4 p-xl-4 d-flex flex-column flex-grow-1" style="flex: 1;">
+                            <!-- Meta -->
+                            <div class="d-flex align-items-center gap-3 mb-2">
+                                <span class="small d-flex align-items-center gap-1 text-secondary">
+                                    <i class="ri-calendar-2-line" style="color: #8BC905;"></i> 
+                                    {{ \Carbon\Carbon::now()->format('M d, Y') }}
+                                </span>
+                                <span class="small d-flex align-items-center gap-1 text-secondary">
+                                    <i class="ri-message-line" style="color: #8BC905;"></i> 
+                                    3 Comments
+                                </span>
+                                <span class="badge px-2 py-1 rounded-pill" style="background: rgba(139,201,5,0.1); color: #8BC905; font-size: 0.7rem;">
+                                    4 min read
+                                </span>
                             </div>
+                            
+                            <!-- Title -->
+                            <h3 class="fw-bold mb-2" style="color: #0C3A30; font-size: 1.35rem; line-height: 1.4;">
+                                <a href="/" class="text-decoration-none" style="color: #0C3A30; transition: color 0.2s;">
+                                    The Basics Of Financial Responsibility
+                                </a>
+                            </h3>
+                            
+                            <!-- Excerpt -->
+                            <p class="text-secondary mb-3 small" style="color: #4A5C5A !important; line-height: 1.6;">
+                                Master the fundamentals of budgeting, saving, and spending — designed for beginners.
+                            </p>
+                            
+                            <!-- Read More -->
+                            <a href="/" class="read-more d-inline-flex align-items-center gap-2 fw-semibold text-decoration-none mt-auto"
+                               style="color: #8BC905; transition: all 0.3s ease;">
+                                Read Article
+                                <span class="rounded-circle d-flex align-items-center justify-content-center" 
+                                      style="width: 28px; height: 28px; background: rgba(139,201,5,0.1); color: #8BC905; transition: all 0.3s ease;">
+                                    <i class="ri-arrow-right-up-line"></i>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ========================================= -->
+            <!-- RIGHT COLUMN - 1 VERTICAL FEATURED CARD -->
+            <!-- ========================================= -->
+            <div class="col-xl-6 col-lg-12 col-md-12">
+                <div class="blog-card-vertical h-100 w-100 overflow-hidden rounded-4 d-flex flex-column"
+                     style="background: white; border: 1px solid rgba(139,201,5,0.1); box-shadow: 0 20px 40px -15px rgba(0,0,0,0.08); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);">
+                    
+                    <!-- Featured Badge -->
+                    <span class="position-absolute top-0 end-0 m-4 px-4 py-2 rounded-pill fw-semibold d-inline-flex align-items-center gap-2"
+                          style="background: linear-gradient(145deg, #8BC905, #7AB805); color: #0C3A30; border: none; box-shadow: 0 10px 20px -8px rgba(139,201,5,0.3); z-index: 10;">
+                        <span style="display: inline-block; width: 8px; height: 8px; background: #0C3A30; border-radius: 50%; animation: pulse 2s infinite;"></span>
+                        FEATURED
+                    </span>
+                    
+                    <!-- Image Container -->
+                    <div class="blog-image-vertical-wrapper position-relative w-100" style="height: 260px;">
+                        <a href="/" class="d-block h-100 w-100">
+                            <img src="assets/images/blog/blog-image-3.jpg" 
+                                 alt="Financial Management"
+                                 style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);"
+                                 class="blog-image-hover">
+                        </a>
+                        <!-- Gradient Overlay -->
+                        <div class="position-absolute bottom-0 start-0 w-100 p-3" 
+                             style="background: linear-gradient(to top, rgba(12,58,48,0.8), transparent);">
+                            <span class="badge px-3 py-2 rounded-pill" style="background: rgba(255,255,255,0.9); color: #0C3A30;">
+                                <i class="ri-trending-up-fill me-1" style="color: #8BC905;"></i> 
+                                Trending Now
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <!-- Content -->
+                    <div class="single-blog-card-body p-4 p-xl-5 d-flex flex-column flex-grow-1">
+                        <!-- Meta -->
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <span class="small d-flex align-items-center gap-1 text-secondary">
+                                <i class="ri-calendar-2-line" style="color: #8BC905;"></i> 
+                                {{ \Carbon\Carbon::now()->format('M d, Y') }}
+                            </span>
+                            <span class="small d-flex align-items-center gap-1 text-secondary">
+                                <i class="ri-message-line" style="color: #8BC905;"></i> 
+                                12 Comments
+                            </span>
+                            <span class="badge px-2 py-1 rounded-pill" style="background: rgba(139,201,5,0.1); color: #8BC905; font-size: 0.7rem;">
+                                7 min read
+                            </span>
+                        </div>
+                        
+                        <!-- Title -->
+                        <h3 class="fw-bold mb-3" style="color: #0C3A30; font-size: 1.65rem; line-height: 1.3;">
+                            <a href="/" class="text-decoration-none" style="color: #0C3A30; transition: color 0.2s;">
+                                Effective Financial Management: Crucial For Most Organizations
+                            </a>
+                        </h3>
+                        
+                        <!-- Excerpt -->
+                        <p class="text-secondary mb-4" style="color: #4A5C5A !important; line-height: 1.7;">
+                            We're revolutionizing how businesses approach financial strategy. From cash flow optimization to AI-powered forecasting — discover the tools that separate market leaders from followers.
+                        </p>
+                        
+                        <!-- Author & Read More -->
+                        <div class="d-flex align-items-center justify-content-between mt-auto">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="position-relative">
+                                    <div class="rounded-circle d-flex align-items-center justify-content-center" 
+                                         style="width: 44px; height: 44px; background: linear-gradient(145deg, #0C3A30, #0A2A23); color: white; font-weight: 600;">
+                                        MD
+                                    </div>
+                                    <span class="position-absolute bottom-0 end-0 bg-success rounded-circle border-2 border-white" 
+                                          style="width: 12px; height: 12px; background: #8BC905 !important;"></span>
+                                </div>
+                                <div>
+                                    <span class="small text-secondary d-block">Written by</span>
+                                    <span class="fw-semibold small" style="color: #0C3A30;">Michael Chen</span>
+                                </div>
+                            </div>
+                            
+                            <a href="/" class="read-more d-inline-flex align-items-center gap-2 fw-semibold text-decoration-none"
+                               style="color: #8BC905; transition: all 0.3s ease;">
+                                Read Article
+                                <span class="rounded-circle d-flex align-items-center justify-content-center" 
+                                      style="width: 32px; height: 32px; background: rgba(139,201,5,0.1); color: #8BC905; transition: all 0.3s ease;">
+                                    <i class="ri-arrow-right-up-line"></i>
+                                </span>
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        
+        <!-- ========================================= -->
+        <!-- BOTTOM CTA - VIEW ALL ARTICLES -->
+        <!-- ========================================= -->
+        <div class="text-center mt-5 pt-4" data-cues="slideInUp" data-duration="800">
+            <div class="d-flex justify-content-center">
+                <a href="/blog" 
+                   class="btn btn-lg px-5 py-3 rounded-pill fw-bold d-inline-flex align-items-center gap-3"
+                   style="background: white; color: #0C3A30; border: 2px solid rgba(139,201,5,0.2); box-shadow: 0 15px 25px -8px rgba(0,0,0,0.05); transition: all 0.3s ease;">
+                    <span>View All Articles</span>
+                    <span class="rounded-circle d-flex align-items-center justify-content-center" 
+                          style="width: 32px; height: 32px; background: rgba(139,201,5,0.1); color: #8BC905; transition: all 0.3s ease;">
+                        <i class="ri-arrow-right-line"></i>
+                    </span>
+                </a>
+            </div>
+            <p class="small text-secondary mt-3" style="color: #4A5C5A !important;">
+                📚 50+ articles on personal finance, investing, and wealth management
+            </p>
+        </div>
+    </div>
+</div>
+<!-- End Blog Area - Premium Redesign -->
+
+<style>
+    /* ============ PREMIUM BLOG STYLES ============ */
+    
+    /* Animations */
+    @keyframes pulse {
+        0% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.8; transform: scale(0.95); box-shadow: 0 0 15px #8BC905; }
+        100% { opacity: 1; transform: scale(1); }
+    }
+    
+    /* Blog Card Hover Effects */
+    .blog-card-horizontal, .blog-card-vertical {
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .blog-card-horizontal:hover, .blog-card-vertical:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 30px 50px -15px rgba(139,201,5,0.15) !important;
+        border-color: rgba(139,201,5,0.3) !important;
+    }
+    
+    /* Image Hover */
+    .blog-image-hover {
+        transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    .blog-image-wrapper:hover .blog-image-hover,
+    .blog-image-vertical-wrapper:hover .blog-image-hover {
+        transform: scale(1.08);
+    }
+    
+    /* Title Hover */
+    h3 a:hover {
+        color: #8BC905 !important;
+        text-decoration: underline;
+        text-decoration-color: rgba(139,201,5,0.3);
+        text-underline-offset: 4px;
+    }
+    
+    /* Read More Hover */
+    .read-more {
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    .read-more:hover {
+        gap: 12px !important;
+    }
+    
+    .read-more:hover span {
+        background: #8BC905 !important;
+        color: white !important;
+        transform: translateX(4px);
+    }
+    
+    .read-more span {
+        transition: all 0.3s ease;
+    }
+    
+    /* Category Badge */
+    .position-absolute.top-0.start-0.m-3 {
+        transition: all 0.3s ease;
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+    }
+    
+    .blog-card-horizontal:hover .position-absolute.top-0.start-0.m-3,
+    .blog-card-vertical:hover .position-absolute.top-0.end-0.m-4 {
+        transform: scale(1.05);
+    }
+    
+    /* Meta Icons */
+    .ri-calendar-2-line, .ri-message-line {
+        transition: all 0.2s ease;
+    }
+    
+    .blog-card-horizontal:hover .ri-calendar-2-line,
+    .blog-card-vertical:hover .ri-calendar-2-line,
+    .blog-card-horizontal:hover .ri-message-line,
+    .blog-card-vertical:hover .ri-message-line {
+        transform: scale(1.1);
+        color: #0C3A30 !important;
+    }
+    
+    /* Author Avatar */
+    .rounded-circle.d-flex.align-items-center.justify-content-center {
+        transition: all 0.3s ease;
+    }
+    
+    .blog-card-vertical:hover .rounded-circle.d-flex.align-items-center.justify-content-center {
+        transform: scale(1.1);
+        background: #8BC905 !important;
+    }
+    
+    /* View All Button Hover */
+    .btn-outline-accent:hover {
+        background: rgba(139,201,5,0.05) !important;
+        border-color: #8BC905 !important;
+        transform: translateY(-3px);
+        box-shadow: 0 20px 30px -10px rgba(139,201,5,0.15) !important;
+    }
+    
+    .btn-outline-accent:hover span:last-child {
+        background: #8BC905 !important;
+        color: white !important;
+        transform: translateX(4px);
+    }
+    
+    /* Responsive */
+    @media (max-width: 767px) {
+        .blog-card-horizontal {
+            flex-direction: column !important;
+        }
+        
+        .blog-image-wrapper {
+            flex: 0 0 200px !important;
+            min-height: 200px !important;
+        }
+        
+        .blog-card-vertical {
+            margin-top: 1rem;
+        }
+        
+        h2.display-5 {
+            font-size: 2rem;
+        }
+        
+        .blog-card-body h3 {
+            font-size: 1.2rem !important;
+        }
+        
+        .single-blog-card-body h3 {
+            font-size: 1.4rem !important;
+        }
+        
+        .position-absolute.top-0.end-0.m-4 {
+            position: relative !important;
+            top: auto !important;
+            right: auto !important;
+            margin: 1rem !important;
+            display: inline-block;
+            width: fit-content;
+        }
+    }
+    
+    @media (min-width: 768px) and (max-width: 991px) {
+        .blog-image-wrapper {
+            min-height: 240px !important;
+        }
+        
+        .blog-card-vertical {
+            margin-top: 0;
+        }
+    }
+    
+    /* Utilities */
+    .text-secondary {
+        color: #4A5C5A !important;
+    }
+    
+    .bg-color-edf1ee {
+        background-color: #edf1ee;
+    }
+</style>
         <!-- End Blog Area -->
 
         <!-- Start Faq Area -->
