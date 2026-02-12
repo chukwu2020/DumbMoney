@@ -50,22 +50,22 @@
                     <div class="main-banner-content text-white">
                         <span class="sub-t text-white">WELCOME TO MARKETMIND</span>
                         <h1 class="mt-2" style="color:white;">
-                            Secure
+                            Transform
                             <span style="color: #8BC905; font-size:2rem;">
                                 <img style="width: 100px; height:auto;" src="{{ asset('assets/images/svg/your.svg') }} " alt="icon"> Your
                             </span>
-                            Financial Future with Intelligent Investing
+                            Trading with Intelligent Strategies
                         </h1>
                         <a href="{{ route('signup') }}" class="btn btn-primary btn-lg px-3 py-2 rounded-pill shadow-lg glow-effect mt-3">
-                            <i class="fas fa-rocket me-2"></i> Launch Dashboard
+                            <i class="fas fa-rocket me-2"></i> Start Trading
                         </a>
                     </div>
                 </div>
 
                 <div class="col-xl-7 col-lg-12" data-cues="slideInLeft" data-duration="800">
                     <div class="info text-white">
-                        <p class="mb-4">
-                            We are at the forefront of revolutionizing the financial landscape through cutting-edge MarketMind solutions.
+                        <p class="mb-3">
+                            Successful trading takes time, strategy, and discipline. MarketMind helps you trade smarter, faster, and with confidence.
                         </p>
 
                         <div class="row align-items-center g-3 g-md-3">
@@ -76,7 +76,7 @@
                                     <li><img class="rounded-circle" src="{{ asset('assets/images/user/user-image-2.jpg') }}" alt="user"></li>
                                     <li><img class="rounded-circle" src="{{ asset('assets/images/user/user-image-3.jpg') }}" alt="user"></li>
                                     <li><img class="rounded-circle" src="{{ asset('assets/images/user/user-image-1.jpg') }}" alt="user"></li>
-                                    <li>32k+</li>
+                                    <li>87k+</li>
                                 </ul>
                             </div>
                             <div class="col-lg-6 col-md-6">
@@ -278,7 +278,7 @@
                                 LIVE MARKET DATA STREAMING
                             </span>
                             <h1 class="display-4 fw-bold text-white mb-4">
-                                <span class="text-primary">MarketMind</span> AI <span class="text-highlight">Convergence</span> Platform
+                                <span class="text-primary">MarketMind</span> Next-Gen <span class="text-highlight">Trading Support</span> Platform
                             </h1>
                             <p class="lead text-white-80 mb-4" style="color: white !important;">
                                 Next-gen algorithmic trading across crypto, forex assets, and real estate markets with deep learning execution.
@@ -287,7 +287,7 @@
                             <div class="d-flex flex-wrap gap-3 mb-5">
 
                                 <a href="{{ route('login') }}" class="btn btn-outline-light btn-lg px-4 py-3 rounded-pill">
-                                    <i class="fas fa-play-circle me-2"></i>Start Trading 
+                                    <i class="fas fa-play-circle me-2"></i>Start Trading
                                 </a>
                             </div>
 
@@ -1466,213 +1466,1216 @@
 
 
         <div class="cyber-border p-0">
+            <div class="card-area py-5">
+                <div class="container-fluid side-padding" style="max-width: 1440px; margin: 0 auto;">
 
-            <div class="card-area">
-                <div class="container-fluid side-padding">
-                    <div class="row g-3 g-md-4 justify-content-center" data-cues="slideInUp" data-duration="800">
-                        <div class="col-xl-4 col-lg-6 col-md-6">
-                            <div class="banner-card bg-color-ffffff radius-30">
-                                <div class="flex-warp position-relative">
-                                    <i>
-                                        <img src="assets/images/svg/grow.svg" alt="image">
-                                    </i>
-                                    <h3>Create A Card That Is Unique And Customized</h3>
-                                </div>
-                                <div class="banner-card-body bg-color-def1ee">
-                                    <img src="assets/images/service/service-image-1.png" alt="image">
+                    <!-- ========================================= -->
+                    <!-- SECTION HEADER - PERFECTLY CENTERED & SWEET -->
+                    <!-- ========================================= -->
+                    <div class="text-center mb-5" data-cues="slideInUp" data-duration="800">
+                        <div class="d-flex justify-content-center mb-3">
+                            <span class="badge px-4 py-2 rounded-pill fw-semibold d-inline-flex align-items-center gap-2"
+                                style="background: linear-gradient(145deg, #0C3A30, #0A2A23); color: white; border: 1px solid rgba(139,201,5,0.4); letter-spacing: 0.5px; box-shadow: 0 10px 20px -8px rgba(10,42,35,0.2);">
+                                <span style="display: inline-block; width: 8px; height: 8px; background: #8BC905; border-radius: 50%; box-shadow: 0 0 8px #8BC905; animation: pulse 2s infinite;"></span>
+                                POWERED BY MARKETMIND AI
+                            </span>
+                        </div>
+
+                        <h2 class="display-5 fw-bold mb-3 mx-auto" style="color: #0C3A30; max-width: 800px; line-height: 1.2;">
+                            Intelligence That
+                            <span style="color: #8BC905; position: relative; display: inline-block;">
+                                Outperforms
+                                <span class="position-absolute start-0 w-100" style="bottom: 0.1em; height: 8px; background: rgba(139,201,5,0.25); border-radius: 30px; z-index: -1;"></span>
+                            </span>
+                        </h2>
+
+                        <p class="fs-5 text-secondary mx-auto px-3" style="color: #4A5C5A !important; max-width: 600px; line-height: 1.6;">
+                            Experience the next generation of financial technology with our proprietary AI execution engine
+                        </p>
+                    </div>
+
+                    <!-- ========================================= -->
+                    <!-- CARDS GRID - 3 PERFECTLY BALANCED CARDS -->
+                    <!-- NO OVERLAP, NO TEXT OVERFLOW, CLEAN ALIGNMENT -->
+                    <!-- ========================================= -->
+                    <div class="row g-4 justify-content-center" data-cues="slideInUp" data-duration="800">
+
+                        <!-- CARD 1 - STRATEGY BUILDER - FRESH & CLEAN -->
+                        <div class="col-xl-4 col-lg-6 col-md-6 d-flex">
+                            <div class="card h-100 w-100 border-0"
+                                style="border-radius: 28px; background: white; box-shadow: 0 20px 35px -10px rgba(0,0,0,0.05); transition: all 0.4s ease; overflow: hidden;">
+
+                                <!-- Top accent -->
+                                <div style="height: 4px; background: linear-gradient(90deg, #8BC905, #0C3A30);"></div>
+
+                                <div class="p-4 p-xl-4">
+                                    <!-- Header -->
+                                    <div class="d-flex align-items-center gap-3 mb-3">
+                                        <div class="d-flex align-items-center justify-content-center rounded-3"
+                                            style="width: 56px; height: 56px; background: linear-gradient(145deg, #0C3A30, #0A2A23);">
+                                            <img src="assets/images/svg/grow.svg" alt="image" style="width: 30px; height: 30px;" class="filter-white">
+                                        </div>
+                                        <div>
+                                            <span class="text-uppercase small fw-bold" style="color: #8BC905; letter-spacing: 1.5px;">PREMIUM</span>
+                                            <h4 class="fw-bold mb-0" style="color: #0C3A30; font-size: 1.25rem;">Strategy Builder</h4>
+                                        </div>
+                                        <span class="ms-auto badge px-3 py-2 rounded-pill" style="background: rgba(139,201,5,0.1); color: #0C3A30; border: 1px solid rgba(139,201,5,0.2);">
+                                            AI ⚡
+                                        </span>
+                                    </div>
+
+                                    <!-- Title -->
+                                    <h3 class="fw-bold mb-3" style="color: #0C3A30; font-size: 1.75rem; line-height: 1.2;">
+                                        Create <span style="color: #8BC905;">AI-Powered</span><br>Trading Cards For All Transactions
+                                    </h3>
+
+                                    <!-- Stats row -->
+                                    <div class="d-flex gap-3 mb-3">
+                                        <div>
+                                            <span class="fw-bold fs-4" style="color: #0C3A30;">127%</span>
+                                            <span class="d-block small text-secondary">Avg. APY</span>
+                                        </div>
+                                        <div style="width: 1px; height: 30px; background: rgba(0,0,0,0.1);"></div>
+                                        <div>
+                                            <span class="fw-bold fs-4" style="color: #0C3A30;">2.4K+</span>
+                                            <span class="d-block small text-secondary">Active</span>
+                                        </div>
+                                        <div style="width: 1px; height: 30px; background: rgba(0,0,0,0.1);"></div>
+                                        <div>
+                                            <span class="fw-bold fs-4" style="color: #0C3A30;">4.9</span>
+                                            <span class="d-block small text-secondary">★ Rating</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Image -->
+                                    <div class="rounded-4 overflow-hidden mb-3" style="background: linear-gradient(145deg, #f5f7fa, #e9ecf0); height: 160px;">
+                                        <img src="assets/images/service/service-image-1.png" alt="image" class="w-100 h-100" style="object-fit: cover;">
+                                    </div>
+
+                                    <!-- Tags - neatly wrapped -->
+                                    <div class="mb-3">
+                                        <div class="d-flex align-items-center gap-2 mb-2">
+                                            <span style="display: inline-block; width: 6px; height: 6px; background: #8BC905; border-radius: 50%;"></span>
+                                            <span class="small fw-semibold" style="color: #0C3A30;">ACTIVE MARKETS</span>
+                                        </div>
+                                        <div class="d-flex flex-wrap gap-1">
+                                            <span class="badge px-3 py-2 rounded-pill fw-normal" style="background: rgba(139,201,5,0.06); color: #0C3A30; border: 1px solid rgba(139,201,5,0.15);">📊 S&P 500</span>
+                                            <span class="badge px-3 py-2 rounded-pill fw-normal" style="background: rgba(139,201,5,0.06); color: #0C3A30; border: 1px solid rgba(139,201,5,0.15);">🚀 Growth</span>
+                                            <span class="badge px-3 py-2 rounded-pill fw-normal" style="background: rgba(139,201,5,0.06); color: #0C3A30; border: 1px solid rgba(139,201,5,0.15);">💎 Blue Chip</span>
+                                            <span class="badge px-3 py-2 rounded-pill fw-normal" style="background: rgba(139,201,5,0.06); color: #0C3A30; border: 1px solid rgba(139,201,5,0.15);">🌍 Global</span>
+                                            <span class="badge px-3 py-2 rounded-pill fw-normal" style="background: rgba(139,201,5,0.06); color: #0C3A30; border: 1px solid rgba(139,201,5,0.15);">⚡ Tech</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- CTA -->
+                                    <a href="{{('login')}}" class="btn w-100 py-3 rounded-pill fw-semibold d-flex align-items-center justify-content-between px-4 mt-2"
+                                        style="background: #0C3A30; color: white; border: none;">
+                                        <span>Build Your Strategy</span>
+                                        <span class="rounded-circle bg-white p-1 d-flex align-items-center justify-content-center" style="width: 28px; height: 28px; background: rgba(255,255,255,0.2) !important;">
+                                            <i class="fas fa-arrow-right" style="color: white; font-size: 0.9rem;"></i>
+                                        </span>
+                                    </a>
                                 </div>
                             </div>
+                        </div>
 
-                            <!-- Advice Area Start -->
-                            <div class="advice-area bg-color-ffffff radius-20 mt-3">
-                                <div class="container-fluid">
-                                    <div class="advice-content">
-                                        <ul>
-                                            <li>Revenue</li>
-                                            <li>Investment</li>
-                                            <li>Deposit</li>
-                                            <li>Earnings</li>
-                                            <li>Transaction</li>
-                                            <li>Revenue</li>
-                                            <li>Investment</li>
-                                            <li>Deposit</li>
-                                            <li>Earnings</li>
-                                            <li>Transaction</li>
-                                        </ul>
+                        <!-- CARD 2 - GLOBAL BANKING - RICH & ELEGANT -->
+                        <div class="col-xl-4 col-lg-6 col-md-6 d-flex">
+                            <div class="card h-100 w-100 border-0"
+                                style="border-radius: 28px; background: linear-gradient(145deg, #0C3A30, #08231e); box-shadow: 0 25px 35px -15px rgba(8,35,30,0.3); transition: all 0.4s ease; overflow: hidden;">
+
+                                <!-- Decorative pattern -->
+                                <div class="position-absolute w-100 h-100 opacity-10"
+                                    style="background-image: radial-gradient(circle at 20px 20px, #9EDD05 1px, transparent 1px); background-size: 25px 25px;"></div>
+
+                                <div class="p-4 p-xl-4 position-relative" style="z-index: 2;">
+                                    <!-- Header -->
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="d-flex align-items-center justify-content-center rounded-3"
+                                                style="width: 56px; height: 56px; background: rgba(255,255,255,0.1); backdrop-filter: blur(5px); border: 1px solid rgba(158,221,5,0.3);">
+                                                <img src="assets/images/svg/corporation.svg" alt="image" style="width: 30px; height: 30px;" class="filter-white">
+                                            </div>
+                                            <div>
+                                                <span class="text-uppercase small fw-bold" style="color: #9EDD05; letter-spacing: 1.5px;">Marketmind</span>
+                                                <h4 class="fw-bold mb-0 text-white" style="font-size: 1.25rem;">Global Banking</h4>
+                                            </div>
+                                        </div>
+                                        <span class="badge px-3 py-2 rounded-pill" style="background: rgba(158,221,5,0.15); color: #9EDD05; border: 1px solid rgba(158,221,5,0.3);">
+                                            <i class="fas fa-bolt me-1" style="font-size: 0.7rem;"></i> LIVE
+                                        </span>
+                                    </div>
+
+                                    <!-- Title -->
+                                    <h3 class="fw-bold mb-3 text-white" style="font-size: 1.75rem; line-height: 1.2;">
+                                        Zero-Fee<br><span style="color: #9EDD05;">Worldwide Transactions</span>
+                                    </h3>
+
+                                    <!-- Live rates -->
+                                    <div class="d-flex align-items-center gap-3 mb-3 p-3 rounded-3" style="background: rgba(0,0,0,0.2); backdrop-filter: blur(5px);">
+                                        <span style="color: white !important;" class="small text-white-80">EUR/USD <strong style="color: #9EDD05;">1.0856</strong></span>
+                                        <span style="color: white !important;" class="small text-white-80">GBP/USD <strong style="color: #9EDD05;">1.2742</strong></span>
+                                        <span style="color: white !important;" class="small text-white-80">USD/JPY <strong style="color: #9EDD05;">157.32</strong></span>
+                                    </div>
+
+                                    <!-- Card image -->
+                                    <div class="text-center mb-3">
+                                        <img src="assets/images/service/service-image-2.png" alt="image" class="img-fluid" style="max-height: 110px; filter: drop-shadow(0 15px 20px -8px rgba(0,0,0,0.4));">
+                                    </div>
+
+                                    <!-- Balance card -->
+                                    <div class="p-3 rounded-4 mb-3" style="background: rgba(0,0,0,0.25); backdrop-filter: blur(10px); border: 1px solid rgba(158,221,5,0.2);">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <span class="small text-white-50 text-uppercase">Total Balance</span>
+                                                <h4 class="fw-bold mb-0 text-white" style="font-size: 1.75rem; letter-spacing: -0.5px;">$59,647</h4>
+                                            </div>
+                                            <span class="badge p-3 rounded-circle" style="background: rgba(158,221,5,0.2);">
+                                                <i class="fas fa-arrow-up" style="color: #9EDD05;"></i>
+                                            </span>
+                                        </div>
+                                        <div class="mt-2">
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <span class="small text-white-50">Monthly limit</span>
+                                                <span class="small text-white">$68K / $100K</span>
+                                            </div>
+                                            <div class="progress" style="height: 5px; background: rgba(255,255,255,0.1);">
+                                                <div class="progress-bar" style="width: 68%; background: #9EDD05; border-radius: 3px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Actions -->
+                                    <div class="d-flex gap-2">
+                                        <a href="{{('login')}}" class="btn flex-grow-1 py-3 rounded-pill fw-semibold" style="background: #9EDD05; color: #0C3A30;">
+                                            <i class="fas fa-paper-plane me-2"></i>Send
+                                        </a>
+                                        <a href="#" class="btn p-3 rounded-circle" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(158,221,5,0.3); color: white; width: 52px; height: 52px;">
+                                            <i class="fas fa-qrcode"></i>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xl-4 col-lg-6 col-md-6">
-                            <div class="banner-card part-two bg-color-9edd05 radius-30 position-relative">
-                                <div class="flex-warp position-relative">
-                                    <i>
-                                        <img src="assets/images/svg/corporation.svg" alt="image">
-                                    </i>
-                                    <h3>Transfers Across The Globe Are Free</h3>
-                                </div>
-                                <p class="mb-0">Our digital solutions transform money management investing and transaction.</p>
-                                <div class="banner-card-image">
-                                    <div class="text-end">
-                                        <img src="assets/images/service/service-image-2.png" alt="image">
-                                    </div>
-                                </div>
 
-                                <div class="total bg-color-ffffff radius">
-                                    <h4>Total Balance</h4>
-                                    <h5>$59,647.00</h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-lg-6 col-md-6">
-                            <div class="banner-card part-three bg-color-ffffff radius-30 position-relative">
-                                <div class="flex-warp position-relative">
-                                    <i>
-                                        <img src="assets/images/svg/euro.svg" alt="image">
-                                    </i>
-                                    <h3>Personalized Insights And Financial Goals</h3>
-                                </div>
-                                <div class="banner-image-body">
-                                    <div class="text-end">
-                                        <img class="service-image-3" src="assets/images/service/service-image-3.png" alt="image">
+                        <!-- CARD 3 - SMART GOALS - FRESH & MODERN -->
+                        <div class="col-xl-4 col-lg-6 col-md-6 d-flex">
+                            <div class="card h-100 w-100 border-0"
+                                style="border-radius: 28px; background: white; box-shadow: 0 20px 35px -10px rgba(0,0,0,0.05); transition: all 0.4s ease; overflow: hidden;">
+
+                                <!-- Corner accent -->
+                                <div class="position-absolute top-0 end-0" style="width: 80px; height: 80px; background: linear-gradient(135deg, transparent 50%, rgba(139,201,5,0.08) 50%);"></div>
+
+                                <div class="p-4 p-xl-4 position-relative" style="z-index: 2;">
+                                    <!-- Header -->
+                                    <div class="d-flex align-items-center gap-3 mb-3">
+                                        <div class="d-flex align-items-center justify-content-center rounded-3"
+                                            style="width: 56px; height: 56px; background: rgba(139,201,5,0.1);">
+                                            <img src="assets/images/svg/euro.svg" alt="image" style="width: 30px; height: 30px; filter: brightness(0) saturate(100%) invert(53%) sepia(98%) saturate(2027%) hue-rotate(43deg);">
+                                        </div>
+                                        <div>
+                                            <span class="text-uppercase small fw-bold" style="color: #8BC905; letter-spacing: 1.5px;">AUTOMATED INSIGHTS</span>
+                                            <h4 class="fw-bold mb-0" style="color: #0C3A30; font-size: 1.25rem;">Smart Goals</h4>
+                                        </div>
                                     </div>
-                                    <img class="service-image-4" src="assets/images/service/service-image-4.png" alt="image">
+
+                                    <!-- Title -->
+                                    <h3 class="fw-bold mb-3" style="color: #0C3A30; font-size: 1.75rem; line-height: 1.2;">
+                                        Personalized<br><span style="color: #8BC905; position: relative;">Trading Goals
+                                            <span style="position: absolute; bottom: 2px; left: 0; width: 100%; height: 6px; background: rgba(139,201,5,0.2); border-radius: 3px; z-index: -1;"></span>
+                                        </span>
+                                    </h3>
+
+                                    <!-- Stats -->
+                                    <div class="d-flex gap-4 mb-3">
+                                        <div>
+                                            <span class="fw-bold fs-4" style="color: #0C3A30;">98.7%</span>
+                                            <span class="d-block small text-secondary">Trader(Admin) Confidence</span>
+                                        </div>
+                                        <div style="width: 1px; height: 30px; background: rgba(0,0,0,0.1);"></div>
+                                        <div>
+                                            <span class="fw-bold fs-4" style="color: #0C3A30;">24/30</span>
+                                            <span class="d-block small text-secondary">Goals Met</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Image with floating card -->
+                                    <div class="position-relative mb-3" style="height: 140px;">
+                                        <div class="text-end">
+                                            <img src="assets/images/service/service-image-3.png" alt="image" style="height: 130px; object-fit: contain;">
+                                        </div>
+                                        <div class="position-absolute bottom-0 start-0 bg-white shadow-lg rounded-3 p-3 d-flex align-items-center gap-2"
+                                            style="border-left: 4px solid #8BC905; max-width: 160px; animation: gentleFloat 4s ease-in-out infinite;">
+                                            <i class="fas fa-piggy-bank" style="color: #8BC905;"></i>
+                                            <div>
+                                                <div class="small text-secondary">Trading Goal</div>
+                                                <div class="fw-bold" style="color: #0C3A30;">$24,500</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Progress -->
+                                    <div class="mt-3">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span class="small text-secondary">Next milestone: $12,000</span>
+                                            <span class="small fw-bold" style="color: #0C3A30;">75%</span>
+                                        </div>
+                                        <div class="progress mb-4" style="height: 6px; background: rgba(139,201,5,0.1);">
+                                            <div class="progress-bar" style="width: 75%; background: #8BC905; border-radius: 3px;"></div>
+                                        </div>
+                                    </div>
+
+                                    <!-- CTA -->
+                                    <a href="{{('login')}}" class="btn w-100 py-3 rounded-pill fw-semibold d-flex align-items-center justify-content-between px-4"
+                                        style="border: 2px solid #8BC905; color: #0C3A30; background: transparent;">
+                                        <span>View Insights</span>
+                                        <span class="rounded-circle d-flex align-items-center justify-content-center" style="width: 28px; height: 28px; background: #8BC905;">
+                                            <i class="fas fa-arrow-right" style="color: white; font-size: 0.9rem;"></i>
+                                        </span>
+                                    </a>
                                 </div>
-                                <i class="flaticon-star-5 star-5 moveHorizontal_reverse"></i>
                             </div>
                         </div>
+                    </div>
+
+                    <!-- ========================================= -->
+                    <!-- BOTTOM CTA - CLEAN & CENTERED -->
+                    <!-- ========================================= -->
+                    <div class="text-center mt-5 pt-4" data-cues="slideInUp" data-duration="800">
+                        <a href="{{('login')}}" class="btn btn-lg px-5 py-3 rounded-pill fw-bold d-inline-flex align-items-center gap-3"
+                            style="background: linear-gradient(145deg, #0C3A30, #08231e); color: white; border: none; box-shadow: 0 20px 30px -10px rgba(12,58,48,0.25);">
+                            <span>Start Building Your Strategy</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                        <p class="small text-secondary mt-3" style="color: #4A5C5A !important;">
+                            No credit card required • Free AI consultation included
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
+
+        <style>
+            /* ============ CLEAN ANIMATIONS ============ */
+
+            @keyframes pulse {
+                0% {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+
+                50% {
+                    opacity: 0.8;
+                    transform: scale(0.95);
+                    box-shadow: 0 0 12px #8BC905;
+                }
+
+                100% {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+            }
+
+            @keyframes gentleFloat {
+                0% {
+                    transform: translateY(0);
+                }
+
+                50% {
+                    transform: translateY(-5px);
+                }
+
+                100% {
+                    transform: translateY(0);
+                }
+            }
+
+            .card {
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+
+            .card:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 30px 45px -15px rgba(0, 0, 0, 0.15) !important;
+            }
+
+            .filter-white {
+                filter: brightness(0) invert(1);
+            }
+
+            .text-white-50 {
+                color: rgba(255, 255, 255, 0.6);
+            }
+
+            .text-white-80 {
+                color: rgba(255, 255, 255, 0.85);
+            }
+
+            /* Container constraint */
+            .container-fluid.side-padding {
+                padding-left: 30px;
+                padding-right: 30px;
+            }
+
+            @media (min-width: 1440px) {
+                .container-fluid.side-padding {
+                    padding-left: 50px;
+                    padding-right: 50px;
+                }
+            }
+
+            /* Perfect card heights */
+            .d-flex>.card {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .card .p-4 {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .card .btn {
+                margin-top: auto;
+            }
+
+            /* Clean tag styling */
+            .badge {
+                font-weight: 500;
+                transition: all 0.2s ease;
+            }
+
+            .badge:hover {
+                background: rgba(139, 201, 5, 0.15) !important;
+                transform: scale(1.02);
+            }
+
+            /* No text overflow */
+            h3,
+            h4,
+            p {
+                overflow-wrap: break-word;
+                word-wrap: break-word;
+                hyphens: auto;
+            }
+        </style>
 
 
 
 
         <!-- Start Pricing Plan Area -->
-        <div class="pricing-plan-area pt-100 pb-80 mb-5 pt-md-120 pb-md-100 bg-color-def1ee" style="background-image: url(assets/images/hero/hero-image-1.svg)">
-            <div class="container">
-                <div class="section-title">
-                    <span class="sub-title">PRICING PLAN</span>
-                    <h2>Choose The Best <span><img src="assets/images/svg/lines-2.svg" alt="image">Plans</span> Which For You</h2>
+        <!-- Start Pricing Plan Area -->
+        <div class="pricing-plan-area py-5 py-md-6 mb-5" style="background: linear-gradient(145deg, #f8fafc, #f0f4f8); position: relative; overflow: hidden;">
+
+            <!-- Decorative Elements -->
+            <div class="position-absolute" style="top: -100px; right: -50px; width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle, rgba(139,201,5,0.03) 0%, transparent 70%); pointer-events: none;"></div>
+            <div class="position-absolute" style="bottom: -50px; left: -50px; width: 250px; height: 250px; border-radius: 50%; background: radial-gradient(circle, rgba(12,58,48,0.02) 0%, transparent 70%); pointer-events: none;"></div>
+
+            <div class="container" style="max-width: 1280px; margin: 0 auto; position: relative; z-index: 2;">
+
+                <!-- ========================================= -->
+                <!-- SECTION HEADER - PREMIUM & CENTERED -->
+                <!-- ========================================= -->
+                <div class="text-center mb-5" data-cues="slideInUp" data-duration="800">
+                    <div class="d-flex justify-content-center mb-3">
+                        <span class="badge px-4 py-2 rounded-pill fw-semibold d-inline-flex align-items-center gap-2"
+                            style="background: linear-gradient(145deg, #0C3A30, #0A2A23); color: white; border: 1px solid rgba(139,201,5,0.4); letter-spacing: 0.5px; box-shadow: 0 10px 20px -8px rgba(10,42,35,0.2);">
+                            <span style="display: inline-block; width: 8px; height: 8px; background: #8BC905; border-radius: 50%; box-shadow: 0 0 8px #8BC905; animation: pulse 2s infinite;"></span>
+                            PRICING PLANS
+                        </span>
+                    </div>
+
+                    <h2 class="display-5 fw-bold mb-3 mx-auto" style="color: #0C3A30; max-width: 700px; line-height: 1.2;">
+                        Choose The <span style="color: #8BC905; position: relative; display: inline-block;">
+                            Best Plan
+                            <span class="position-absolute start-0 w-100" style="bottom: 0.1em; height: 8px; background: rgba(139,201,5,0.25); border-radius: 30px; z-index: -1;"></span>
+                        </span>
+                        <br>That Fits You
+                    </h2>
+
+                    <p class="fs-5 text-secondary mx-auto px-3" style="color: #4A5C5A !important; max-width: 600px; line-height: 1.6;">
+                        Select your perfect investment plan and start growing your wealth with our AI-powered strategies
+                    </p>
                 </div>
-                <div class="row g-3 g-md-4 justify-content-center" data-cues="slideInUp" data-duration="800">
+
+                <!-- ========================================= -->
+                <!-- PRICING CARDS - 3 PERFECTLY BALANCED -->
+                <!-- ========================================= -->
+                <div class="row g-4 justify-content-center" data-cues="slideInUp" data-duration="800">
+                    @php
+                    $sortedPlans = $plans->sortBy('minimum_amount')->values();
+                    $popularPlanId = $sortedPlans->count() > 1 ? $sortedPlans[1]->id : ($sortedPlans[0]->id ?? null);
+                    @endphp
+
                     @foreach($plans->take(3) as $plan)
-                    <div class="col-lg-4 col-md-6">
-                        <div class="pricing-card bg-color-ffffff radius-30">
-                            <div class="title position-relative">
-                                <h3>{{ $plan->name }} </h3>
-                                <h4>{{ rtrim(rtrim($plan->interest_rate, '0'), '.') }}% / <span>Per Term</span></h4>
-                                <img class="about-image-2" src="assets/images/about/about-image-2.png" alt="image">
-                            </div>
-                            <div class="pricing-card-body">
-                                <ul class="check">
-                                    <li><i class="ri-check-line"></i> Duration: {{ $plan->duration }} Days</li>
-                                    <li><i class="ri-check-line"></i> Percentage: {{ rtrim(rtrim($plan->interest_rate, '0'), '.') }}%</li>
-                                    <li class="flex items-start gap-3">
-                                        <span class="check-icon"><i class="ri-check-line"></i></span>
-                                        <span><strong>Earnings:</strong> {{ $plan->duration < 28 ? 'Daily' : 'Weekly' }}</span>
-                                    </li>
-                                    <li><i class="ri-check-line"></i> Minimum Deposit: ${{ number_format($plan->minimum_amount) }}</li>
-                                    <li><i class="ri-check-line"></i> Maximum Deposit: ${{ number_format($plan->maximum_amount) }}</li>
-                                </ul>
-                                <a href="/login" class="default-btn two w-100 text-center">Get Started <i class="ri-arrow-right-up-line"></i></a>
+                    <div class="col-lg-4 col-md-6 d-flex">
+                        <div class="card h-100 w-100 border-0 position-relative"
+                            style="border-radius: 32px; background: white; box-shadow: 0 20px 35px -10px rgba(0,0,0,0.05); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); overflow: hidden;">
+
+                            <!-- Top Accent Bar -->
+                            <div style="height: 6px; background: linear-gradient(90deg, #8BC905, #0C3A30, #8BC905); background-size: 200% 100%; animation: shimmer 3s infinite;"></div>
+
+                            <!-- Popular Badge -->
+                            @if($plan->id === $popularPlanId)
+                            <span class="position-absolute px-4 py-2 fw-bold d-inline-flex align-items-center gap-2"
+                                style="top: 6px; right: 6px; background: linear-gradient(135deg, #FF6B6B, #FF4757); color: white; border-radius: 30px; font-size: 0.8rem; letter-spacing: 0.5px; box-shadow: 0 8px 16px -4px rgba(255,71,87,0.3); z-index: 10;">
+                                <span style="display: inline-block; width: 6px; height: 6px; background: white; border-radius: 50%; animation: pulse 2s infinite;"></span>
+                                ⭐ MOST POPULAR
+                            </span>
+                            @endif
+
+                            <!-- Premium Badge for Highest Plan -->
+                            @if($loop->last && !$plan->id === $popularPlanId)
+                            <span class="position-absolute px-4 py-2 fw-bold d-inline-flex align-items-center gap-2"
+                                style="top: 20px; right: 20px; background: linear-gradient(145deg, #0C3A30, #0A2A23); color: white; border: 1px solid rgba(139,201,5,0.3); border-radius: 30px; font-size: 0.8rem; letter-spacing: 0.5px; box-shadow: 0 8px 16px -4px rgba(12,58,48,0.2); z-index: 10;">
+                                <i class="fas fa-crown" style="color: #FFD700;"></i>
+                                PREMIUM
+                            </span>
+                            @endif
+
+                            <div class="p-4 p-xl-5 d-flex flex-col h-100">
+
+                                <!-- Plan Icon & Name -->
+                                <div class="text-center mb-4">
+                                    <div class="d-flex justify-content-center mb-3">
+                                        <div class="d-flex align-items-center justify-content-center rounded-4"
+                                            style="width: 100px; height: 100px; background: linear-gradient(145deg, rgba(139,201,5,0.1), rgba(12,58,48,0.05)); border-radius: 24px !important;">
+                                            <img src="{{ asset('assets/images/depositimage.jpg') }}" alt="Plan Icon"
+                                                style="width: 70px; height: 70px; border-radius: 16px; object-fit: cover; box-shadow: 0 10px 20px -8px rgba(0,0,0,0.1);">
+                                        </div>
+                                    </div>
+                                    <h3 class="fw-bold mb-1" style="color: #0C3A30; font-size: 1.75rem; letter-spacing: -0.5px;">
+                                        {{ $plan->name }}
+                                    </h3>
+
+                                    <!-- Interest Rate Display -->
+                                    <div class="d-flex align-items-baseline justify-content-center gap-1 mt-2">
+                                        <span class="fw-black" style="color: #8BC905; font-size: 2.5rem; line-height: 1;">
+                                            {{ rtrim(rtrim($plan->interest_rate, '0'), '.') }}%
+                                        </span>
+                                        <span class="text-secondary" style="font-size: 1rem;">/ Per Term</span>
+                                    </div>
+
+                                    <!-- Duration Chip -->
+                                    <span class="badge px-4 py-2 rounded-pill mt-2"
+                                        style="background: rgba(139,201,5,0.08); color: #0C3A30; border: 1px solid rgba(139,201,5,0.2); font-size: 0.9rem;">
+                                        📅 {{ $plan->duration }} Days Duration
+                                    </span>
+                                </div>
+
+                                <!-- Features List - Premium Check Icons -->
+                                <div class="mt-3">
+                                    <ul class="list-unstyled d-flex flex-column gap-3">
+                                        <li class="d-flex align-items-start gap-3">
+                                            <span class="d-flex align-items-center justify-content-center rounded-circle flex-shrink-0"
+                                                style="width: 24px; height: 24px; background: rgba(139,201,5,0.15); color: #8BC905;">
+                                                <i class="ri-check-line" style="font-size: 14px; font-weight: bold;"></i>
+                                            </span>
+                                            <span style="color: #0C3A30; font-size: 1rem;">
+                                                <strong>Duration:</strong> {{ $plan->duration }} Days
+                                            </span>
+                                        </li>
+                                        <li class="d-flex align-items-start gap-3">
+                                            <span class="d-flex align-items-center justify-content-center rounded-circle flex-shrink-0"
+                                                style="width: 24px; height: 24px; background: rgba(139,201,5,0.15); color: #8BC905;">
+                                                <i class="ri-check-line" style="font-size: 14px; font-weight: bold;"></i>
+                                            </span>
+                                            <span style="color: #0C3A30; font-size: 1rem;">
+                                                <strong>Return Rate:</strong> {{ rtrim(rtrim($plan->interest_rate, '0'), '.') }}%
+                                            </span>
+                                        </li>
+                                        <li class="d-flex align-items-start gap-3">
+                                            <span class="d-flex align-items-center justify-content-center rounded-circle flex-shrink-0"
+                                                style="width: 24px; height: 24px; background: rgba(139,201,5,0.15); color: #8BC905;">
+                                                <i class="ri-check-line" style="font-size: 14px; font-weight: bold;"></i>
+                                            </span>
+                                            <span style="color: #0C3A30; font-size: 1rem;">
+                                                <strong>Earnings:</strong>
+                                                <span class="badge ms-1 px-3 py-1 rounded-pill"
+                                                    style="background: {{ $plan->duration < 28 ? 'rgba(139,201,5,0.15)' : 'rgba(12,58,48,0.1)' }}; color: #0C3A30; font-weight: 600;">
+                                                    {{ $plan->duration < 28 ? '⚡ Daily' : '📆 Weekly' }}
+                                                </span>
+                                            </span>
+                                        </li>
+                                        <li class="d-flex align-items-start gap-3">
+                                            <span class="d-flex align-items-center justify-content-center rounded-circle flex-shrink-0"
+                                                style="width: 24px; height: 24px; background: rgba(139,201,5,0.15); color: #8BC905;">
+                                                <i class="ri-check-line" style="font-size: 14px; font-weight: bold;"></i>
+                                            </span>
+                                            <span style="color: #0C3A30; font-size: 1rem;">
+                                                <strong>Min Deposit:</strong>
+                                                <span class="fw-bold" style="color: #0C3A30;">${{ number_format($plan->minimum_amount) }}</span>
+                                            </span>
+                                        </li>
+                                        <li class="d-flex align-items-start gap-3">
+                                            <span class="d-flex align-items-center justify-content-center rounded-circle flex-shrink-0"
+                                                style="width: 24px; height: 24px; background: rgba(139,201,5,0.15); color: #8BC905;">
+                                                <i class="ri-check-line" style="font-size: 14px; font-weight: bold;"></i>
+                                            </span>
+                                            <span style="color: #0C3A30; font-size: 1rem;">
+                                                <strong>Max Deposit:</strong>
+                                                <span class="fw-bold" style="color: #0C3A30;">${{ number_format($plan->maximum_amount) }}</span>
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <!-- Potential Earnings Preview -->
+                                <div class="mt-4 p-3 rounded-4" style="background: rgba(139,201,5,0.04); border: 1px dashed rgba(139,201,5,0.3);">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="small text-secondary">Potential return on $1,000</span>
+                                        <span class="fw-bold" style="color: #8BC905;">
+                                            +${{ number_format(1000 * ($plan->interest_rate / 100), 2) }}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- CTA Button - Spacer to push to bottom -->
+                                <div class="mt-auto pt-4">
+                                    <a href="/login" class="btn w-100 py-3 rounded-pill fw-bold d-flex align-items-center justify-content-between px-4"
+                                        style="background: {{ $plan->id === $popularPlanId ? 'linear-gradient(145deg, #8BC905, #7AB805)' : 'linear-gradient(145deg, #0C3A30, #0A2A23)' }}; color: white; border: none; transition: all 0.3s;">
+                                        <span>Get Started</span>
+                                        <span class="rounded-circle bg-white/20 p-2 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                                            <i class="ri-arrow-right-up-line" style="color: white; font-size: 1.2rem;"></i>
+                                        </span>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
                     @endforeach
-
-                    <div class="text-center mt-4">
-                        <a href="{{route('plans.header')}}" class="default-btn bg-[#8bc905] text-white px-5 py-3 rounded-xl">🔍 View All Plans</a>
-                    </div>
                 </div>
 
+                <!-- ========================================= -->
+                <!-- BOTTOM CTA - VIEW ALL PLANS -->
+                <!-- ========================================= -->
+                <div class="text-center mt-5 pt-4" data-cues="slideInUp" data-duration="800">
+                    <div class="d-flex justify-content-center">
+                        <a href="{{ route('plans.header') }}"
+                            class="btn btn-lg px-5 py-3 rounded-pill fw-bold d-inline-flex align-items-center gap-3"
+                            style="background: white; color: #0C3A30; border: 2px solid rgba(139,201,5,0.3); box-shadow: 0 10px 25px -8px rgba(0,0,0,0.05); transition: all 0.3s;">
+                            <span style="font-size: 1.1rem;">🔍 View All Investment Plans</span>
+                            <span class="rounded-circle d-flex align-items-center justify-content-center"
+                                style="width: 32px; height: 32px; background: rgba(139,201,5,0.1); color: #8BC905;">
+                                <i class="ri-arrow-right-line"></i>
+                            </span>
+                        </a>
+                    </div>
+                    <p class="small text-secondary mt-3" style="color: #4A5C5A !important;">
+                        ✨ All plans include AI-powered analytics and 24/7 support
+                    </p>
+                </div>
             </div>
         </div>
+
+        <style>
+            /* ============ PREMIUM ANIMATIONS ============ */
+
+            @keyframes pulse {
+                0% {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+
+                50% {
+                    opacity: 0.8;
+                    transform: scale(0.95);
+                    box-shadow: 0 0 12px #8BC905;
+                }
+
+                100% {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+            }
+
+            @keyframes shimmer {
+                0% {
+                    background-position: 200% 0;
+                }
+
+                100% {
+                    background-position: -200% 0;
+                }
+            }
+
+            /* Card Hover Effects */
+            .card {
+                transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                    box-shadow 0.4s ease;
+            }
+
+            .card:hover {
+                transform: translateY(-12px);
+                box-shadow: 0 30px 45px -15px rgba(12, 58, 48, 0.15) !important;
+            }
+
+            .card:hover .btn {
+                transform: scale(1.02);
+            }
+
+            .card:hover .d-flex.justify-content-center div:first-child {
+                transform: scale(1.05);
+                transition: transform 0.4s ease;
+            }
+
+            /* Button Hover Effect */
+            .btn:hover {
+                transform: translateY(-2px);
+
+                box-shadow: 0 15px 25px -8px {
+                        {
+                        $plan->id ===$popularPlanId ? 'rgba(139,201,5,0.4)': 'rgba(12,58,48,0.3)'
+                    }
+                }
+
+                !important;
+            }
+
+            .btn:hover .bg-white\/20 {
+                transform: translateX(4px);
+                transition: transform 0.3s ease;
+            }
+
+            /* List Item Hover Effect */
+            .list-unstyled li {
+                transition: transform 0.2s ease;
+            }
+
+            .list-unstyled li:hover {
+                transform: translateX(4px);
+            }
+
+            .list-unstyled li:hover .rounded-circle {
+                background: rgba(139, 201, 5, 0.25) !important;
+                transition: background 0.2s ease;
+            }
+
+            /* View All Plans Button Hover */
+            .btn-outline-accent:hover {
+                background: rgba(139, 201, 5, 0.05);
+                border-color: #8BC905 !important;
+                transform: translateY(-3px);
+            }
+
+            /* Badge Shine Effect */
+            .position-absolute.px-4.py-2 {
+                backdrop-filter: blur(4px);
+            }
+
+            /* Container width control */
+            .container {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            @media (min-width: 992px) {
+                .container {
+                    padding-left: 30px;
+                    padding-right: 30px;
+                }
+            }
+
+            /* Consistent card heights */
+            .d-flex>.card {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .card .p-4.p-xl-5 {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+            }
+
+            /* Ensure no text overflow */
+            h3,
+            h4,
+            p,
+            span {
+                overflow-wrap: break-word;
+                word-wrap: break-word;
+            }
+
+            /* Custom gradient text for premium feel */
+            .gradient-text {
+                background: linear-gradient(145deg, #8BC905, #0C3A30);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+
+            /* Smooth icon transitions */
+            .ri-check-line,
+            .ri-arrow-right-up-line,
+            .ri-arrow-right-line {
+                transition: transform 0.2s ease;
+            }
+
+            .btn:hover .ri-arrow-right-up-line,
+            .btn:hover .ri-arrow-right-line {
+                transform: translateX(4px) translateY(-2px);
+            }
+        </style>
         <!-- End Pricing Plan Area -->
         <!-- End Main Banner Area -->
 
-        <!-- Start Features Area -->
-        <div class="features-area bg-color-0c3a30 pt-100 pb-80 pt-md-120 pb-md-100 overflow-hidden">
-            <div class="container">
-                <div class="row align-items-center">
+        <!-- Start Features Area - Premium Redesign -->
+        <div class="features-area position-relative py-5 py-md-6 overflow-hidden"
+            style="background: linear-gradient(145deg, #0C3A30, #0A2A23);">
+
+            <!-- Premium Decorative Elements -->
+            <div class="position-absolute" style="top: -150px; right: -100px; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(139,201,5,0.08) 0%, transparent 70%); pointer-events: none;"></div>
+            <div class="position-absolute" style="bottom: -100px; left: -50px; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(158,221,5,0.05) 0%, transparent 70%); pointer-events: none;"></div>
+            <div class="position-absolute" style="top: 30%; left: 10%; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, rgba(139,201,5,0.03) 0%, transparent 70%); pointer-events: none; filter: blur(40px);"></div>
+
+            <!-- Animated Grid Pattern -->
+            <div class="position-absolute w-100 h-100 opacity-5"
+                style="top: 0; left: 0; background-image: radial-gradient(circle at 20px 20px, rgba(158,221,5,0.1) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; animation: drift 30s infinite linear;"></div>
+
+            <div class="container position-relative" style="max-width: 1280px; margin: 0 auto; z-index: 5;">
+                <div class="row g-5 align-items-center">
+
+                    <!-- ========================================= -->
+                    <!-- LEFT COLUMN - PREMIUM FEATURE IMAGE SHOWCASE -->
+                    <!-- ========================================= -->
                     <div class="col-xl-6 col-lg-12" data-cues="slideInRight" data-duration="800">
-                        <div class="features-image bg-color-9edd05 radius-30 position-relative">
-                            <img class="feature-image-1" src="assets/images/feature/feature-image-1.png" alt="image">
-                            <img class="feature-image-2 bounce" src="assets/images/feature/feature-image-2.png" alt="image">
-                            <img class="feature-shape-1 moveVertical" src="assets/images/shape/feature-shape-1.png" alt="image">
-                        </div>
-                    </div>
-                    <div class="col-xl-6 col-lg-12" data-cues="slideInLeft" data-duration="800">
-                        <div class="features-content">
-                            <div class="section-heading">
-                                <span class="sub-title">TOP FEATURES</span>
-                                <h2 class="text-white">Let's Take Your <span><img src="assets/images/svg/lines-1.svg" alt="image">Analytics</span> To The Next Level</h2>
-                                <p class="text-white">With a robust suite of products ranging from digital banking and payment processing to wealth management and blockchain applications we empower our clients.</p>
+                        <div class="position-relative p-4">
+                            <!-- Main Image Container -->
+                            <div class="position-relative rounded-5 overflow-hidden"
+                                style="background: linear-gradient(145deg, rgba(139,201,5,0.1), rgba(12,58,48,0.2)); backdrop-filter: blur(10px); border: 1px solid rgba(139,201,5,0.15); box-shadow: 0 30px 50px -20px rgba(0,0,0,0.3);">
+
+                                <!-- Glass Morphism Overlay -->
+                                <div class="position-absolute top-0 start-0 w-100 h-100"
+                                    style="background: radial-gradient(circle at 70% 30%, rgba(139,201,5,0.1) 0%, transparent 70%); pointer-events: none;"></div>
+
+                                <!-- Feature Image 1 - Main -->
+                                <div class="text-center p-5">
+                                    <img class="img-fluid feature-image-1 hover-float"
+                                        src="assets/images/feature/feature-image-1.png"
+                                        alt="Analytics Dashboard"
+                                        style="max-width: 100%; filter: drop-shadow(0 30px 40px -15px rgba(0,0,0,0.4)); transform: perspective(1000px) rotateY(-5deg) rotateX(5deg); transition: transform 0.6s ease;">
+                                </div>
+
+                                <!-- Floating Badges -->
+                                <div class="position-absolute top-0 start-0 m-4">
+                                    <span class="badge px-4 py-3 rounded-pill fw-semibold d-inline-flex align-items-center gap-2 backdrop-blur"
+                                        style="background: rgba(255,255,255,0.95); color: #0C3A30; border: 1px solid rgba(139,201,5,0.3); box-shadow: 0 15px 25px -8px rgba(0,0,0,0.2);">
+                                        <span style="display: inline-block; width: 10px; height: 10px; background: #8BC905; border-radius: 50%; box-shadow: 0 0 15px #8BC905; animation: pulse 2s infinite;"></span>
+                                        <span class="fw-bold">AI-POWERED</span>
+                                    </span>
+                                </div>
+
+                                <!-- Feature Image 2 - Floating Element -->
+                                <div class="position-absolute" style="bottom: 30px; right: 30px; animation: float 6s ease-in-out infinite;">
+                                    <div class="rounded-4 p-3"
+                                        style="background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border: 1px solid rgba(139,201,5,0.2); box-shadow: 0 20px 30px -10px rgba(0,0,0,0.15);">
+                                        <img class="feature-image-2" src="assets/images/feature/feature-image-2.png" alt="Analytics" style="width: 60px; height: 60px; object-fit: contain;">
+                                    </div>
+                                </div>
+
+                                <!-- Stats Card - Floating -->
+                                <div class="position-absolute" style="bottom: 40px; left: 30px; animation: float 7s ease-in-out infinite; animation-delay: 1s;">
+                                    <div class="rounded-4 p-3 d-flex align-items-center gap-3"
+                                        style="background: rgba(12,58,48,0.95); backdrop-filter: blur(10px); border: 1px solid rgba(139,201,5,0.3); box-shadow: 0 20px 30px -10px rgba(0,0,0,0.3);">
+                                        <div class="rounded-circle p-2" style="background: rgba(139,201,5,0.2);">
+                                            <i class="fas fa-chart-line" style="color: #8BC905;"></i>
+                                        </div>
+                                        <div>
+                                            <span class="small text-white-50">Real-time Analytics</span>
+                                            <div class="fw-bold text-white" style="font-size: 1.2rem;">2.4M+</div>
+                                            <span class="small text-white-50">Daily transactions</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
-                            <ul>
-                                <li class="bg-color-29594b radius-20">
-                                    <i class="flaticon-businessman-1"></i>
-                                    <h3 class="text-white">Local Business Finance</h3>
-                                    <p class="text-white">Our commitment to security transparency and customer centricity ensures that every transaction is no.</p>
-                                </li>
-                                <li class="bg-color-29594b radius-20">
-                                    <i class="flaticon-payment-method"></i>
-                                    <h3 class="text-white">Built For Global Payments</h3>
-                                    <p class="text-white">Our commitment to security transparency and customer centricity ensures that every transaction is no.</p>
-                                </li>
-                                <li class="bg-color-29594b radius-20">
-                                    <i class="flaticon-laptop-2"></i>
-                                    <h3 class="text-white">Make Internet Of Money</h3>
-                                    <p class="text-white">Our commitment to security transparency and customer centricity ensures that every transaction is no.</p>
-                                </li>
-                            </ul>
+                            <!-- Decorative Shape -->
+                            <div class="position-absolute" style="top: -20px; left: -20px; z-index: -1;">
+                                <img class="feature-shape-1 moveVertical" src="assets/images/shape/feature-shape-1.png" alt="shape" style="opacity: 0.6;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ========================================= -->
+                    <!-- RIGHT COLUMN - PREMIUM FEATURES CONTENT -->
+                    <!-- ========================================= -->
+                    <div class="col-xl-6 col-lg-12" data-cues="slideInLeft" data-duration="800">
+                        <div class="features-content ps-xl-4">
+
+                            <!-- Section Header -->
+                            <div class="section-heading mb-4">
+                                <div class="d-flex align-items-center gap-2 mb-3">
+                                    <span class="badge px-4 py-2 rounded-pill fw-semibold d-inline-flex align-items-center gap-2"
+                                        style="background: rgba(139,201,5,0.15); color: #8BC905; border: 1px solid rgba(139,201,5,0.3); letter-spacing: 1px; backdrop-filter: blur(5px);">
+                                        <span style="display: inline-block; width: 8px; height: 8px; background: #8BC905; border-radius: 50%; box-shadow: 0 0 8px #8BC905; animation: pulse 2s infinite;"></span>
+                                        TOP FEATURES
+                                    </span>
+                                    <span class="badge px-3 py-2 rounded-pill" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.1);">
+                                        ⚡ NEXT-GEN
+                                    </span>
+                                </div>
+
+                                <h2 class="display-5 fw-bold mb-3 text-white" style="line-height: 1.2; max-width: 600px;">
+                                    Let's Take Your
+                                    <span style="color: #8BC905; position: relative; display: inline-block;">
+                                        Analytics
+                                        <span class="position-absolute start-0 w-100" style="bottom: 0.1em; height: 8px; background: rgba(139,201,5,0.3); border-radius: 30px; z-index: 1;"></span>
+                                    </span>
+                                    <br>To The Next Level
+                                </h2>
+
+                                <p class="fs-5 text-white-80 mb-4" style="line-height: 1.6; max-width: 550px;">
+                                    From digital banking and payment processing to wealth management and blockchain — we're building the financial infrastructure of tomorrow, today.
+                                </p>
+                            </div>
+
+                            <!-- Premium Feature Cards -->
+                            <div class="d-flex flex-column gap-3 mt-4">
+
+                                <!-- Feature Card 1 -->
+                                <div class="feature-card p-4 rounded-4 d-flex align-items-start gap-4"
+                                    style="background: rgba(41,89,75,0.5); backdrop-filter: blur(10px); border: 1px solid rgba(139,201,5,0.15); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);">
+                                    <div class="feature-icon-wrapper d-flex align-items-center justify-content-center rounded-3 flex-shrink-0"
+                                        style="width: 64px; height: 64px; background: rgba(139,201,5,0.15); border: 1px solid rgba(139,201,5,0.2);">
+                                        <i class="flaticon-businessman-1" style="color: #8BC905; font-size: 2rem;"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="fw-bold mb-2 text-white" style="font-size: 1.35rem;">Local Business Finance</h3>
+                                        <p class="text-white-80 mb-0" style="font-size: 0.95rem; line-height: 1.6;">
+                                            Smart financing solutions designed for local businesses with AI-powered risk assessment and instant approvals.
+                                        </p>
+                                        <div class="d-flex align-items-center gap-3 mt-3">
+                                            <span class="small d-flex align-items-center gap-1 text-white-50">
+                                                <i class="fas fa-check-circle" style="color: #8BC905;"></i> 24/7 Support
+                                            </span>
+                                            <span class="small d-flex align-items-center gap-1 text-white-50">
+                                                <i class="fas fa-check-circle" style="color: #8BC905;"></i> No Hidden Fees
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Feature Card 2 -->
+                                <div class="feature-card p-4 rounded-4 d-flex align-items-start gap-4"
+                                    style="background: rgba(41,89,75,0.5); backdrop-filter: blur(10px); border: 1px solid rgba(139,201,5,0.15); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);">
+                                    <div class="feature-icon-wrapper d-flex align-items-center justify-content-center rounded-3 flex-shrink-0"
+                                        style="width: 64px; height: 64px; background: rgba(139,201,5,0.15); border: 1px solid rgba(139,201,5,0.2);">
+                                        <i class="flaticon-payment-method" style="color: #8BC905; font-size: 2rem;"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="fw-bold mb-2 text-white" style="font-size: 1.35rem;">Built For Global Payments</h3>
+                                        <p class="text-white-80 mb-0" style="font-size: 0.95rem; line-height: 1.6;">
+                                            Seamless cross-border transactions in 150+ currencies with real-time settlement and competitive FX rates.
+                                        </p>
+                                        <div class="d-flex align-items-center gap-3 mt-3">
+                                            <span class="small d-flex align-items-center gap-1 text-white-50">
+                                                <i class="fas fa-globe" style="color: #8BC905;"></i> 150+ Countries
+                                            </span>
+                                            <span class="small d-flex align-items-center gap-1 text-white-50">
+                                                <i class="fas fa-bolt" style="color: #8BC905;"></i> Instant Settlement
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Feature Card 3 -->
+                                <div class="feature-card p-4 rounded-4 d-flex align-items-start gap-4"
+                                    style="background: rgba(41,89,75,0.5); backdrop-filter: blur(10px); border: 1px solid rgba(139,201,5,0.15); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);">
+                                    <div class="feature-icon-wrapper d-flex align-items-center justify-content-center rounded-3 flex-shrink-0"
+                                        style="width: 64px; height: 64px; background: rgba(139,201,5,0.15); border: 1px solid rgba(139,201,5,0.2);">
+                                        <i class="flaticon-laptop-2" style="color: #8BC905; font-size: 2rem;"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="fw-bold mb-2 text-white" style="font-size: 1.35rem;">Make Internet Of Money</h3>
+                                        <p class="text-white-80 mb-0" style="font-size: 0.95rem; line-height: 1.6;">
+                                            Blockchain-powered financial infrastructure enabling programmable money and smart contract integration.
+                                        </p>
+                                        <div class="d-flex align-items-center gap-3 mt-3">
+                                            <span class="small d-flex align-items-center gap-1 text-white-50">
+                                                <i class="fas fa-link" style="color: #8BC905;"></i> Smart Contracts
+                                            </span>
+                                            <span class="small d-flex align-items-center gap-1 text-white-50">
+                                                <i class="fas fa-shield" style="color: #8BC905;"></i> Bank-Grade Security
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- CTA Button -->
+                            <div class="mt-4 pt-2">
+                                <a href="{{('login')}}" class="btn btn-lg px-5 py-3 rounded-pill fw-bold d-inline-flex align-items-center gap-3"
+                                    style="background: #8BC905; color: #0C3A30; border: none; box-shadow: 0 20px 30px -10px rgba(139,201,5,0.3); transition: all 0.3s;">
+                                    <span>Explore All Features</span>
+                                    <span class="rounded-circle bg-white p-2 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; background: rgba(12,58,48,0.1) !important;">
+                                        <i class="ri-arrow-right-up-line" style="color: #0C3A30; font-size: 1.2rem;"></i>
+                                    </span>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="partner-area mt-5 pt-80 pt-md-120">
-                <div class="container">
-                    <div class="title">
-                        <p>TRUSTED BY INDUSTRY LEADING COMPANIES AROUND THE GLOBE</p>
+            <!-- ========================================= -->
+            <!-- PARTNER AREA - PREMIUM DARK THEME -->
+            <!-- ========================================= -->
+            <div class="partner-area mt-5 pt-5 pt-md-6 position-relative">
+                <div class="container position-relative" style="max-width: 1280px; margin: 0 auto;">
+
+                    <!-- Section Divider -->
+                    <div class="d-flex justify-content-center mb-5">
+                        <div style="width: 100px; height: 2px; background: linear-gradient(90deg, transparent, rgba(139,201,5,0.5), transparent);"></div>
                     </div>
-                    <div class="partner-items">
+
+                    <div class="text-center mb-4">
+                        <span class="text-uppercase small fw-semibold d-inline-block px-4 py-2 rounded-pill"
+                            style="background: rgba(139,201,5,0.1); color: #8BC905; border: 1px solid rgba(139,201,5,0.2); letter-spacing: 2px; backdrop-filter: blur(5px);">
+                            TRUSTED BY INDUSTRY LEADERS
+                        </span>
+                        <p class="text-white-50 mt-3 mb-0" style="font-size: 0.95rem;">
+                            Powering financial innovation for the world's most ambitious companies
+                        </p>
+                    </div>
+
+                    <div class="partner-items position-relative">
+                        <!-- Gradient Overlays for Swiper -->
+                        <div class="position-absolute top-0 start-0 h-100" style="width: 80px; background: linear-gradient(90deg, #0C3A30, transparent); z-index: 10; pointer-events: none;"></div>
+                        <div class="position-absolute top-0 end-0 h-100" style="width: 80px; background: linear-gradient(-90deg, #0C3A30, transparent); z-index: 10; pointer-events: none;"></div>
+
                         <div class="swiper partner-slide">
                             <div class="swiper-wrapper">
+                                <!-- Partner Logos with Premium Cards -->
                                 <div class="swiper-slide">
-                                    <div class="partner-logo">
-                                        <img src="assets/images/partner/partner-logo-1.png" alt="image">
+                                    <div class="partner-logo p-4 rounded-4 d-flex align-items-center justify-content-center"
+                                        style="background: rgba(41,89,75,0.3); backdrop-filter: blur(10px); border: 1px solid rgba(139,201,5,0.1); transition: all 0.3s ease; height: 100px;">
+                                        <img src="assets/images/partner/partner-logo-1.png" alt="Partner" style="max-width: 120px; max-height: 50px; filter: brightness(0) invert(0.9); opacity: 0.9; transition: all 0.3s ease;">
                                     </div>
                                 </div>
                                 <div class="swiper-slide">
-                                    <div class="partner-logo">
-                                        <img src="assets/images/partner/partner-logo-2.png" alt="image">
+                                    <div class="partner-logo p-4 rounded-4 d-flex align-items-center justify-content-center"
+                                        style="background: rgba(41,89,75,0.3); backdrop-filter: blur(10px); border: 1px solid rgba(139,201,5,0.1); transition: all 0.3s ease; height: 100px;">
+                                        <img src="assets/images/partner/partner-logo-2.png" alt="Partner" style="max-width: 120px; max-height: 50px; filter: brightness(0) invert(0.9); opacity: 0.9; transition: all 0.3s ease;">
                                     </div>
                                 </div>
                                 <div class="swiper-slide">
-                                    <div class="partner-logo">
-                                        <img src="assets/images/partner/partner-logo-3.png" alt="image">
+                                    <div class="partner-logo p-4 rounded-4 d-flex align-items-center justify-content-center"
+                                        style="background: rgba(41,89,75,0.3); backdrop-filter: blur(10px); border: 1px solid rgba(139,201,5,0.1); transition: all 0.3s ease; height: 100px;">
+                                        <img src="assets/images/partner/partner-logo-3.png" alt="Partner" style="max-width: 120px; max-height: 50px; filter: brightness(0) invert(0.9); opacity: 0.9; transition: all 0.3s ease;">
                                     </div>
                                 </div>
                                 <div class="swiper-slide">
-                                    <div class="partner-logo">
-                                        <img src="assets/images/partner/partner-logo-4.png" alt="image">
+                                    <div class="partner-logo p-4 rounded-4 d-flex align-items-center justify-content-center"
+                                        style="background: rgba(41,89,75,0.3); backdrop-filter: blur(10px); border: 1px solid rgba(139,201,5,0.1); transition: all 0.3s ease; height: 100px;">
+                                        <img src="assets/images/partner/partner-logo-4.png" alt="Partner" style="max-width: 120px; max-height: 50px; filter: brightness(0) invert(0.9); opacity: 0.9; transition: all 0.3s ease;">
                                     </div>
                                 </div>
                                 <div class="swiper-slide">
-                                    <div class="partner-logo">
-                                        <img src="assets/images/partner/partner-logo-5.png" alt="image">
+                                    <div class="partner-logo p-4 rounded-4 d-flex align-items-center justify-content-center"
+                                        style="background: rgba(41,89,75,0.3); backdrop-filter: blur(10px); border: 1px solid rgba(139,201,5,0.1); transition: all 0.3s ease; height: 100px;">
+                                        <img src="assets/images/partner/partner-logo-5.png" alt="Partner" style="max-width: 120px; max-height: 50px; filter: brightness(0) invert(0.9); opacity: 0.9; transition: all 0.3s ease;">
                                     </div>
                                 </div>
                             </div>
+                        </div>
+
+                        <!-- Swiper Navigation (Optional) -->
+                        <div class="swiper-pagination position-relative mt-4"></div>
+                    </div>
+
+                    <!-- Trust Metrics -->
+                    <div class="d-flex justify-content-center gap-5 mt-5 pt-3">
+                        <div class="text-center">
+                            <div class="fw-bold text-white" style="font-size: 2rem;">$2.4B+</div>
+                            <span class="small text-white-50">Transactions Processed</span>
+                        </div>
+                        <div class="text-center">
+                            <div class="fw-bold text-white" style="font-size: 2rem;">150+</div>
+                            <span class="small text-white-50">Countries Served</span>
+                        </div>
+                        <div class="text-center">
+                            <div class="fw-bold text-white" style="font-size: 2rem;">99.99%</div>
+                            <span class="small text-white-50">Uptime SLA</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- End Features Area -->
+        <!-- End Features Area - Premium Redesign -->
+
+        <style>
+            /* ============ PREMIUM ANIMATIONS ============ */
+
+            @keyframes pulse {
+                0% {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+
+                50% {
+                    opacity: 0.8;
+                    transform: scale(0.95);
+                    box-shadow: 0 0 15px #8BC905;
+                }
+
+                100% {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+            }
+
+            @keyframes float {
+                0% {
+                    transform: translateY(0px);
+                }
+
+                50% {
+                    transform: translateY(-15px);
+                }
+
+                100% {
+                    transform: translateY(0px);
+                }
+            }
+
+            @keyframes drift {
+                0% {
+                    background-position: 0 0;
+                }
+
+                100% {
+                    background-position: 80px 80px;
+                }
+            }
+
+            @keyframes shimmer {
+                0% {
+                    background-position: -100% 0;
+                }
+
+                100% {
+                    background-position: 200% 0;
+                }
+            }
+
+            /* Feature Card Hover Effects */
+            .feature-card {
+                transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+                position: relative;
+                overflow: hidden;
+            }
+
+            .feature-card:hover {
+                transform: translateX(8px) translateY(-4px);
+                background: rgba(41, 89, 75, 0.7) !important;
+                border-color: rgba(139, 201, 5, 0.3) !important;
+                box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.3);
+            }
+
+            .feature-card:hover .feature-icon-wrapper {
+                transform: scale(1.1);
+                background: rgba(139, 201, 5, 0.25) !important;
+                border-color: rgba(139, 201, 5, 0.5) !important;
+            }
+
+            .feature-icon-wrapper {
+                transition: all 0.3s ease;
+            }
+
+            /* Image Hover Effect */
+            .feature-image-1:hover {
+                transform: perspective(1000px) rotateY(-8deg) rotateX(8deg) scale(1.02) !important;
+            }
+
+            .hover-float {
+                animation: float 6s ease-in-out infinite;
+            }
+
+            /* Partner Logo Hover */
+            .partner-logo:hover {
+                background: rgba(139, 201, 5, 0.15) !important;
+                border-color: rgba(139, 201, 5, 0.3) !important;
+                transform: translateY(-5px);
+                box-shadow: 0 15px 25px -10px rgba(0, 0, 0, 0.2);
+            }
+
+            .partner-logo:hover img {
+                filter: brightness(0) invert(1) !important;
+                opacity: 1 !important;
+                transform: scale(1.05);
+            }
+
+            .partner-logo img {
+                transition: all 0.3s ease;
+            }
+
+            /* Button Hover */
+            .btn:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 25px 35px -12px rgba(139, 201, 5, 0.4) !important;
+            }
+
+            .btn:hover .bg-white {
+                transform: translateX(4px);
+            }
+
+            /* Text Utilities */
+            .text-white-50 {
+                color: rgba(255, 255, 255, 0.6) !important;
+            }
+
+            .text-white-80 {
+                color: rgba(255, 255, 255, 0.85) !important;
+            }
+
+            .backdrop-blur {
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+            }
+
+            /* Container Control */
+            .container {
+                padding-left: 24px;
+                padding-right: 24px;
+            }
+
+            @media (min-width: 992px) {
+                .container {
+                    padding-left: 30px;
+                    padding-right: 30px;
+                }
+            }
+
+            /* Swiper Customization */
+            .swiper-pagination-bullet {
+                background: rgba(139, 201, 5, 0.3) !important;
+                width: 10px;
+                height: 10px;
+            }
+
+            .swiper-pagination-bullet-active {
+                background: #8BC905 !important;
+                box-shadow: 0 0 15px #8BC905;
+            }
+
+            /* Responsive Adjustments */
+            @media (max-width: 768px) {
+                .feature-card {
+                    padding: 1.5rem !important;
+                }
+
+                .feature-icon-wrapper {
+                    width: 56px !important;
+                    height: 56px !important;
+                }
+
+                .feature-icon-wrapper i {
+                    font-size: 1.5rem !important;
+                }
+            }
+        </style>
 
         <!-- Start Services Area -->
         <div class="services-area pt-100 pb-80 pt-md-120 pb-md-100 position-relative overflow-hidden">

@@ -6,7 +6,7 @@
         background-color: #9EDD05;
         color: #0C3A30;
         padding: 0.75rem 1.5rem;
-        font-weight: bold;
+        font-weight: bold; 
         text-align: center;
         border-radius: 9999px;
         transition: all 0.3s ease;
@@ -16,17 +16,23 @@
 
     .custom-btn:hover {
         background-color: #89C604;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
     }
 
     .custom-badge {
-        background-color: #9EDD05;
-        color: #0C3A30;
-        font-weight: bold;
-        padding: 0.25rem 0.75rem;
-        border-radius: 9999px;
-        font-size: 0.75rem;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+        position: absolute;
+        top: 0.10rem;
+        right: 0.10rem;
+        background: linear-gradient(135deg, #ff6b6b, #ff4757);
+        color: white;
+        padding: 6px 10px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        border-radius: 16px 0 16px 0;
+        box-shadow: 0 4px 12px rgba(255,71,87,0.4);
+        z-index: 5;
+        text-transform: uppercase;
     }
 
     .check-icon {
@@ -45,49 +51,53 @@
     }
 </style>
 
-<div class="bg-white  py-20 min-h-screen">
-    <div class="container mx-auto   px-4 py-10">
+<div class="bg-white py-20 min-h-screen">
+    <div class="container mx-auto px-4 py-10">
         <!-- Section Header -->
-
         <div class="flex flex-wrap items-center justify-between gap-2 mb-6">
-            <h5 class="font-semibold mb-0  " style="color: #0C3A30; padding-right:0.8rem;">Plans </h5>
+            <h5 class="font-semibold mb-0" style="color: #0C3A30; padding-right:0.8rem;">Plans</h5>
             <ul class="flex items-center gap-[6px]">
                 <li class="font-medium">
-                    <a href="{{ route('user_dashboard') }}" class="flex items-center gap-2 hover:text-primary-600 " onmouseover="this.style.backgroundColor='transparent'; this.style.color='#9EDD05';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='#0C3A30';">
+                    <a href="{{ route('user_dashboard') }}" class="flex items-center gap-2 hover:text-primary-600" 
+                       onmouseover="this.style.color='#9EDD05';" onmouseout="this.style.color='#0C3A30';">
                         <iconify-icon icon="solar:home-smile-angle-outline" class="icon text-lg"></iconify-icon>
                         Dashboard
                     </a>
                 </li>
                 <li>-</li>
-                <li class="font-medium ">Plans</li>
+                <li class="font-medium">Plans</li>
             </ul>
         </div>
+
         <div class="text-center mb-16">
             <h4 class="text-3xl md:text-5xl font-extrabold mt-3 mb-3 leading-tight plan-heading">
-               PRICING PLANS
+                PRICING PLANS
             </h4>
         </div>
 
         <!-- Plan Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+
+            @php
+                // Find the second minimum amount plan for "Popular" badge
+                $sortedPlans = $plans->sortBy('minimum_amount')->values();
+                $popularPlanId = $sortedPlans->count() > 1 ? $sortedPlans[1]->id : $sortedPlans[0]->id;
+            @endphp
+
             @foreach($plans as $plan)
-            <div class="bg-white  border border-gray-200 rounded-lg shadow-lg hover:shadow-2xl transition duration-300 p-6 flex flex-col justify-between relative group" style="background-image: url(assets/images/hero/hero-image-1.svg);">
+            <div class="bg-white border border-gray-200 rounded-lg shadow-lg hover:shadow-2xl transition duration-300 p-6 flex flex-col justify-between relative group" 
+                 style="background-image: url(assets/images/hero/hero-image-1.svg);">
 
                 <!-- Popular Badge -->
-                @if($loop->first)
-                <span class="absolute top-4 right-4 custom-badge">
-                    Popular
+                @if($plan->id === $popularPlanId)
+                <span class="custom-badge">
+                    ⭐ Popular
                 </span>
                 @endif
 
                 <!-- Icon -->
                 <div class="flex justify-center mb-5">
-
-                 
                     <img src="{{ asset('assets/images/depositimage.jpg') }}" alt="Plan Icon" style="width: 104px; height: 84px; border-radius: 6px;">
-
-             
-
                 </div>
 
                 <!-- Plan Name & Interest -->
@@ -95,55 +105,33 @@
                     <h3 class="text-2xl font-semibold capitalize plan-heading">
                         {{ $plan->name }}
                     </h3>
-                    <p class="text-lg mt-1 text-gray-700 ">
-                        <span class="font-bold">{{ rtrim(rtrim($plan->interest_rate, '0'), '.') }}% </span>
+                    <p class="text-lg mt-1 text-gray-700">
+                        <span class="font-bold">{{ rtrim(rtrim($plan->interest_rate, '0'), '.') }}%</span>
                         <span class="text-sm font-normal">/ Per Term</span>
                     </p>
                 </div>
 
                 <!-- Features List -->
                 <div class="flex justify-center">
-                    <ul class="space-y-4 text-sm text-gray-700text-left">
+                    <ul class="space-y-4 text-sm text-gray-700 text-left">
                         <li class="flex items-start gap-3">
-                            <span class="check-icon">
-                                <i class="ri-check-line"></i>
-                            </span>
+                            <span class="check-icon"><i class="ri-check-line"></i></span>
                             <span><strong>Duration:</strong> {{ $plan->duration }} Days</span>
                         </li>
-                       <li class="flex items-start gap-3">
-    <span class="check-icon">
-        <i class="ri-check-line"></i>
-    </span>
-    <span><strong>Percentage:</strong> {{ rtrim(rtrim($plan->interest_rate, '0'), '.') }}%</span>
-</li>
-
-{{-- Add earnings frequency --}}
-<li class="flex items-start gap-3">
-    <span class="check-icon">
-        <i class="ri-check-line"></i>
-    </span>
-    <span>
-        <strong>Earnings:</strong>
-        @if($plan->duration < 28)
-            Daily
-        @else
-            Weekly
-        @endif
-    </span>
-</li>
-
-
-                        
                         <li class="flex items-start gap-3">
-                            <span class="check-icon">
-                                <i class="ri-check-line"></i>
-                            </span>
+                            <span class="check-icon"><i class="ri-check-line"></i></span>
+                            <span><strong>Percentage:</strong> {{ rtrim(rtrim($plan->interest_rate, '0'), '.') }}%</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="check-icon"><i class="ri-check-line"></i></span>
+                            <span><strong>Earnings:</strong> {{ $plan->duration < 28 ? 'Daily' : 'Weekly' }}</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="check-icon"><i class="ri-check-line"></i></span>
                             <span><strong>Min Deposit:</strong> ${{ number_format($plan->minimum_amount) }}</span>
                         </li>
                         <li class="flex items-start gap-3">
-                            <span class="check-icon">
-                                <i class="ri-check-line"></i>
-                            </span>
+                            <span class="check-icon"><i class="ri-check-line"></i></span>
                             <span><strong>Max Deposit:</strong> ${{ number_format($plan->maximum_amount) }}</span>
                         </li>
                     </ul>
@@ -155,6 +143,7 @@
                 </a>
             </div>
             @endforeach
+
         </div>
     </div>
 </div>
