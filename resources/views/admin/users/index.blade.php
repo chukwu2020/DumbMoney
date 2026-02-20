@@ -219,7 +219,7 @@
         </a>
 
         <!-- Delete -->
-        <form method="POST" action="{{ route('user.destroy', $user->id) }}" style="color: green;"
+        <form method="POST" action="{{ route('user.destroy', $user->id) }}" style="color: red;"
               onsubmit="return confirm('Are you sure?');">
             @csrf
             @method('DELETE')

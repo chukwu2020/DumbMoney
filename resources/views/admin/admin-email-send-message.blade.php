@@ -43,7 +43,7 @@
 <!-- Body -->
 <tr>
 <td class="mobile-padding" style="padding:40px 45px; font-size:15px; line-height:1.7;">
-<h2 style="margin:0 0 25px 0; font-size:22px; color:#0C3A30; font-weight:700; letter-spacing:1px; text-transform:uppercase;">
+<h2 style="margin:0 0 25px 0; font-size:18px; color:#0C3A30; font-weight:500; letter-spacing:1px; text-transform:uppercase;">
   {{ $subject }}
 </h2>
 
