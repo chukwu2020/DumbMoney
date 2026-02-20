@@ -12,11 +12,14 @@ use App\Models\User;
 use App\Models\UserKyc;
 use App\Models\Withdrawal;
 use App\Models\WithdrawalCard;
+use App\Notifications\AdminMessageNotification;
 use App\Notifications\IDVerificationSubmitted;
+
 use App\Notifications\TransactionNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str; // ✅ ADDED THIS IMPORT
 
 class AdminController extends Controller
@@ -483,4 +486,37 @@ public function toggleMembershipLock(User $user)
 
         return redirect()->back()->with('success', 'KYC rejected.');
     }
+
+
+
+    // admin message controller 
+
+
+
+public function sendMessage(Request $request)
+{
+    $request->validate([
+        'title' => 'required',
+        'message' => 'required',
+        'users' => 'required|array'
+    ]);
+
+    if (in_array('all', $request->users)) {
+        $users = User::all();
+    } else {
+        $users = User::whereIn('id', $request->users)->get();
+    }
+
+    Notification::send($users, new AdminMessageNotification(
+        $request->title,
+        $request->message
+    ));
+
+    return back()->with('success', 'Message sent successfully!');
+}
+
+
+
+
+
 }

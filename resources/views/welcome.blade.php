@@ -6748,7 +6748,7 @@
                         
                         <!-- Description - Trading Focused -->
                         <p class="text-white-80 mb-4" style="line-height: 1.7; max-width: 500px; font-size: 1.1rem;">
-                            Trade stocks, crypto, and forex from your pocket. Real-time charts, instant execution, and AI-powered insights — all in the palm of your hand.
+                            Trade stocks, crypto, and forex from your pocket. Real-time charts, instant execution, and AI-powered insights all in the palm of your hand.
                         </p>
                         
                         <!-- App Features -->

@@ -276,10 +276,20 @@ Route::patch('/admin/membership/lock/{user}', [AdminController::class, 'toggleMe
     // lives
 
 
-    // Admin Routes (inside admin middleware group)
-Route::middleware(['isAdmin'])->group(function () {
+    Route::middleware(['isAdmin'])->group(function () {
+
     Route::post('/admin/generate-membership-code', [AdminController::class, 'generateMembershipCode'])
         ->name('admin.generate.membership.code');
+
+    // Show message form
+    Route::get('/admin/user/{id}/message', function ($id) {
+        $user = \App\Models\User::findOrFail($id);
+        return view('admin.send-message', compact('user'));
+    })->name('admin.user.message.form');
+
+    // Send message
+    Route::post('/admin/send-message', [AdminController::class, 'sendMessage'])
+        ->name('admin.send.message');
 });
 
 // User Routes (inside auth middleware)
