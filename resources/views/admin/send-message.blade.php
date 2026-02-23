@@ -9,7 +9,6 @@
             <div class="d-flex align-items-center justify-content-between mb-4">
                 <div>
                     <h2 class="fw-bold mb-1" style="color: #0C3A30;">Send Message to Users</h2>
-                   
                 </div>
             </div>
 
@@ -48,6 +47,48 @@
                                 </div>
                             </div>
                             <div class="card-body p-0">
+                                <!-- Country Filter Section -->
+                                <div class="p-3 border-bottom" style="background-color: #f8f9fa;">
+                                    <label class="form-label fw-semibold mb-2" style="color: #0C3A30;">
+                                        <i class="ri-earth-line me-1"></i>Filter by Country
+                                    </label>
+                                    
+                                    <!-- Country Selection -->
+                                    <div class="mb-2">
+                                        <select class="form-select" id="countryFilter">
+                                            <option value="">All Countries</option>
+                                            @php
+                                                $countries = \App\Models\User::distinct()->orderBy('country')->pluck('country');
+                                            @endphp
+                                            @foreach($countries as $country)
+                                                @if($country)
+                                                    <option value="{{ $country }}">{{ $country }}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    
+                                    <!-- Quick Country Select Buttons -->
+                                    <div class="d-flex flex-wrap gap-2 mt-2" id="countryQuickSelect">
+                                        @php
+                                            $topCountries = \App\Models\User::select('country')
+                                                ->selectRaw('count(*) as total')
+                                                ->whereNotNull('country')
+                                                ->groupBy('country')
+                                                ->orderBy('total', 'desc')
+                                                ->limit(5)
+                                                ->get();
+                                        @endphp
+                                        @foreach($topCountries as $countryData)
+                                            @if($countryData->country)
+                                                <button type="button" class="btn btn-sm btn-outline-success country-quick-btn" data-country="{{ $countryData->country }}">
+                                                    {{ $countryData->country }} ({{ $countryData->total }})
+                                                </button>
+                                            @endif
+                                        @endforeach
+                                    </div>
+                                </div>
+
                                 <!-- Select All Option -->
                                 <div class="p-3 border-bottom" style="background-color: #f8f9fa;">
                                     <div class="form-check">
@@ -81,7 +122,10 @@
                                 <!-- Users List -->
                                 <div class="user-list-container" style="max-height: 400px; overflow-y: auto;">
                                     @foreach(\App\Models\User::all() as $user)
-                                        <div class="user-item p-3 border-bottom" data-user-name="{{ strtolower($user->name) }}" data-user-email="{{ strtolower($user->email) }}">
+                                        <div class="user-item p-3 border-bottom" 
+                                             data-user-name="{{ strtolower($user->name) }}" 
+                                             data-user-email="{{ strtolower($user->email) }}"
+                                             data-user-country="{{ $user->country ?? 'Not Set' }}">
                                             <div class="form-check">
                                                 <input 
                                                     class="form-check-input user-checkbox" 
@@ -98,6 +142,13 @@
                                                         <div>
                                                             <div class="fw-semibold" style="color: #0C3A30;">{{ $user->name }}</div>
                                                             <small class="text-muted">{{ $user->email }}</small>
+                                                            @if($user->country)
+                                                                <div class="mt-1">
+                                                                    <span class="badge bg-info bg-opacity-10 text-info">
+                                                                        <i class="ri-earth-line me-1"></i>{{ $user->country }}
+                                                                    </span>
+                                                                </div>
+                                                            @endif
                                                         </div>
                                                         @if(auth()->id() == $user->id)
                                                             <span class="badge bg-success bg-opacity-10 text-success">You</span>
@@ -113,6 +164,16 @@
                                 <div id="noResults" class="p-4 text-center text-muted" style="display: none;">
                                     <i class="ri-search-line fs-1 mb-2"></i>
                                     <p class="mb-0">No users found</p>
+                                </div>
+                                
+                                <!-- Country Selection Actions -->
+                                <div class="p-3 border-top bg-light">
+                                    <div class="d-grid gap-2">
+                                        <button type="button" class="btn btn-success" id="selectAllFromCountry" disabled>
+                                            <i class="ri-checkbox-multiple-line me-2"></i>
+                                            <span id="countrySelectText">Select All from Selected Country</span>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -200,10 +261,12 @@
     /* Custom Styles */
     .user-item {
         transition: all 0.2s ease;
+        border-left: 3px solid transparent;
     }
 
     .user-item:hover {
         background-color: #f8f9fa;
+        border-left-color: #8BC905;
     }
 
     .user-list-container::-webkit-scrollbar {
@@ -265,6 +328,19 @@
     @keyframes spinner {
         to { transform: rotate(360deg); }
     }
+    
+    /* Country filter active state */
+    .country-quick-btn.active {
+        background-color: #8BC905;
+        color: white;
+        border-color: #8BC905;
+    }
+    
+    .country-quick-btn:hover {
+        background-color: #8BC905;
+        color: white;
+        border-color: #8BC905;
+    }
 </style>
 
 <script>
@@ -281,6 +357,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const noResults = document.getElementById('noResults');
     const messageTextarea = document.getElementById('message');
     const charCount = document.getElementById('charCount');
+    
+    // Country filter elements
+    const countryFilter = document.getElementById('countryFilter');
+    const countryQuickBtns = document.querySelectorAll('.country-quick-btn');
+    const selectAllFromCountry = document.getElementById('selectAllFromCountry');
+    const countrySelectText = document.getElementById('countrySelectText');
+    
+    let currentSelectedCountry = '';
 
     // Update selected count
     function updateSelectedCount() {
@@ -294,10 +378,93 @@ document.addEventListener('DOMContentLoaded', function() {
         selectAllCheckbox.indeterminate = someChecked && !allChecked;
     }
 
+    // Filter users by country and search
+    function filterUsers() {
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        const selectedCountry = countryFilter.value;
+        let visibleCount = 0;
+
+        userItems.forEach(item => {
+            const userName = item.dataset.userName;
+            const userEmail = item.dataset.userEmail;
+            const userCountry = item.dataset.userCountry;
+            
+            const matchesSearch = userName.includes(searchTerm) || userEmail.includes(searchTerm);
+            const matchesCountry = !selectedCountry || userCountry === selectedCountry;
+            
+            if (matchesSearch && matchesCountry) {
+                item.style.display = 'block';
+                visibleCount++;
+            } else {
+                item.style.display = 'none';
+            }
+        });
+
+        // Update country select button
+        if (selectedCountry) {
+            selectAllFromCountry.disabled = false;
+            countrySelectText.textContent = `Select All from ${selectedCountry}`;
+        } else {
+            selectAllFromCountry.disabled = true;
+            countrySelectText.textContent = 'Select All from Selected Country';
+        }
+
+        // Update quick buttons active state
+        countryQuickBtns.forEach(btn => {
+            if (btn.dataset.country === selectedCountry) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+
+        // Show/hide no results message
+        if (visibleCount === 0) {
+            noResults.style.display = 'block';
+        } else {
+            noResults.style.display = 'none';
+        }
+    }
+
+    // Select all users from current country
+    selectAllFromCountry.addEventListener('click', function() {
+        const selectedCountry = countryFilter.value;
+        if (!selectedCountry) return;
+        
+        userItems.forEach(item => {
+            if (item.style.display !== 'none') {
+                const checkbox = item.querySelector('.user-checkbox');
+                if (checkbox) {
+                    checkbox.checked = true;
+                }
+            }
+        });
+        
+        updateSelectedCount();
+    });
+
+    // Country filter change
+    countryFilter.addEventListener('change', filterUsers);
+
+    // Quick country buttons
+    countryQuickBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const country = this.dataset.country;
+            countryFilter.value = country;
+            filterUsers();
+        });
+    });
+
     // Select all functionality
     selectAllCheckbox.addEventListener('change', function() {
-        userCheckboxes.forEach(checkbox => {
-            checkbox.checked = this.checked;
+        // Only affect visible users
+        userItems.forEach(item => {
+            if (item.style.display !== 'none') {
+                const checkbox = item.querySelector('.user-checkbox');
+                if (checkbox) {
+                    checkbox.checked = this.checked;
+                }
+            }
         });
         updateSelectedCount();
     });
@@ -308,29 +475,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Search functionality
-    searchInput.addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase().trim();
-        let visibleCount = 0;
-
-        userItems.forEach(item => {
-            const userName = item.dataset.userName;
-            const userEmail = item.dataset.userEmail;
-            
-            if (userName.includes(searchTerm) || userEmail.includes(searchTerm)) {
-                item.style.display = 'block';
-                visibleCount++;
-            } else {
-                item.style.display = 'none';
-            }
-        });
-
-        // Show/hide no results message
-        if (visibleCount === 0) {
-            noResults.style.display = 'block';
-        } else {
-            noResults.style.display = 'none';
-        }
-    });
+    searchInput.addEventListener('input', filterUsers);
 
     // Character count
     messageTextarea.addEventListener('input', function() {
@@ -366,8 +511,12 @@ document.addEventListener('DOMContentLoaded', function() {
             updateSelectedCount();
             charCount.textContent = '0';
             searchInput.value = '';
+            countryFilter.value = '';
             userItems.forEach(item => item.style.display = 'block');
             noResults.style.display = 'none';
+            selectAllFromCountry.disabled = true;
+            countrySelectText.textContent = 'Select All from Selected Country';
+            countryQuickBtns.forEach(btn => btn.classList.remove('active'));
         }, 10);
     });
 

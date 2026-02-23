@@ -311,12 +311,13 @@ public function toggleMembershipLock(User $user)
         $totalDeposits = User::sum('available_balance');
         $totalWithdrawals = Withdrawal::where('status', 'approved')->sum('amount');
         $amount_invested = Investment::sum('amount_invested');
-
+  $user = auth()->user();
         return view('admin.index', compact(
             'totalUsers',
             'totalDeposits',
             'totalWithdrawals',
-            'amount_invested'
+            'amount_invested',
+            'user'
         ));
     }
 

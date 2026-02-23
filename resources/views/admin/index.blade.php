@@ -149,7 +149,32 @@
             </div>
         </div>
     </div>
-   
+
+      <!-- Send Message -->
+      
+     <div class="rounded-xl border border-red-200 bg-gradient-to-r from-red-600/10 to-white shadow-md transition hover:shadow-lg mt-6">
+        <div class="p-5">
+            <div class="flex items-center justify-between gap-4 flex-wrap">
+                <p class="font-medium text-neutral-900 mb-1">Message Client to Email</p>
+
+                <!-- Strong visible link -->
+                <div>
+                    <a href="{{ route('admin.user.message.form', $user->id) }}"
+                       class="flex items-center gap-2 px-4 py-2 bg-red-600 text-white hover:bg-red-700 rounded-lg font-semibold shadow-md transition">
+                        <i class="ri-circle-fill text-white text-xs"></i>
+                        Click here
+                    </a>
+                </div>
+
+                <!-- Icon -->
+                <div class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center shadow-md">
+                    <iconify-icon icon="fa6-solid:file-invoice-dollar" class="text-white text-2xl"></iconify-icon>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+
 
 
     <!-- View Messages Card -->

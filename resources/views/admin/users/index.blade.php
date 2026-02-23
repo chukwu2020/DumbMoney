@@ -200,15 +200,7 @@
 <td class="text-center">
     <div class="flex justify-center gap-2">
 
-        <!-- Send Message -->
-        <a href="{{ route('admin.user.message.form', $user->id) }}">
-            <button
-                class="w-28 h-10 rounded-full bg-blue-600 text-white hover:bg-blue-700 flex items-center justify-center"
-                title="Send Message">
-                <iconify-icon icon="mdi:email-send" class="mr-2 text-lg"></iconify-icon>
-                Message
-            </button>
-        </a>
+       
 
         <!-- Edit -->
         <a href="{{ route('user.edit', $user->id) }}" style="color: green;">
