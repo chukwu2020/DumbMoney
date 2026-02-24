@@ -528,28 +528,35 @@ class AdminController extends Controller
     /**
      * Translate message to target language using Google Cloud Translate
      */
-   private function translateMessage($text, $targetLanguage)
+ private function translateMessage($text, $targetLanguage)
 {
     try {
-        if ($targetLanguage === 'en') {
+        if ($targetLanguage === 'en' || empty($targetLanguage)) {
             return $text;
         }
 
-        // Free Google Translate endpoint - NO KEY NEEDED
-        $url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl={$targetLanguage}&dt=t&q=" . urlencode($text);
+        // Split long text into chunks to avoid URL length limits
+        $chunks = str_split($text, 500); // Translate in chunks of 500 characters
+        $translatedChunks = [];
         
-        $response = file_get_contents($url);
-        $result = json_decode($response);
-        
-        if (isset($result[0][0][0])) {
-            return $result[0][0][0];
+        foreach ($chunks as $chunk) {
+            $url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl={$targetLanguage}&dt=t&q=" . urlencode($chunk);
+            
+            $response = file_get_contents($url);
+            $result = json_decode($response, true);
+            
+            if (isset($result[0][0][0])) {
+                $translatedChunks[] = $result[0][0][0];
+            } else {
+                $translatedChunks[] = $chunk; // Keep original if translation fails
+            }
         }
         
-        return $text;
+        return implode(' ', $translatedChunks); // Combine translated chunks
         
     } catch (\Exception $e) {
-        Log::error('Free translation failed: ' . $e->getMessage());
-        return $text;
+        Log::error('Translation failed: ' . $e->getMessage());
+        return $text; // Return original if translation fails
     }
 }
     /**
