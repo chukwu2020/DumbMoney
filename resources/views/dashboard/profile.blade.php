@@ -132,11 +132,11 @@
                                     </div>
                                     <div>
                                         <label class="block font-semibold text-sm text-[#0C3A30] mb-2">Phone</label>
-                                        <input type="text" name="phone" value="{{ old('phone', $user->phone) }}" class="form-control custom-input" />
+                                        <input type="text" name="phone" value="{{ old('phone', $user->phone) }}" class="form-control custom-input" readonly class="form-control custom-input bg-gray-100 cursor-not-allowed" />
                                     </div>
                                     <div>
                                         <label class="block font-semibold text-sm text-[#0C3A30] mb-2">Country</label>
-                                        <input type="text" name="country" value="{{ old('country', $user->country) }}" class="form-control custom-input" />
+                                        <input type="text" name="country" value="{{ old('country', $user->country) }}" class="form-control custom-input" readonly class="form-control custom-input bg-gray-100 cursor-not-allowed"/>
                                     </div>
                                     <div>
                                         <label class="block font-semibold text-sm text-[#0C3A30] mb-2">Address</label>

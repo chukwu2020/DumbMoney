@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ $languageCode ?? 'en' }}">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -28,15 +28,21 @@
 <!-- Email Card -->
 <table class="email-container" width="600" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff" style="border-radius:14px; overflow:hidden; box-shadow:0 6px 20px rgba(0,0,0,0.06);">
 
+<!-- Language Badge -->
+<tr>
+<td style="padding:15px 45px 0 45px; text-align:right;">
+    <span style="background:#f0fdf4; color:#8bc905; font-size:12px; padding:4px 12px; border-radius:20px; display:inline-block;">
+        🌐 {{ $translatedLabels['translated_to'] ?? 'Translated to' }}: {{ strtoupper($languageCode) }} @if($country)({{ $country }})@endif
+    </span>
+</td>
+</tr>
+
 <!-- Header -->
 <tr>
 <td style="background:#8bc905; padding:30px 20px; text-align:center;">
-
 <img src="https://res.cloudinary.com/dswwq3xks/image/upload/v1752508147/mymarketmindmainlogo_qonmlk.png"
      alt="MarketMind Logo"
      style="height:55px; margin-bottom:12px; display:block; margin-left:auto; margin-right:auto;">
-
-
 </td>
 </tr>
 
@@ -48,12 +54,13 @@
 </h2>
 
 <p style="margin-top:0; font-size:16px;">
-  Hello {{ $userName ?? 'Valued Investor' }},
+  {{ $translatedLabels['hello'] ?? 'Hello' }} {{ $userName ?? ($translatedLabels['valued_investor'] ?? 'Valued Investor') }},
 </p>
 
 <p style="margin:20px 0; font-weight:500; letter-spacing:0.4px;">
-  This is an official update from the MarketMind trading desk regarding your account activity:
+  {{ $translatedLabels['update_intro'] ?? 'This is an official update from the MarketMind trading desk regarding your account activity' }}:
 </p>
+
 <!-- Highlighted Message Box -->
 <table width="100%" cellpadding="0" cellspacing="0" style="margin:25px 0;">
 <tr>
@@ -65,39 +72,36 @@
 </tr>
 </table>
 
+
+
 <!-- CTA Button -->
 @if(!empty($actionUrl))
 <table width="100%" cellpadding="0" cellspacing="0" style="margin:35px 0;">
 <tr>
 <td align="center">
-
 <a href="{{ $actionUrl }}"
    style="background:#8bc905; color:#ffffff; text-decoration:none; padding:14px 28px; border-radius:6px; font-weight:bold; display:inline-block;">
-   {{ $actionText ?? 'View My Account' }}
+   {{ $actionText ?? ($translatedLabels['view_account'] ?? 'View My Account') }}
 </a>
-
 </td>
 </tr>
 </table>
 @endif
 
 <p style="margin-top:30px; font-size:14px; color:#4a5f55;">
-If you have any questions, simply reply to this email our trading team is here to help.
+  {{ $translatedLabels['help_text'] ?? 'If you have any questions, simply reply to this email - our trading team is here to help' }}.
 </p>
 
 <!-- Signature -->
 <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:35px; border-top:1px solid #e5efe9; padding-top:20px;">
 <tr>
 <td>
-
 <p style="margin:0; font-size:14px;">
-Warm regards,
+  {{ $translatedLabels['farewell'] ?? 'Warm regards' }},
 </p>
-
 <p style="margin:5px 0 0; font-size:16px; font-weight:600; color:#8bc905;">
-The MarketMind Team
+  {{ $translatedLabels['team_signature'] ?? 'The MarketMind Team' }}
 </p>
-
 </td>
 </tr>
 </table>
@@ -108,23 +112,19 @@ The MarketMind Team
 <!-- Footer -->
 <tr>
 <td bgcolor="#f0fdf4" style="padding:25px; text-align:center; font-size:12px; color:#5a6d5a;">
-
 <p style="margin:0 0 10px;">
-  © {{ date('Y') }} MarketMind. All rights reserved.
+  © {{ date('Y') }} MarketMind. {{ $translatedLabels['rights_reserved'] ?? 'All rights reserved' }}.
 </p>
-
 <p style="margin:0;">
-  You are receiving this email because you have an active MarketMind account.
+  {{ $translatedLabels['received_reason'] ?? 'You are receiving this email because you have an active MarketMind account' }}.
 </p>
-
 <p style="margin:15px 0 0;">
-  <a href="#" style="color:#8bc905; text-decoration:none;">Help Center</a>
+  <a href="#" style="color:#8bc905; text-decoration:none;">{{ $translatedLabels['help_center'] ?? 'Help Center' }}</a>
   &nbsp;•&nbsp;
-  <a href="#" style="color:#8bc905; text-decoration:none;">Privacy Policy</a>
+  <a href="#" style="color:#8bc905; text-decoration:none;">{{ $translatedLabels['privacy_policy'] ?? 'Privacy Policy' }}</a>
   &nbsp;•&nbsp;
-  <a href="#" style="color:#8bc905; text-decoration:none;">Unsubscribe</a>
+  <a href="#" style="color:#8bc905; text-decoration:none;">{{ $translatedLabels['unsubscribe'] ?? 'Unsubscribe' }}</a>
 </p>
-
 </td>
 </tr>
 

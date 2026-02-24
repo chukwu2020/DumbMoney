@@ -1,2215 +1,1519 @@
-@extends('layout.app')
-@section('content')
+<?php
 
+namespace App\Http\Controllers;
 
-<style>
-    /* CSS to reduce header gap */
-    .main-banner-area {
-        margin-top: -1rem;
-        padding-top: 4rem !important;
+use App\Models\ContactUSMessage;
+use App\Models\Deposit;
+use App\Models\Idverification;
+use App\Models\Investment;
+use App\Models\Message;
+use App\Models\Plan;
+use App\Models\User;
+use App\Models\UserKyc;
+use App\Models\Withdrawal;
+use App\Models\WithdrawalCard;
+use App\Notifications\AdminMessageNotification;
+use App\Notifications\IDVerificationSubmitted;
+
+use App\Notifications\TransactionNotification;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Str; // ✅ ADDED THIS IMPORT
+
+class AdminController extends Controller
+{
+    public function userIndex(Request $request)
+    {
+        $query = User::with(['investments', 'profile', 'withdrawalCard'])
+            ->where('role_as', 0);
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('status')) {
+            $status = $request->input('status');
+            if ($status == 'Active') {
+                $query->where('active', 1);
+            } elseif ($status == 'Inactive') {
+                $query->where('active', 0);
+            }
+        }
+
+        $users = $query->paginate(10);
+
+        foreach ($users as $user) {
+            $user->total_invested = $user->investments->sum('amount_invested');
+        }
+
+        return view('admin.users.index', compact('users'));
     }
 
-    @media (max-width: 768px) {
-        .main-banner-area {
-            margin-top: -1.5rem;
+    public function hiddenuser(Request $request)
+    {
+        $query = User::with(['investments', 'profile', 'withdrawalCard'])
+            ->where('role_as', 0);
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+            });
         }
+
+        if ($request->filled('status')) {
+            $status = $request->input('status');
+            if ($status == 'Active') {
+                $query->where('active', 1);
+            } elseif ($status == 'Inactive') {
+                $query->where('active', 0);
+            }
+        }
+
+        $users = $query->paginate(10);
+
+        foreach ($users as $user) {
+            $user->total_invested = $user->investments->sum('amount_invested');
+        }
+
+        return view('admin.users.indexmain', compact('users'));
+    }
+
+    public function userDestroy($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return redirect()->route('user.index')->with('success', 'User deleted successfully.');
+    }
+
+    public function edit($id)
+    {
+        $user = User::findOrFail($id);
+        return view('admin.users.edit', compact('user'));
+    }
+
+    public function pendingDeposits()
+    {
+        $deposits = Deposit::with('user', 'plan', 'wallet')
+            ->where('status', 0)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('admin.deposits.pending', compact('deposits'));
+    }
+
+    public function approvedDeposits()
+    {
+        $deposits = Deposit::with(['user', 'plan', 'wallet'])
+            ->where('status', 1)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('admin.deposits.approved', compact('deposits'));
+    }
+
+   
+public function rejectDeposit(Request $request, $id)
+{
+    $request->validate([
+        'rejection_note' => 'required|string|min:5',
+    ]);
+
+    $deposit = Deposit::findOrFail($id);
+
+    if ($deposit->status === 1) {
+        return back()->with('error', 'Cannot reject approved deposit.');
+    }
+
+    $deposit->update([
+        'status' => 2, // rejected
+        'rejection_note' => $request->rejection_note,
+    ]);
+
+    // Optional notification
+    $deposit->user->notify(new TransactionNotification(
+        'Deposit Rejected',
+        'Your deposit was rejected. Please check the reason in your dashboard.'
+    ));
+
+    return back()->with('success', 'Deposit rejected with reason.');
+}
+
+    public function approveDeposit($id)
+    {
+        $deposit = Deposit::findOrFail($id);
+
+        if ($deposit->status === 1) {
+            return redirect()->back()->with('error', 'This deposit has already been approved.');
+        }
+
+        $plan = Plan::find($deposit->plan_id);
+
+        if (!$plan) {
+            return back()->with('error', 'Investment plan not found');
+        }
+
+        $roi = $plan->interest_rate;
+        $totalProfit = ($deposit->amount_deposited * $roi / 100) * $plan->duration;
+
+        Investment::create([
+            'user_id' => $deposit->user_id,
+            'plan_id' => $deposit->plan_id,
+            'amount_invested' => $deposit->amount_deposited,
+            'roi' => $roi,
+            'total_profit' => $totalProfit,
+            'start_date' => Carbon::now(),
+            'end_date' => Carbon::now()->addDays($plan->duration),
+            'withdrawn' => 0,
+        ]);
+
+        $deposit->status = 1;
+        $deposit->save();
+
+        $user = $deposit->user;
+
+        $user->notify(new TransactionNotification(
+            'Deposit Approved',
+            'Your deposit of $' . number_format($deposit->amount_deposited, 2) . ' has been approved and investment started successfully.'
+        ));
+
+        return redirect()->back()->with('success', 'Deposit approved and investment started');
+    }
+
+    public function showApprovedWithdrawals()
+    {
+        $approvedWithdrawals = Withdrawal::where('status', 'approved')
+            ->with(['user'])
+            ->latest()
+            ->get();
+
+        $withdrawalCards = WithdrawalCard::all();
+
+        return view('admin.deposits.withdrawal_approved', compact('approvedWithdrawals', 'withdrawalCards'));
+    }
+
+    public function unapproveBalanceWithdrawal(Request $request, $id)
+    {
+        $withdrawal = Withdrawal::findOrFail($id);
+
+        $withdrawal->user->available_balance += $withdrawal->amount;
+        $withdrawal->user->save();
+
+        $withdrawal->status = 'failed';
+        $withdrawal->admin_note = $request->admin_note;
+        $withdrawal->save();
+
+        return redirect()->back()->with('success', 'Withdrawal has been unapproved and marked as failed.');
+    }
+
+    // ✅ FIXED: Generate Membership Code
+   
+
+
+// Add this to AdminController.php
+
+public function generateMembershipCode(Request $request)
+{
+    $request->validate([
+        'user_id' => 'required|exists:users,id'
+    ]);
+
+    $user = User::findOrFail($request->user_id);
+    
+    // Check if user already has a code
+    if ($user->membership_code) {
+        return response()->json([
+            'success' => false,
+            'message' => 'User already has code: ' . $user->membership_code
+        ], 400);
+    }
+
+    // Generate unique code
+    do {
+        $membershipCode = 'VIP' . date('Y') . strtoupper(Str::random(6));
+    } while (DB::table('membership_codes')->where('code', $membershipCode)->exists());
+    
+    // Insert into membership_codes table
+    DB::table('membership_codes')->insert([
+        'code' => $membershipCode,
+        'is_used' => false,
+        'used_by' => null,
+        'used_at' => null,
+        'created_at' => now(),
+        'updated_at' => now()
+    ]);
+    
+    // Assign to user (but don't activate yet)
+    $user->update([
+        'membership_code' => $membershipCode,
+        'has_membership' => false
+    ]);
+    
+    return response()->json([
+        'success' => true,
+        'membership_code' => $membershipCode,
+        'user_name' => $user->name
+    ]);
+}
+
+// live
+
+public function toggleMembershipLock(User $user)
+{
+    $user->membership_locked = !$user->membership_locked;
+    $user->save();
+
+    $status = $user->membership_locked ? 'locked' : 'unlocked';
+
+    return back()->with('success', "Membership code has been {$status}.");
+}
+
+
+
+    public function withdrawaldestroy($id)
+    {
+        $withdrawal = Withdrawal::findOrFail($id);
+
+        if ($withdrawal->status !== 'approved') {
+            return back()->with('error', 'Only approved withdrawals can be deleted.');
+        }
+
+        $withdrawal->delete();
+
+        return back()->with('success', 'Approved withdrawal deleted successfully.');
+    }
+
+    public function updateBalance(Request $request, $id)
+    {
+        $request->validate([
+            'available_balance' => 'required|numeric|min:0',
+            'investments.*' => 'nullable|numeric|min:0',
+        ]);
+
+        $user = User::findOrFail($id);
+        $user->available_balance = $request->input('available_balance');
+        $user->save();
+
+        return redirect()->route('user.index')->with('success', 'User balance updated successfully.');
+    }
+
+    public function admin_dashboard()
+    {
+        $totalUsers = User::count();
+        $totalDeposits = User::sum('available_balance');
+        $totalWithdrawals = Withdrawal::where('status', 'approved')->sum('amount');
+        $amount_invested = Investment::sum('amount_invested');
+  $user = auth()->user();
+        return view('admin.index', compact(
+            'totalUsers',
+            'totalDeposits',
+            'totalWithdrawals',
+            'amount_invested',
+            'user'
+        ));
+    }
+
+    public function adminViewWithdrawals()
+    {
+        $withdrawals = Withdrawal::with(['user.profile', 'user.withdrawalCard'])
+            ->where('status', 'pending')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('admin.deposits.withdrawal_pending', compact('withdrawals'));
+    }
+
+    public function approveBalanceWithdrawal($id)
+    {
+        $withdrawal = Withdrawal::findOrFail($id);
+
+        if ($withdrawal->status === 'approved') {
+            return back()->with('error', 'This withdrawal has already been approved.');
+        }
+
+        $withdrawal->status = 'approved';
+        $withdrawal->admin_note = null;
+        $withdrawal->save();
+
+        $user = $withdrawal->user;
+
+        $user->notify(new TransactionNotification(
+            'Withdrawal Approved',
+            'Your withdrawal request of $' . number_format($withdrawal->amount, 2) . ' has been approved.'
+        ));
+
+        return back()->with('success', 'Withdrawal approved successfully.');
+    }
+
+    public function rejectBalanceWithdrawal(Request $request, $id)
+    {
+        $request->validate([
+            'admin_note' => 'required|string|max:500',
+        ]);
+
+        $withdrawal = Withdrawal::findOrFail($id);
+
+        if ($withdrawal->status !== 'pending') {
+            return back()->with('error', 'Only pending withdrawals can be rejected.');
+        }
+
+        $user = $withdrawal->user;
+        $user->available_balance += $withdrawal->amount;
+        $user->save();
+
+        $withdrawal->status = 'rejected';
+        $withdrawal->admin_note = $request->admin_note;
+        $withdrawal->save();
+
+        $user->notify(new TransactionNotification(
+            'Withdrawal Rejected',
+            'Your withdrawal request of $' . number_format($withdrawal->amount, 2) . ' has been rejected. Reason: ' . $request->admin_note
+        ));
+
+        return back()->with('success', 'Withdrawal rejected, amount refunded to user, and notification sent.');
+    }
+
+    public function index()
+    {
+        $messages = ContactUSMessage::orderBy('created_at', 'desc')->paginate(20);
+        return view('admin.contactUs.index', compact('messages'));
+    }
+
+    public function destroy($id)
+    {
+        $message = Message::findOrFail($id);
+        $message->delete();
+
+        return redirect()->route('admin.messages.index')->with('success', 'Message deleted successfully.');
+    }
+
+    public function profile()
+    {
+        $user = User::with('profile')->find(auth()->id());
+        return view('admin.profile', compact('user'));
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $user = auth()->user();
+
+        if ($request->hasFile('profile_pic')) {
+            $file = $request->file('profile_pic');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads'), $filename);
+
+            $profile = $user->profile ?? new \App\Models\UserProfile();
+            $profile->user_id = $user->id;
+            $profile->profile_pic = $filename;
+            $profile->save();
+        }
+
+        $user->update([
+            'name' => $request->input('name'),
+            'phone' => $request->input('phone'),
+        ]);
+
+        if ($user->profile) {
+            $user->profile->update([
+                'address' => $request->input('address'),
+                'bitcoin_address' => $request->input('bitcoin_address'),
+                'etherium_address' => $request->input('etherium_address'),
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Profile updated successfully.');
+    }
+
+    public function kycindex()
+    {
+        $kycs = UserKyc::with('user')->latest()->get();
+        return view('admin.admin_approve_id_verification', compact('kycs'));
+    }
+
+    public function approve($id)
+    {
+        $kyc = UserKyc::with('user')->findOrFail($id);
+
+        if ($kyc->status === 'approved') {
+            return redirect()->back()->with('error', 'This KYC is already approved.');
+        }
+
+        if ($kyc->status === 'rejected') {
+            return redirect()->back()->with('error', 'This KYC has already been rejected and cannot be approved.');
+        }
+
+        $kyc->status = 'approved';
+        $kyc->admin_note = 'Approved by admin';
+        $kyc->save();
+
+        $user = $kyc->user;
+        $user->notify(new TransactionNotification(
+            'KYC Approved',
+            'Your KYC documents have been reviewed and approved. You have unlocked additional features for your trading.'
+        ));
+
+        return redirect()->back()->with('success', 'KYC approved.');
+    }
+
+    public function reject($id)
+    {
+        $kyc = UserKyc::with('user')->findOrFail($id);
+
+        if ($kyc->status === 'rejected') {
+            return redirect()->back()->with('error', 'This KYC is already rejected.');
+        }
+
+        if ($kyc->status === 'approved') {
+            return redirect()->back()->with('error', 'This KYC has already been approved and cannot be rejected.');
+        }
+
+        $kyc->status = 'rejected';
+        $kyc->admin_note = 'Rejected by admin';
+        $kyc->save();
+
+        $user = $kyc->user;
+        $user->notify(new TransactionNotification(
+            'KYC Rejected',
+            'Your KYC documents were reviewed and rejected. Please upload a clearer image of your ID for verification.'
+        ));
+
+        return redirect()->back()->with('success', 'KYC rejected.');
+    }
+
+
+
+    // admin message controller 
+
+
+
+public function sendMessage(Request $request)
+{
+    $request->validate([
+        'title' => 'required',
+        'message' => 'required',
+        'users' => 'required|array'
+    ]);
+
+    if (in_array('all', $request->users)) {
+        $users = User::all();
+    } else {
+        $users = User::whereIn('id', $request->users)->get();
+    }
+
+    Notification::send($users, new AdminMessageNotification(
+        $request->title,
+        $request->message
+    ));
+
+    return back()->with('success', 'Message sent successfully!');
+}
+
+// **
+//      * Get language code based on country
+//      */
+    private function getLanguageCode($country)
+    {
+        $countryLanguageMap = [
+            'Afghanistan' => 'ps',
+            'Albania' => 'sq',
+            'Algeria' => 'ar',
+            'Argentina' => 'es',
+            'Australia' => 'en',
+            'Austria' => 'de',
+            'Bangladesh' => 'bn',
+            'Belarus' => 'be',
+            'Belgium' => 'nl',
+            'Brazil' => 'pt',
+            'Bulgaria' => 'bg',
+            'Cambodia' => 'km',
+            'Canada' => 'en',
+            'Chile' => 'es',
+            'China' => 'zh-CN',
+            'Colombia' => 'es',
+            'Croatia' => 'hr',
+            'Czech Republic' => 'cs',
+            'Denmark' => 'da',
+            'Egypt' => 'ar',
+            'Estonia' => 'et',
+            'Finland' => 'fi',
+            'France' => 'fr',
+            'Germany' => 'de',
+            'Ghana' => 'en',
+            'Greece' => 'el',
+            'Hong Kong' => 'zh-TW',
+            'Hungary' => 'hu',
+            'Iceland' => 'is',
+            'India' => 'hi',
+            'Indonesia' => 'id',
+            'Iran' => 'fa',
+            'Iraq' => 'ar',
+            'Ireland' => 'en',
+            'Israel' => 'he',
+            'Italy' => 'it',
+            'Japan' => 'ja',
+            'Jordan' => 'ar',
+            'Kazakhstan' => 'kk',
+            'Kenya' => 'sw',
+            'Kuwait' => 'ar',
+            'Latvia' => 'lv',
+            'Lebanon' => 'ar',
+            'Lithuania' => 'lt',
+            'Luxembourg' => 'lb',
+            'Malaysia' => 'ms',
+            'Maldives' => 'dv',
+            'Mexico' => 'es',
+            'Morocco' => 'ar',
+            'Nepal' => 'ne',
+            'Netherlands' => 'nl',
+            'New Zealand' => 'en',
+            'Nigeria' => 'en',
+            'Norway' => 'no',
+            'Pakistan' => 'ur',
+            'Palestine' => 'ar',
+            'Peru' => 'es',
+            'Philippines' => 'tl',
+            'Poland' => 'pl',
+            'Portugal' => 'pt',
+            'Qatar' => 'ar',
+            'Romania' => 'ro',
+            'Russia' => 'ru',
+            'Saudi Arabia' => 'ar',
+            'Serbia' => 'sr',
+            'Singapore' => 'en',
+            'Slovakia' => 'sk',
+            'Slovenia' => 'sl',
+            'South Africa' => 'af',
+            'South Korea' => 'ko',
+            'Spain' => 'es',
+            'Sri Lanka' => 'si',
+            'Sweden' => 'sv',
+            'Switzerland' => 'de',
+            'Syria' => 'ar',
+            'Taiwan' => 'zh-TW',
+            'Tanzania' => 'sw',
+            'Thailand' => 'th',
+            'Tunisia' => 'ar',
+            'Turkey' => 'tr',
+            'Ukraine' => 'uk',
+            'United Arab Emirates' => 'ar',
+            'United Kingdom' => 'en',
+            'United States' => 'en',
+            'Uruguay' => 'es',
+            'Uzbekistan' => 'uz',
+            'Venezuela' => 'es',
+            'Vietnam' => 'vi',
+            'Yemen' => 'ar',
+            'Zambia' => 'en',
+            'Zimbabwe' => 'en',
+        ];
+
+        return $countryLanguageMap[$country] ?? 'en'; // Default to English
+    }
+
+    /**
+     * Translate message to target language
+     */
+    private function translateMessage($text, $targetLanguage)
+    {
+        try {
+            if ($targetLanguage === 'en') {
+                return $text; // No translation needed
+            }
+
+            // Using Google Translate (free version)
+            $tr = new GoogleTranslate();
+            $tr->setSource('en'); // Source language (admin's language)
+            $tr->setTarget($targetLanguage);
+            
+            return $tr->translate($text);
+            
+        } catch (\Exception $e) {
+            \Log::error('Translation failed: ' . $e->getMessage());
+            return $text; // Return original if translation fails
+        }
+    }
+
+    /**
+     * Send message with auto-translation
+     */
+    public function sendMessage(Request $request)
+    {
+        $request->validate([
+            'title' => 'required',
+            'message' => 'required',
+            'users' => 'required|array'
+        ]);
+
+        if (in_array('all', $request->users)) {
+            $users = User::all();
+        } else {
+            $users = User::whereIn('id', $request->users)->get();
+        }
+
+        $originalTitle = $request->title;
+        $originalMessage = $request->message;
+
+        foreach ($users as $user) {
+            // Get user's language based on country
+            $languageCode = $this->getLanguageCode($user->country ?? '');
+            
+            // Translate title and message
+            $translatedTitle = $this->translateMessage($originalTitle, $languageCode);
+            $translatedMessage = $this->translateMessage($originalMessage, $languageCode);
+            
+            // Send notification with translated content
+            $user->notify(new AdminMessageNotification(
+                $translatedTitle,
+                $translatedMessage,
+                $originalTitle, // Pass original for reference
+                $languageCode,   // Pass language code
+                $user->country   // Pass country
+            ));
+        }
+
+        // Log the translation activity
+        \Log::info('Messages sent with translation', [
+            'total_users' => $users->count(),
+            'languages' => $users->pluck('country')->unique()->values()
+        ]);
+
+        return back()->with('success', 'Messages sent successfully with auto-translation!');
+    }
+
+
+
+
+}<?php
+
+namespace App\Notifications;
+
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
+
+class AdminMessageNotification extends Notification
+{
+    use Queueable;
+
+    public $title;
+    public $message;
+    public $originalTitle;
+    public $languageCode;
+    public $country;
+
+    public function __construct($title, $message, $originalTitle = null, $languageCode = 'en', $country = null)
+    {
+        $this->title = $title;
+        $this->message = $message;
+        $this->originalTitle = $originalTitle;
+        $this->languageCode = $languageCode;
+        $this->country = $country;
+    }
+
+    public function via($notifiable)
+    {
+        return ['mail'];
+    }
+
+    public function toMail($notifiable)
+    {
+        return (new MailMessage)
+            ->subject($this->title)
+            ->view('emails.admin-message', [
+                'subject' => $this->title,
+                'userName' => $notifiable->name,
+                'messageBody' => $this->message,
+                'originalTitle' => $this->originalTitle,
+                'languageCode' => $this->languageCode,
+                'country' => $this->country,
+                'actionUrl' => route('user.dashboard'),
+                'actionText' => 'View Dashboard',
+                'previewText' => 'You have a new message from MarketMind'
+            ]);
+    }
+}
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>{{ $subject }} - {{ config('app.name') }}</title>
+
+<style>
+@media only screen and (max-width: 600px) {
+  .email-container { width: 100% !important; }
+  .mobile-padding { padding: 25px !important; }
+  .stack-column { display: block !important; width: 100% !important; text-align: left !important; }
+}
+</style>
+</head>
+
+<body style="margin:0; padding:0; background-color:#f4f8f5; font-family: Arial, Helvetica, sans-serif; color:#0C3A30;">
+
+<!-- Hidden Preview Text -->
+<div style="display:none; max-height:0; overflow:hidden;">
+  {{ $previewText ?? 'You have a new update from MarketMind.' }}
+</div>
+
+<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f4f8f5">
+<tr>
+<td align="center" style="padding:40px 15px;">
+
+<!-- Email Card -->
+<table class="email-container" width="600" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff" style="border-radius:14px; overflow:hidden; box-shadow:0 6px 20px rgba(0,0,0,0.06);">
+
+<!-- Header -->
+<tr>
+<td style="background:#8bc905; padding:30px 20px; text-align:center;">
+
+<img src="https://res.cloudinary.com/dswwq3xks/image/upload/v1752508147/mymarketmindmainlogo_qonmlk.png"
+     alt="MarketMind Logo"
+     style="height:55px; margin-bottom:12px; display:block; margin-left:auto; margin-right:auto;">
+
+
+</td>
+</tr>
+
+<!-- Body -->
+<tr>
+<td class="mobile-padding" style="padding:40px 45px; font-size:15px; line-height:1.7;">
+<h2 style="margin:0 0 25px 0; font-size:18px; color:#0C3A30; font-weight:500; letter-spacing:1px; text-transform:uppercase;">
+  {{ $subject }}
+</h2>
+
+<p style="margin-top:0; font-size:16px;">
+  Hello {{ $userName ?? 'Valued Investor' }},
+</p>
+
+<p style="margin:20px 0; font-weight:500; letter-spacing:0.4px;">
+  This is an official update from the MarketMind trading desk regarding your account activity:
+</p>
+<!-- Highlighted Message Box -->
+<table width="100%" cellpadding="0" cellspacing="0" style="margin:25px 0;">
+<tr>
+<td style="background:#f0fdf4; border-left:4px solid #8bc905; padding:20px; border-radius:6px;">
+  <p style="margin:0; font-size:15px; line-height:1.7;">
+    {{ $messageBody }}
+  </p>
+</td>
+<!-- Add this near the top of your email template, maybe after the header -->
+<tr>
+<td style="padding:10px 45px 0 45px; text-align:right;">
+    <span style="background:#f0fdf4; color:#8bc905; font-size:12px; padding:4px 12px; border-radius:20px;">
+        🌐 Translated to: {{ strtoupper($languageCode) }} @if($country)({{ $country }})@endif
+    </span>
+</td>
+</tr>
+
+<!-- Optional: Show original message in English -->
+@if($originalTitle && $originalTitle != $subject)
+<tr>
+<td style="padding:10px 45px 0 45px;">
+    <details style="background:#f8f9fa; padding:15px; border-radius:8px;">
+        <summary style="color:#0C3A30; cursor:pointer; font-weight:500;">📝 View Original English Message</summary>
+        <p style="margin-top:15px; color:#4a5f55;">{{ $originalTitle }}</p>
+        <p style="color:#4a5f55;">{{ $messageBody }}</p>
+    </details>
+</td>
+</tr>
+@endif
+</tr>
+</table>
+
+<!-- CTA Button -->
+@if(!empty($actionUrl))
+<table width="100%" cellpadding="0" cellspacing="0" style="margin:35px 0;">
+<tr>
+<td align="center">
+
+<a href="{{ $actionUrl }}"
+   style="background:#8bc905; color:#ffffff; text-decoration:none; padding:14px 28px; border-radius:6px; font-weight:bold; display:inline-block;">
+   {{ $actionText ?? 'View My Account' }}
+</a>
+
+</td>
+</tr>
+</table>
+@endif
+
+<p style="margin-top:30px; font-size:14px; color:#4a5f55;">
+If you have any questions, simply reply to this email our trading team is here to help.
+</p>
+
+<!-- Signature -->
+<table width="100%" cellpadding="0" cellspacing="0" style="margin-top:35px; border-top:1px solid #e5efe9; padding-top:20px;">
+<tr>
+<td>
+
+<p style="margin:0; font-size:14px;">
+Warm regards,
+</p>
+
+<p style="margin:5px 0 0; font-size:16px; font-weight:600; color:#8bc905;">
+The MarketMind Team
+</p>
+
+</td>
+</tr>
+</table>
+
+</td>
+</tr>
+
+<!-- Footer -->
+<tr>
+<td bgcolor="#f0fdf4" style="padding:25px; text-align:center; font-size:12px; color:#5a6d5a;">
+
+<p style="margin:0 0 10px;">
+  © {{ date('Y') }} MarketMind. All rights reserved.
+</p>
+
+<p style="margin:0;">
+  You are receiving this email because you have an active MarketMind account.
+</p>
+
+<p style="margin:15px 0 0;">
+  <a href="#" style="color:#8bc905; text-decoration:none;">Help Center</a>
+  &nbsp;•&nbsp;
+  <a href="#" style="color:#8bc905; text-decoration:none;">Privacy Policy</a>
+  &nbsp;•&nbsp;
+  <a href="#" style="color:#8bc905; text-decoration:none;">Unsubscribe</a>
+</p>
+
+</td>
+</tr>
+
+</table>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>
+
+
+@extends('layout.admin')
+
+@section('content')
+<div class="container-fluid px-4 py-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-xl-10">
+            
+            <!-- Page Header -->
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <div>
+                    <h2 class="fw-bold mb-1" style="color: #0C3A30;">Send Message to Users</h2>
+                </div>
+            </div>
+
+            @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="ri-check-circle-line me-2"></i>{{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
+
+            @if($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="ri-error-warning-line me-2"></i>
+                    <ul class="mb-0">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
+
+            <form action="{{ route('admin.send.message') }}" method="POST" id="messageForm">
+                @csrf
+                
+                <div class="row g-4">
+                    <!-- User Selection Card -->
+                    <div class="col-lg-5">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-white border-bottom py-3">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <h5 class="mb-0 fw-semibold" style="color: #0C3A30;">
+                                        <i class="ri-user-3-line me-2"></i>Select Recipients
+                                    </h5>
+                                    <span class="badge bg-light text-dark" id="selectedCount">0 selected</span>
+                                </div>
+                            </div>
+                            <div class="card-body p-0">
+                                <!-- Country Filter Section -->
+                                <div class="p-3 border-bottom" style="background-color: #f8f9fa;">
+                                    <label class="form-label fw-semibold mb-2" style="color: #0C3A30;">
+                                        <i class="ri-earth-line me-1"></i>Filter by Country
+                                    </label>
+                                    
+                                    <!-- Country Selection -->
+                                    <div class="mb-2">
+                                        <select class="form-select" id="countryFilter">
+                                            <option value="">All Countries</option>
+                                            @php
+                                                $countries = \App\Models\User::distinct()->orderBy('country')->pluck('country');
+                                            @endphp
+                                            @foreach($countries as $country)
+                                                @if($country)
+                                                    <option value="{{ $country }}">{{ $country }}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    
+                                    <!-- Quick Country Select Buttons -->
+                                    <div class="d-flex flex-wrap gap-2 mt-2" id="countryQuickSelect">
+                                        @php
+                                            $topCountries = \App\Models\User::select('country')
+                                                ->selectRaw('count(*) as total')
+                                                ->whereNotNull('country')
+                                                ->groupBy('country')
+                                                ->orderBy('total', 'desc')
+                                                ->limit(5)
+                                                ->get();
+                                        @endphp
+                                        @foreach($topCountries as $countryData)
+                                            @if($countryData->country)
+                                                <button type="button" class="btn btn-sm btn-outline-success country-quick-btn" data-country="{{ $countryData->country }}">
+                                                    {{ $countryData->country }} ({{ $countryData->total }})
+                                                </button>
+                                            @endif
+                                        @endforeach
+                                    </div>
+                                </div>
+
+                                <!-- Select All Option -->
+                                <div class="p-3 border-bottom" style="background-color: #f8f9fa;">
+                                    <div class="form-check">
+                                        <input 
+                                            class="form-check-input" 
+                                            type="checkbox" 
+                                            id="selectAll"
+                                            style="cursor: pointer; width: 18px; height: 18px;"
+                                        >
+                                        <label class="form-check-label fw-semibold ms-2" for="selectAll" style="cursor: pointer;">
+                                            Select All Users
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Search Box -->
+                                <div class="p-3 border-bottom">
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-white border-end-0">
+                                            <i class="ri-search-line text-muted"></i>
+                                        </span>
+                                        <input 
+                                            type="text" 
+                                            class="form-control border-start-0 ps-0" 
+                                            id="searchUsers" 
+                                            placeholder="Search users..."
+                                        >
+                                    </div>
+                                </div>
+
+                                <!-- Users List -->
+                                <div class="user-list-container" style="max-height: 400px; overflow-y: auto;">
+                                    @foreach(\App\Models\User::all() as $user)
+                                        <div class="user-item p-3 border-bottom" 
+                                             data-user-name="{{ strtolower($user->name) }}" 
+                                             data-user-email="{{ strtolower($user->email) }}"
+                                             data-user-country="{{ $user->country ?? 'Not Set' }}">
+                                            <div class="form-check">
+                                                <input 
+                                                    class="form-check-input user-checkbox" 
+                                                    type="checkbox" 
+                                                    name="users[]" 
+                                                    value="{{ $user->id }}" 
+                                                    id="user{{ $user->id }}"
+                                                    @if(old('users') && in_array($user->id, old('users'))) checked @endif
+                                                    @if(auth()->id() == $user->id) checked @endif
+                                                    style="cursor: pointer; width: 18px; height: 18px;"
+                                                >
+                                                <label class="form-check-label ms-2 w-100" for="user{{ $user->id }}" style="cursor: pointer;">
+                                                    <div class="d-flex align-items-center justify-content-between">
+                                                        <div>
+                                                            <div class="fw-semibold" style="color: #0C3A30;">{{ $user->name }}</div>
+                                                            <small class="text-muted">{{ $user->email }}</small>
+                                                            @if($user->country)
+                                                                <div class="mt-1">
+                                                                    <span class="badge bg-info bg-opacity-10 text-info">
+                                                                        <i class="ri-earth-line me-1"></i>{{ $user->country }}
+                                                                    </span>
+                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                        @if(auth()->id() == $user->id)
+                                                            <span class="badge bg-success bg-opacity-10 text-success">You</span>
+                                                        @endif
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+
+                                <!-- No Results Message -->
+                                <div id="noResults" class="p-4 text-center text-muted" style="display: none;">
+                                    <i class="ri-search-line fs-1 mb-2"></i>
+                                    <p class="mb-0">No users found</p>
+                                </div>
+                                
+                                <!-- Country Selection Actions -->
+                                <div class="p-3 border-top bg-light">
+                                    <div class="d-grid gap-2">
+                                        <button type="button" class="btn btn-success" id="selectAllFromCountry" disabled>
+                                            <i class="ri-checkbox-multiple-line me-2"></i>
+                                            <span id="countrySelectText">Select All from Selected Country</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Message Composition Card -->
+                    <div class="col-lg-7">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-white border-bottom py-3">
+                                <h5 class="mb-0 fw-semibold" style="color: #0C3A30;">
+                                    <i class="ri-mail-line me-2"></i>Compose Message
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <!-- Title Field -->
+                                <div class="mb-4">
+                                    <label for="title" class="form-label fw-semibold" style="color: #0C3A30;">
+                                        Message Title <span class="text-danger">*</span>
+                                    </label>
+                                    <input 
+                                        type="text" 
+                                        class="form-control form-control-lg @error('title') is-invalid @enderror" 
+                                        id="title" 
+                                        name="title" 
+                                        placeholder="Enter message title..."
+                                        value="{{ old('title') }}"
+                                        required
+                                    >
+                                    @error('title')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <!-- Message Field -->
+                                <div class="mb-4">
+                                    <label for="message" class="form-label fw-semibold" style="color: #0C3A30;">
+                                        Message Content <span class="text-danger">*</span>
+                                    </label>
+                                    <textarea 
+                                        class="form-control @error('message') is-invalid @enderror" 
+                                        id="message" 
+                                        name="message" 
+                                        rows="10" 
+                                        placeholder="Type your message here..."
+                                        required
+                                    >{{ old('message') }}</textarea>
+                                    @error('message')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                    <small class="text-muted">
+                                        <span id="charCount">0</span> characters
+                                    </small>
+                                </div>
+
+                                <!-- Action Buttons -->
+                                <div class="d-flex gap-3">
+                                    <button 
+                                        type="submit" 
+                                        class="btn btn-lg px-5 fw-semibold" 
+                                        id="sendButton"
+                                        style="background: linear-gradient(145deg, #8BC905, #7AB805); color: white; border: none;"
+                                    >
+                                        <i class="ri-send-plane-fill me-2"></i>
+                                        <span id="buttonText">Send Message</span>
+                                    </button>
+                                    <button 
+                                        type="reset" 
+                                        class="btn btn-outline-secondary btn-lg px-4"
+                                        id="resetButton"
+                                    >
+                                        <i class="ri-refresh-line me-2"></i>Reset
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Custom Styles */
+    .user-item {
+        transition: all 0.2s ease;
+        border-left: 3px solid transparent;
+    }
+
+    .user-item:hover {
+        background-color: #f8f9fa;
+        border-left-color: #8BC905;
+    }
+
+    .user-list-container::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .user-list-container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    .user-list-container::-webkit-scrollbar-thumb {
+        background: #8BC905;
+        border-radius: 4px;
+    }
+
+    .user-list-container::-webkit-scrollbar-thumb:hover {
+        background: #7AB805;
+    }
+
+    .form-check-input:checked {
+        background-color: #8BC905;
+        border-color: #8BC905;
+    }
+
+    .form-check-input:focus {
+        border-color: #8BC905;
+        box-shadow: 0 0 0 0.25rem rgba(139, 201, 5, 0.25);
+    }
+
+    /* Button disabled state */
+    #sendButton:disabled {
+        background: #e9ecef !important;
+        color: #6c757d !important;
+        cursor: not-allowed !important;
+        opacity: 0.65;
+    }
+
+    /* Loading state */
+    .btn-loading {
+        position: relative;
+        pointer-events: none;
+    }
+
+    .btn-loading::after {
+        content: "";
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        top: 50%;
+        left: 50%;
+        margin-left: -8px;
+        margin-top: -8px;
+        border: 2px solid transparent;
+        border-top-color: currentColor;
+        border-radius: 50%;
+        animation: spinner 0.6s linear infinite;
+    }
+
+    @keyframes spinner {
+        to { transform: rotate(360deg); }
+    }
+    
+    /* Country filter active state */
+    .country-quick-btn.active {
+        background-color: #8BC905;
+        color: white;
+        border-color: #8BC905;
+    }
+    
+    .country-quick-btn:hover {
+        background-color: #8BC905;
+        color: white;
+        border-color: #8BC905;
     }
 </style>
 
-<!-- Start Main Banner Area -->
-<!-- <div class="main-banner-area overflow-hidden position-relative " style="background-image: url(assets/images/hero/hero-image-1.svg);; "> -->
-<div class="main-banner-area overflow-hidden position-relative "
-    style="background-image: url(assets/images/hero/hero-image-1.svg); ">
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('messageForm');
+    const sendButton = document.getElementById('sendButton');
+    const buttonText = document.getElementById('buttonText');
+    const resetButton = document.getElementById('resetButton');
+    const selectAllCheckbox = document.getElementById('selectAll');
+    const userCheckboxes = document.querySelectorAll('.user-checkbox');
+    const selectedCountBadge = document.getElementById('selectedCount');
+    const searchInput = document.getElementById('searchUsers');
+    const userItems = document.querySelectorAll('.user-item');
+    const noResults = document.getElementById('noResults');
+    const messageTextarea = document.getElementById('message');
+    const charCount = document.getElementById('charCount');
+    
+    // Country filter elements
+    const countryFilter = document.getElementById('countryFilter');
+    const countryQuickBtns = document.querySelectorAll('.country-quick-btn');
+    const selectAllFromCountry = document.getElementById('selectAllFromCountry');
+    const countrySelectText = document.getElementById('countrySelectText');
+    
+    let currentSelectedCountry = '';
 
+    // Update selected count
+    function updateSelectedCount() {
+        const selectedCount = document.querySelectorAll('.user-checkbox:checked').length;
+        selectedCountBadge.textContent = selectedCount + ' selected';
+        
+        // Update select all checkbox state
+        const allChecked = Array.from(userCheckboxes).every(cb => cb.checked);
+        const someChecked = Array.from(userCheckboxes).some(cb => cb.checked);
+        selectAllCheckbox.checked = allChecked;
+        selectAllCheckbox.indeterminate = someChecked && !allChecked;
+    }
 
+    // Filter users by country and search
+    function filterUsers() {
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        const selectedCountry = countryFilter.value;
+        let visibleCount = 0;
 
-    <!-- Background wrapper -->
+        userItems.forEach(item => {
+            const userName = item.dataset.userName;
+            const userEmail = item.dataset.userEmail;
+            const userCountry = item.dataset.userCountry;
+            
+            const matchesSearch = userName.includes(searchTerm) || userEmail.includes(searchTerm);
+            const matchesCountry = !selectedCountry || userCountry === selectedCountry;
+            
+            if (matchesSearch && matchesCountry) {
+                item.style.display = 'block';
+                visibleCount++;
+            } else {
+                item.style.display = 'none';
+            }
+        });
 
-    <!-- <div class="hero-section position-relative overflow-hidden" style="height: 480px; width:auto; justify-content:center; align-items:center;"> -->
+        // Update country select button
+        if (selectedCountry) {
+            selectAllFromCountry.disabled = false;
+            countrySelectText.textContent = `Select All from ${selectedCountry}`;
+        } else {
+            selectAllFromCountry.disabled = true;
+            countrySelectText.textContent = 'Select All from Selected Country';
+        }
 
+        // Update quick buttons active state
+        countryQuickBtns.forEach(btn => {
+            if (btn.dataset.country === selectedCountry) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
 
+        // Show/hide no results message
+        if (visibleCount === 0) {
+            noResults.style.display = 'block';
+        } else {
+            noResults.style.display = 'none';
+        }
+    }
 
+    // Select all users from current country
+    selectAllFromCountry.addEventListener('click', function() {
+        const selectedCountry = countryFilter.value;
+        if (!selectedCountry) return;
+        
+        userItems.forEach(item => {
+            if (item.style.display !== 'none') {
+                const checkbox = item.querySelector('.user-checkbox');
+                if (checkbox) {
+                    checkbox.checked = true;
+                }
+            }
+        });
+        
+        updateSelectedCount();
+    });
 
-    <!-- Content on top -->
-    <!-- Hero Section with Video Background -->
-    <div class="hero-section position-relative overflow-hidden d-flex justify-content-center align-items-center" style="height: 480px; margin-top: -45px;">
+    // Country filter change
+    countryFilter.addEventListener('change', filterUsers);
 
-        <!-- Background Video -->
-        <video autoplay muted loop playsinline class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover" style="z-index: 0;">
-            <source src="{{ asset('assets/images/Hero-Video.mp4') }}" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
+    // Quick country buttons
+    countryQuickBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const country = this.dataset.country;
+            countryFilter.value = country;
+            filterUsers();
+        });
+    });
 
-        <!-- Overlay -->
-        <div class="position-absolute top-0 start-0 w-100 h-100" style="background-color: rgba(0, 0, 0, 0.5); z-index: 1;"></div>
+    // Select all functionality
+    selectAllCheckbox.addEventListener('change', function() {
+        // Only affect visible users
+        userItems.forEach(item => {
+            if (item.style.display !== 'none') {
+                const checkbox = item.querySelector('.user-checkbox');
+                if (checkbox) {
+                    checkbox.checked = this.checked;
+                }
+            }
+        });
+        updateSelectedCount();
+    });
 
-        <!-- Centered Content -->
-        <div class="container position-relative text-white" style="z-index: 2;">
-            <div class="row align-items-center" style="margin-top: 4rem;">
-                <div class="col-xl-5 col-lg-12 mb-4" data-cues="slideInRight" data-duration="800">
-                    <div class="main-banner-content text-white">
-                        <span class="sub-t text-white">WELCOME TO MARKETMIND</span>
-                        <h1 class="mt-2" style="color:white;">
-                            Secure
-                            <span style="color: #8BC905; font-size:2rem;">
-                                <img style="width: 100px; height:auto;" src="{{ asset('assets/images/svg/your.svg') }} " alt="icon"> Your
-                            </span>
-                            Financial Future with Intelligent Investing
-                        </h1>
-                        <a href="{{ route('signup') }}" class="btn btn-primary btn-lg px-3 py-2 rounded-pill shadow-lg glow-effect mt-3">
-                            <i class="fas fa-rocket me-2"></i> Launch Dashboard
-                        </a>
-                    </div>
-                </div>
+    // Individual checkbox change
+    userCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateSelectedCount);
+    });
 
-                <div class="col-xl-7 col-lg-12" data-cues="slideInLeft" data-duration="800">
-                    <div class="info text-white">
-                        <p class="mb-4">
-                            We are at the forefront of revolutionizing the financial landscape through cutting-edge MarketMind solutions.
-                        </p>
+    // Search functionality
+    searchInput.addEventListener('input', filterUsers);
 
-                        <div class="row align-items-center g-3 g-md-3">
-                            <div class="col-lg-5 col-md-5">
+    // Character count
+    messageTextarea.addEventListener('input', function() {
+        charCount.textContent = this.value.length;
+    });
 
-                                <ul class="user bg-color-ffffff radius" style="padding: 6px 10px; font-size: 0.85rem; transform: scale(0.85); display: inline-flex;">
+    // Initialize character count
+    charCount.textContent = messageTextarea.value.length;
 
-                                    <li><img class="rounded-circle" src="{{ asset('assets/images/user/user-image-2.jpg') }}" alt="user"></li>
-                                    <li><img class="rounded-circle" src="{{ asset('assets/images/user/user-image-3.jpg') }}" alt="user"></li>
-                                    <li><img class="rounded-circle" src="{{ asset('assets/images/user/user-image-1.jpg') }}" alt="user"></li>
-                                    <li>32k+</li>
-                                </ul>
-                            </div>
-                            <div class="col-lg-6 col-md-6">
-                                <div class="star-review">
-                                    <ul>
-                                        <li>
-                                            <i class="flaticon-star-2"></i>
-                                            <i class="flaticon-star-2"></i>
-                                            <i class="flaticon-star-2"></i>
-                                            <i class="flaticon-star-2"></i>
-                                            <i class="flaticon-star-2"></i>
-                                        </li>
-                                        <li><strong>4.9/5</strong> <span style="color:white;">Rating</span></li>
-                                        <li>From over 1000+ reviews</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div><!-- /.info -->
-                </div>
-            </div>
-        </div>
+    // Form submission - prevent double click
+    form.addEventListener('submit', function(e) {
+        // Check if at least one user is selected
+        const selectedUsers = document.querySelectorAll('.user-checkbox:checked').length;
+        
+        if (selectedUsers === 0) {
+            e.preventDefault();
+            alert('Please select at least one user to send the message to.');
+            return false;
+        }
+
+        // Disable button and show loading state
+        sendButton.disabled = true;
+        sendButton.classList.add('btn-loading');
+        buttonText.textContent = 'Sending...';
+        
+        // Also disable reset button
+        resetButton.disabled = true;
+    });
+
+    // Reset button
+    resetButton.addEventListener('click', function() {
+        setTimeout(() => {
+            updateSelectedCount();
+            charCount.textContent = '0';
+            searchInput.value = '';
+            countryFilter.value = '';
+            userItems.forEach(item => item.style.display = 'block');
+            noResults.style.display = 'none';
+            selectAllFromCountry.disabled = true;
+            countrySelectText.textContent = 'Select All from Selected Country';
+            countryQuickBtns.forEach(btn => btn.classList.remove('active'));
+        }, 10);
+    });
+
+    // Initial count update
+    updateSelectedCount();
+});
+</script>
+<!-- Add this after the Message Composition Card, before the Action Buttons -->
+<div class="mb-4 p-3 bg-light rounded" id="translationPreview" style="display: none;">
+    <h6 class="fw-semibold mb-3" style="color: #0C3A30;">
+        <i class="ri-translate-2 me-2"></i>Translation Preview
+    </h6>
+    <div id="selectedCountriesList" class="mb-2">
+        <span class="badge bg-info me-1">Loading languages...</span>
     </div>
-
-
-
-    <script src="https://s3.tradingview.com/tv.js"></script>
-    <style>
-        :root {
-            --primary-dark: #0C3A30;
-            --primary-accent: #8BC905;
-            --secondary-accent: #9EDD05;
-            --crypto-blue: #2775CA;
-            --forest-green: #2E8B57;
-            --realestate-gold: #D4AF37;
-            --dark-bg: #0A1929;
-            --darker-bg: #071521;
-            --card-bg: #122738;
-        }
-
-        body {
-            font-family: 'Space Grotesk', sans-serif;
-            background-color: var(--dark-bg);
-
-            overflow-x: hidden;
-        }
-
-        .cyber-border {
-            position: relative;
-            border: 1px solid rgba(139, 201, 5, 0.3);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .cyber-border::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--primary-accent), transparent);
-            animation: borderPulse 3s infinite;
-        }
-
-        @keyframes borderPulse {
-            0% {
-                opacity: 0.3;
-            }
-
-            50% {
-                opacity: 1;
-            }
-
-            100% {
-                opacity: 0.3;
-            }
-        }
-
-        .asset-tab {
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s;
-        }
-
-        .asset-tab.active {
-            border-bottom: 3px solid var(--primary-accent);
-            color: white !important;
-        }
-
-        .glow-effect {
-            box-shadow: 0 0 15px rgba(139, 201, 5, 0.2);
-        }
-
-        .market-indicator {
-            position: relative;
-            padding-left: 15px;
-        }
-
-        .market-indicator::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: var(--primary-accent);
-        }
-
-        .market-indicator.negative::before {
-            background-color: #FF4D4D;
-        }
-
-        .data-stream {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .data-stream::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            width: 60px;
-            background: linear-gradient(90deg, transparent, var(--dark-bg));
-        }
-
-        .forest-metric {
-            background: linear-gradient(135deg, rgba(46, 139, 87, 0.15), rgba(46, 139, 87, 0.05));
-            border-left: 3px solid var(--forest-green);
-        }
-
-        .realestate-metric {
-            background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(212, 175, 55, 0.05));
-            border-left: 3px solid var(--realestate-gold);
-        }
-
-        .crypto-metric {
-            background: linear-gradient(135deg, rgba(39, 117, 202, 0.15), rgba(39, 117, 202, 0.05));
-            border-left: 3px solid var(--crypto-blue);
-        }
-
-
-        .tech-pattern {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-image:
-                linear-gradient(rgba(139, 201, 5, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(139, 201, 5, 0.05) 1px, transparent 1px);
-            background-size: 20px 20px;
-            pointer-events: none;
-        }
-
-
-        .pulse-dot {
-            width: 10px;
-            height: 10px;
-            background-color: var(--primary-accent);
-            border-radius: 50%;
-            display: inline-block;
-            animation: pulseAnim 1.5s infinite;
-            box-shadow: 0 0 0 rgba(139, 201, 5, 0.4);
-        }
-
-        @keyframes pulseAnim {
-            0% {
-                transform: scale(1);
-                box-shadow: 0 0 0 0 rgba(139, 201, 5, 0.7);
-            }
-
-            70% {
-                transform: scale(1.5);
-                box-shadow: 0 0 0 10px rgba(139, 201, 5, 0);
-            }
-
-            100% {
-                transform: scale(1);
-                box-shadow: 0 0 0 0 rgba(139, 201, 5, 0);
-            }
-        }
-    </style>
-
-
-
-    <div class="container-fluid px-0">
-        <!-- Cyberpunk Inspired Header -->
-        <div class="position-relative overflow-hidden" style="background: linear-gradient(135deg, var(--darker-bg) 0%, var(--dark-bg) 100%);">
-            <div class="tech-pattern"></div>
-            <div class="container py-5">
-                <div class="row align-items-center">
-                    <!-- Left Column - Main Content -->
-                    <div class="col-lg-6 mb-5 mb-lg-0">
-                        <div class="pe-lg-5">
-                            <span class="badge bg-primary-soft text-primary mb-3 d-inline-flex align-items-center">
-                                <span class="pulse-dot me-2"></span>
-                                LIVE MARKET DATA STREAMING
-                            </span>
-                            <h1 class="display-4 fw-bold text-white mb-4">
-                                <span class="text-primary">MarketMind</span> AI <span class="text-highlight">Convergence</span> Platform
-                            </h1>
-                            <p class="lead text-white-80 mb-4" style="color: white !important;">
-                                Next-gen algorithmic trading across crypto, forest assets, and real estate markets with deep learning execution.
-                            </p>
-
-                            <div class="d-flex flex-wrap gap-3 mb-5">
-
-                                <a href="{{ route('login') }}" class="btn btn-outline-light btn-lg px-4 py-3 rounded-pill">
-                                    <i class="fas fa-play-circle me-2"></i> View Demo
-                                </a>
-                            </div>
-
-                            <div class="d-flex flex-wrap gap-4" style="color: white !important;">
-                                <div class="d-flex align-items-center">
-                                    <div class="me-3">
-                                        <div class="fs-1 fw-bold text-primary">24/7</div>
-                                        <div class="text-white-80 small" style="color: white !important;">Market Monitoring</div>
-                                    </div>
-                                    <div class="vr"></div>
-                                </div>
-                                <div class="d-flex align-items-center">
-                                    <div class="me-3">
-                                        <div class="fs-1 fw-bold text-primary">0.02s</div>
-                                        <div class="text-white-80 small" style="color: white !important;">Execution Speed</div>
-                                    </div>
-                                    <div class="vr"></div>
-                                </div>
-                                <div class="d-flex align-items-center">
-                                    <div class="me-3">
-                                        <div class="fs-1 fw-bold text-primary">17</div>
-                                        <div class="text-white-80 small" style="color: white !important;">Asset Classes</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Right Column - Image -->
-                    <div class="col-lg-6 d-flex justify-content-center">
-                        <img src="assets/images/exclusive-funded-optimized-banner2024﹖v=1.svg" alt="Trading Bot" class="img-fluid" style="max-width: 90%; height: auto;">
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <style>
-            :root {
-                --primary-dark: #0C3A30;
-                --primary-accent: #c2ff3eff;
-                --secondary-accent: #9EDD05;
-                --crypto-blue: #2775CA;
-                --forex-green: #2E8B57;
-                --indices-purple: #6F42C1;
-                --commodities-orange: #FD7E14;
-                --metals-gold: #FFD700;
-                --etfs-teal: #20C997;
-                --equities-navy: #1A237E;
-                --cfd-red: #DC3545;
-                --dark-bg: #0A1929;
-                --darker-bg: #071521;
-                --card-bg: #122738;
-            }
-
-            /* Enhanced Asset-specific backgrounds with more visibility */
-            .crypto-metric {
-                background: linear-gradient(135deg, rgba(39, 117, 202, 0.25), rgba(39, 117, 202, 0.15));
-                border-left: 4px solid var(--crypto-blue);
-                color: black !important;
-            }
-
-            .forex-metric {
-                background: linear-gradient(135deg, rgba(46, 139, 87, 0.25), rgba(46, 139, 87, 0.15));
-                border-left: 4px solid var(--forex-green);
-                color: black !important;
-            }
-
-            .indices-metric {
-                background: linear-gradient(135deg, rgba(111, 66, 193, 0.25), rgba(111, 66, 193, 0.15));
-                border-left: 4px solid var(--indices-purple);
-                color: black !important;
-            }
-
-            .commodities-metric {
-                background: linear-gradient(135deg, rgba(253, 126, 20, 0.25), rgba(253, 126, 20, 0.15));
-                border-left: 4px solid var(--commodities-orange);
-                color: black !important;
-            }
-
-            .metals-metric {
-                background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(255, 215, 0, 0.15));
-                border-left: 4px solid var(--metals-gold);
-                color: black !important;
-            }
-
-            .etfs-metric {
-                background: linear-gradient(135deg, rgba(32, 201, 151, 0.25), rgba(32, 201, 151, 0.15));
-                border-left: 4px solid var(--etfs-teal);
-                color: black !important;
-            }
-
-            .equities-metric {
-                background: linear-gradient(135deg, rgba(26, 35, 126, 0.25), rgba(26, 35, 126, 0.15));
-                border-left: 4px solid var(--equities-navy);
-                color: black !important;
-            }
-
-            .cfd-metric {
-                background: linear-gradient(135deg, rgba(220, 53, 69, 0.25), rgba(220, 53, 69, 0.15));
-                border-left: 4px solid var(--cfd-red);
-                color: black !important;
-            }
-
-            /* Enhanced text styling for better visibility */
-            .metric-value {
-                font-size: 1.5rem !important;
-                font-weight: 800 !important;
-                color: #000000 !important;
-                text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
-                transition: all 0.3s ease;
-            }
-
-            .metric-change {
-                font-size: 1rem !important;
-                font-weight: 700 !important;
-                transition: all 0.3s ease;
-            }
-
-            .metric-change.positive {
-                color: #00aa55 !important;
-                text-shadow: 0 1px 2px rgba(0, 255, 136, 0.3);
-            }
-
-            .metric-change.negative {
-                color: #ff3333 !important;
-                text-shadow: 0 1px 2px rgba(255, 68, 68, 0.3);
-            }
-
-            /* Asset-specific text colors */
-            .crypto-metric .text-blue {
-                color: var(--crypto-blue) !important;
-                font-weight: 700;
-            }
-
-            .forex-metric .text-green {
-                color: var(--forex-green) !important;
-                font-weight: 700;
-            }
-
-            .indices-metric .text-purple {
-                color: var(--indices-purple) !important;
-                font-weight: 700;
-            }
-
-            .commodities-metric .text-orange {
-                color: var(--commodities-orange) !important;
-                font-weight: 700;
-            }
-
-            .metals-metric .text-gold {
-                color: var(--metals-gold) !important;
-                font-weight: 700;
-            }
-
-            .etfs-metric .text-teal {
-                color: var(--etfs-teal) !important;
-                font-weight: 700;
-            }
-
-            .equities-metric .text-navy {
-                color: var(--equities-navy) !important;
-                font-weight: 700;
-            }
-
-            .cfd-metric .text-red {
-                color: var(--cfd-red) !important;
-                font-weight: 700;
-            }
-
-            /* Market card colors matching asset classes */
-            .market-card.crypto {
-                border-left: 4px solid var(--crypto-blue);
-                background: rgba(39, 117, 202, 0.1);
-            }
-
-            .market-card.forex {
-                border-left: 4px solid var(--forex-green);
-                background: rgba(46, 139, 87, 0.1);
-            }
-
-            .market-card.indices {
-                border-left: 4px solid var(--indices-purple);
-                background: rgba(111, 66, 193, 0.1);
-            }
-
-            .market-card.commodities {
-                border-left: 4px solid var(--commodities-orange);
-                background: rgba(253, 126, 20, 0.1);
-            }
-
-            .market-card.metals {
-                border-left: 4px solid var(--metals-gold);
-                background: rgba(255, 215, 0, 0.1);
-            }
-
-            .market-card.etfs {
-                border-left: 4px solid var(--etfs-teal);
-                background: rgba(32, 201, 151, 0.1);
-            }
-
-            .market-card.equities {
-                border-left: 4px solid var(--equities-navy);
-                background: rgba(26, 35, 126, 0.1);
-            }
-
-            .market-card.cfd {
-                border-left: 4px solid var(--cfd-red);
-                background: rgba(220, 53, 69, 0.1);
-            }
-
-            /* Tab colors matching asset classes */
-            .asset-tab[href="#crypto-tab"]:hover {
-                background-color: rgba(39, 117, 202, 0.2) !important;
-            }
-
-            .asset-tab[href="#forex-tab"]:hover {
-                background-color: rgba(46, 139, 87, 0.2) !important;
-            }
-
-            .asset-tab[href="#indices-tab"]:hover {
-                background-color: rgba(111, 66, 193, 0.2) !important;
-            }
-
-            .asset-tab[href="#commodities-tab"]:hover {
-                background-color: rgba(253, 126, 20, 0.2) !important;
-            }
-
-            .asset-tab[href="#metals-tab"]:hover {
-                background-color: rgba(255, 215, 0, 0.2) !important;
-            }
-
-            .asset-tab[href="#etfs-tab"]:hover {
-                background-color: rgba(32, 201, 151, 0.2) !important;
-            }
-
-            .asset-tab[href="#equities-tab"]:hover {
-                background-color: rgba(26, 35, 126, 0.2) !important;
-            }
-
-            .asset-tab[href="#cfd-tab"]:hover {
-                background-color: rgba(220, 53, 69, 0.2) !important;
-            }
-
-            /* Active tab colors */
-            .asset-tab.active[href="#crypto-tab"] {
-                background-color: rgba(39, 117, 202, 0.3) !important;
-                border-bottom-color: var(--crypto-blue) !important;
-                color: #000 !important;
-                font-weight: 700;
-            }
-
-            .asset-tab.active[href="#forex-tab"] {
-                background-color: rgba(46, 139, 87, 0.3) !important;
-                border-bottom-color: var(--forex-green) !important;
-                color: #000 !important;
-                font-weight: 700;
-            }
-
-            .asset-tab.active[href="#indices-tab"] {
-                background-color: rgba(111, 66, 193, 0.3) !important;
-                border-bottom-color: var(--indices-purple) !important;
-                color: #000 !important;
-                font-weight: 700;
-            }
-
-            .asset-tab.active[href="#commodities-tab"] {
-                background-color: rgba(253, 126, 20, 0.3) !important;
-                border-bottom-color: var(--commodities-orange) !important;
-                color: #000 !important;
-                font-weight: 700;
-            }
-
-            .asset-tab.active[href="#metals-tab"] {
-                background-color: rgba(255, 215, 0, 0.3) !important;
-                border-bottom-color: var(--metals-gold) !important;
-                color: #000 !important;
-                font-weight: 700;
-            }
-
-            .asset-tab.active[href="#etfs-tab"] {
-                background-color: rgba(32, 201, 151, 0.3) !important;
-                border-bottom-color: var(--etfs-teal) !important;
-                color: #000 !important;
-                font-weight: 700;
-            }
-
-            .asset-tab.active[href="#equities-tab"] {
-                background-color: rgba(26, 35, 126, 0.3) !important;
-                border-bottom-color: var(--equities-navy) !important;
-                color: #000 !important;
-                font-weight: 700;
-            }
-
-            .asset-tab.active[href="#cfd-tab"] {
-                background-color: rgba(220, 53, 69, 0.3) !important;
-                border-bottom-color: var(--cfd-red) !important;
-                color: #000 !important;
-                font-weight: 700;
-            }
-
-            @keyframes blink {
-                0% {
-                    opacity: 1;
-                }
-
-                50% {
-                    opacity: 0.3;
-                }
-
-                100% {
-                    opacity: 1;
-                }
-            }
-
-            @keyframes numberPulse {
-                0% {
-                    transform: scale(1);
-                }
-
-                50% {
-                    transform: scale(1.05);
-                }
-
-                100% {
-                    transform: scale(1);
-                }
-            }
-
-            .number-changing {
-                animation: numberPulse 0.5s ease;
-            }
-
-            .asset-tab.active {
-                border-bottom: 4px solid var(--primary-accent);
-            }
-
-            .market-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-                gap: 10px;
-                padding: 10px;
-            }
-
-            .market-card {
-                border-radius: 8px;
-                padding: 12px;
-                transition: all 0.3s ease;
-                color: #000 !important;
-            }
-
-            .market-card:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            }
-
-            .market-card .symbol {
-                font-size: 0.85rem;
-                color: #000;
-                font-weight: 700;
-            }
-
-            .market-card .price {
-                font-size: 1.1rem;
-                font-weight: 800;
-                color: #000;
-            }
-
-            .market-card .change {
-                font-size: 0.9rem;
-                font-weight: 700;
-            }
-
-            .market-card .change.positive {
-                color: #00aa55 !important;
-            }
-
-            .market-card .change.negative {
-                color: #ff3333 !important;
-            }
-
-            /* Chart container styling */
-            .tradingview-widget-container {
-                border-radius: 8px;
-                overflow: hidden;
-                margin-bottom: 15px;
-            }
-
-            /* Text colors for better readability */
-            .text-white-80 {
-                color: rgba(0, 0, 0, 0.8) !important;
-                font-weight: 600;
-            }
-
-            .bg-gold-soft {
-                background-color: rgba(139, 201, 5, 0.2) !important;
-            }
-
-            /* Enhanced badge styling */
-            .badge.bg-gold-soft {
-                color: #000 !important;
-                font-weight: 700;
-                font-size: 0.7rem;
-                padding: 4px 8px;
-            }
-
-            /* Metric headers */
-            .metric-header {
-                color: #000 !important;
-                font-weight: 700;
-                font-size: 0.9rem;
-            }
-        </style>
-
-        <div class="container py-5">
-            <div class="row g-4">
-                <!-- Crypto Metrics -->
-                <div class="col-md-3 col-sm-6">
-                    <div class="crypto-metric h-100 p-3 rounded">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h6 class="mb-0 metric-header">
-                                <i class="fab fa-bitcoin text-blue me-2"></i>
-                                Crypto
-                            </h6>
-                            <span class="badge bg-gold-soft" style="animation: blink 1.5s infinite;">LIVE</span>
-                        </div>
-                        <div class="mb-2">
-                            <div class="metric-value">$<span id="crypto-tvl">156,423,789</span></div>
-                            <div class="text-white-80 small">Assets Under Management</div>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <div class="metric-change positive" id="crypto-24h-change">+4.2%</div>
-                                <div class="text-white-80 small">24h Change</div>
-                            </div>
-                            <div>
-                                <div class="metric-change positive" id="crypto-pairs">850+</div>
-                                <div class="text-white-80 small">Pairs</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Forex Metrics -->
-                <div class="col-md-3 col-sm-6">
-                    <div class="forex-metric h-100 p-3 rounded">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h6 class="mb-0 metric-header">
-                                <i class="fas fa-exchange-alt text-green me-2"></i>
-                                Forex
-                            </h6>
-                            <span class="badge bg-gold-soft" style="animation: blink 1.5s infinite;">LIVE</span>
-                        </div>
-                        <div class="mb-2">
-                            <div class="metric-value">$<span id="forex-tvl">124,856,421</span></div>
-                            <div class="text-white-80 small">Daily Volume</div>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <div class="metric-change positive" id="forex-profit">+2.8%</div>
-                                <div class="text-white-80 small">Avg. Return</div>
-                            </div>
-                            <div>
-                                <div class="metric-change positive" id="forex-pairs">65+</div>
-                                <div class="text-white-80 small">Pairs</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Indices Metrics -->
-                <div class="col-md-3 col-sm-6">
-                    <div class="indices-metric h-100 p-3 rounded">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h6 class="mb-0 metric-header">
-                                <i class="fas fa-chart-bar text-purple me-2"></i>
-                                Indices
-                            </h6>
-                            <span class="badge bg-gold-soft" style="animation: blink 1.5s infinite;">LIVE</span>
-                        </div>
-                        <div class="mb-2">
-                            <div class="metric-value">$<span id="indices-tvl">89,745,236</span></div>
-                            <div class="text-white-80 small">Market Exposure</div>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <div class="metric-change positive" id="indices-change">+1.5%</div>
-                                <div class="text-white-80 small">Today</div>
-                            </div>
-                            <div>
-                                <div class="metric-change positive" id="indices-count">25+</div>
-                                <div class="text-white-80 small">Indices</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Commodities Metrics -->
-                <div class="col-md-3 col-sm-6">
-                    <div class="commodities-metric h-100 p-3 rounded">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h6 class="mb-0 metric-header">
-                                <i class="fas fa-gas-pump text-orange me-2"></i>
-                                Commodities
-                            </h6>
-                            <span class="badge bg-gold-soft" style="animation: blink 1.5s infinite;">LIVE</span>
-                        </div>
-                        <div class="mb-2">
-                            <div class="metric-value">$<span id="commodities-tvl">67,892,154</span></div>
-                            <div class="text-white-80 small">Portfolio Value</div>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <div class="metric-change negative" id="commodities-change">-0.8%</div>
-                                <div class="text-white-80 small">24h Change</div>
-                            </div>
-                            <div>
-                                <div class="metric-change positive" id="commodities-count">15+</div>
-                                <div class="text-white-80 small">Products</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Additional Asset Classes Row -->
-                <div class="col-md-3 col-sm-6">
-                    <div class="metals-metric h-100 p-3 rounded">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h6 class="mb-0 metric-header">
-                                <i class="fas fa-gem text-gold me-2"></i>
-                                Metals
-                            </h6>
-                            <span class="badge bg-gold-soft" style="animation: blink 1.5s infinite;">LIVE</span>
-                        </div>
-                        <div class="mb-2">
-                            <div class="metric-value">$<span id="metals-tvl">45,678,321</span></div>
-                            <div class="text-white-80 small">Precious Metals</div>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <div class="metric-change positive" id="metals-change">+3.2%</div>
-                                <div class="text-white-80 small">Gold Spot</div>
-                            </div>
-                            <div>
-                                <div class="metric-change positive" id="metals-count">8+</div>
-                                <div class="text-white-80 small">Metals</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3 col-sm-6">
-                    <div class="etfs-metric h-100 p-3 rounded">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h6 class="mb-0 metric-header">
-                                <i class="fas fa-chart-pie text-teal me-2"></i>
-                                ETFs
-                            </h6>
-                            <span class="badge bg-gold-soft" style="animation: blink 1.5s infinite;">LIVE</span>
-                        </div>
-                        <div class="mb-2">
-                            <div class="metric-value">$<span id="etfs-tvl">78,945,632</span></div>
-                            <div class="text-white-80 small">ETF Holdings</div>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <div class="metric-change positive" id="etfs-change">+2.1%</div>
-                                <div class="text-white-80 small">Performance</div>
-                            </div>
-                            <div>
-                                <div class="metric-change positive" id="etfs-count">120+</div>
-                                <div class="text-white-80 small">ETFs</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3 col-sm-6">
-                    <div class="equities-metric h-100 p-3 rounded">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h6 class="mb-0 metric-header">
-                                <i class="fas fa-industry text-navy me-2"></i>
-                                Equities
-                            </h6>
-                            <span class="badge bg-gold-soft" style="animation: blink 1.5s infinite;">LIVE</span>
-                        </div>
-                        <div class="mb-2">
-                            <div class="metric-value">$<span id="equities-tvl">234,567,890</span></div>
-                            <div class="text-white-80 small">Stock Portfolio</div>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <div class="metric-change positive" id="equities-change">+1.8%</div>
-                                <div class="text-white-80 small">Today</div>
-                            </div>
-                            <div>
-                                <div class="metric-change positive" id="equities-count">500+</div>
-                                <div class="text-white-80 small">Stocks</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3 col-sm-6">
-                    <div class="cfd-metric h-100 p-3 rounded">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h6 class="mb-0 metric-header">
-                                <i class="fas fa-project-diagram text-red me-2"></i>
-                                CFDs
-                            </h6>
-                            <span class="badge bg-gold-soft" style="animation: blink 1.5s infinite;">LIVE</span>
-                        </div>
-                        <div class="mb-2">
-                            <div class="metric-value">$<span id="cfd-tvl">56,789,123</span></div>
-                            <div class="text-white-80 small">CFD Exposure</div>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <div class="metric-change positive" id="cfd-change">+4.5%</div>
-                                <div class="text-white-80 small">Leveraged</div>
-                            </div>
-                            <div>
-                                <div class="metric-change positive" id="cfd-count">300+</div>
-                                <div class="text-white-80 small">CFDs</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <script>
-            // Enhanced growth simulation for all asset classes with faster updates
-            document.addEventListener('DOMContentLoaded', function() {
-                // Initial values for all asset classes
-                const initialValues = {
-                    crypto: 156423789,
-                    forex: 124856421,
-                    indices: 89745236,
-                    commodities: 67892154,
-                    metals: 45678321,
-                    etfs: 78945632,
-                    equities: 234567890,
-                    cfd: 56789123
-                };
-
-                let balances = {
-                    ...initialValues
-                };
-                let lastUpdateDate = new Date().toDateString();
-
-                function formatNumber(num) {
-                    if (num >= 1000000) {
-                        return (num / 1000000).toFixed(1) + 'M';
-                    }
-                    if (num >= 1000) {
-                        return (num / 1000).toFixed(1) + 'K';
-                    }
-                    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                }
-
-                function updateNumberWithAnimation(elementId, newValue) {
-                    const element = document.getElementById(elementId);
-                    element.classList.add('number-changing');
-                    element.textContent = newValue;
-                    setTimeout(() => {
-                        element.classList.remove('number-changing');
-                    }, 500);
-                }
-
-                function updateMetrics() {
-                    const today = new Date().toDateString();
-
-                    // Update balances more frequently for visible changes
-                    Object.keys(balances).forEach(asset => {
-                        const randomChange = 1 + ((Math.random() - 0.5) * 0.02); // -1% to +1% change
-                        balances[asset] = Math.floor(balances[asset] * randomChange);
-
-                        // Update displayed values with animation
-                        updateNumberWithAnimation(`${asset}-tvl`, formatNumber(balances[asset]));
-                    });
-
-                    // Update dynamic metrics more frequently and with larger ranges
-                    updateNumberWithAnimation('crypto-24h-change', (Math.random() > 0.3 ? '+' : '') + (1 + Math.random() * 8).toFixed(1) + '%');
-                    updateNumberWithAnimation('forex-profit', (Math.random() > 0.4 ? '+' : '') + (0.5 + Math.random() * 4).toFixed(1) + '%');
-                    updateNumberWithAnimation('indices-change', (Math.random() > 0.3 ? '+' : '') + (0.2 + Math.random() * 3).toFixed(1) + '%');
-                    updateNumberWithAnimation('commodities-change', (Math.random() > 0.4 ? '+' : '') + (0.3 + Math.random() * 5).toFixed(1) + '%');
-                    updateNumberWithAnimation('metals-change', (Math.random() > 0.2 ? '+' : '') + (1 + Math.random() * 6).toFixed(1) + '%');
-                    updateNumberWithAnimation('etfs-change', (Math.random() > 0.3 ? '+' : '') + (0.5 + Math.random() * 3).toFixed(1) + '%');
-                    updateNumberWithAnimation('equities-change', (Math.random() > 0.4 ? '+' : '') + (0.3 + Math.random() * 4).toFixed(1) + '%');
-                    updateNumberWithAnimation('cfd-change', (Math.random() > 0.2 ? '+' : '') + (2 + Math.random() * 8).toFixed(1) + '%');
-
-                    // Update counts with some variation
-                    updateNumberWithAnimation('crypto-pairs', Math.floor(840 + Math.random() * 30) + '+');
-                    updateNumberWithAnimation('forex-pairs', Math.floor(60 + Math.random() * 15) + '+');
-                    updateNumberWithAnimation('indices-count', Math.floor(20 + Math.random() * 12) + '+');
-                    updateNumberWithAnimation('commodities-count', Math.floor(12 + Math.random() * 8) + '+');
-                    updateNumberWithAnimation('metals-count', Math.floor(6 + Math.random() * 4) + '+');
-                    updateNumberWithAnimation('etfs-count', Math.floor(110 + Math.random() * 25) + '+');
-                    updateNumberWithAnimation('equities-count', Math.floor(480 + Math.random() * 50) + '+');
-                    updateNumberWithAnimation('cfd-count', Math.floor(280 + Math.random() * 50) + '+');
-                }
-
-                updateMetrics();
-                // Update every 1.5 seconds for very visible changes
-                setInterval(updateMetrics, 1500);
+    <p class="small text-muted mb-0">
+        <i class="ri-information-line me-1"></i>
+        Messages will be automatically translated to each user's native language based on their country.
+    </p>
+</div>
+
+<script>
+// Add this to your existing JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+    // Function to get unique countries from selected users
+    function updateTranslationPreview() {
+        const selectedCheckboxes = document.querySelectorAll('.user-checkbox:checked');
+        const countries = new Set();
+        
+        selectedCheckboxes.forEach(checkbox => {
+            const userItem = checkbox.closest('.user-item');
+            const country = userItem ? userItem.dataset.userCountry : null;
+            if (country && country !== 'Not Set') {
+                countries.add(country);
+            }
+        });
+        
+        const previewDiv = document.getElementById('translationPreview');
+        const countriesList = document.getElementById('selectedCountriesList');
+        
+        if (countries.size > 0) {
+            previewDiv.style.display = 'block';
+            
+            let html = '';
+            countries.forEach(country => {
+                const langCode = getLanguageCode(country);
+                html += `<span class="badge bg-success bg-opacity-10 text-success me-1 mb-1">
+                    ${country} (${langCode})
+                </span>`;
             });
-        </script>
-
-
-
-
-
-
-        <!-- charts sections -->
-        <div class="cyber-border p-0" style="margin-bottom: 2rem;">
-            <!-- Asset Class Tabs -->
-            <ul class="nav nav-tabs nav-justified border-0 bg-dark">
-                <li class="nav-item">
-                    <a class="nav-link asset-tab active text-white bg-black" data-bs-toggle="tab" href="#crypto-tab">
-                        <i class="fab fa-bitcoin me-2"></i> Crypto (1000+ Pairs)
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link asset-tab text-white" data-bs-toggle="tab" href="#forex-tab">
-                        <i class="fas fa-exchange-alt me-2"></i> Forex (50+ Pairs)
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link asset-tab text-white" data-bs-toggle="tab" href="#realestate-tab">
-                        <i class="fas fa-building me-2"></i> Real Estate
-                    </a>
-                </li>
-            </ul>
-
-            <!-- Tab Content -->
-            <div class="tab-content bg-card-bg">
-                <!-- Crypto Tab - Enhanced with 20+ cryptocurrencies -->
-                <div class="tab-pane fade show active" id="crypto-tab">
-                    <div class="p-3">
-                        <div class="tradingview-widget-container">
-                            <div id="crypto-chart" style="height: 300px;"></div>
-                        </div>
-                        <div class="data-stream p-3">
-                            <div class="d-flex flex-wrap">
-                                <!-- Row 1 -->
-                                <div class="market-indicator me-4 mb-3">
-                                    <div class="text-primary">BTC/USD</div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="fw-bold me-2">$<span id="btc-price">64,823.25</span></div>
-                                        <small class="text-success">+2.4%</small>
-                                    </div>
-                                </div>
-                                <div class="market-indicator me-4 mb-3">
-                                    <div class="text-primary">ETH/USD</div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="fw-bold me-2">$<span id="eth-price">3,248.11</span></div>
-                                        <small class="text-success">+1.2%</small>
-                                    </div>
-                                </div>
-                                <div class="market-indicator me-4 mb-3">
-                                    <div class="text-primary">BNB/USD</div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="fw-bold me-2">$<span id="bnb-price">585.42</span></div>
-                                        <small class="text-danger">-0.8%</small>
-                                    </div>
-                                </div>
-                                <div class="market-indicator me-4 mb-3">
-                                    <div class="text-primary">SOL/USD</div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="fw-bold me-2">$<span id="sol-price">142.76</span></div>
-                                        <small class="text-success">+3.7%</small>
-                                    </div>
-                                </div>
-
-                                <!-- Row 2 -->
-                                <div class="market-indicator me-4 mb-3">
-                                    <div class="text-primary">XRP/USD</div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="fw-bold me-2">$<span id="xrp-price">0.52</span></div>
-                                        <small class="text-success">+5.1%</small>
-                                    </div>
-                                </div>
-                                <div class="market-indicator me-4 mb-3">
-                                    <div class="text-primary">ADA/USD</div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="fw-bold me-2">$<span id="ada-price">0.46</span></div>
-                                        <small class="text-danger">-1.2%</small>
-                                    </div>
-                                </div>
-                                <div class="market-indicator me-4 mb-3">
-                                    <div class="text-primary">DOGE/USD</div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="fw-bold me-2">$<span id="doge-price">0.12</span></div>
-                                        <small class="text-success">+8.4%</small>
-                                    </div>
-                                </div>
-                                <div class="market-indicator me-4 mb-3">
-                                    <div class="text-primary">DOT/USD</div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="fw-bold me-2">$<span id="dot-price">6.82</span></div>
-                                        <small class="text-danger">-0.5%</small>
-                                    </div>
-                                </div>
-
-                                <!-- Row 3 -->
-                                <div class="market-indicator me-4 mb-3">
-                                    <div class="text-primary">SHIB/USD</div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="fw-bold me-2">$<span id="shib-price">0.000023</span></div>
-                                        <small class="text-success">+12.3%</small>
-                                    </div>
-                                </div>
-                                <div class="market-indicator me-4 mb-3">
-                                    <div class="text-primary">AVAX/USD</div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="fw-bold me-2">$<span id="avax-price">34.56</span></div>
-                                        <small class="text-success">+2.1%</small>
-                                    </div>
-                                </div>
-                                <div class="market-indicator me-4 mb-3">
-                                    <div class="text-primary">LINK/USD</div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="fw-bold me-2">$<span id="link-price">18.32</span></div>
-                                        <small class="text-danger">-0.9%</small>
-                                    </div>
-                                </div>
-                                <div class="market-indicator me-4 mb-3">
-                                    <div class="text-primary">MATIC/USD</div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="fw-bold me-2">$<span id="matic-price">0.72</span></div>
-                                        <small class="text-success">+1.4%</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Forex Tab - Enhanced with 20+ pairs -->
-                <div class="tab-pane fade" id="forex-tab">
-                    <div class="p-3">
-                        <div class="tradingview-widget-container">
-                            <div id="forex-chart" style="height: 300px;"></div>
-                        </div>
-                        <div class="data-stream p-3">
-                            <div class="d-flex flex-wrap">
-                                <!-- Major Pairs -->
-                                <div class="market-indicator me-4 mb-3">
-                                    <div class="text-success">EUR/USD</div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="fw-bold me-2"><span id="eur-price">1.0856</span></div>
-                                        <small class="text-success">+0.45%</small>
-                                    </div>
-                                </div>
-                                <div class="market-indicator me-4 mb-3">
-                                    <div class="text-success">GBP/USD</div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="fw-bold me-2"><span id="gbp-price">1.2742</span></div>
-                                        <small class="text-danger">-0.18%</small>
-                                    </div>
-                                </div>
-                                <div class="market-indicator me-4 mb-3">
-                                    <div class="text-success">USD/JPY</div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="fw-bold me-2"><span id="jpy-price">157.32</span></div>
-                                        <small class="text-success">+0.32%</small>
-                                    </div>
-                                </div>
-                                <div class="market-indicator me-4 mb-3">
-                                    <div class="text-success">AUD/USD</div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="fw-bold me-2"><span id="aud-price">0.6654</span></div>
-                                        <small class="text-success">+0.28%</small>
-                                    </div>
-                                </div>
-
-                                <!-- Minor Pairs -->
-                                <div class="market-indicator me-4 mb-3">
-                                    <div class="text-success">USD/CAD</div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="fw-bold me-2"><span id="cad-price">1.3628</span></div>
-                                        <small class="text-danger">-0.15%</small>
-                                    </div>
-                                </div>
-                                <div class="market-indicator me-4 mb-3">
-                                    <div class="text-success">EUR/GBP</div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="fw-bold me-2"><span id="eurgbp-price">0.8512</span></div>
-                                        <small class="text-success">+0.22%</small>
-                                    </div>
-                                </div>
-                                <div class="market-indicator me-4 mb-3">
-                                    <div class="text-success">USD/CHF</div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="fw-bold me-2"><span id="chf-price">0.9015</span></div>
-                                        <small class="text-danger">-0.08%</small>
-                                    </div>
-                                </div>
-                                <div class="market-indicator me-4 mb-3">
-                                    <div class="text-success">NZD/USD</div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="fw-bold me-2"><span id="nzd-price">0.6123</span></div>
-                                        <small class="text-success">+0.17%</small>
-                                    </div>
-                                </div>
-
-                                <!-- Exotic Pairs -->
-                                <div class="market-indicator me-4 mb-3">
-                                    <div class="text-success">EUR/TRY</div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="fw-bold me-2"><span id="try-price">34.8765</span></div>
-                                        <small class="text-danger">-0.42%</small>
-                                    </div>
-                                </div>
-                                <div class="market-indicator me-4 mb-3">
-                                    <div class="text-success">USD/MXN</div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="fw-bold me-2"><span id="mxn-price">18.3421</span></div>
-                                        <small class="text-success">+0.35%</small>
-                                    </div>
-                                </div>
-                                <div class="market-indicator me-4 mb-3">
-                                    <div class="text-success">USD/ZAR</div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="fw-bold me-2"><span id="zar-price">18.6543</span></div>
-                                        <small class="text-danger">-0.27%</small>
-                                    </div>
-                                </div>
-                                <div class="market-indicator me-4 mb-3">
-                                    <div class="text-success">USD/SGD</div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="fw-bold me-2"><span id="sgd-price">1.3521</span></div>
-                                        <small class="text-success">+0.12%</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Real Estate Tab - Enhanced -->
-                <div class="tab-pane fade" id="realestate-tab">
-                    <div class="p-3">
-                        <div class="tradingview-widget-container">
-                            <div id="realestate-chart" style="height: 300px;"></div>
-                        </div>
-                        <div class="data-stream p-3">
-                            <div class="d-flex flex-wrap">
-                                <!-- REITs -->
-                                <div class="market-indicator me-4 mb-3">
-                                    <div class="text-warning">REIT INDEX</div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="fw-bold me-2">$<span id="reit-price">1,425.80</span></div>
-                                        <small class="text-success">+1.2%</small>
-                                    </div>
-                                </div>
-                                <div class="market-indicator me-4 mb-3">
-                                    <div class="text-warning">COMMERCIAL</div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="fw-bold me-2">$<span id="commercial-price">245.31</span></div>
-                                        <small class="text-success">+0.7%</small>
-                                    </div>
-                                </div>
-                                <div class="market-indicator me-4 mb-3">
-                                    <div class="text-warning">RESIDENTIAL</div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="fw-bold me-2">$<span id="residential-price">185.42</span></div>
-                                        <small class="text-danger">-0.5%</small>
-                                    </div>
-                                </div>
-                                <div class="market-indicator me-4 mb-3">
-                                    <div class="text-warning">INDUSTRIAL</div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="fw-bold me-2">$<span id="industrial-price">320.15</span></div>
-                                        <small class="text-success">+1.8%</small>
-                                    </div>
-                                </div>
-
-                                <!-- Regional Markets -->
-                                <div class="market-indicator me-4 mb-3">
-                                    <div class="text-warning">US HOUSING</div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="fw-bold me-2">$<span id="us-housing-price">356.78</span></div>
-                                        <small class="text-success">+2.1%</small>
-                                    </div>
-                                </div>
-                                <div class="market-indicator me-4 mb-3">
-                                    <div class="text-warning">EU PROPERTY</div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="fw-bold me-2">$<span id="eu-property-price">278.43</span></div>
-                                        <small class="text-danger">-0.3%</small>
-                                    </div>
-                                </div>
-                                <div class="market-indicator me-4 mb-3">
-                                    <div class="text-warning">ASIA REIT</div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="fw-bold me-2">$<span id="asia-reit-price">198.76</span></div>
-                                        <small class="text-success">+1.5%</small>
-                                    </div>
-                                </div>
-                                <div class="market-indicator me-4 mb-3">
-                                    <div class="text-warning">LUXURY</div>
-                                    <div class="d-flex align-items-center">
-                                        <div class="fw-bold me-2">$<span id="luxury-price">542.31</span></div>
-                                        <small class="text-success">+3.2%</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Status Bar -->
-            <div class="d-flex justify-content-between align-items-center bg-dark p-3 border-top border-dark">
-                <div class="d-flex align-items-center">
-                    <span class="badge bg-primary me-2">
-                        <i class="fas fa-robot"></i>
-                    </span>
-                    <div>
-                        <div class="text-white small">AI TRADING BOT</div>
-                        <div class="text-primary fw-bold" id="bot-status">ACTIVE <span class="badge bg-success ms-2" style="animation: blink 1.5s infinite;">LIVE</span></div>
-                    </div>
-                </div>
-                <div class="text-end">
-                    <div class="text-white-80 small" style="color: white !important ;">Last Execution</div>
-                    <div class="text-white" id="last-trade">2 seconds ago</div>
-                </div>
-            </div>
-        </div>
-
-        <style>
-            @keyframes blink {
-                0% {
-                    opacity: 1;
-                }
-
-                50% {
-                    opacity: 0.3;
-                }
-
-                100% {
-                    opacity: 1;
-                }
-            }
-
-            .asset-tab.active {
-                background-color: black !important;
-                color: white !important;
-                border-bottom: 3px solid var(--primary-accent);
-            }
-        </style>
-
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script>
-            // Initialize TradingView Charts
-            function initCharts() {
-                // Crypto Chart
-                new TradingView.widget({
-                    "autosize": true,
-                    "symbol": "BITSTAMP:BTCUSD",
-                    "interval": "30",
-                    "timezone": "Etc/UTC",
-                    "theme": "dark",
-                    "style": "1",
-                    "locale": "en",
-                    "toolbar_bg": "#0C3A30",
-                    "enable_publishing": false,
-                    "hide_top_toolbar": true,
-                    "hide_side_toolbar": false,
-                    "allow_symbol_change": true,
-                    "container_id": "crypto-chart"
-                });
-
-                // Forex Chart
-                new TradingView.widget({
-                    "autosize": true,
-                    "symbol": "FX:EURUSD",
-                    "interval": "30",
-                    "timezone": "Etc/UTC",
-                    "theme": "dark",
-                    "style": "1",
-                    "locale": "en",
-                    "toolbar_bg": "#0C3A30",
-                    "enable_publishing": false,
-                    "hide_top_toolbar": true,
-                    "hide_side_toolbar": false,
-                    "allow_symbol_change": true,
-                    "container_id": "forex-chart"
-                });
-
-                // Real Estate Chart
-                new TradingView.widget({
-                    "autosize": true,
-                    "symbol": "NYSE:VNQ",
-                    "interval": "D",
-                    "timezone": "Etc/UTC",
-                    "theme": "dark",
-                    "style": "1",
-                    "locale": "en",
-                    "toolbar_bg": "#0C3A30",
-                    "enable_publishing": false,
-                    "hide_top_toolbar": true,
-                    "hide_side_toolbar": false,
-                    "allow_symbol_change": true,
-                    "container_id": "realestate-chart"
-                });
-            }
-
-            // Enhanced real-time data simulation
-            function simulateMarketData() {
-                // Crypto Prices (20+ coins)
-                document.getElementById('btc-price').textContent = (Math.random() * 2000 + 62000).toFixed(2);
-                document.getElementById('eth-price').textContent = (Math.random() * 200 + 3100).toFixed(2);
-                document.getElementById('bnb-price').textContent = (Math.random() * 20 + 580).toFixed(2);
-                document.getElementById('sol-price').textContent = (Math.random() * 10 + 140).toFixed(2);
-                document.getElementById('xrp-price').textContent = (0.50 + Math.random() * 0.04).toFixed(2);
-                document.getElementById('ada-price').textContent = (0.45 + Math.random() * 0.02).toFixed(2);
-                document.getElementById('doge-price').textContent = (0.11 + Math.random() * 0.02).toFixed(2);
-                document.getElementById('dot-price').textContent = (6.80 + Math.random() * 0.04).toFixed(2);
-                document.getElementById('shib-price').textContent = (0.000022 + Math.random() * 0.000002).toFixed(6);
-                document.getElementById('avax-price').textContent = (34.00 + Math.random() * 1.2).toFixed(2);
-                document.getElementById('link-price').textContent = (18.00 + Math.random() * 0.7).toFixed(2);
-                document.getElementById('matic-price').textContent = (0.70 + Math.random() * 0.04).toFixed(2);
-
-                // Forex Prices (20+ pairs)
-                document.getElementById('eur-price').textContent = (1.0850 + Math.random() * 0.003).toFixed(4);
-                document.getElementById('gbp-price').textContent = (1.2740 + Math.random() * 0.004).toFixed(4);
-                document.getElementById('jpy-price').textContent = (157.30 + Math.random() * 0.5).toFixed(2);
-                document.getElementById('aud-price').textContent = (0.6650 + Math.random() * 0.002).toFixed(4);
-                document.getElementById('cad-price').textContent = (1.3620 + Math.random() * 0.002).toFixed(4);
-                document.getElementById('eurgbp-price').textContent = (0.8510 + Math.random() * 0.001).toFixed(4);
-                document.getElementById('chf-price').textContent = (0.9010 + Math.random() * 0.001).toFixed(4);
-                document.getElementById('nzd-price').textContent = (0.6120 + Math.random() * 0.001).toFixed(4);
-                document.getElementById('try-price').textContent = (34.8000 + Math.random() * 0.2).toFixed(4);
-                document.getElementById('mxn-price').textContent = (18.3000 + Math.random() * 0.1).toFixed(4);
-                document.getElementById('zar-price').textContent = (18.6000 + Math.random() * 0.1).toFixed(4);
-                document.getElementById('sgd-price').textContent = (1.3520 + Math.random() * 0.001).toFixed(4);
-
-                // Real Estate (12+ metrics)
-                document.getElementById('reit-price').textContent = (Math.random() * 20 + 1400).toFixed(2);
-                document.getElementById('commercial-price').textContent = (Math.random() * 10 + 240).toFixed(2);
-                document.getElementById('residential-price').textContent = (Math.random() * 10 + 180).toFixed(2);
-                document.getElementById('industrial-price').textContent = (Math.random() * 15 + 310).toFixed(2);
-                document.getElementById('us-housing-price').textContent = (Math.random() * 10 + 350).toFixed(2);
-                document.getElementById('eu-property-price').textContent = (Math.random() * 10 + 275).toFixed(2);
-                document.getElementById('asia-reit-price').textContent = (Math.random() * 8 + 195).toFixed(2);
-                document.getElementById('luxury-price').textContent = (Math.random() * 20 + 535).toFixed(2);
-
-                // Update bot status randomly
-                const statuses = ['ACTIVE', 'ANALYZING', 'EXECUTING', 'REBALANCING'];
-                document.getElementById('bot-status').textContent = statuses[Math.floor(Math.random() * statuses.length)];
-                document.getElementById('last-trade').textContent = `${Math.floor(Math.random() * 5)} seconds ago`;
-            }
-
-            // Initialize on load
-            document.addEventListener('DOMContentLoaded', () => {
-                initCharts();
-                simulateMarketData();
-                setInterval(simulateMarketData, 2000); // Faster updates for more activity
-
-                // Add active class to clicked tabs
-                document.querySelectorAll('.asset-tab').forEach(tab => {
-                    tab.addEventListener('click', function() {
-                        document.querySelectorAll('.asset-tab').forEach(t => {
-                            t.classList.remove('active');
-                            t.style.backgroundColor = '';
-                        });
-                        this.classList.add('active');
-                        this.style.backgroundColor = 'black';
-                    });
-                });
-            });
-        </script>
-
-
-        <div class="cyber-border p-0">
-
-            <div class="card-area">
-                <div class="container-fluid side-padding">
-                    <div class="row g-3 g-md-4 justify-content-center" data-cues="slideInUp" data-duration="800">
-                        <div class="col-xl-4 col-lg-6 col-md-6">
-                            <div class="banner-card bg-color-ffffff radius-30">
-                                <div class="flex-warp position-relative">
-                                    <i>
-                                        <img src="assets/images/svg/grow.svg" alt="image">
-                                    </i>
-                                    <h3>Create A Card That Is Unique And Customized</h3>
-                                </div>
-                                <div class="banner-card-body bg-color-def1ee">
-                                    <img src="assets/images/service/service-image-1.png" alt="image">
-                                </div>
-                            </div>
-
-                            <!-- Advice Area Start -->
-                            <div class="advice-area bg-color-ffffff radius-20 mt-3">
-                                <div class="container-fluid">
-                                    <div class="advice-content">
-                                        <ul>
-                                            <li>Revenue</li>
-                                            <li>Investment</li>
-                                            <li>Deposit</li>
-                                            <li>Earnings</li>
-                                            <li>Transaction</li>
-                                            <li>Revenue</li>
-                                            <li>Investment</li>
-                                            <li>Deposit</li>
-                                            <li>Earnings</li>
-                                            <li>Transaction</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-lg-6 col-md-6">
-                            <div class="banner-card part-two bg-color-9edd05 radius-30 position-relative">
-                                <div class="flex-warp position-relative">
-                                    <i>
-                                        <img src="assets/images/svg/corporation.svg" alt="image">
-                                    </i>
-                                    <h3>Transfers Across The Globe Are Free</h3>
-                                </div>
-                                <p class="mb-0">Our digital solutions transform money management investing and transaction.</p>
-                                <div class="banner-card-image">
-                                    <div class="text-end">
-                                        <img src="assets/images/service/service-image-2.png" alt="image">
-                                    </div>
-                                </div>
-
-                                <div class="total bg-color-ffffff radius">
-                                    <h4>Total Balance</h4>
-                                    <h5>$59,647.00</h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-lg-6 col-md-6">
-                            <div class="banner-card part-three bg-color-ffffff radius-30 position-relative">
-                                <div class="flex-warp position-relative">
-                                    <i>
-                                        <img src="assets/images/svg/euro.svg" alt="image">
-                                    </i>
-                                    <h3>Personalized Insights And Financial Goals</h3>
-                                </div>
-                                <div class="banner-image-body">
-                                    <div class="text-end">
-                                        <img class="service-image-3" src="assets/images/service/service-image-3.png" alt="image">
-                                    </div>
-                                    <img class="service-image-4" src="assets/images/service/service-image-4.png" alt="image">
-                                </div>
-                                <i class="flaticon-star-5 star-5 moveHorizontal_reverse"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
-
-        <!-- Start Pricing Plan Area -->
-        <div class="pricing-plan-area pt-100 pb-80 mb-5 pt-md-120 pb-md-100 bg-color-def1ee" style="background-image: url(assets/images/hero/hero-image-1.svg)">
-            <div class="container">
-                <div class="section-title">
-                    <span class="sub-title">PRICING PLAN</span>
-                    <h2>Choose The Best <span><img src="assets/images/svg/lines-2.svg" alt="image">Plans</span> Which For You</h2>
-                </div>
-                <div class="row g-3 g-md-4 justify-content-center" data-cues="slideInUp" data-duration="800">
-                    @foreach($plans->take(3) as $plan)
-                    <div class="col-lg-4 col-md-6">
-                        <div class="pricing-card bg-color-ffffff radius-30">
-                            <div class="title position-relative">
-                                <h3>{{ $plan->name }} </h3>
-                                <h4>{{ rtrim(rtrim($plan->interest_rate, '0'), '.') }}% / <span>Per Term</span></h4>
-                                <img class="about-image-2" src="assets/images/about/about-image-2.png" alt="image">
-                            </div>
-                            <div class="pricing-card-body">
-                                <ul class="check">
-                                    <li><i class="ri-check-line"></i> Duration: {{ $plan->duration }} Days</li>
-                                    <li><i class="ri-check-line"></i> Percentage: {{ rtrim(rtrim($plan->interest_rate, '0'), '.') }}%</li>
-                                    <li class="flex items-start gap-3">
-                                        <span class="check-icon"><i class="ri-check-line"></i></span>
-                                        <span><strong>Earnings:</strong> {{ $plan->duration < 28 ? 'Daily' : 'Weekly' }}</span>
-                                    </li>
-                                    <li><i class="ri-check-line"></i> Minimum Deposit: ${{ number_format($plan->minimum_amount) }}</li>
-                                    <li><i class="ri-check-line"></i> Maximum Deposit: ${{ number_format($plan->maximum_amount) }}</li>
-                                </ul>
-                                <a href="/login" class="default-btn two w-100 text-center">Get Started <i class="ri-arrow-right-up-line"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    @endforeach
-
-                    <div class="text-center mt-4">
-                        <a href="{{route('plans.header')}}" class="default-btn bg-[#8bc905] text-white px-5 py-3 rounded-xl">🔍 View All Plans</a>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-        <!-- End Pricing Plan Area -->
-        <!-- End Main Banner Area -->
-
-        <!-- Start Features Area -->
-        <div class="features-area bg-color-0c3a30 pt-100 pb-80 pt-md-120 pb-md-100 overflow-hidden">
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-xl-6 col-lg-12" data-cues="slideInRight" data-duration="800">
-                        <div class="features-image bg-color-9edd05 radius-30 position-relative">
-                            <img class="feature-image-1" src="assets/images/feature/feature-image-1.png" alt="image">
-                            <img class="feature-image-2 bounce" src="assets/images/feature/feature-image-2.png" alt="image">
-                            <img class="feature-shape-1 moveVertical" src="assets/images/shape/feature-shape-1.png" alt="image">
-                        </div>
-                    </div>
-                    <div class="col-xl-6 col-lg-12" data-cues="slideInLeft" data-duration="800">
-                        <div class="features-content">
-                            <div class="section-heading">
-                                <span class="sub-title">TOP FEATURES</span>
-                                <h2 class="text-white">Let's Take Your <span><img src="assets/images/svg/lines-1.svg" alt="image">Analytics</span> To The Next Level</h2>
-                                <p class="text-white">With a robust suite of products ranging from digital banking and payment processing to wealth management and blockchain applications we empower our clients.</p>
-                            </div>
-
-                            <ul>
-                                <li class="bg-color-29594b radius-20">
-                                    <i class="flaticon-businessman-1"></i>
-                                    <h3 class="text-white">Local Business Finance</h3>
-                                    <p class="text-white">Our commitment to security transparency and customer centricity ensures that every transaction is no.</p>
-                                </li>
-                                <li class="bg-color-29594b radius-20">
-                                    <i class="flaticon-payment-method"></i>
-                                    <h3 class="text-white">Built For Global Payments</h3>
-                                    <p class="text-white">Our commitment to security transparency and customer centricity ensures that every transaction is no.</p>
-                                </li>
-                                <li class="bg-color-29594b radius-20">
-                                    <i class="flaticon-laptop-2"></i>
-                                    <h3 class="text-white">Make Internet Of Money</h3>
-                                    <p class="text-white">Our commitment to security transparency and customer centricity ensures that every transaction is no.</p>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="partner-area mt-5 pt-80 pt-md-120">
-                <div class="container">
-                    <div class="title">
-                        <p>TRUSTED BY INDUSTRY LEADING COMPANIES AROUND THE GLOBE</p>
-                    </div>
-                    <div class="partner-items">
-                        <div class="swiper partner-slide">
-                            <div class="swiper-wrapper">
-                                <div class="swiper-slide">
-                                    <div class="partner-logo">
-                                        <img src="assets/images/partner/partner-logo-1.png" alt="image">
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="partner-logo">
-                                        <img src="assets/images/partner/partner-logo-2.png" alt="image">
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="partner-logo">
-                                        <img src="assets/images/partner/partner-logo-3.png" alt="image">
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="partner-logo">
-                                        <img src="assets/images/partner/partner-logo-4.png" alt="image">
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="partner-logo">
-                                        <img src="assets/images/partner/partner-logo-5.png" alt="image">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End Features Area -->
-
-        <!-- Start Services Area -->
-        <div class="services-area pt-100 pb-80 pt-md-120 pb-md-100 position-relative overflow-hidden">
-            <div class="container left-padding">
-                <div class="row align-items-center">
-                    <div class="col-xl-4 col-lg-12" data-cues="slideInLeft" data-duration="800">
-                        <div class="section-heading position-relative mb-0">
-                            <span class="sub-title">OUR SERVICES</span>
-                            <h2>Syncing <span><img src="assets/images/svg/lines-2.svg" alt="">Your</span> Finances</h2>
-                            <p class="mb-4 mb-md-5">With a robust suite of products ranging from digital banking and payment processing to wealth</p>
-
-                            <a href="{{route('our.services')}}" class="default-btn two">See All Services <i class="ri-arrow-right-up-line"></i></a>
-
-                            <div class="services-btn">
-                                <div class="swiper-button-next">
-                                    <i class="ri-arrow-right-line"></i>
-                                </div>
-                                <div class="swiper-button-prev">
-                                    <i class="ri-arrow-left-line"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-8 col-lg-12">
-                        <div class="services-items">
-                            <div class="swiper services-slide">
-                                <div class="swiper-wrapper">
-                                    <div class="swiper-slide">
-                                        <div class="services-card position-relative">
-
-
-                                            <img class="radius-30" src="assets/images/copytrading-animated.svg" alt="image">
-                                            <img style="z-index: 1500 !important;" class="radius-30" src="assets/images/copytrading-animated.svg" alt="image">
-                                            <div class="services-card-body bg-color-fffaeb radius-30">
-                                                <i class="flaticon-businessman-5 businessman"></i>
-                                                <h3>
-                                                    <a href="{{route('our.services')}}">Funds Remittance</a>
-                                                </h3>
-                                                <p class="mb-0">With a robust suite of products ranging from digital banking and payment processing.</p>
-                                                <a href="{{route('our.services')}}" class="read-more">Read More <i class="ri-arrow-right-up-line"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide" style="overflow: hidden;">
-                                        <div class="services-card position-relative">
-                                            <img class="radius-30" src="assets/images/service/service-image-6.jpg" alt="image">
-                                            <div class="services-card-body bg-color-fffaeb radius-30">
-                                                <i class="flaticon-browser-1 businessman"></i>
-                                                <h3>
-                                                    <a href="{{route('our.services')}}">Personal Loan</a>
-                                                </h3>
-                                                <p class="mb-0">With a robust suite of products ranging from digital banking and payment processing.</p>
-                                                <a href="{{route('our.services')}}" class="read-more">Read More <i class="ri-arrow-right-up-line"></i></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End Services Area -->
-
-        <!-- Start About Us Area -->
-        <div class="about-us-area pb-80 pb-md-120 overflow-hidden">
-            <div class="container">
-                <div class="about-top mb-4 mb-md-5">
-                    <div class="row align-items-center" data-cues="slideInUp" data-duration="800">
-                        <div class="col-lg-7 col-md-7">
-                            <div class="section-heading mb-0">
-                                <span class="sub-title">ABOUT US</span>
-                                <h2 class="mb-0">Leveraging Technology <span><img src="assets/images/svg/lines-3.svg" alt="image">For</span> Secure & Banking</h2>
-                            </div>
-                        </div>
-                        <div class="col-lg-5 col-md-5">
-                            <div class="content">
-                                <p>By integrating advanced technology with financial expertise we provide a comprehensive suite of services that cater to both individuals and businesses</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="about-info bg-color-edf1ee radius-30">
-                    <div class="row g-3 g-md-4">
-                        <div class="col-lg-6" data-cues="slideInRight" data-duration="800">
-                            <div class="about-content">
-                                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link active" id="miss-tab" data-bs-toggle="tab" data-bs-target="#miss-tab-pane" type="button" role="tab" aria-controls="miss-tab-pane" aria-selected="true">Our Mission</button>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link" id="qua-tab" data-bs-toggle="tab" data-bs-target="#qua-tab-pane" type="button" role="tab" aria-controls="qua-tab-pane" aria-selected="false">Our Quality</button>
-                                    </li>
-                                </ul>
-                                <div class="tab-content" id="myTabContent">
-                                    <div class="tab-pane fade show active" id="miss-tab-pane" role="tabpanel" aria-labelledby="miss-tab" tabindex="0">
-                                        <div class="title">
-                                            <h2>Passionate For Your Financial Support Here</h2>
-                                            <p class="mb-0">With a robust suite of products ranging from digital banking and payment processing to wealth management and blockchain applications.</p>
-                                        </div>
-
-                                        <ul class="check">
-                                            <li>
-                                                <i class="ri-check-line"></i>
-                                                Pay Bills On Time Without Missing A Beat
-                                            </li>
-                                            <li>
-                                                <i class="ri-check-line"></i>
-                                                Create And Send Invoices In Seconds
-                                            </li>
-                                            <li>
-                                                <i class="ri-check-line"></i>
-                                                Control Your Cash Flow On Demand
-                                            </li>
-                                        </ul>
-
-                                        <a href="{{route('about.us')}}" class="default-btn mt-4 mt-md-5">More About Us <i class="ri-arrow-right-up-line"></i></a>
-                                    </div>
-                                    <div class="tab-pane fade" id="qua-tab-pane" role="tabpanel" aria-labelledby="qua-tab" tabindex="0">
-                                        <div class="title">
-                                            <h2>Financial For Your Passionate Support Here</h2>
-                                            <p class="mb-0">With a robust suite of products ranging from digital banking and payment processing to wealth management and blockchain applications.</p>
-                                        </div>
-
-                                        <ul class="check">
-                                            <li>
-                                                <i class="ri-check-line"></i>
-                                                Pay Bills On Time Without Missing A Beat
-                                            </li>
-                                            <li>
-                                                <i class="ri-check-line"></i>
-                                                Create And Send Invoices In Seconds
-                                            </li>
-                                            <li>
-                                                <i class="ri-check-line"></i>
-                                                Control Your Cash Flow On Demand
-                                            </li>
-                                        </ul>
-
-                                        <a href="{{route('about.us')}}" class="default-btn mt-4 mt-md-5">More About Us <i class="ri-arrow-right-up-line"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6" data-cues="slideInLeft" data-duration="800">
-                            <div class="about-image bg-color-ffffff radius-30">
-                                <img class="about-image-1" src="assets/images/frontpage-pricing-d.webp" alt="image">
-
-
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End About Us Area -->
-
-        <!-- Start Why Choose Us Area -->
-        <div class="why-choose-us-area mb-4 mb-md-5 overflow-hidden">
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-lg-6 col-md-12" data-cues="slideInRight" data-duration="800">
-                        <div class="choose-image position-relative">
-                            <img class="radius-30" src="assets/images/about/about-image-2.jpg" alt="image">
-                            <div class="paly-content">
-                                <a data-fslightbox="one" href="https://www.youtube.com/watch?v=Y7cpCDlRfV0" class="popup-btn">
-                                    <i class="flaticon-play-buttton"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-12" data-cues="slideInLeft" data-duration="800">
-                        <div class="why-choose-us-content">
-                            <div class="section-heading mb-0">
-                                <span class="sub-title">WHY CHOOSE US</span>
-                                <h2>Grow Your <span><img src="assets/images/svg/lines-1.svg" alt="image">Transaction</span> From Another Level</h2>
-                                <p class="mb-4 mb-md-5">With a robust suite of products ranging from digital banking and payment processing to wealth management and blockchain applications we empower our clients.</p>
-                                <a href="{{ route('about.us') }}" class="default-btn two">Learn More <i class="ri-arrow-right-up-line"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End Why Choose Us Area -->
-
-        <!-- Start Choose Card Area -->
-        <div class="choose-card-area pb-80 pb-md-120 mb-5">
-            <div class="container">
-                <div class="row g-3 g-md-4 justify-content-center" data-cues="slideInUp" data-duration="800">
-                    <div class="col-lg-4 col-md-6">
-                        <div class="choose-card bg-color-fffaeb radius-30">
-                            <i class="flaticon-money-5"></i>
-                            <h3>Global Payments</h3>
-                            <p>With a robust suite of products ranging from digital banking and payment processing.</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="choose-card bg-color-fffaeb radius-30">
-                            <i class="flaticon-dollar-symbol-1"></i>
-                            <h3>Revenue & Finance</h3>
-                            <p>With a robust suite of products ranging from digital banking and payment processing.</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="choose-card bg-color-fffaeb radius-30">
-                            <i class="flaticon-tablet"></i>
-                            <h3>Bank As A Service</h3>
-                            <p>With a robust suite of products ranging from digital banking and payment processing.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End Choose Card Area -->
-
-        <!-- Start How It Works Area -->
-        <div class="how-it-works-area bg-color-0c3a30 pt-100 pb-120 pt-md-120  -pb-md-100">
-            <div class="container">
-                <div class="about-top mb-4 mb-md-5">
-                    <div class="row align-items-center">
-                        <div class="col-lg-7 col-md-7" data-cues="slideInRight" data-duration="800">
-                            <div class="section-heading mb-0">
-                                <span class="sub-title text-white">HOW IT WORKS</span>
-                                <h2 class="text-white mb-0">Commitment To <span><img src="assets/images/svg/lines-1.svg" alt="image">Exceptional</span> Services And Solutions</h2>
-                            </div>
-                        </div>
-                        <div class="col-lg-5 col-md-5" data-cues="slideInLeft" data-duration="800">
-                            <div class="content">
-                                <p class="text-white">By integrating advanced technology with financial expertise we provide a comprehensive suite of services that cater to both individuals and businesses</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row align-items-center">
-                    <div class="col-xl-4 col-lg-12">
-                        <div class="works-btn">
-                            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link active" id="crea-tab" data-bs-toggle="tab" data-bs-target="#crea-tab-pane" type="button" role="tab" aria-controls="crea-tab-pane" aria-selected="true">Create Account <i class="ri-arrow-right-up-line"></i></button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="use-tab" data-bs-toggle="tab" data-bs-target="#use-tab-pane" type="button" role="tab" aria-controls="use-tab-pane" aria-selected="false">User Confirmation <i class="ri-arrow-right-up-line"></i></button>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-xl-8 col-lg-12">
-                        <div class="tab-content" id="myTabContent">
-                            <div class="tab-pane fade show active" id="crea-tab-pane" role="tabpanel" aria-labelledby="crea-tab" tabindex="0">
-                                <div class="row g-3 g-md-4" data-cues="slideInUp" data-duration="800">
-                                    <div class="col-lg-6">
-                                        <div class="single-works-image">
-                                            <img class="radius-30" src="assets/images/about/about-image-3.jpg" alt="image">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="single-works-card bg-color-29594b radius-30">
-                                            <i class="flaticon-payment-method-1 method"></i>
-                                            <h3 class="text-white">Create Account</h3>
-                                            <p class="text-white">With a robust suite of products ranging from digital banking and payment processing to wealth management and blockchain applications we empower our clients to navigate the complexities of the financial world with ease confidence</p>
-                                            <a href="/" class="default-btn two">Get Started <i class="ri-arrow-right-up-line"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="use-tab-pane" role="tabpanel" aria-labelledby="use-tab" tabindex="0">
-                                <div class="row g-3 g-md-4" data-cues="slideInUp" data-duration="800">
-                                    <div class="col-lg-6">
-                                        <div class="single-works-image">
-                                            <img class="radius-30" src="assets/images/about/about-image-10.jpg" alt="image">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="single-works-card bg-color-29594b radius-30">
-                                            <i class="flaticon-tablet method"></i>
-                                            <h3 class="text-white">User Confirmation</h3>
-                                            <p class="text-white">With a robust suite of products ranging from digital banking and payment processing to wealth management and blockchain applications we empower our clients to navigate the complexities of the financial world with ease confidence</p>
-                                            <a href="/" class="default-btn two">Get Started <i class="ri-arrow-right-up-line"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End How It Works Area -->
-
-
-
-        <!-- Start Testimonials Area -->
-        <div class="testimonials-area pt-100 pb-80 pt-md-120 pb-md-100">
-            <div class="container">
-                <div class="about-top mb-4 mb-md-5">
-                    <div class="row align-items-center">
-                        <div class="col-lg-5 col-md-7" data-cues="slideInRight" data-duration="800">
-                            <div class="section-heading mb-0">
-                                <span class="sub-title">TESTIMONIALS</span>
-                                <h2 class="mb-0">Hear What Our <span><img src="assets/images/svg/lines-1.svg" alt="image">Clients</span> Say About Us</h2>
-                            </div>
-                        </div>
-                        <div class="col-lg-7 col-md-5" data-cues="slideInLeft" data-duration="800">
-                            <div class="content">
-                                <p>By integrating advanced technology with financial expertise we provide a comprehensive suite of services that cater to both individuals and businesses</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row" data-cues="slideInUp" data-duration="800">
-                    <div class="col-lg-6 col-md-12">
-                        <div class="testimonials-image bg-color-9edd05 radius-30 position-relative">
-                            <img class="about-image-2" src="assets/images/frontpage-pricing-d.webp" alt="image">
-                            <img class="feature-shape-1 rotate" src="assets/images/shape/feature-shape-1.png" alt="image">
-                            <img class="feature-shape-2 rotate" src="assets/images/shape/feature-shape-1.png" alt="image">
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-12">
-                        <div class="testimonials-content">
-                            <div class="testimonials-card bg-color-fffaeb radius-30 mb-3 mb-md-4">
-                                <ul>
-                                    <li>
-                                        <i class="flaticon-star-2"></i>
-                                        <i class="flaticon-star-2"></i>
-                                        <i class="flaticon-star-2"></i>
-                                        <i class="flaticon-star-2"></i>
-                                        <i class="flaticon-star-2"></i>
-                                    </li>
-                                </ul>
-                                <p>“We are at the forefront of revolutionizing the financial landscape through cutting MarketMind solutions Our mission is to bridge the gap between traditional banking and modern technology, offering innovative and seamless financial services that cater to the evolving needs of individuals.”</p>
-
-                                <div class="flex-warp d-flex align-items-center justify-content-between">
-                                    <div class="d-flex gap-3 gap-md-4 align-items-center">
-                                        <img class="user-image-4 rounded-circle" src="assets/images/user/user-image-4.jpg" alt="image">
-                                        <div>
-                                            <h3>Our Discord Community Name</h3>
-                                            <span>CEO & Founder Of Our Community And On Discord Channels</span>
-                                        </div>
-                                    </div>
-                                    <img class="right-quote" src="assets/images/svg/right-quote.svg" alt="image">
-                                </div>
-                            </div>
-
-                            <div class="testimonials-card bg-color-fffaeb radius-30">
-                                <ul>
-                                    <li>
-                                        <i class="flaticon-star-2"></i>
-                                        <i class="flaticon-star-2"></i>
-                                        <i class="flaticon-star-2"></i>
-                                        <i class="flaticon-star-2"></i>
-                                        <i class="flaticon-star-2"></i>
-                                    </li>
-                                </ul>
-                                <p>“We are at the forefront of revolutionizing the financial landscape through cutting MarketMind solutions Our mission is to bridge the gap between traditional banking and modern technology, offering innovative and seamless financial services that cater to the evolving needs of individuals.”</p>
-
-                                <div class="flex-warp d-flex align-items-center justify-content-between">
-                                    <div class="d-flex gap-3 gap-md-4 align-items-center">
-                                        <img class="user-image-4 rounded-circle" src="assets/images/user/user-image-5.jpg" alt="image">
-                                        <div>
-                                            <h3>Kevin M. Rueda</h3>
-                                            <span>Investor</span>
-                                        </div>
-                                    </div>
-                                    <img class="right-quote" src="assets/images/svg/right-quote.svg" alt="image">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End Testimonials Area -->
-
-        <!-- Start Blog Area -->
-        <div class="blog-area pb-80 pb-md-120 ">
-            <div class="container">
-                <div class="section-title">
-                    <span class="sub-title pt-100">LATEST BLOG</span>
-                    <h2>Smart Tools For <span><img src="assets/images/svg/lines-1.svg" alt="image">Creative</span> Financial Planning</h2>
-                </div>
-                <div class="row g-3 g-md-4" data-cues="slideInUp" data-duration="800">
-                    <div class="col-xl-6 col-lg-12 col-md-12">
-                        <div class="blog-card bg-color-edf1ee radius-30 mb-3 mb-md-4">
-                            <div class="row align-items-center">
-                                <div class="col-lg-5 col-md-5">
-                                    <div class="blog-image">
-                                        <a href="/" class="d-block">
-                                            <img src="assets/images/blog/blog-image-1.jpg" class="blog-image-1" alt="image">
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="col-lg-7 col-md-7">
-                                    <div class="blog-card-body">
-                                        <ul>
-                                            <li><i class="ri-calendar-2-line"></i> {{ \Carbon\Carbon::now()->format('M d, Y') }}</li>
-
-                                            <li><i class="ri-message-line"></i> No Comment</li>
-                                        </ul>
-                                        <h3>
-                                            <a href="/">How To Easily Understand Your Insurance Contract</a>
-                                        </h3>
-                                        <p>With a robust suite of products ranging from digital banking and payment processing.</p>
-                                        <a href="/" class="read-more">Read More <i class="ri-arrow-right-up-line"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="blog-card bg-color-edf1ee radius-30">
-                            <div class="row align-items-center">
-                                <div class="col-lg-5 col-md-5">
-                                    <div class="blog-image">
-                                        <a href="/" class="d-block">
-                                            <img src="assets/images/blog/blog-image-2.jpg" class="blog-image-1" alt="image">
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="col-lg-7 col-md-7">
-                                    <div class="blog-card-body">
-                                        <ul>
-                                            <li><i class="ri-calendar-2-line"></i> {{ \Carbon\Carbon::now()->format('M d, Y') }}</li>
-
-                                            <li><i class="ri-message-line"></i> No Comment</li>
-                                        </ul>
-                                        <h3>
-                                            <a href="/">The Basics Of Financial Responsibility</a>
-                                        </h3>
-                                        <p>With a robust suite of products ranging from digital banking and payment processing.</p>
-                                        <a href="/" class="read-more">Read More <i class="ri-arrow-right-up-line"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-6 col-lg-12 col-md-12">
-                        <div class="single-blog bg-color-edf1ee radius-30">
-                            <a href="/" class="d-block">
-                                <img src="assets/images/blog/blog-image-3.jpg" class="blog-image-3" alt="image">
-                            </a>
-                            <div class="single-blog-card-body">
-                                <ul>
-                                    <li><i class="ri-calendar-2-line"></i> {{ \Carbon\Carbon::now()->format('M d, Y') }}</li>
-
-                                    <li><i class="ri-message-line"></i> No Comment</li>
-                                </ul>
-                                <h3>
-                                    <a href="/">Effective Financial Management Crucial For Most Organizations</a>
-                                </h3>
-                                <p>We are at the forefront of revolutionizing the financial landscape through cutting solutions Our mission is to bridge the gap between traditional banking.</p>
-                                <a href="/" class="read-more">Read More <i class="ri-arrow-right-up-line"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End Blog Area -->
-
-        <!-- Start Faq Area -->
-        <div class="faq-area pb-80 pb-md-120 overflow-hidden mt-5 mb-5">
-            <div class="container">
-                <div class="row g-3 g-md-4 align-items-center">
-                    <div class="col-lg-6 col-md-12" data-cues="slideInRight" data-duration="800">
-                        <div class="question-card bg-color-9edd05 radius-30">
-                            <div class="section-heading">
-                                <span class="sub-title">FAQ</span>
-                                <h2>Frequently <span><img src="assets/images/svg/lines-4.svg" alt="image">Asked</span> Questions</h2>
-                                <p>With a robust suite of products ranging from digital banking and payment processing to wealth management and blockchain applications.</p>
-                            </div>
-                            <img class="radius-30" src="assets/images/blog/blog-image-4.jpg" alt="image">
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-12" data-cues="slideInLeft" data-duration="800">
-                        <div class="faq-content">
-                            <div class="accordion" id="accordionFAQ">
-                                <div class="accordion-item">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBang" aria-expanded="false" aria-controls="collapseBang">
-                                        1. Why should I care about financial planning?
-                                    </button>
-                                    <div id="collapseBang" class="accordion-collapse collapse show" data-bs-parent="#accordionFAQ">
-                                        <div class="accordion-body">
-                                            <p>Our mission is to bridge the gap between traditional banking and modern offering innovative and seamless financial services that cater to the evolving needs of individuals and businesses alike. With a robust suite.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="accordion-item">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSunam" aria-expanded="false" aria-controls="collapseSunam">
-                                        2. What are the different types of investments?
-                                    </button>
-                                    <div id="collapseSunam" class="accordion-collapse collapse" data-bs-parent="#accordionFAQ">
-                                        <div class="accordion-body">
-                                            <p> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End Faq Area -->
-
-        <!-- Start App Area -->
-        <div class="app-area pb-80 pb-md-120 overflow-hidden">
-            <div class="container">
-                <div class="download-area bg-color-edf1ee radius-30">
-                    <div class="row g-3 g-md-4 align-items-center">
-                        <div class="col-lg-6 col-md-12" data-cues="slideInRight" data-duration="800">
-                            <div class="section-heading mb-0">
-                                <span class="sub-title">DOWNLOAD OUR APP</span>
-                                <h2>Experience <span><img src="assets/images/svg/lines-1.svg" alt="image">The</span> Future Of Banking</h2>
-                                <p class="mb-4 mb-md-5">With a robust suite of products ranging from digital banking and payment processing to wealth management and blockchain applications.</p>
-
-                                <div class="app-btn">
-                                    <a href="https://play.google.com/store/apps/category/FAMILY?hl=en" target="_blank" class="me-2 me-md-3">
-                                        <img class="rounded-3" src="assets/images/app/app-image-2.jpg" alt="image">
-                                    </a>
-                                    <a href="https://www.apple.com/app-store/" target="_blank">
-                                        <img class="rounded-3" src="assets/images/app/app-image-3.jpg" alt="image">
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-12" data-cues="slideInLeft" data-duration="800">
-                            <div class="app-image">
-                                <img class="radius-30" src="assets/images/app/app-image-1.jpg" alt="image">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End App Area -->
-    </div>
-    @endsection
+            
+            countriesList.innerHTML = html || '<span class="text-muted">No countries detected</span>';
+        } else {
+            previewDiv.style.display = 'none';
+        }
+    }
+    
+    // Simple language code mapping (you can expand this)
+    function getLanguageCode(country) {
+        const map = {
+            'Belarus': 'be',
+            'Russia': 'ru',
+            'Ukraine': 'uk',
+            'United States': 'en',
+            'United Kingdom': 'en',
+            'France': 'fr',
+            'Germany': 'de',
+            'Spain': 'es',
+            'Italy': 'it',
+            'China': 'zh-CN',
+            'Japan': 'ja',
+            'South Korea': 'ko',
+            'Brazil': 'pt',
+            'India': 'hi',
+            'Nigeria': 'en',
+            'Egypt': 'ar',
+            'Saudi Arabia': 'ar',
+            'UAE': 'ar'
+        };
+        return map[country] || 'en';
+    }
+    
+    // Update preview when checkboxes change
+    userCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateTranslationPreview);
+    });
+    
+    // Initial update
+    updateTranslationPreview();
+});
+</script>
+@endsection

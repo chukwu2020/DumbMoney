@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Google\Cloud\Translate\TranslateClient;
 use App\Models\ContactUSMessage;
 use App\Models\Deposit;
 use App\Models\Idverification;
@@ -19,6 +20,7 @@ use App\Notifications\TransactionNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str; // ✅ ADDED THIS IMPORT
 
@@ -120,32 +122,32 @@ class AdminController extends Controller
         return view('admin.deposits.approved', compact('deposits'));
     }
 
-   
-public function rejectDeposit(Request $request, $id)
-{
-    $request->validate([
-        'rejection_note' => 'required|string|min:5',
-    ]);
 
-    $deposit = Deposit::findOrFail($id);
+    public function rejectDeposit(Request $request, $id)
+    {
+        $request->validate([
+            'rejection_note' => 'required|string|min:5',
+        ]);
 
-    if ($deposit->status === 1) {
-        return back()->with('error', 'Cannot reject approved deposit.');
+        $deposit = Deposit::findOrFail($id);
+
+        if ($deposit->status === 1) {
+            return back()->with('error', 'Cannot reject approved deposit.');
+        }
+
+        $deposit->update([
+            'status' => 2, // rejected
+            'rejection_note' => $request->rejection_note,
+        ]);
+
+        // Optional notification
+        $deposit->user->notify(new TransactionNotification(
+            'Deposit Rejected',
+            'Your deposit was rejected. Please check the reason in your dashboard.'
+        ));
+
+        return back()->with('success', 'Deposit rejected with reason.');
     }
-
-    $deposit->update([
-        'status' => 2, // rejected
-        'rejection_note' => $request->rejection_note,
-    ]);
-
-    // Optional notification
-    $deposit->user->notify(new TransactionNotification(
-        'Deposit Rejected',
-        'Your deposit was rejected. Please check the reason in your dashboard.'
-    ));
-
-    return back()->with('success', 'Deposit rejected with reason.');
-}
 
     public function approveDeposit($id)
     {
@@ -215,66 +217,66 @@ public function rejectDeposit(Request $request, $id)
     }
 
     // ✅ FIXED: Generate Membership Code
-   
 
 
-// Add this to AdminController.php
 
-public function generateMembershipCode(Request $request)
-{
-    $request->validate([
-        'user_id' => 'required|exists:users,id'
-    ]);
+    // Add this to AdminController.php
 
-    $user = User::findOrFail($request->user_id);
-    
-    // Check if user already has a code
-    if ($user->membership_code) {
+    public function generateMembershipCode(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id'
+        ]);
+
+        $user = User::findOrFail($request->user_id);
+
+        // Check if user already has a code
+        if ($user->membership_code) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User already has code: ' . $user->membership_code
+            ], 400);
+        }
+
+        // Generate unique code
+        do {
+            $membershipCode = 'VIP' . date('Y') . strtoupper(Str::random(6));
+        } while (DB::table('membership_codes')->where('code', $membershipCode)->exists());
+
+        // Insert into membership_codes table
+        DB::table('membership_codes')->insert([
+            'code' => $membershipCode,
+            'is_used' => false,
+            'used_by' => null,
+            'used_at' => null,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        // Assign to user (but don't activate yet)
+        $user->update([
+            'membership_code' => $membershipCode,
+            'has_membership' => false
+        ]);
+
         return response()->json([
-            'success' => false,
-            'message' => 'User already has code: ' . $user->membership_code
-        ], 400);
+            'success' => true,
+            'membership_code' => $membershipCode,
+            'user_name' => $user->name
+        ]);
     }
 
-    // Generate unique code
-    do {
-        $membershipCode = 'VIP' . date('Y') . strtoupper(Str::random(6));
-    } while (DB::table('membership_codes')->where('code', $membershipCode)->exists());
-    
-    // Insert into membership_codes table
-    DB::table('membership_codes')->insert([
-        'code' => $membershipCode,
-        'is_used' => false,
-        'used_by' => null,
-        'used_at' => null,
-        'created_at' => now(),
-        'updated_at' => now()
-    ]);
-    
-    // Assign to user (but don't activate yet)
-    $user->update([
-        'membership_code' => $membershipCode,
-        'has_membership' => false
-    ]);
-    
-    return response()->json([
-        'success' => true,
-        'membership_code' => $membershipCode,
-        'user_name' => $user->name
-    ]);
-}
+    // live
 
-// live
+    public function toggleMembershipLock(User $user)
+    {
+        $user->membership_locked = !$user->membership_locked;
+        $user->save();
 
-public function toggleMembershipLock(User $user)
-{
-    $user->membership_locked = !$user->membership_locked;
-    $user->save();
+        $status = $user->membership_locked ? 'locked' : 'unlocked';
 
-    $status = $user->membership_locked ? 'locked' : 'unlocked';
-
-    return back()->with('success', "Membership code has been {$status}.");
-}
+        return back()->with('success', "Membership code has been {$status}.");
+    }
 
 
 
@@ -311,7 +313,7 @@ public function toggleMembershipLock(User $user)
         $totalDeposits = User::sum('available_balance');
         $totalWithdrawals = Withdrawal::where('status', 'approved')->sum('amount');
         $amount_invested = Investment::sum('amount_invested');
-  $user = auth()->user();
+        $user = auth()->user();
         return view('admin.index', compact(
             'totalUsers',
             'totalDeposits',
@@ -490,10 +492,72 @@ public function toggleMembershipLock(User $user)
 
 
 
-    // admin message controller 
+// * Get language code based on country
+//      */
+    private function getLanguageCode($country)
+    {
+        $countryLanguageMap = [
+            'Afghanistan' => 'ps', 'Albania' => 'sq', 'Algeria' => 'ar', 'Argentina' => 'es',
+            'Australia' => 'en', 'Austria' => 'de', 'Bangladesh' => 'bn', 'Belarus' => 'be',
+            'Belgium' => 'nl', 'Brazil' => 'pt', 'Bulgaria' => 'bg', 'Cambodia' => 'km',
+            'Canada' => 'en', 'Chile' => 'es', 'China' => 'zh-CN', 'Colombia' => 'es',
+            'Croatia' => 'hr', 'Czech Republic' => 'cs', 'Denmark' => 'da', 'Egypt' => 'ar',
+            'Estonia' => 'et', 'Finland' => 'fi', 'France' => 'fr', 'Germany' => 'de',
+            'Ghana' => 'en', 'Greece' => 'el', 'Hong Kong' => 'zh-TW', 'Hungary' => 'hu',
+            'Iceland' => 'is', 'India' => 'hi', 'Indonesia' => 'id', 'Iran' => 'fa',
+            'Iraq' => 'ar', 'Ireland' => 'en', 'Israel' => 'he', 'Italy' => 'it',
+            'Japan' => 'ja', 'Jordan' => 'ar', 'Kazakhstan' => 'kk', 'Kenya' => 'sw',
+            'Kuwait' => 'ar', 'Latvia' => 'lv', 'Lebanon' => 'ar', 'Lithuania' => 'lt',
+            'Luxembourg' => 'lb', 'Malaysia' => 'ms', 'Maldives' => 'dv', 'Mexico' => 'es',
+            'Morocco' => 'ar', 'Nepal' => 'ne', 'Netherlands' => 'nl', 'New Zealand' => 'en',
+            'Nigeria' => 'en', 'Norway' => 'no', 'Pakistan' => 'ur', 'Palestine' => 'ar',
+            'Peru' => 'es', 'Philippines' => 'tl', 'Poland' => 'pl', 'Portugal' => 'pt',
+            'Qatar' => 'ar', 'Romania' => 'ro', 'Russia' => 'ru', 'Saudi Arabia' => 'ar',
+            'Serbia' => 'sr', 'Singapore' => 'en', 'Slovakia' => 'sk', 'Slovenia' => 'sl',
+            'South Africa' => 'af', 'South Korea' => 'ko', 'Spain' => 'es', 'Sri Lanka' => 'si',
+            'Sweden' => 'sv', 'Switzerland' => 'de', 'Syria' => 'ar', 'Taiwan' => 'zh-TW',
+            'Tanzania' => 'sw', 'Thailand' => 'th', 'Tunisia' => 'ar', 'Turkey' => 'tr',
+            'Ukraine' => 'uk', 'United Arab Emirates' => 'ar', 'United Kingdom' => 'en',
+            'United States' => 'en', 'Uruguay' => 'es', 'Uzbekistan' => 'uz', 'Venezuela' => 'es',
+            'Vietnam' => 'vi', 'Yemen' => 'ar', 'Zambia' => 'en', 'Zimbabwe' => 'en',
+        ];
 
+        return $countryLanguageMap[$country] ?? 'en';
+    }
 
+    /**
+     * Translate message to target language using Google Cloud Translate
+     */
+   private function translateMessage($text, $targetLanguage)
+{
+    try {
+        if ($targetLanguage === 'en') {
+            return $text;
+        }
 
+        // Free Google Translate endpoint - NO KEY NEEDED
+        $url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl={$targetLanguage}&dt=t&q=" . urlencode($text);
+        
+        $response = file_get_contents($url);
+        $result = json_decode($response);
+        
+        if (isset($result[0][0][0])) {
+            return $result[0][0][0];
+        }
+        
+        return $text;
+        
+    } catch (\Exception $e) {
+        Log::error('Free translation failed: ' . $e->getMessage());
+        return $text;
+    }
+}
+    /**
+     * Send message with auto-translation
+     */
+/**
+ * Send message with auto-translation
+ */
 public function sendMessage(Request $request)
 {
     $request->validate([
@@ -508,16 +572,53 @@ public function sendMessage(Request $request)
         $users = User::whereIn('id', $request->users)->get();
     }
 
-    Notification::send($users, new AdminMessageNotification(
-        $request->title,
-        $request->message
-    ));
+    $originalTitle = $request->title;
+    $originalMessage = $request->message;
+    
+    $translationSuccess = true;
+    $failedTranslations = [];
 
-    return back()->with('success', 'Message sent successfully!');
+    foreach ($users as $user) {
+        $languageCode = $this->getLanguageCode($user->country ?? '');
+        
+        try {
+            $translatedTitle = $this->translateMessage($originalTitle, $languageCode);
+            $translatedMessage = $this->translateMessage($originalMessage, $languageCode);
+            
+            $user->notify(new AdminMessageNotification(
+                $translatedTitle,
+                $translatedMessage,
+                $originalTitle,
+                $originalMessage,
+                $languageCode,
+                $user->country
+            ));
+        } catch (\Exception $e) {
+            // If translation fails, send the original message
+            Log::warning('Translation failed for user ' . $user->id . ': ' . $e->getMessage());
+            $failedTranslations[] = $user->name;
+            
+            $user->notify(new AdminMessageNotification(
+                $originalTitle,
+                $originalMessage,
+                $originalTitle,
+                $originalMessage,
+                'en',
+                $user->country
+            ));
+        }
+    }
+
+    $message = 'Messages sent successfully!';
+    if (!empty($failedTranslations)) {
+        $message = 'Messages sent, but translation failed for: ' . implode(', ', $failedTranslations);
+    }
+
+    Log::info('Messages sent', [
+        'total_users' => $users->count(),
+        'failed_translations' => $failedTranslations
+    ]);
+
+    return back()->with('success', $message);
 }
-
-
-
-
-
 }

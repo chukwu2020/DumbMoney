@@ -68,7 +68,7 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->phone = $request->phone;
         $user->country = $request->country;
-      $user->password = Hash::make(Str::random(12));
+     $user->password = Hash::make($request->password);
      
 
         $user->role_as = '0';

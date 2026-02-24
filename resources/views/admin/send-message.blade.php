@@ -249,6 +249,20 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        <!-- Translation Preview - Moved here inside the col-lg-7 but outside the card -->
+                        <div class="mt-3 p-3 bg-light rounded" id="translationPreview" style="display: none;">
+                            <h6 class="fw-semibold mb-3" style="color: #0C3A30;">
+                                <i class="ri-translate-2 me-2"></i>Translation Preview
+                            </h6>
+                            <div id="selectedCountriesList" class="mb-2">
+                                <span class="badge bg-info me-1">Loading languages...</span>
+                            </div>
+                            <p class="small text-muted mb-0">
+                                <i class="ri-information-line me-1"></i>
+                                Messages will be automatically translated to each user's native language based on their country.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -364,6 +378,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const selectAllFromCountry = document.getElementById('selectAllFromCountry');
     const countrySelectText = document.getElementById('countrySelectText');
     
+    // Translation preview elements
+    const translationPreview = document.getElementById('translationPreview');
+    const selectedCountriesList = document.getElementById('selectedCountriesList');
+    
     let currentSelectedCountry = '';
 
     // Update selected count
@@ -376,6 +394,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const someChecked = Array.from(userCheckboxes).some(cb => cb.checked);
         selectAllCheckbox.checked = allChecked;
         selectAllCheckbox.indeterminate = someChecked && !allChecked;
+        
+        // Update translation preview
+        updateTranslationPreview();
     }
 
     // Filter users by country and search
@@ -484,6 +505,80 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize character count
     charCount.textContent = messageTextarea.value.length;
+
+    // Function to update translation preview
+    function updateTranslationPreview() {
+        const selectedCheckboxes = document.querySelectorAll('.user-checkbox:checked');
+        const countries = new Set();
+        const countryLanguageMap = {
+            'Afghanistan': 'ps', 'Albania': 'sq', 'Algeria': 'ar', 'Argentina': 'es',
+            'Australia': 'en', 'Austria': 'de', 'Bangladesh': 'bn', 'Belarus': 'be',
+            'Belgium': 'nl', 'Brazil': 'pt', 'Bulgaria': 'bg', 'Cambodia': 'km',
+            'Canada': 'en', 'Chile': 'es', 'China': 'zh-CN', 'Colombia': 'es',
+            'Croatia': 'hr', 'Czech Republic': 'cs', 'Denmark': 'da', 'Egypt': 'ar',
+            'Estonia': 'et', 'Finland': 'fi', 'France': 'fr', 'Germany': 'de',
+            'Ghana': 'en', 'Greece': 'el', 'Hong Kong': 'zh-TW', 'Hungary': 'hu',
+            'Iceland': 'is', 'India': 'hi', 'Indonesia': 'id', 'Iran': 'fa',
+            'Iraq': 'ar', 'Ireland': 'en', 'Israel': 'he', 'Italy': 'it',
+            'Japan': 'ja', 'Jordan': 'ar', 'Kazakhstan': 'kk', 'Kenya': 'sw',
+            'Kuwait': 'ar', 'Latvia': 'lv', 'Lebanon': 'ar', 'Lithuania': 'lt',
+            'Luxembourg': 'lb', 'Malaysia': 'ms', 'Maldives': 'dv', 'Mexico': 'es',
+            'Morocco': 'ar', 'Nepal': 'ne', 'Netherlands': 'nl', 'New Zealand': 'en',
+            'Nigeria': 'en', 'Norway': 'no', 'Pakistan': 'ur', 'Palestine': 'ar',
+            'Peru': 'es', 'Philippines': 'tl', 'Poland': 'pl', 'Portugal': 'pt',
+            'Qatar': 'ar', 'Romania': 'ro', 'Russia': 'ru', 'Saudi Arabia': 'ar',
+            'Serbia': 'sr', 'Singapore': 'en', 'Slovakia': 'sk', 'Slovenia': 'sl',
+            'South Africa': 'af', 'South Korea': 'ko', 'Spain': 'es', 'Sri Lanka': 'si',
+            'Sweden': 'sv', 'Switzerland': 'de', 'Syria': 'ar', 'Taiwan': 'zh-TW',
+            'Tanzania': 'sw', 'Thailand': 'th', 'Tunisia': 'ar', 'Turkey': 'tr',
+            'Ukraine': 'uk', 'United Arab Emirates': 'ar', 'United Kingdom': 'en',
+            'United States': 'en', 'Uruguay': 'es', 'Uzbekistan': 'uz', 'Venezuela': 'es',
+            'Vietnam': 'vi', 'Yemen': 'ar', 'Zambia': 'en', 'Zimbabwe': 'en'
+        };
+        
+        selectedCheckboxes.forEach(checkbox => {
+            const userItem = checkbox.closest('.user-item');
+            const country = userItem ? userItem.dataset.userCountry : null;
+            if (country && country !== 'Not Set') {
+                countries.add(country);
+            }
+        });
+        
+        if (countries.size > 0) {
+            translationPreview.style.display = 'block';
+            
+            let html = '';
+            countries.forEach(country => {
+                const langCode = countryLanguageMap[country] || 'en';
+                const flag = getFlagEmoji(country);
+                html += `<span class="badge bg-success bg-opacity-10 text-success me-1 mb-1 p-2">
+                    ${flag} ${country} (${langCode})
+                </span>`;
+            });
+            
+            selectedCountriesList.innerHTML = html;
+        } else {
+            translationPreview.style.display = 'none';
+        }
+    }
+    
+    // Helper function to get flag emoji (simplified)
+    function getFlagEmoji(country) {
+        const flags = {
+            'United States': '🇺🇸', 'United Kingdom': '🇬🇧', 'Canada': '🇨🇦',
+            'Australia': '🇦🇺', 'Germany': '🇩🇪', 'France': '🇫🇷',
+            'Spain': '🇪🇸', 'Italy': '🇮🇹', 'Portugal': '🇵🇹',
+            'Russia': '🇷🇺', 'China': '🇨🇳', 'Japan': '🇯🇵',
+            'South Korea': '🇰🇷', 'India': '🇮🇳', 'Brazil': '🇧🇷',
+            'Mexico': '🇲🇽', 'Argentina': '🇦🇷', 'Nigeria': '🇳🇬',
+            'Egypt': '🇪🇬', 'South Africa': '🇿🇦', 'Saudi Arabia': '🇸🇦',
+            'UAE': '🇦🇪', 'Turkey': '🇹🇷', 'Israel': '🇮🇱',
+            'Belarus': '🇧🇾', 'Ukraine': '🇺🇦', 'Poland': '🇵🇱',
+            'Netherlands': '🇳🇱', 'Sweden': '🇸🇪', 'Norway': '🇳🇴',
+            'Denmark': '🇩🇰', 'Finland': '🇫🇮', 'Greece': '🇬🇷'
+        };
+        return flags[country] || '🌐';
+    }
 
     // Form submission - prevent double click
     form.addEventListener('submit', function(e) {
