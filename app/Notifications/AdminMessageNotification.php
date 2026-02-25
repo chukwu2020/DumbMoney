@@ -17,8 +17,14 @@ class AdminMessageNotification extends Notification
     public $languageCode;
     public $country;
 
-    public function __construct($title, $message, $originalTitle = null, $originalMessage = null, $languageCode = 'en', $country = null)
-    {
+    public function __construct(
+        string $title,
+        string $message,
+        ?string $originalTitle = null,
+        ?string $originalMessage = null,
+        string $languageCode = 'en',
+        ?string $country = null
+    ) {
         $this->title = $title;
         $this->message = $message;
         $this->originalTitle = $originalTitle;
@@ -27,32 +33,39 @@ class AdminMessageNotification extends Notification
         $this->country = $country;
     }
 
+   
+
     public function via($notifiable)
     {
         return ['mail'];
     }
 
-   public function toMail($notifiable)
-{
-    try {
-        $actionUrl = route('user_dashboard');
-    } catch (\Exception $e) {
-        $actionUrl = url('/user/dashboard');
-    }
+    public function toMail($notifiable)
+    {
+        try {
+            $actionUrl = route('user_dashboard');
+        } catch (\Exception $e) {
+            $actionUrl = url('/user/dashboard');
+        }
 
-    return (new MailMessage)
-        ->subject($this->title)
-        ->view('admin.admin-email-send-message', [
-            'subject' => $this->title,
-            'userName' => $notifiable->name,
-            'messageBody' => $this->message,
-            'originalTitle' => $this->originalTitle,
-            'originalMessage' => $this->originalMessage,
-            'languageCode' => $this->languageCode,
-            'country' => $this->country,
-            'actionUrl' => $actionUrl,
-            'actionText' => 'View Dashboard',
-            'previewText' => 'You have a new message from MarketMind'
-        ]);
-}
+        // Prepare full message including greeting and intro
+        $fullMessage = "Hello {$notifiable->name},\n\n"
+                     . "This is an official update from the MarketMind trading desk regarding your account activity:\n\n"
+                     . $this->message;
+
+        return (new MailMessage)
+            ->subject($this->title)
+            ->view('admin.admin-email-send-message', [
+                'subject' => $this->title,
+                'userName' => $notifiable->name,
+                'messageBody' => $fullMessage,
+                'originalTitle' => $this->originalTitle,
+                'originalMessage' => $this->originalMessage,
+                'languageCode' => $this->languageCode,
+                'country' => $this->country,
+                'actionUrl' => $actionUrl,
+                'actionText' => 'View Dashboard',
+                'previewText' => 'You have a new message from MarketMind'
+            ]);
+    }
 }

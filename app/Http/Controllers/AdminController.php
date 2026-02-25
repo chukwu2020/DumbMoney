@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Google\Cloud\Translate\TranslateClient;
+use Google\Cloud\Translate\V2\TranslateClient;  
 use App\Models\ContactUSMessage;
+use Illuminate\Support\Facades\Log;
 use App\Models\Deposit;
 use App\Models\Idverification;
 use App\Models\Investment;
@@ -18,11 +19,12 @@ use App\Notifications\IDVerificationSubmitted;
 
 use App\Notifications\TransactionNotification;
 use Carbon\Carbon;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+
 use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Str; // ✅ ADDED THIS IMPORT
+use Illuminate\Support\Str; 
 
 class AdminController extends Controller
 {
@@ -528,38 +530,41 @@ class AdminController extends Controller
     /**
      * Translate message to target language using Google Cloud Translate
      */
- private function translateMessage($text, $targetLanguage)
+
+private function translateMessage($text, $targetLanguage)
 {
     try {
         if ($targetLanguage === 'en' || empty($targetLanguage)) {
             return $text;
         }
 
-        // Split long text into chunks to avoid URL length limits
-        $chunks = str_split($text, 500); // Translate in chunks of 500 characters
-        $translatedChunks = [];
-        
-        foreach ($chunks as $chunk) {
-            $url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl={$targetLanguage}&dt=t&q=" . urlencode($chunk);
-            
-            $response = file_get_contents($url);
-            $result = json_decode($response, true);
-            
-            if (isset($result[0][0][0])) {
-                $translatedChunks[] = $result[0][0][0];
-            } else {
-                $translatedChunks[] = $chunk; // Keep original if translation fails
-            }
+        $url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl={$targetLanguage}&dt=t&q=" . urlencode($text);
+
+        $response = file_get_contents($url);
+
+        if (!$response) {
+            return $text;
         }
-        
-        return implode(' ', $translatedChunks); // Combine translated chunks
-        
+
+        $result = json_decode($response, true);
+
+        if (!isset($result[0])) {
+            return $text;
+        }
+
+        $translatedText = '';
+
+        foreach ($result[0] as $sentence) {
+            $translatedText .= $sentence[0];
+        }
+
+        return $translatedText;
+
     } catch (\Exception $e) {
         Log::error('Translation failed: ' . $e->getMessage());
-        return $text; // Return original if translation fails
+        return $text;
     }
-}
-    /**
+} /**
      * Send message with auto-translation
      */
 /**
