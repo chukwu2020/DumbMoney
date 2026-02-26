@@ -24,6 +24,79 @@
         </ul>
     </div>
 
+    <!-- ===== SEARCH SECTION ===== -->
+    <div class="mb-6">
+        <div class="card rounded-xl overflow-hidden border-0 bg-white shadow-sm">
+            <div class="card-body p-6">
+                <h6 class="text-lg font-semibold mb-4">Search Users</h6>
+                
+                <form action="{{ route('hidden.user') }}" method="GET" class="flex flex-wrap gap-4 items-end">
+                    <!-- Search by Name -->
+                    <div class="flex-1 min-w-[200px]">
+                        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                        <input type="text" 
+                               name="name" 
+                               id="name" 
+                               value="{{ request('name') }}"
+                               placeholder="Search by name..."
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent">
+                    </div>
+                    
+                    <!-- Search by Email -->
+                    <div class="flex-1 min-w-[200px]">
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <input type="email" 
+                               name="email" 
+                               id="email" 
+                               value="{{ request('email') }}"
+                               placeholder="Search by email..."
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent">
+                    </div>
+                    
+                    <!-- Search by Country -->
+                    <div class="flex-1 min-w-[200px]">
+                        <label for="country" class="block text-sm font-medium text-gray-700 mb-1">Country</label>
+                        <input type="text" 
+                               name="country" 
+                               id="country" 
+                               value="{{ request('country') }}"
+                               placeholder="Search by country..."
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent">
+                    </div>
+                    
+                    <!-- Search Button -->
+                    <div class="flex gap-2">
+                        <button type="submit" style="color: #0C3A30;" 
+                                class="px-6 py-2 bg-[#0C3A30] text-white rounded-lg hover:bg-[#154e40] transition-colors duration-200 flex items-center gap-2">
+                            <iconify-icon icon="material-symbols:search"></iconify-icon>
+                            Search
+                        </button>
+                        
+                        <!-- Clear Button (only show if there are search parameters) -->
+                        @if(request('name') || request('email') || request('country'))
+                        <a href="{{ route('hidden.user') }}" 
+                           class="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors duration-200 flex items-center gap-2">
+                            <iconify-icon icon="material-symbols:close"></iconify-icon>
+                            Clear
+                        </a>
+                        @endif
+                    </div>
+                </form>
+
+                <!-- Optional: Search Stats -->
+                @if(request('name') || request('email') || request('country'))
+                <div class="mt-3 text-sm text-gray-600">
+                    Showing results for: 
+                    @if(request('name')) <span class="inline-flex items-center gap-1 mr-3"><iconify-icon icon="material-symbols:person" class="text-[#0C3A30]"></iconify-icon> Name: "{{ request('name') }}"</span> @endif
+                    @if(request('email')) <span class="inline-flex items-center gap-1 mr-3"><iconify-icon icon="material-symbols:mail" class="text-[#0C3A30]"></iconify-icon> Email: "{{ request('email') }}"</span> @endif
+                    @if(request('country')) <span class="inline-flex items-center gap-1"><iconify-icon icon="material-symbols:location-on" class="text-[#0C3A30]"></iconify-icon> Country: "{{ request('country') }}"</span> @endif
+                </div>
+                @endif
+            </div>
+        </div>
+    </div>
+    <!-- ===== END SEARCH SECTION ===== -->
+
     <!-- Table -->
     <div class="grid grid-cols-12">
         <div class="col-span-12">
@@ -53,7 +126,7 @@
 
                             <tbody>
 
-                                @foreach ($users as $user)
+                                @forelse ($users as $user)
                                 <tr>
 
                                     <!-- Profile -->
@@ -92,6 +165,7 @@
                                     <td>{{ $user->created_at->format('d M Y') }}</td>
 
                                     <!-- Balance -->
+                                   
                                     <td>${{ number_format($user->total_income, 2) }}</td>
 
                                     <!-- Investment Status -->
@@ -196,36 +270,41 @@
                                         @endif
                                     </td>
 
-                              <!-- Actions -->
-<td class="text-center">
-    <div class="flex justify-center gap-2">
+                                    <!-- Actions -->
+                                    <td class="text-center">
+                                        <div class="flex justify-center gap-2">
 
-       
+                                            <!-- Edit -->
+                                            <a href="{{ route('user.edit', $user->id) }}" style="color: green;">
+                                                <button
+                                                    class="w-10 h-10 rounded-full bg-green-100 text-green-600 hover:bg-green-200 flex items-center justify-center">
+                                                    <iconify-icon icon="lucide:edit"></iconify-icon>
+                                                </button>
+                                            </a>
 
-        <!-- Edit -->
-        <a href="{{ route('user.edit', $user->id) }}" style="color: green;">
-            <button
-                class="w-10 h-10 rounded-full bg-green-100 text-green-600 hover:bg-green-200 flex items-center justify-center">
-                <iconify-icon icon="lucide:edit"></iconify-icon>
-            </button>
-        </a>
+                                            <!-- Delete -->
+                                            <form method="POST" action="{{ route('user.destroy', $user->id) }}" style="color: red;"
+                                                  onsubmit="return confirm('Are you sure?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button
+                                                    class="w-10 h-10 rounded-full bg-red-100 text-red-600 hover:bg-red-200 flex items-center justify-center">
+                                                    <iconify-icon icon="fluent:delete-24-regular"></iconify-icon>
+                                                </button>
+                                            </form>
 
-        <!-- Delete -->
-        <form method="POST" action="{{ route('user.destroy', $user->id) }}" style="color: red;"
-              onsubmit="return confirm('Are you sure?');">
-            @csrf
-            @method('DELETE')
-            <button
-                class="w-10 h-10 rounded-full bg-red-100 text-red-600 hover:bg-red-200 flex items-center justify-center">
-                <iconify-icon icon="fluent:delete-24-regular"></iconify-icon>
-            </button>
-        </form>
-
-    </div>
-</td>
+                                        </div>
+                                    </td>
 
                                 </tr>
-                                @endforeach
+                                @empty
+                                <tr>
+                                    <td colspan="12" class="text-center py-8 text-gray-500">
+                                        <iconify-icon icon="material-symbols:info-outline" class="text-4xl mb-2"></iconify-icon>
+                                        <p>No users found matching your search criteria.</p>
+                                    </td>
+                                </tr>
+                                @endforelse
 
                             </tbody>
 
@@ -266,10 +345,8 @@
     }
 </script>
 
-
 <script>
     function generateMembershipCode(userId) {
-
         // Disable button while loading
         const btn = event.target;
         const oldHtml = btn.innerHTML;
@@ -288,21 +365,15 @@
             })
             .then(response => response.json())
             .then(data => {
-
                 if (data.success) {
-
                     // Reload the page so the generated code appears
                     location.reload();
-
                 } else {
-
                     // Restore button
                     btn.disabled = false;
                     btn.innerHTML = oldHtml;
-
                     alert(data.message);
                 }
-
             })
             .catch(err => {
                 console.error(err);

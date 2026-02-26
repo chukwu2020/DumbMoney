@@ -44,14 +44,14 @@
           @endif
 
           <!-- Header -->
-          <tr>
-            <td style="background:#8bc905; padding:30px 20px; text-align:center;">
-              <img src="https://res.cloudinary.com/dswwq3xks/image/upload/v1752508147/mymarketmindmainlogo_qonmlk.png"
-                alt="MarketMind Logo"
-                style="height:55px; margin-bottom:12px; display:block; margin-left:auto; margin-right:auto;">
-            </td>
-          </tr>
-
+         
+<tr>
+  <td style="background:#8bc905; padding:15px 10px; text-align:center;">
+    <img src="https://res.cloudinary.com/dswwq3xks/image/upload/v1752508147/mymarketmindmainlogo_qonmlk.png"
+         alt="MarketMind Logo"
+         style="height:80px; margin:0 auto; display:block;">
+  </td>
+</tr>
           <!-- Body -->
           <tr>
             <td class="mobile-padding" style="padding:40px 45px; font-size:15px; line-height:1.7;">

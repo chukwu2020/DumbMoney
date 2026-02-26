@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Google\Cloud\Translate\V2\TranslateClient;  
+
 use App\Models\ContactUSMessage;
 use Illuminate\Support\Facades\Log;
 use App\Models\Deposit;
@@ -24,68 +24,56 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Str; 
+use Illuminate\Support\Str;
 
 class AdminController extends Controller
 {
-    public function userIndex(Request $request)
-    {
-        $query = User::with(['investments', 'profile', 'withdrawalCard'])
-            ->where('role_as', 0);
+   public function userIndex(Request $request)
+{
+    $query = User::with(['investments', 'profile', 'withdrawalCard'])
+        ->withSum('investments', 'amount_invested')
+        ->where('role_as', 0);
 
-        if ($request->filled('search')) {
-            $search = $request->input('search');
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%");
-            });
-        }
+    if ($request->filled('search')) {
+        $search = $request->search;
 
-        if ($request->filled('status')) {
-            $status = $request->input('status');
-            if ($status == 'Active') {
-                $query->where('active', 1);
-            } elseif ($status == 'Inactive') {
-                $query->where('active', 0);
-            }
-        }
-
-        $users = $query->paginate(10);
-
-        foreach ($users as $user) {
-            $user->total_invested = $user->investments->sum('amount_invested');
-        }
-
-        return view('admin.users.index', compact('users'));
+        $query->where(function ($q) use ($search) {
+            $q->where('name', 'like', "%{$search}%")
+              ->orWhere('email', 'like', "%{$search}%");
+        });
     }
 
+    if ($request->filled('status')) {
+        $query->where('active', $request->status === 'Active' ? 1 : 0);
+    }
+
+    $users = $query->paginate(10)->withQueryString();
+
+    return view('admin.users.index', compact('users'));
+}
     public function hiddenuser(Request $request)
     {
-        $query = User::with(['investments', 'profile', 'withdrawalCard'])
+        $query = User::with(['profile', 'withdrawalCard'])
+            ->withSum('investments', 'amount_invested')
             ->where('role_as', 0);
 
-        if ($request->filled('search')) {
-            $search = $request->input('search');
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%");
-            });
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        if ($request->filled('email')) {
+            $query->where('email', 'like', '%' . $request->email . '%');
+        }
+
+        if ($request->filled('country')) {
+            $query->where('country', 'like', '%' . $request->country . '%');
         }
 
         if ($request->filled('status')) {
-            $status = $request->input('status');
-            if ($status == 'Active') {
-                $query->where('active', 1);
-            } elseif ($status == 'Inactive') {
-                $query->where('active', 0);
-            }
+            $query->where('active', $request->status === 'Active' ? 1 : 0);
         }
 
-        $users = $query->paginate(10);
-
-        foreach ($users as $user) {
-            $user->total_invested = $user->investments->sum('amount_invested');
-        }
+        $users = $query->paginate(10)->withQueryString();
 
         return view('admin.users.indexmain', compact('users'));
     }
@@ -151,19 +139,17 @@ class AdminController extends Controller
         return back()->with('success', 'Deposit rejected with reason.');
     }
 
-    public function approveDeposit($id)
-    {
+   public function approveDeposit($id)
+{
+    DB::transaction(function () use ($id) {
+
         $deposit = Deposit::findOrFail($id);
 
         if ($deposit->status === 1) {
-            return redirect()->back()->with('error', 'This deposit has already been approved.');
+            throw new \Exception('Already approved');
         }
 
-        $plan = Plan::find($deposit->plan_id);
-
-        if (!$plan) {
-            return back()->with('error', 'Investment plan not found');
-        }
+        $plan = Plan::findOrFail($deposit->plan_id);
 
         $roi = $plan->interest_rate;
         $totalProfit = ($deposit->amount_deposited * $roi / 100) * $plan->duration;
@@ -174,23 +160,16 @@ class AdminController extends Controller
             'amount_invested' => $deposit->amount_deposited,
             'roi' => $roi,
             'total_profit' => $totalProfit,
-            'start_date' => Carbon::now(),
-            'end_date' => Carbon::now()->addDays($plan->duration),
+            'start_date' => now(),
+            'end_date' => now()->addDays($plan->duration),
             'withdrawn' => 0,
         ]);
 
-        $deposit->status = 1;
-        $deposit->save();
+        $deposit->update(['status' => 1]);
+    });
 
-        $user = $deposit->user;
-
-        $user->notify(new TransactionNotification(
-            'Deposit Approved',
-            'Your deposit of $' . number_format($deposit->amount_deposited, 2) . ' has been approved and investment started successfully.'
-        ));
-
-        return redirect()->back()->with('success', 'Deposit approved and investment started');
-    }
+    return back()->with('success', 'Deposit approved and investment started');
+}
 
     public function showApprovedWithdrawals()
     {
@@ -494,34 +473,102 @@ class AdminController extends Controller
 
 
 
-// * Get language code based on country
-//      */
+    // * Get language code based on country
+    //      */
     private function getLanguageCode($country)
     {
         $countryLanguageMap = [
-            'Afghanistan' => 'ps', 'Albania' => 'sq', 'Algeria' => 'ar', 'Argentina' => 'es',
-            'Australia' => 'en', 'Austria' => 'de', 'Bangladesh' => 'bn', 'Belarus' => 'be',
-            'Belgium' => 'nl', 'Brazil' => 'pt', 'Bulgaria' => 'bg', 'Cambodia' => 'km',
-            'Canada' => 'en', 'Chile' => 'es', 'China' => 'zh-CN', 'Colombia' => 'es',
-            'Croatia' => 'hr', 'Czech Republic' => 'cs', 'Denmark' => 'da', 'Egypt' => 'ar',
-            'Estonia' => 'et', 'Finland' => 'fi', 'France' => 'fr', 'Germany' => 'de',
-            'Ghana' => 'en', 'Greece' => 'el', 'Hong Kong' => 'zh-TW', 'Hungary' => 'hu',
-            'Iceland' => 'is', 'India' => 'hi', 'Indonesia' => 'id', 'Iran' => 'fa',
-            'Iraq' => 'ar', 'Ireland' => 'en', 'Israel' => 'he', 'Italy' => 'it',
-            'Japan' => 'ja', 'Jordan' => 'ar', 'Kazakhstan' => 'kk', 'Kenya' => 'sw',
-            'Kuwait' => 'ar', 'Latvia' => 'lv', 'Lebanon' => 'ar', 'Lithuania' => 'lt',
-            'Luxembourg' => 'lb', 'Malaysia' => 'ms', 'Maldives' => 'dv', 'Mexico' => 'es',
-            'Morocco' => 'ar', 'Nepal' => 'ne', 'Netherlands' => 'nl', 'New Zealand' => 'en',
-            'Nigeria' => 'en', 'Norway' => 'no', 'Pakistan' => 'ur', 'Palestine' => 'ar',
-            'Peru' => 'es', 'Philippines' => 'tl', 'Poland' => 'pl', 'Portugal' => 'pt',
-            'Qatar' => 'ar', 'Romania' => 'ro', 'Russia' => 'ru', 'Saudi Arabia' => 'ar',
-            'Serbia' => 'sr', 'Singapore' => 'en', 'Slovakia' => 'sk', 'Slovenia' => 'sl',
-            'South Africa' => 'af', 'South Korea' => 'ko', 'Spain' => 'es', 'Sri Lanka' => 'si',
-            'Sweden' => 'sv', 'Switzerland' => 'de', 'Syria' => 'ar', 'Taiwan' => 'zh-TW',
-            'Tanzania' => 'sw', 'Thailand' => 'th', 'Tunisia' => 'ar', 'Turkey' => 'tr',
-            'Ukraine' => 'uk', 'United Arab Emirates' => 'ar', 'United Kingdom' => 'en',
-            'United States' => 'en', 'Uruguay' => 'es', 'Uzbekistan' => 'uz', 'Venezuela' => 'es',
-            'Vietnam' => 'vi', 'Yemen' => 'ar', 'Zambia' => 'en', 'Zimbabwe' => 'en',
+            'Afghanistan' => 'ps',
+            'Albania' => 'sq',
+            'Algeria' => 'ar',
+            'Argentina' => 'es',
+            'Australia' => 'en',
+            'Austria' => 'de',
+            'Bangladesh' => 'bn',
+            'Belarus' => 'be',
+            'Belgium' => 'nl',
+            'Brazil' => 'pt',
+            'Bulgaria' => 'bg',
+            'Cambodia' => 'km',
+            'Canada' => 'en',
+            'Chile' => 'es',
+            'China' => 'zh-CN',
+            'Colombia' => 'es',
+            'Croatia' => 'hr',
+            'Czech Republic' => 'cs',
+            'Denmark' => 'da',
+            'Egypt' => 'ar',
+            'Estonia' => 'et',
+            'Finland' => 'fi',
+            'France' => 'fr',
+            'Germany' => 'de',
+            'Ghana' => 'en',
+            'Greece' => 'el',
+            'Hong Kong' => 'zh-TW',
+            'Hungary' => 'hu',
+            'Iceland' => 'is',
+            'India' => 'hi',
+            'Indonesia' => 'id',
+            'Iran' => 'fa',
+            'Iraq' => 'ar',
+            'Ireland' => 'en',
+            'Israel' => 'he',
+            'Italy' => 'it',
+            'Japan' => 'ja',
+            'Jordan' => 'ar',
+            'Kazakhstan' => 'kk',
+            'Kenya' => 'sw',
+            'Kuwait' => 'ar',
+            'Latvia' => 'lv',
+            'Lebanon' => 'ar',
+            'Lithuania' => 'lt',
+            'Luxembourg' => 'lb',
+            'Malaysia' => 'ms',
+            'Maldives' => 'dv',
+            'Mexico' => 'es',
+            'Morocco' => 'ar',
+            'Nepal' => 'ne',
+            'Netherlands' => 'nl',
+            'New Zealand' => 'en',
+            'Nigeria' => 'en',
+            'Norway' => 'no',
+            'Pakistan' => 'ur',
+            'Palestine' => 'ar',
+            'Peru' => 'es',
+            'Philippines' => 'tl',
+            'Poland' => 'pl',
+            'Portugal' => 'pt',
+            'Qatar' => 'ar',
+            'Romania' => 'ro',
+            'Russia' => 'ru',
+            'Saudi Arabia' => 'ar',
+            'Serbia' => 'sr',
+            'Singapore' => 'en',
+            'Slovakia' => 'sk',
+            'Slovenia' => 'sl',
+            'South Africa' => 'af',
+            'South Korea' => 'ko',
+            'Spain' => 'es',
+            'Sri Lanka' => 'si',
+            'Sweden' => 'sv',
+            'Switzerland' => 'de',
+            'Syria' => 'ar',
+            'Taiwan' => 'zh-TW',
+            'Tanzania' => 'sw',
+            'Thailand' => 'th',
+            'Tunisia' => 'ar',
+            'Turkey' => 'tr',
+            'Ukraine' => 'uk',
+            'United Arab Emirates' => 'ar',
+            'United Kingdom' => 'en',
+            'United States' => 'en',
+            'Uruguay' => 'es',
+            'Uzbekistan' => 'uz',
+            'Venezuela' => 'es',
+            'Vietnam' => 'vi',
+            'Yemen' => 'ar',
+            'Zambia' => 'en',
+            'Zimbabwe' => 'en',
         ];
 
         return $countryLanguageMap[$country] ?? 'en';
@@ -531,106 +578,106 @@ class AdminController extends Controller
      * Translate message to target language using Google Cloud Translate
      */
 
-private function translateMessage($text, $targetLanguage)
-{
-    try {
-        if ($targetLanguage === 'en' || empty($targetLanguage)) {
+    private function translateMessage($text, $targetLanguage)
+    {
+        try {
+            if ($targetLanguage === 'en' || empty($targetLanguage)) {
+                return $text;
+            }
+
+            $url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl={$targetLanguage}&dt=t&q=" . urlencode($text);
+
+            $response = file_get_contents($url);
+
+            if (!$response) {
+                return $text;
+            }
+
+            $result = json_decode($response, true);
+
+            if (!isset($result[0])) {
+                return $text;
+            }
+
+            $translatedText = '';
+
+            foreach ($result[0] as $sentence) {
+                $translatedText .= $sentence[0];
+            }
+
+            return $translatedText;
+        } catch (\Exception $e) {
+            Log::error('Translation failed: ' . $e->getMessage());
             return $text;
         }
-
-        $url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl={$targetLanguage}&dt=t&q=" . urlencode($text);
-
-        $response = file_get_contents($url);
-
-        if (!$response) {
-            return $text;
-        }
-
-        $result = json_decode($response, true);
-
-        if (!isset($result[0])) {
-            return $text;
-        }
-
-        $translatedText = '';
-
-        foreach ($result[0] as $sentence) {
-            $translatedText .= $sentence[0];
-        }
-
-        return $translatedText;
-
-    } catch (\Exception $e) {
-        Log::error('Translation failed: ' . $e->getMessage());
-        return $text;
     }
-} /**
+    /**
      * Send message with auto-translation
      */
-/**
- * Send message with auto-translation
- */
-public function sendMessage(Request $request)
-{
-    $request->validate([
-        'title' => 'required',
-        'message' => 'required',
-        'users' => 'required|array'
-    ]);
+    /**
+     * Send message with auto-translation
+     */
+    public function sendMessage(Request $request)
+    {
+        $request->validate([
+            'title' => 'required',
+            'message' => 'required',
+            'users' => 'required|array'
+        ]);
 
-    if (in_array('all', $request->users)) {
-        $users = User::all();
-    } else {
-        $users = User::whereIn('id', $request->users)->get();
-    }
-
-    $originalTitle = $request->title;
-    $originalMessage = $request->message;
-    
-    $translationSuccess = true;
-    $failedTranslations = [];
-
-    foreach ($users as $user) {
-        $languageCode = $this->getLanguageCode($user->country ?? '');
-        
-        try {
-            $translatedTitle = $this->translateMessage($originalTitle, $languageCode);
-            $translatedMessage = $this->translateMessage($originalMessage, $languageCode);
-            
-            $user->notify(new AdminMessageNotification(
-                $translatedTitle,
-                $translatedMessage,
-                $originalTitle,
-                $originalMessage,
-                $languageCode,
-                $user->country
-            ));
-        } catch (\Exception $e) {
-            // If translation fails, send the original message
-            Log::warning('Translation failed for user ' . $user->id . ': ' . $e->getMessage());
-            $failedTranslations[] = $user->name;
-            
-            $user->notify(new AdminMessageNotification(
-                $originalTitle,
-                $originalMessage,
-                $originalTitle,
-                $originalMessage,
-                'en',
-                $user->country
-            ));
+        if (in_array('all', $request->users)) {
+            $users = User::all();
+        } else {
+            $users = User::whereIn('id', $request->users)->get();
         }
+
+        $originalTitle = $request->title;
+        $originalMessage = $request->message;
+
+        $translationSuccess = true;
+        $failedTranslations = [];
+
+        foreach ($users as $user) {
+            $languageCode = $this->getLanguageCode($user->country ?? '');
+
+            try {
+                $translatedTitle = $this->translateMessage($originalTitle, $languageCode);
+                $translatedMessage = $this->translateMessage($originalMessage, $languageCode);
+
+                $user->notify(new AdminMessageNotification(
+                    $translatedTitle,
+                    $translatedMessage,
+                    $originalTitle,
+                    $originalMessage,
+                    $languageCode,
+                    $user->country
+                ));
+            } catch (\Exception $e) {
+                // If translation fails, send the original message
+                Log::warning('Translation failed for user ' . $user->id . ': ' . $e->getMessage());
+                $failedTranslations[] = $user->name;
+
+                $user->notify(new AdminMessageNotification(
+                    $originalTitle,
+                    $originalMessage,
+                    $originalTitle,
+                    $originalMessage,
+                    'en',
+                    $user->country
+                ));
+            }
+        }
+
+        $message = 'Messages sent successfully!';
+        if (!empty($failedTranslations)) {
+            $message = 'Messages sent, but translation failed for: ' . implode(', ', $failedTranslations);
+        }
+
+        Log::info('Messages sent', [
+            'total_users' => $users->count(),
+            'failed_translations' => $failedTranslations
+        ]);
+
+        return back()->with('success', $message);
     }
-
-    $message = 'Messages sent successfully!';
-    if (!empty($failedTranslations)) {
-        $message = 'Messages sent, but translation failed for: ' . implode(', ', $failedTranslations);
-    }
-
-    Log::info('Messages sent', [
-        'total_users' => $users->count(),
-        'failed_translations' => $failedTranslations
-    ]);
-
-    return back()->with('success', $message);
-}
 }
