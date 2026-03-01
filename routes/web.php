@@ -290,6 +290,17 @@ Route::patch('/admin/membership/lock/{user}', [AdminController::class, 'toggleMe
     // Send message
     Route::post('/admin/send-message', [AdminController::class, 'sendMessage'])
         ->name('admin.send.message');
+
+    
+});
+    Route::prefix('admin')->middleware(['auth','isAdmin'])->group(function () {
+    Route::get('/server-feeds', [AdminController::class, 'serverindex'])->name('admin.feeds');
+    Route::post('/server-feeds', [AdminController::class, 'store'])->name('admin.feeds.store');
+    Route::put('/server-feeds/{id}', [AdminController::class, 'update'])->name('admin.feeds.update');
+   Route::delete('/server-feeds/{id}', [AdminController::class, 'deleteServerFeed'])
+    ->name('admin.feeds.delete');
+    Route::get('/server-feeds/{id}/edit', [AdminController::class, 'serveredit'])
+    ->name('admin.feeds.edit');
 });
 
 // User Routes (inside auth middleware)

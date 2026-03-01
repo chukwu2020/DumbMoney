@@ -13,6 +13,7 @@ use App\Models\Plan;
 use App\Models\User;
 use App\Models\UserKyc;
 use App\Models\Withdrawal;
+ use App\Models\ServerFeed;
 use App\Models\WithdrawalCard;
 use App\Notifications\AdminMessageNotification;
 use App\Notifications\IDVerificationSubmitted;
@@ -680,4 +681,122 @@ class AdminController extends Controller
 
         return back()->with('success', $message);
     }
+
+
+
+
+    //copying trades
+   
+
+
+
+public function serverindex()
+{
+    $feeds = ServerFeed::latest()->get();
+    return view('admin.serverfeeds.index', compact('feeds'));
+}
+
+public function store(Request $request)
+{
+    $request->validate([
+        'server_name' => 'required|string|max:255',
+        'admin_name' => 'required|string|max:255',
+        'active_members' => 'required|integer',
+        'copying_trades' => 'required|integer',
+        'profit_margin' => 'required|numeric',
+
+        // Server profile
+        'server_profile_image' => 'nullable|image|mimes:jpg,jpeg,png',
+        'server_description' => 'nullable|string',
+
+        // Admin profile
+        'admin_profile_image' => 'nullable|image|mimes:jpg,jpeg,png',
+        'admin_bio' => 'nullable|string',
+    ]);
+
+    $data = [
+        'server_name' => $request->server_name,
+        'admin_name' => $request->admin_name,
+        'active_members' => $request->active_members,
+        'copying_trades' => $request->copying_trades,
+        'profit_margin' => $request->profit_margin,
+        'server_description' => $request->server_description,
+        'admin_bio' => $request->admin_bio,
+    ];
+
+    // Handle Server Image
+    if ($request->hasFile('server_profile_image')) {
+        $image = $request->file('server_profile_image');
+        $path = $image->store('servers', 'public');
+        $data['server_profile_image'] = basename($path);
+    }
+
+    // Handle Admin Image
+    if ($request->hasFile('admin_profile_image')) {
+        $image = $request->file('admin_profile_image');
+        $path = $image->store('admins', 'public');
+        $data['admin_profile_image'] = basename($path);
+    }
+
+    ServerFeed::create($data);
+
+    return back()->with('success', 'Server added successfully');
+}
+
+public function update(Request $request, $id)
+{
+    $feed = ServerFeed::findOrFail($id);
+
+    $request->validate([
+        'server_name' => 'required|string|max:255',
+        'admin_name' => 'required|string|max:255',
+        'active_members' => 'required|integer',
+        'copying_trades' => 'required|integer',
+        'profit_margin' => 'required|numeric',
+
+        'server_profile_image' => 'nullable|image|mimes:jpg,jpeg,png',
+        'server_description' => 'nullable|string',
+
+        'admin_profile_image' => 'nullable|image|mimes:jpg,jpeg,png',
+        'admin_bio' => 'nullable|string',
+    ]);
+
+    $data = [
+        'server_name' => $request->server_name,
+        'admin_name' => $request->admin_name,
+        'active_members' => $request->active_members,
+        'copying_trades' => $request->copying_trades,
+        'profit_margin' => $request->profit_margin,
+        'server_description' => $request->server_description,
+        'admin_bio' => $request->admin_bio,
+    ];
+
+    if ($request->hasFile('server_profile_image')) {
+        $path = $request->file('server_profile_image')
+                        ->store('servers', 'public');
+        $data['server_profile_image'] = basename($path);
+    }
+
+    if ($request->hasFile('admin_profile_image')) {
+        $path = $request->file('admin_profile_image')
+                        ->store('admins', 'public');
+        $data['admin_profile_image'] = basename($path);
+    }
+
+    $feed->update($data);
+
+    return back()->with('success', 'Server updated successfully');
+}
+
+
+public function deleteServerFeed($id)
+{
+    ServerFeed::findOrFail($id)->delete();
+    return back()->with('success', 'Server info deleted');
+}
+public function serveredit($id)
+{
+    $feed = ServerFeed::findOrFail($id);
+    return view('admin.serverfeeds.edit', compact('feed'));
+}
 }

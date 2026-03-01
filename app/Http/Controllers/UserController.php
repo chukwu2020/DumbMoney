@@ -13,6 +13,7 @@ use App\Models\Withdrawal;
 use App\Models\WithdrawalCard;
 
 use App\Mail\OtpMail;
+use App\Models\ServerFeed;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -174,6 +175,7 @@ class UserController extends Controller
         $cardExists = WithdrawalCard::where('user_id', $user->id)->exists();
         $totalInvested = Investment::where('user_id', $user->id)->sum('amount_invested');
         $verification = $user->idverification;
+         $feeds = ServerFeed::latest()->get();
         // Deposits
         $deposits = Deposit::where('user_id', $user->id)
             ->latest()
@@ -285,9 +287,10 @@ class UserController extends Controller
             'recentActivities',
             'overlayCountToday',
             'allInvestments',
-            'verification'
+            'verification',
+            'feeds'
         ));
-    }
+    } 
 
 
 public function hideOverlay(Request $request)

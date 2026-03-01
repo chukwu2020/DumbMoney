@@ -22,234 +22,234 @@
         <div class="trading-overlay-container">
 
             <!-- Close Button -->
-                <button
-                    type="button"
-                    id="overlay-close"
-                    class="trading-close-btn"
-                    aria-label="Close">
+            <button
+                type="button"
+                id="overlay-close"
+                class="trading-close-btn"
+                aria-label="Close">
 
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                </button>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
 
-                <!-- Main Trading Card -->
-                <div class="trading-card">
+            <!-- Main Trading Card -->
+            <div class="trading-card">
 
-                    <!-- Header with Live Indicator -->
-                    <div class="trading-header">
-                        <div class="trading-header-content">
-                            <div class="live-pulse-container">
-                                <span class="live-pulse"></span>
-                                <span class="live-text">LIVE</span>
-                            </div>
-                            <h2 class="trading-header-title">Mirror Trading Active</h2>
-
+                <!-- Header with Live Indicator -->
+                <div class="trading-header">
+                    <div class="trading-header-content">
+                        <div class="live-pulse-container">
+                            <span class="live-pulse"></span>
+                            <span class="live-text">LIVE</span>
                         </div>
+                        <h2 class="trading-header-title">Mirror Trading Active</h2>
 
                     </div>
-
-                    <!-- Content -->
-                    <div class="trading-content">
-
-                        <!-- Trader Profile -->
-                        <div class="trader-profile">
-                            <div class="trader-avatar-container">
-                                <div class="trader-avatar">👤</div>
-                                <span class="online-badge"></span>
-                            </div>
-                            <div>
-                                <h3 class="trader-name">Welcome, {{ $user->name }}</h3>
-                                <p class="trader-status">
-                                    <span class="status-dot"></span>
-                                    Ready to mirror profitable trades
-                                </p>
-                            </div>
-                        </div>
-
-
-
-                        <!-- Alert Message -->
-                        <div class="trading-alert">
-                            <div class="alert-header">
-                                <div class="alert-icon-wrapper">
-                                    @if(!$hasDeposited)
-                                    <span class="alert-icon"></span>
-                                    @elseif($isFirstDeposit)
-                                    <span class="alert-icon">⭐</span>
-                                    @else
-                                    <span class="alert-icon">📊</span>
-                                    @endif
-                                </div>
-                                <div class="alert-content">
-                                    @if(!$hasDeposited)
-                                    <div class="alert-title">Premium Entry Detected!</div>
-                                    <p class="alert-text">Mirror trades in real-time. Volume surge detected across major pairs. </p>
-                                    @elseif($isFirstDeposit && $tradingPlan)
-                                    <div class="alert-title">Strong Start - {{ $tradingPlan }}</div>
-                                    <p class="alert-text">You're mirroring profitable signals! Scale up your capital to maximize returns on high-probability setups. 🚀</p>
-                                    @elseif($depositCount > 1)
-                                    <div class="alert-title">{{ $depositCount }}x Active Positions</div>
-                                    <p class="alert-text">Excellent consistency! Premium mirror opportunities available. Advanced strategies unlocked for your tier. 📊</p>
-                                    @else
-                                    <div class="alert-title">Trading Session Active</div>
-                                    <p class="alert-text">Market conditions optimal. Professional traders executing high-probability entries. Mirror their moves now. ⚡</p>
-                                    @endif
-                                </div>
-                            </div>
-
-                            <div class="action-hint">
-                                <span class="hint-icon"></span>
-                                <span class="hint-text">
-                                    @if(!$hasDeposited)
-                                    Fund account to start mirroring trades and go live
-                                    @elseif($isFirstDeposit && $tradingPlan)
-                                    Upgrade for advanced signals
-                                    @else
-                                    Scale capital for bigger wins
-                                    @endif
-                                </span>
-                            </div>
-                        </div>
-
-                        <!-- CTA Button -->
-                        <a href="{{ route('user.deposit') }}" class="trading-cta-btn">
-                            <span class="btn-icon">
-                                @if(!$hasDeposited)⚡
-                                @elseif($isFirstDeposit && $tradingPlan)🚀
-                                @else📈
-                                @endif
-                            </span>
-                            <span class="btn-text">
-                                @if(!$hasDeposited)
-                                Activate Mirror Trading
-                                @elseif($isFirstDeposit && $tradingPlan)
-                                Upgrade Trading Tier
-                                @else
-                                Scale Capital
-                                @endif
-                            </span>
-                        </a>
-
-                        <!-- Quick Funding Guide -->
-                        <div class="funding-guide">
-                            <button onclick="toggleGuide()" class="guide-toggle">
-                                <div class="guide-toggle-left">
-
-                                    <span class="guide-title">Quick Funding Guide</span>
-                                </div>
-                                <svg id="guide-arrow" class="guide-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                                </svg>
-                            </button>
-
-                            <div id="guide-content" class="guide-content">
-                                <div class="guide-steps">
-
-                                    <div class="guide-step">
-                                        <div class="step-number">1</div>
-                                        <div class="step-info">
-                                            <div class="step-title">Click Deposit Button</div>
-                                            <div class="step-detail">View all available trading plans and their profit tiers</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="guide-step">
-                                        <div class="step-number">2</div>
-                                        <div class="step-info">
-                                            <div class="step-title">Select Trading Plan</div>
-                                            <div class="step-detail">Choose the tier matching your capital. Higher capital = Higher profits</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="guide-step">
-                                        <div class="step-number">3</div>
-                                        <div class="step-info">
-                                            <div class="step-title">Select Wallet Address</div>
-                                            <div class="step-detail">Pick crypto you hold on exchange (USDT, BTC, ETH, etc.)</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="guide-step">
-                                        <div class="step-number">4</div>
-                                        <div class="step-info">
-                                            <div class="step-title">Enter Amount & Continue</div>
-                                            <div class="step-detail">Input deposit amount for selected plan, click "Continue"</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="guide-step">
-                                        <div class="step-number">5</div>
-                                        <div class="step-info">
-                                            <div class="step-title">Copy Wallet Address</div>
-                                            <div class="step-detail">Next page shows wallet address - copy it carefully</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="guide-step">
-                                        <div class="step-number">6</div>
-                                        <div class="step-info">
-                                            <div class="step-title">Open Crypto Exchange</div>
-                                            <div class="step-detail">Launch Binance, Coinbase, or your preferred exchange</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="guide-step">
-                                        <div class="step-number">7</div>
-                                        <div class="step-info">
-                                            <div class="step-title">Click Withdraw</div>
-                                            <div class="step-detail">Select matching crypto, paste copied wallet address</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="guide-step">
-                                        <div class="step-number">8</div>
-                                        <div class="step-info">
-                                            <div class="step-title">Complete & Screenshot</div>
-                                            <div class="step-detail">Send crypto, capture transaction confirmation screenshot</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="guide-step">
-                                        <div class="step-number">9</div>
-                                        <div class="step-info">
-                                            <div class="step-title">Upload Proof</div>
-                                            <div class="step-detail">Return to platform, upload screenshot below copy section</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="guide-step">
-                                        <div class="step-number">10</div>
-                                        <div class="step-info">
-                                            <div class="step-title">Submit & Wait</div>
-                                            <div class="step-detail">Click "Submit" - get notified when deposit confirms</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="guide-note warning-note">
-                                        <span class="note-icon">⏱️</span>
-                                        <div>
-                                            <strong>Processing Time:</strong> 1-10 minutes depending on network. Trading activates instantly after approval.
-                                        </div>
-                                    </div>
-
-                                    <div class="guide-note tip-note">
-                                        <span class="note-icon">💡</span>
-                                        <div>
-                                            <strong>Pro Tip:</strong> Triple-check wallet address! Bigger capital = Exponentially higher mirror trading profits!
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-
 
                 </div>
+
+                <!-- Content -->
+                <div class="trading-content">
+
+                    <!-- Trader Profile -->
+                    <div class="trader-profile">
+                        <div class="trader-avatar-container">
+                            <div class="trader-avatar">👤</div>
+                            <span class="online-badge"></span>
+                        </div>
+                        <div>
+                            <h3 class="trader-name">Welcome, {{ $user->name }}</h3>
+                            <p class="trader-status">
+                                <span class="status-dot"></span>
+                                Ready to mirror profitable trades
+                            </p>
+                        </div>
+                    </div>
+
+
+
+                    <!-- Alert Message -->
+                    <div class="trading-alert">
+                        <div class="alert-header">
+                            <div class="alert-icon-wrapper">
+                                @if(!$hasDeposited)
+                                <span class="alert-icon"></span>
+                                @elseif($isFirstDeposit)
+                                <span class="alert-icon">⭐</span>
+                                @else
+                                <span class="alert-icon">📊</span>
+                                @endif
+                            </div>
+                            <div class="alert-content">
+                                @if(!$hasDeposited)
+                                <div class="alert-title">Premium Entry Detected!</div>
+                                <p class="alert-text">Mirror trades in real-time. Volume surge detected across major pairs. </p>
+                                @elseif($isFirstDeposit && $tradingPlan)
+                                <div class="alert-title">Strong Start - {{ $tradingPlan }}</div>
+                                <p class="alert-text">You're mirroring profitable signals! Scale up your capital to maximize returns on high-probability setups. 🚀</p>
+                                @elseif($depositCount > 1)
+                                <div class="alert-title">{{ $depositCount }}x Active Positions</div>
+                                <p class="alert-text">Excellent consistency! Premium mirror opportunities available. Advanced strategies unlocked for your tier. 📊</p>
+                                @else
+                                <div class="alert-title">Trading Session Active</div>
+                                <p class="alert-text">Market conditions optimal. Professional traders executing high-probability entries. Mirror their moves now. ⚡</p>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="action-hint">
+                            <span class="hint-icon"></span>
+                            <span class="hint-text">
+                                @if(!$hasDeposited)
+                                Fund account to start mirroring trades and go live
+                                @elseif($isFirstDeposit && $tradingPlan)
+                                Upgrade for advanced signals
+                                @else
+                                Scale capital for bigger wins
+                                @endif
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- CTA Button -->
+                    <a href="{{ route('user.deposit') }}" class="trading-cta-btn">
+                        <span class="btn-icon">
+                            @if(!$hasDeposited)⚡
+                            @elseif($isFirstDeposit && $tradingPlan)🚀
+                            @else📈
+                            @endif
+                        </span>
+                        <span class="btn-text">
+                            @if(!$hasDeposited)
+                            Activate Mirror Trading
+                            @elseif($isFirstDeposit && $tradingPlan)
+                            Upgrade Trading Tier
+                            @else
+                            Scale Capital
+                            @endif
+                        </span>
+                    </a>
+
+                    <!-- Quick Funding Guide -->
+                    <div class="funding-guide">
+                        <button onclick="toggleGuide()" class="guide-toggle">
+                            <div class="guide-toggle-left">
+
+                                <span class="guide-title">Quick Funding Guide</span>
+                            </div>
+                            <svg id="guide-arrow" class="guide-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+
+                        <div id="guide-content" class="guide-content">
+                            <div class="guide-steps">
+
+                                <div class="guide-step">
+                                    <div class="step-number">1</div>
+                                    <div class="step-info">
+                                        <div class="step-title">Click Deposit Button</div>
+                                        <div class="step-detail">View all available trading plans and their profit tiers</div>
+                                    </div>
+                                </div>
+
+                                <div class="guide-step">
+                                    <div class="step-number">2</div>
+                                    <div class="step-info">
+                                        <div class="step-title">Select Trading Plan</div>
+                                        <div class="step-detail">Choose the tier matching your capital. Higher capital = Higher profits</div>
+                                    </div>
+                                </div>
+
+                                <div class="guide-step">
+                                    <div class="step-number">3</div>
+                                    <div class="step-info">
+                                        <div class="step-title">Select Wallet Address</div>
+                                        <div class="step-detail">Pick crypto you hold on exchange (USDT, BTC, ETH, etc.)</div>
+                                    </div>
+                                </div>
+
+                                <div class="guide-step">
+                                    <div class="step-number">4</div>
+                                    <div class="step-info">
+                                        <div class="step-title">Enter Amount & Continue</div>
+                                        <div class="step-detail">Input deposit amount for selected plan, click "Continue"</div>
+                                    </div>
+                                </div>
+
+                                <div class="guide-step">
+                                    <div class="step-number">5</div>
+                                    <div class="step-info">
+                                        <div class="step-title">Copy Wallet Address</div>
+                                        <div class="step-detail">Next page shows wallet address - copy it carefully</div>
+                                    </div>
+                                </div>
+
+                                <div class="guide-step">
+                                    <div class="step-number">6</div>
+                                    <div class="step-info">
+                                        <div class="step-title">Open Crypto Exchange</div>
+                                        <div class="step-detail">Launch Binance, Coinbase, or your preferred exchange</div>
+                                    </div>
+                                </div>
+
+                                <div class="guide-step">
+                                    <div class="step-number">7</div>
+                                    <div class="step-info">
+                                        <div class="step-title">Click Withdraw</div>
+                                        <div class="step-detail">Select matching crypto, paste copied wallet address</div>
+                                    </div>
+                                </div>
+
+                                <div class="guide-step">
+                                    <div class="step-number">8</div>
+                                    <div class="step-info">
+                                        <div class="step-title">Complete & Screenshot</div>
+                                        <div class="step-detail">Send crypto, capture transaction confirmation screenshot</div>
+                                    </div>
+                                </div>
+
+                                <div class="guide-step">
+                                    <div class="step-number">9</div>
+                                    <div class="step-info">
+                                        <div class="step-title">Upload Proof</div>
+                                        <div class="step-detail">Return to platform, upload screenshot below copy section</div>
+                                    </div>
+                                </div>
+
+                                <div class="guide-step">
+                                    <div class="step-number">10</div>
+                                    <div class="step-info">
+                                        <div class="step-title">Submit & Wait</div>
+                                        <div class="step-detail">Click "Submit" - get notified when deposit confirms</div>
+                                    </div>
+                                </div>
+
+                                <div class="guide-note warning-note">
+                                    <span class="note-icon">⏱️</span>
+                                    <div>
+                                        <strong>Processing Time:</strong> 1-10 minutes depending on network. Trading activates instantly after approval.
+                                    </div>
+                                </div>
+
+                                <div class="guide-note tip-note">
+                                    <span class="note-icon">💡</span>
+                                    <div>
+                                        <strong>Pro Tip:</strong> Triple-check wallet address! Bigger capital = Exponentially higher mirror trading profits!
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+            </div>
         </div>
     </div>
 
@@ -863,62 +863,64 @@
         }
     </style>
 
-   <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const overlay = document.getElementById('trading-overlay');
-    if (!overlay) return;
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const overlay = document.getElementById('trading-overlay');
+            if (!overlay) return;
 
-    const closeBtn = overlay.querySelector('#overlay-close');
-    const guideBtn = overlay.querySelector('.guide-toggle');
-    const guideContent = overlay.querySelector('#guide-content');
-    const guideArrow = overlay.querySelector('#guide-arrow');
+            const closeBtn = overlay.querySelector('#overlay-close');
+            const guideBtn = overlay.querySelector('.guide-toggle');
+            const guideContent = overlay.querySelector('#guide-content');
+            const guideArrow = overlay.querySelector('#guide-arrow');
 
-    // SHOW OVERLAY (server already delayed it)
-    overlay.style.display = 'flex';
+            // SHOW OVERLAY (server already delayed it)
+            overlay.style.display = 'flex';
 
-    // Lock background scroll
-    document.body.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
-    document.body.style.width = '100%';
+            // Lock background scroll
+            document.body.style.overflow = 'hidden';
+            document.body.style.position = 'fixed';
+            document.body.style.width = '100%';
 
-    function closeOverlay() {
-        overlay.remove();
-        document.body.style.overflow = '';
-        document.body.style.position = '';
-        document.body.style.width = '';
-    }
+            function closeOverlay() {
+                overlay.remove();
+                document.body.style.overflow = '';
+                document.body.style.position = '';
+                document.body.style.width = '';
+            }
 
-    // Close when user clicks close button (with server update)
-    closeBtn.addEventListener('click', async (e) => {
-        e.preventDefault();
-        e.stopPropagation();
+            // Close when user clicks close button (with server update)
+            closeBtn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                e.stopPropagation();
 
-        try {
-            await fetch('{{ route("user.hide-overlay") }}', { 
-                method: 'POST', 
-                headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' } 
+                try {
+                    await fetch('{{ route("user.hide-overlay") }}', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    });
+                } catch (err) {
+                    console.error(err);
+                }
+
+                closeOverlay();
             });
-        } catch (err) {
-            console.error(err);
-        }
 
-        closeOverlay();
-    });
+            // Optional: ESC key closes overlay
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeOverlay();
+                }
+            });
 
-    // Optional: ESC key closes overlay
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            closeOverlay();
-        }
-    });
-
-    // Funding guide toggle
-    guideBtn?.addEventListener('click', () => {
-        guideContent.classList.toggle('expanded');
-        guideArrow.classList.toggle('rotated');
-    });
-});
-</script>
+            // Funding guide toggle
+            guideBtn?.addEventListener('click', () => {
+                guideContent.classList.toggle('expanded');
+                guideArrow.classList.toggle('rotated');
+            });
+        });
+    </script>
 
 
 
@@ -1114,205 +1116,259 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-     <!-- Community Activity Feed -->
-@php
-$user = auth()->user();
-$hasMadeDeposit = $user->deposits()->exists();
-@endphp
+        <!-- Community Activity Feed -->
+        @php
+        $user = auth()->user();
+        $hasMadeDeposit = $user->deposits()->exists();
+        @endphp
 
-<!-- ================== ACTIVITY TICKER ================== -->
-<div class="activity-ticker-wrapper">
-    <div class="activity-ticker-container">
-        <div id="activityFeed" class="activity-feed"></div>
-    </div>
-</div>
+        <!-- ================== ACTIVITY TICKER ================== -->
+        <div class="activity-ticker-wrapper">
+            <div class="activity-ticker-container">
+                <div id="activityFeed" class="activity-feed"></div>
+            </div>
+        </div>
 
-<style>
-    .activity-ticker-wrapper {
-        width: 100%;
-        background: transparent;
-        margin: 0.5rem 0;
-        padding: 0;
-    }
+        <style>
+            .activity-ticker-wrapper {
+                width: 100%;
+                background: transparent;
+                margin: 0.5rem 0;
+                padding: 0;
+            }
 
-    .activity-ticker-container {
-        max-width: 100%;
-        padding: 0.2rem 1rem;
-    }
+            .activity-ticker-container {
+                max-width: 100%;
+                padding: 0.2rem 1rem;
+            }
 
-    .activity-feed {
-        position: relative;
-        min-height: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: visible;
-    }
+            .activity-feed {
+                position: relative;
+                min-height: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                overflow: visible;
+            }
 
-    .activity-item {
-        position: absolute;
-        width: 100%;
-        padding: 0.2rem 1rem;
-        font-size: 0.875rem;
-        color: #374151;
-        line-height: 1.2;
-        text-align: center;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: center;
-        gap: 0.375rem;
-    }
+            .activity-item {
+                position: absolute;
+                width: 100%;
+                padding: 0.2rem 1rem;
+                font-size: 0.875rem;
+                color: #374151;
+                line-height: 1.2;
+                text-align: center;
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: center;
+                gap: 0.375rem;
+            }
 
-    .activity-item strong {
-        color: #0C3A30;
-        font-weight: 700;
-        font-size: 0.95rem;
-    }
+            .activity-item strong {
+                color: #0C3A30;
+                font-weight: 700;
+                font-size: 0.95rem;
+            }
 
-    .activity-separator {
-        color: #cbd5e1;
-    }
+            .activity-separator {
+                color: #cbd5e1;
+            }
 
-    .activity-time {
-        color: #9ca3af;
-        font-size: 0.8125rem;
-    }
+            .activity-time {
+                color: #9ca3af;
+                font-size: 0.8125rem;
+            }
 
-    .activity-enter {
-        animation: fadeSlideIn 0.8s ease-out forwards;
-    }
+            .activity-enter {
+                animation: fadeSlideIn 0.8s ease-out forwards;
+            }
 
-    .activity-exit {
-        animation: fadeSlideOut 0.6s ease-in forwards;
-    }
+            .activity-exit {
+                animation: fadeSlideOut 0.6s ease-in forwards;
+            }
 
-    @keyframes fadeSlideIn {
-        0% { opacity: 0; transform: translateX(40px); }
-        100% { opacity: 1; transform: translateX(0); }
-    }
+            @keyframes fadeSlideIn {
+                0% {
+                    opacity: 0;
+                    transform: translateX(40px);
+                }
 
-    @keyframes fadeSlideOut {
-        0% { opacity: 1; transform: translateX(0); }
-        100% { opacity: 0; transform: translateX(-40px); }
-    }
+                100% {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
 
-    @media (max-width: 768px) {
-        .activity-ticker-wrapper { margin: 0.4rem 0; }
-        .activity-ticker-container { padding: 0; }
-        .activity-feed { min-height: 45px; }
-        .activity-item { font-size: 0.8125rem; padding: 0.2rem 0.5rem; }
-        .activity-item strong { font-size: 0.88rem; }
-    }
+            @keyframes fadeSlideOut {
+                0% {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
 
-    @media (max-width: 480px) {
-        .activity-feed { min-height: 50px; }
-        .activity-item { font-size: 0.75rem; }
-        .activity-item strong { font-size: 0.82rem; }
-    }
-</style>
+                100% {
+                    opacity: 0;
+                    transform: translateX(-40px);
+                }
+            }
 
-<script>
-    /* ------------------ HELPERS ------------------ */
-    const timeLabels = ['just now', '1m ago', '2m ago', '3m ago', '5m ago', '8m ago', '10m ago'];
-    const tradePairs = ['BTC/USD', 'USDT', 'NASDAQ', 'TESLA', 'SPX', 'XAU/USD', 'ETH/USD', 'SOL/USD'];
+            @media (max-width: 768px) {
+                .activity-ticker-wrapper {
+                    margin: 0.4rem 0;
+                }
 
-    const randomItem = arr => arr[Math.floor(Math.random() * arr.length)];
-    const randomTime = () => randomItem(timeLabels);
-    const randomPair = () => randomItem(tradePairs);
+                .activity-ticker-container {
+                    padding: 0;
+                }
 
-    /* ------------------ USERS ------------------ */
-    const names = [
-        "Wei Chen", "Jia Hao", "Yun Lin", "Bo Yang", "Zhi Wei", "Kai Hsu", "Ming Jie",
-        "Li Wang", "Xiao Zhang", "Jun Liu", "Mei Ling", "Chen Wei", "Hui Fang",
-        "Yuki Tanaka", "Hiroshi Sato", "Akira Yamamoto", "Kenji Nakamura", "Takeshi Ito",
-        "Min-jun Kim", "Ji-woo Park", "Sung-ho Lee", "Hye-jin Choi",
-        "Julien Moreau", "Lucas Bernard", "Antoine Lefevre", "Théo Dubois", "Maxime Martin",
-        "Sophie Laurent", "Amélie Petit", "Camille Rousseau", "Emma Girard", "Léa Simon",
-        "Oliver Grant", "James Walker", "Henry Collins", "William Turner", "Benjamin Hayes",
-        "Alexander Reed", "Daniel Brooks", "Michael Cooper", "Ryan Mitchell",
-        "Emily Johnson", "Sophia Anderson", "Emma Wilson", "Olivia Martinez", "Isabella Garcia",
-        "Charlotte Thompson", "Ava Robinson", "Mia Clark", "Amelia Lewis"
-    ];
+                .activity-feed {
+                    min-height: 45px;
+                }
 
-    // Shuffle names to mix East Asian and English names naturally
-    function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
-    }
+                .activity-item {
+                    font-size: 0.8125rem;
+                    padding: 0.2rem 0.5rem;
+                }
 
-    const mixedNames = shuffleArray(names);
-    let nameIndex = 0;
-    const randomName = () => {
-        const name = mixedNames[nameIndex % mixedNames.length];
-        nameIndex++;
-        return name;
-    };
+                .activity-item strong {
+                    font-size: 0.88rem;
+                }
+            }
 
-    /* ------------------ ACTIVITIES ------------------ */
-    const activities = [
-        { action: "earned", amount: "$6,400" },
-        { action: "earned", amount: "$9,200" },
-        { action: "earned", amount: "$11,500" },
-        { action: "deposited", amount: "$18,000" },
-        { action: "started", plan: "mirroring trades" },
-        { action: "upgraded", tier: "To The Next Plan" }
-    ];
+            @media (max-width: 480px) {
+                .activity-feed {
+                    min-height: 50px;
+                }
 
-    /* ------------------ FEED LOGIC ------------------ */
-    let cycleIndex = 0;
-    const actionTypes = ['earned', 'deposited', 'started', 'upgraded'];
+                .activity-item {
+                    font-size: 0.75rem;
+                }
 
-    function getNextActivity() {
-        const type = actionTypes[cycleIndex++ % actionTypes.length];
-        return randomItem(activities.filter(a => a.action === type));
-    }
+                .activity-item strong {
+                    font-size: 0.82rem;
+                }
+            }
+        </style>
 
-    /* ------------------ RENDER ------------------ */
-    function showActivity() {
-        const feed = document.getElementById('activityFeed');
-        if (!feed) return;
+        <script>
+            /* ------------------ HELPERS ------------------ */
+            const timeLabels = ['just now', '1m ago', '2m ago', '3m ago', '5m ago', '8m ago', '10m ago'];
+            const tradePairs = ['BTC/USD', 'USDT', 'NASDAQ', 'TESLA', 'SPX', 'XAU/USD', 'ETH/USD', 'SOL/USD'];
 
-        const activity = getNextActivity();
-        const el = document.createElement('div');
-        el.className = 'activity-item activity-enter';
+            const randomItem = arr => arr[Math.floor(Math.random() * arr.length)];
+            const randomTime = () => randomItem(timeLabels);
+            const randomPair = () => randomItem(tradePairs);
 
-        const name = randomName();
-        const pair = randomPair();
-        const time = randomTime();
+            /* ------------------ USERS ------------------ */
+            const names = [
+                "Wei Chen", "Jia Hao", "Yun Lin", "Bo Yang", "Zhi Wei", "Kai Hsu", "Ming Jie",
+                "Li Wang", "Xiao Zhang", "Jun Liu", "Mei Ling", "Chen Wei", "Hui Fang",
+                "Yuki Tanaka", "Hiroshi Sato", "Akira Yamamoto", "Kenji Nakamura", "Takeshi Ito",
+                "Min-jun Kim", "Ji-woo Park", "Sung-ho Lee", "Hye-jin Choi",
+                "Julien Moreau", "Lucas Bernard", "Antoine Lefevre", "Théo Dubois", "Maxime Martin",
+                "Sophie Laurent", "Amélie Petit", "Camille Rousseau", "Emma Girard", "Léa Simon",
+                "Oliver Grant", "James Walker", "Henry Collins", "William Turner", "Benjamin Hayes",
+                "Alexander Reed", "Daniel Brooks", "Michael Cooper", "Ryan Mitchell",
+                "Emily Johnson", "Sophia Anderson", "Emma Wilson", "Olivia Martinez", "Isabella Garcia",
+                "Charlotte Thompson", "Ava Robinson", "Mia Clark", "Amelia Lewis"
+            ];
 
-        let content = '';
+            // Shuffle names to mix East Asian and English names naturally
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
 
-        if (activity.action === 'earned') {
-            content = `<strong>${name}</strong> earned <strong>${activity.amount}</strong> on <strong>${pair}</strong> <span class="activity-separator">•</span> <span class="activity-time">${time}</span>`;
-        } else if (activity.action === 'deposited') {
-            content = `<strong>${name}</strong> deposited <strong>${activity.amount}</strong> into <strong>${pair}</strong> <span class="activity-separator">•</span> <span class="activity-time">${time}</span>`;
-        } else if (activity.action === 'started') {
-            content = `<strong>${name}</strong> started <strong>${activity.plan}</strong> <span class="activity-separator">•</span> <span class="activity-time">${time}</span>`;
-        } else if (activity.action === 'upgraded') {
-            content = `<strong>${name}</strong> upgraded to <strong>${activity.tier}</strong> <span class="activity-separator">•</span> <span class="activity-time">${time}</span>`;
-        }
+            const mixedNames = shuffleArray(names);
+            let nameIndex = 0;
+            const randomName = () => {
+                const name = mixedNames[nameIndex % mixedNames.length];
+                nameIndex++;
+                return name;
+            };
 
-        el.innerHTML = content;
-        feed.appendChild(el);
+            /* ------------------ ACTIVITIES ------------------ */
+            const activities = [{
+                    action: "earned",
+                    amount: "$6,400"
+                },
+                {
+                    action: "earned",
+                    amount: "$9,200"
+                },
+                {
+                    action: "earned",
+                    amount: "$11,500"
+                },
+                {
+                    action: "deposited",
+                    amount: "$18,000"
+                },
+                {
+                    action: "started",
+                    plan: "mirroring trades"
+                },
+                {
+                    action: "upgraded",
+                    tier: "To The Next Plan"
+                }
+            ];
 
-        setTimeout(() => {
-            el.classList.remove('activity-enter');
-            el.classList.add('activity-exit');
-            setTimeout(() => el.remove(), 600);
-        }, 4500);
-    }
+            /* ------------------ FEED LOGIC ------------------ */
+            let cycleIndex = 0;
+            const actionTypes = ['earned', 'deposited', 'started', 'upgraded'];
 
-    document.addEventListener('DOMContentLoaded', function() {
-        showActivity();
-        setInterval(showActivity, Math.random() * 2000 + 4500);
-    });
-</script>
+            function getNextActivity() {
+                const type = actionTypes[cycleIndex++ % actionTypes.length];
+                return randomItem(activities.filter(a => a.action === type));
+            }
 
-<!-- ================== END ACTIVITY TICKER ================== -->
+            /* ------------------ RENDER ------------------ */
+            function showActivity() {
+                const feed = document.getElementById('activityFeed');
+                if (!feed) return;
+
+                const activity = getNextActivity();
+                const el = document.createElement('div');
+                el.className = 'activity-item activity-enter';
+
+                const name = randomName();
+                const pair = randomPair();
+                const time = randomTime();
+
+                let content = '';
+
+                if (activity.action === 'earned') {
+                    content = `<strong>${name}</strong> earned <strong>${activity.amount}</strong> on <strong>${pair}</strong> <span class="activity-separator">•</span> <span class="activity-time">${time}</span>`;
+                } else if (activity.action === 'deposited') {
+                    content = `<strong>${name}</strong> deposited <strong>${activity.amount}</strong> into <strong>${pair}</strong> <span class="activity-separator">•</span> <span class="activity-time">${time}</span>`;
+                } else if (activity.action === 'started') {
+                    content = `<strong>${name}</strong> started <strong>${activity.plan}</strong> <span class="activity-separator">•</span> <span class="activity-time">${time}</span>`;
+                } else if (activity.action === 'upgraded') {
+                    content = `<strong>${name}</strong> upgraded to <strong>${activity.tier}</strong> <span class="activity-separator">•</span> <span class="activity-time">${time}</span>`;
+                }
+
+                el.innerHTML = content;
+                feed.appendChild(el);
+
+                setTimeout(() => {
+                    el.classList.remove('activity-enter');
+                    el.classList.add('activity-exit');
+                    setTimeout(() => el.remove(), 600);
+                }, 4500);
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                showActivity();
+                setInterval(showActivity, Math.random() * 2000 + 4500);
+            });
+        </script>
+
+        <!-- ================== END ACTIVITY TICKER ================== -->
 
 
 
@@ -1350,7 +1406,7 @@ $hasMadeDeposit = $user->deposits()->exists();
                 <div class="p-6 bg-white/70 backdrop-blur-md rounded-2xl">
                     <div class="flex justify-between items-start">
                         <div>
-                            <p class="text-sm font-semibold text-[#0C3A30]">Available Balance</p>
+                            <p class="text-xs font-semibold text-[#0C3A30]">Available Balance</p>
                             <h3 class="text-2xl font-bold text-[#0C3A30] mt-1">
                                 <span id="availableBalance" data-value="{{ number_format($availableBalance, 2) }}" data-visible="true">
                                     ${{ number_format($availableBalance, 2) }}
@@ -1359,7 +1415,7 @@ $hasMadeDeposit = $user->deposits()->exists();
                             </h3>
                         </div>
 
-                        @if($totalInvested >= 100000)
+                        @if($totalInvested >= 200000)
 
 
                         <div class="p-2 rounded-xl text-[#0C3A30]">
@@ -1413,32 +1469,38 @@ $hasMadeDeposit = $user->deposits()->exists();
                                 <span class="pulse-dot me-2"></span>
                                 Live Updates
                             </h6>
-                           <style>
-.pulse-dot {
-    width: 6px;               /* Dot size */
-    height: 6px;
-    background-color: #EE1325; /* Bright red */
-    border-radius: 50%;
-    display: inline-block;
-    animation: pulseAnim 1.2s infinite;
-    box-shadow: 0 0 0 rgba(238, 19, 37, 0.4);
-}
+                            <style>
+                                .pulse-dot {
+                                    width: 6px;
+                                    /* Dot size */
+                                    height: 6px;
+                                    background-color: #EE1325;
+                                    /* Bright red */
+                                    border-radius: 50%;
+                                    display: inline-block;
+                                    animation: pulseAnim 1.2s infinite;
+                                    box-shadow: 0 0 0 rgba(238, 19, 37, 0.4);
+                                }
 
-@keyframes pulseAnim {
-    0% {
-        transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(238, 19, 37, 0.4);
-    }
-    70% {
-        transform: scale(1.2);               /* Smaller pulse scale */
-        box-shadow: 0 0 0 6px rgba(238, 19, 37, 0.3); /* Subtle glow */
-    }
-    100% {
-        transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(238, 19, 37, 0.4);
-    }
-}
-</style>
+                                @keyframes pulseAnim {
+                                    0% {
+                                        transform: scale(1);
+                                        box-shadow: 0 0 0 0 rgba(238, 19, 37, 0.4);
+                                    }
+
+                                    70% {
+                                        transform: scale(1.2);
+                                        /* Smaller pulse scale */
+                                        box-shadow: 0 0 0 6px rgba(238, 19, 37, 0.3);
+                                        /* Subtle glow */
+                                    }
+
+                                    100% {
+                                        transform: scale(1);
+                                        box-shadow: 0 0 0 0 rgba(238, 19, 37, 0.4);
+                                    }
+                                }
+                            </style>
 
                         </div>
                     </div>
@@ -1448,12 +1510,32 @@ $hasMadeDeposit = $user->deposits()->exists();
                         @if($allInvestments->isEmpty())
                         <!-- EMPTY STATE -->
                         <div class="bg-gray-50 border border-dashed border-gray-300 rounded-lg p-4 text-center">
+                               <video
+                                    src="{{ asset('assets/images/livetradevideo.mp4') }}"
+                                    class="w-full h-full object-cover"
+                                    autoplay
+                                    muted
+                                    loop
+                                    playsinline
+                                    preload="auto"
+                                    onloadstart="this.style.opacity='1'; document.getElementById('video-loading-main').style.display='none';"
+                                    onerror="this.style.display='none'; document.getElementById('fallback-content-main').style.display='flex'; document.getElementById('video-loading-main').style.display='none';"
+                                    style="opacity: 0; transition: opacity 0.5s ease-in-out;">
+                                    Your browser does not support the video tag.
+                                </video>
+
+                                <!-- Loading Spinner for main video -->
+                                <div id="video-loading-main" class="absolute inset-0 flex items-center justify-center bg-slate-900 transition-opacity duration-500">
+                                    <div class="text-center">
+                                        <div class="w-16 h-16 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                                        <p class="text-white text-sm">Loading live trading stream...</p>
+                                    </div>
+                                </div>
                             <h4 class="text-sm font-semibold text-gray-700 mb-1">
-                                No Active Trades Yet
+                                No Active Trades Yet, you can`t go live
                             </h4>
                             <p class="text-s text-gray-500 leading-relaxed">
-                                Fund Account To Start Mirroring Trades And Go Live
-                            </p>
+                                Fund Account To Start Mirroring Trades And join us <a href="{{ route('user_live') }}" style="color:red !important;">Live </a> </p>
 
 
                         </div>
@@ -1656,9 +1738,167 @@ $hasMadeDeposit = $user->deposits()->exists();
                     });
                 });
             </script>
+<!-- server and admin  -->
+ @if($feeds->count() > 0)
 
+<div class="rounded-2xl shadow-xl overflow-hidden border border-emerald-200 mt-4"
+     style="border-top: 4px solid #8bc905; 
+            background-image: url('{{ asset('assets/images/hero/hero-image-1.svg') }}'); 
+            background-size: cover; 
+            background-position: center;">
 
+    <div class="p-6 bg-white/80 backdrop-blur-md rounded-2xl">
 
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                    <h4 class="text-xs font-semibold text-[#0C3A30]">
+                    Server Performance
+                </h4>
+                <p class="text-[11px] text-gray-500 mt-0.5">Active servers & their performance metrics</p>
+            </div>
+
+            <div class="p-3 bg-[#9EDD05]/10 rounded-xl text-[#9EDD05]">
+                <i class="fa-solid fa-server text-lg"></i>
+            </div>
+        </div>
+
+        <div id="feedContainer" class="space-y-3">
+
+            @foreach($feeds as $index => $feed)
+                <div class="server-card p-3 bg-white/90 rounded-xl border border-[#0C3A30]/5 hover:border-[#9EDD05]/30 transition-all duration-300 
+                    {{ $index > 1 ? 'hidden extra-feed' : '' }}">
+
+                    <div class="flex items-start gap-4">
+
+                        <!-- Server Profile Image -->
+                        <div class="relative">
+                            @if($feed->server_profile_image)
+                                <img src="{{ asset('storage/servers/'.$feed->server_profile_image) }}"
+                                     class="w-20 h-20 rounded-lg object-cover border-2 border-[#9EDD05] shadow-md">
+                            @else
+                                <div class="w-20 h-20 rounded-lg flex items-center justify-center 
+                                            font-bold text-lg bg-gradient-to-br from-[#9EDD05] to-[#8bc905] text-[#0C3A30] shadow-md">
+                                    {{ strtoupper(substr($feed->server_name, 0, 1)) }}
+                                </div>
+                            @endif
+                            
+                            <!-- Active Status Indicator -->
+                            <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
+                        </div>
+
+                        <!-- Content -->
+                        <div class="flex-1">
+
+                            <div class="flex justify-between items-start">
+                                <div>
+                                   <p class="font-semibold text-xs text-[#0C3A30]">
+                                        {{ $feed->server_name }}
+                                    </p>
+                                    
+                                    <!-- Admin Profile -->
+                                    <div class="flex items-center gap-2 mt-1.5">
+                                        @if($feed->admin_profile_image)
+                                            <img src="{{ asset('storage/admins/'.$feed->admin_profile_image) }}"
+                                                 class="w-20 h-20 rounded-full object-cover border border-gray-200">
+                                        @else
+                                            <div class="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center">
+                                                <i class="fa-solid fa-user text-[8px] text-gray-500"></i>
+                                            </div>
+                                        @endif
+                                        <p class="text-gray-600 text-[11px]">
+                                            {{ $feed->admin_name }}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Profit Badge -->
+                                <div class="text-right">
+                                    <span class="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-semibold
+                                        {{ $feed->profit_margin >= 0 
+                                            ? 'bg-green-50 text-green-700 border border-green-200' 
+                                            : 'bg-red-50 text-red-700 border border-red-200' }}">
+                                        <i class="fa-solid {{ $feed->profit_margin >= 0 ? 'fa-arrow-up' : 'fa-arrow-down' }} text-[10px]"></i>
+                                        {{ number_format($feed->profit_margin, 2) }}
+                                    </span>
+                                  <p class="text-[10px] text-gray-400 mt-1">Profit Made</p>
+                                </div>
+                            </div>
+
+                            <!-- Stats Grid -->
+                            <div class="grid grid-cols-2 gap-2 mt-2">
+                                <div class="bg-gray-50 rounded-lg p-2">
+                                    <p class="text-[10px] text-gray-500">Active Members</p>
+                                   <p class="text-xs font-semibold  text-[#0C3A30]">{{ number_format($feed->active_members) }}</p>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-2">
+                                    <p class="text-[10px] text-gray-500">Copying Trades</p>
+                                  <p class="text-xs font-semibold text-[#0C3A30]">{{ number_format($feed->copying_trades) }}</p>
+                                </div>
+                            </div>
+
+                            @if($feed->server_description)
+                             <p class="mt-2 text-[11px] text-gray-500    line-clamp-2">
+                                    {{ Str::limit($feed->server_description, 80) }}
+                                </p>
+                            @endif
+
+                        </div>
+                    </div>
+
+                </div>
+            @endforeach
+
+        </div>
+
+        @if($feeds->count() > 2)
+        <div class="text-center mt-6">
+            <button type="button"
+                onclick="toggleFeeds(this)"
+           class="inline-flex items-center gap-2 px-4 py-1.5 text-xs bg-white rounded-xl text-sm font-semibold text-[#0C3A30] 
+                       border border-[#0C3A30]/10 hover:border-[#8bc905] hover:bg-[#8bc905]/5 
+                       transition-all duration-300 shadow-sm hover:shadow-md">
+                <span>View More</span>
+                <i class="fa-solid fa-chevron-down text-xs"></i>
+            </button>
+        </div>
+        @endif
+
+    </div>
+</div>
+
+@endif
+
+<script>
+function toggleFeeds(button) {
+    let extraFeeds = document.querySelectorAll('.extra-feed');
+    let icon = button.querySelector('i');
+    let buttonText = button.querySelector('span');
+
+    extraFeeds.forEach(feed => {
+        feed.classList.toggle('hidden');
+    });
+
+    if (buttonText.textContent === "View More") {
+        buttonText.textContent = "View Less";
+        icon.classList.remove('fa-chevron-down');
+        icon.classList.add('fa-chevron-up');
+    } else {
+        buttonText.textContent = "View More";
+        icon.classList.remove('fa-chevron-up');
+        icon.classList.add('fa-chevron-down');
+    }
+}
+</script>
+
+<style>
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: hidden;
+    overflow: hidden;
+}
+</style> 
             <!-- Total Invested Card -->
             <div class="rounded-2xl shadow-xl overflow-hidden border border-emerald-200 min-h-[150px]"
                 style="border-top: 4px solid #8bc905; background-image: url('assets/images/hero/hero-image-1.svg'); background-size: cover; background-position: center;">
@@ -1709,6 +1949,11 @@ $hasMadeDeposit = $user->deposits()->exists();
                     </div>
                 </div>
             </div>
+
+
+
+
+
         </div>
 
         <style>
@@ -1736,6 +1981,7 @@ $hasMadeDeposit = $user->deposits()->exists();
                 }
             }
         </style>
+
 
         <!-- Activity Section -->
         <div class="flex flex-wrap gap-6 mt-6 justify-center">

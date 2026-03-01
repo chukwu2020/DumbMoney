@@ -139,7 +139,7 @@
                                         <input type="text" name="country" value="{{ old('country', $user->country) }}" class="form-control custom-input"  class="form-control custom-input bg-gray-100 cursor-not-allowed"/>
                                     </div>
                                     <div>
-                                        <label class="block font-semibold text-sm text-[#0C3A30] mb-2">Address</label>
+                                        <label class="block font-semibold text-psm text-[#0C3A30] mb-2">Address</label>
                                         <input type="text" name="address" value="{{ old('address', $user->profile->address ?? '') }}" class="form-control custom-input" />
                                     </div>
                                 </div>
