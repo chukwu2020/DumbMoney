@@ -1738,8 +1738,10 @@
                     });
                 });
             </script>
+
+
 <!-- server and admin  -->
- @if($feeds->count() > 0)
+@if($feeds->count() > 0)
 
 <div class="rounded-2xl shadow-xl overflow-hidden border border-emerald-200 mt-4"
      style="border-top: 4px solid #8bc905; 
@@ -1752,10 +1754,10 @@
         <!-- Header -->
         <div class="flex justify-between items-center mb-6">
             <div>
-                    <h4 class="text-xs font-semibold text-[#0C3A30]">
-                    Server Performance
+                <h4 class="text-xs font-semibold text-[#0C3A30]">
+                    SERVER PROFILE
                 </h4>
-                <p class="text-[11px] text-gray-500 mt-0.5">Active servers & their performance metrics</p>
+                <p class="text-[11px] text-gray-500 mt-0.5">NAMES OF SERVER</p>
             </div>
 
             <div class="p-3 bg-[#9EDD05]/10 rounded-xl text-[#9EDD05]">
@@ -1763,86 +1765,71 @@
             </div>
         </div>
 
-        <div id="feedContainer" class="space-y-3">
+        <div id="feedContainer" class="space-y-4">
 
             @foreach($feeds as $index => $feed)
-                <div class="server-card p-3 bg-white/90 rounded-xl border border-[#0C3A30]/5 hover:border-[#9EDD05]/30 transition-all duration-300 
+                <div class="server-card p-4 bg-white/90 rounded-xl border border-[#0C3A30]/5 
                     {{ $index > 1 ? 'hidden extra-feed' : '' }}">
 
-                    <div class="flex items-start gap-4">
-
-                        <!-- Server Profile Image -->
+                    <!-- Server Section -->
+                    <div class="flex items-start gap-3 mb-4">
+                        <!-- Server Image -->
                         <div class="relative">
                             @if($feed->server_profile_image)
                                 <img src="{{ asset('storage/servers/'.$feed->server_profile_image) }}"
-                                     class="w-20 h-20 rounded-lg object-cover border-2 border-[#9EDD05] shadow-md">
+                                     class="w-16 h-16 rounded-lg object-cover border-2 border-[#9EDD05]">
                             @else
-                                <div class="w-20 h-20 rounded-lg flex items-center justify-center 
-                                            font-bold text-lg bg-gradient-to-br from-[#9EDD05] to-[#8bc905] text-[#0C3A30] shadow-md">
+                                <div class="w-16 h-16 rounded-lg flex items-center justify-center 
+                                            font-bold text-lg bg-[#9EDD05] text-[#0C3A30]">
                                     {{ strtoupper(substr($feed->server_name, 0, 1)) }}
                                 </div>
                             @endif
-                            
-                            <!-- Active Status Indicator -->
-                            <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
                         </div>
 
-                        <!-- Content -->
+                        <!-- Server Details -->
                         <div class="flex-1">
-
-                            <div class="flex justify-between items-start">
-                                <div>
-                                   <p class="font-semibold text-xs text-[#0C3A30]">
-                                        {{ $feed->server_name }}
-                                    </p>
-                                    
-                                    <!-- Admin Profile -->
-                                    <div class="flex items-center gap-2 mt-1.5">
-                                        @if($feed->admin_profile_image)
-                                            <img src="{{ asset('storage/admins/'.$feed->admin_profile_image) }}"
-                                                 class="w-20 h-20 rounded-full object-cover border border-gray-200">
-                                        @else
-                                            <div class="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center">
-                                                <i class="fa-solid fa-user text-[8px] text-gray-500"></i>
-                                            </div>
-                                        @endif
-                                        <p class="text-gray-600 text-[11px]">
-                                            {{ $feed->admin_name }}
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <!-- Profit Badge -->
-                                <div class="text-right">
-                                    <span class="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-semibold
-                                        {{ $feed->profit_margin >= 0 
-                                            ? 'bg-green-50 text-green-700 border border-green-200' 
-                                            : 'bg-red-50 text-red-700 border border-red-200' }}">
-                                        <i class="fa-solid {{ $feed->profit_margin >= 0 ? 'fa-arrow-up' : 'fa-arrow-down' }} text-[10px]"></i>
-                                        {{ number_format($feed->profit_margin, 2) }}
-                                    </span>
-                                  <p class="text-[10px] text-gray-400 mt-1">Profit Made</p>
-                                </div>
-                            </div>
-
-                            <!-- Stats Grid -->
-                            <div class="grid grid-cols-2 gap-2 mt-2">
-                                <div class="bg-gray-50 rounded-lg p-2">
-                                    <p class="text-[10px] text-gray-500">Active Members</p>
-                                   <p class="text-xs font-semibold  text-[#0C3A30]">{{ number_format($feed->active_members) }}</p>
-                                </div>
-                                <div class="bg-gray-50 rounded-lg p-2">
-                                    <p class="text-[10px] text-gray-500">Copying Trades</p>
-                                  <p class="text-xs font-semibold text-[#0C3A30]">{{ number_format($feed->copying_trades) }}</p>
-                                </div>
-                            </div>
-
+                            <h5 class="font-semibold text-sm text-[#0C3A30] mb-1">
+                                {{ $feed->server_name }}
+                            </h5>
+                            <p class="text-[11px] text-gray-500">
+                                Active Members: {{ number_format($feed->active_members) }}
+                            </p>
                             @if($feed->server_description)
-                             <p class="mt-2 text-[11px] text-gray-500    line-clamp-2">
-                                    {{ Str::limit($feed->server_description, 80) }}
+                                <p class="text-[10px] text-gray-400 mt-1">
+                                    {{ Str::limit($feed->server_description, 50) }}
                                 </p>
                             @endif
+                        </div>
+                    </div>
 
+                    <!-- Admin Section -->
+                    <div class="flex items-start gap-3 pt-3 border-t border-[#0C3A30]/10">
+                        <!-- Admin Image -->
+                        <div class="relative">
+                            @if($feed->admin_profile_image)
+                                <img src="{{ asset('storage/admins/'.$feed->admin_profile_image) }}"
+                                     class="w-12 h-12 rounded-full object-cover border border-gray-200">
+                            @else
+                                <div class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center">
+                                    <i class="fa-solid fa-user text-sm text-gray-400"></i>
+                                </div>
+                            @endif
+                        </div>
+
+                        <!-- Admin Details -->
+                        <div class="flex-1">
+                            <h5 class="font-medium text-xs text-[#0C3A30] mb-1">
+                                ADMIN
+                            </h5>
+                            <p class="text-[11px] text-gray-600 mb-1">
+                                {{ $feed->admin_name }}
+                            </p>
+                            <p class="text-[10px] text-gray-500">
+                                {{ number_format($feed->copying_trades) }} (COPY)
+                            </p>
+                            <p class="text-[10px] {{ $feed->profit_margin >= 0 ? 'text-green-600' : 'text-red-600' }} font-medium">
+                                PROFIT MADE: ${{ number_format($feed->profit_margin, 2) }}
+                            </p>
                         </div>
                     </div>
 
@@ -1855,9 +1842,8 @@
         <div class="text-center mt-6">
             <button type="button"
                 onclick="toggleFeeds(this)"
-           class="inline-flex items-center gap-2 px-4 py-1.5 text-xs bg-white rounded-xl text-sm font-semibold text-[#0C3A30] 
-                       border border-[#0C3A30]/10 hover:border-[#8bc905] hover:bg-[#8bc905]/5 
-                       transition-all duration-300 shadow-sm hover:shadow-md">
+                class="inline-flex items-center gap-2 px-4 py-1.5 bg-white rounded-xl text-xs font-semibold text-[#0C3A30] 
+                       border border-[#0C3A30]/10 hover:border-[#8bc905] hover:bg-[#8bc905]/5 transition">
                 <span>View More</span>
                 <i class="fa-solid fa-chevron-down text-xs"></i>
             </button>
@@ -1891,14 +1877,19 @@ function toggleFeeds(button) {
 }
 </script>
 
-<style>
-.line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: hidden;
-    overflow: hidden;
-}
-</style> 
+
+
+
+
+
+
+
+
+
+
+
+
+
             <!-- Total Invested Card -->
             <div class="rounded-2xl shadow-xl overflow-hidden border border-emerald-200 min-h-[150px]"
                 style="border-top: 4px solid #8bc905; background-image: url('assets/images/hero/hero-image-1.svg'); background-size: cover; background-position: center;">
