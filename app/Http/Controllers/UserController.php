@@ -116,7 +116,12 @@ class UserController extends Controller
         );
 
         // Send OTP email
-        Mail::to($user->email)->send(new OtpMail($newOtp, $verificationUrl));
+        // Mail::to($user->email)->send(new OtpMail($newOtp, $verificationUrl));
+        try {
+    Mail::to($user->email)->send(new OtpMail($newOtp, $verificationUrl));
+} catch (\Exception $e) {
+    dd($e->getMessage());
+}
 
         return redirect()->route('verify.otp', ['token' => $user->email_verification_token]);
     }
