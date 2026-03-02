@@ -157,31 +157,34 @@
 
                     <!-- Server -->
                     <td class="px-4 py-3 flex items-center gap-3">
-
-                        @if($feed->server_profile_image)
-                            <img src="{{ asset('storage/servers/'.$feed->server_profile_image) }}"
-                                 class="w-8 h-8 rounded-full object-cover">
-                        @else
-                            <div class="w-8 h-8 rounded-full bg-[#9EDD05] 
-                                        flex items-center justify-center text-xs font-bold">
-                                {{ strtoupper(substr($feed->server_name, 0, 1)) }}
-                            </div>
-                        @endif
-
-                        <span class="font-medium text-[#0C3A30]">
-                            {{ $feed->server_name }}
-                        </span>
+<div class="flex-shrink-0">
+    @if($feed->server_profile_image)
+        <div class="w-11 h-11 rounded-full overflow-hidden border border-gray-200 flex items-center justify-center">
+            <img src="{{ asset('storage/servers/'.$feed->server_profile_image) }}"
+                 class="min-w-full min-h-full object-cover object-center">
+        </div>
+    @else
+        <div class="w-11 h-11 rounded-full flex items-center justify-center bg-[#9EDD05] text-[#0C3A30] border border-gray-200">
+            <i class="fa-solid fa-user text-sm"></i>
+        </div>
+    @endif
+</div>
                     </td>
 
                     <!-- Admin -->
                     <td class="px-4 py-3 flex items-center gap-2">
-
-                        @if($feed->admin_profile_image)
-                            <img src="{{ asset('storage/admins/'.$feed->admin_profile_image) }}"
-                                 class="w-6 h-6 rounded-full object-cover">
-                        @endif
-
-                        {{ $feed->admin_name }}
+<div class="flex-shrink-0">
+    @if($feed->server_profile_image)
+        <div class="w-11 h-11 rounded-full overflow-hidden border border-gray-200 flex items-center justify-center">
+            <img src="{{ asset('storage/servers/'.$feed->server_profile_image) }}"
+                 class="min-w-full min-h-full object-cover object-center">
+        </div>
+    @else
+        <div class="w-11 h-11 rounded-full flex items-center justify-center bg-[#9EDD05] text-[#0C3A30] border border-gray-200">
+            <i class="fa-solid fa-user text-sm"></i>
+        </div>
+    @endif
+</div>
                     </td>
 
                     <td class="px-4 py-3">

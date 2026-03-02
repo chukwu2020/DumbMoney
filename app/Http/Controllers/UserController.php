@@ -653,4 +653,14 @@ public function terms_privacyhome()
 
         return view('dashboard.informations.rules_guildelines');
     }
+
+    
+
+ public function all_server()
+{
+    // Assuming you have a Feed model
+    $feeds = ServerFeed::latest()->get(); // or Feed::all() if you want all without ordering
+    
+    return view('dashboard.allserver', compact('feeds'));
+}
 }

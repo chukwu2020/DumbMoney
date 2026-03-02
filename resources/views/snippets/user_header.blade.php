@@ -101,14 +101,7 @@ $cardExists = auth()->check() ? WithdrawalCard::where('user_id', auth()->id())->
         }
     </style>
 
-    <!-- {{-- Flash Messages --}}
-    @foreach (['success' => 'green', 'error' => 'red'] as $msg => $color)
-        @if(session($msg))
-            <div class="mx-6 mt-4 px-4 py-2 rounded border border-{{ $color }}-400 bg-{{ $color }}-100 text-{{ $color }}-700 text-sm font-medium">
-                {{ session($msg) }}
-            </div>
-        @endif
-    @endforeach -->
+    
 
     <div class="header-content">
         <!-- Mobile Hamburger -->

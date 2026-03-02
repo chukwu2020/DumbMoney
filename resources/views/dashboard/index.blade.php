@@ -1510,27 +1510,27 @@
                         @if($allInvestments->isEmpty())
                         <!-- EMPTY STATE -->
                         <div class="bg-gray-50 border border-dashed border-gray-300 rounded-lg p-4 text-center">
-                               <video
-                                    src="{{ asset('assets/images/livetradevideo.mp4') }}"
-                                    class="w-full h-full object-cover"
-                                    autoplay
-                                    muted
-                                    loop
-                                    playsinline
-                                    preload="auto"
-                                    onloadstart="this.style.opacity='1'; document.getElementById('video-loading-main').style.display='none';"
-                                    onerror="this.style.display='none'; document.getElementById('fallback-content-main').style.display='flex'; document.getElementById('video-loading-main').style.display='none';"
-                                    style="opacity: 0; transition: opacity 0.5s ease-in-out;">
-                                    Your browser does not support the video tag.
-                                </video>
+                            <video
+                                src="{{ asset('assets/images/livetradevideo.mp4') }}"
+                                class="w-full h-full object-cover"
+                                autoplay
+                                muted
+                                loop
+                                playsinline
+                                preload="auto"
+                                onloadstart="this.style.opacity='1'; document.getElementById('video-loading-main').style.display='none';"
+                                onerror="this.style.display='none'; document.getElementById('fallback-content-main').style.display='flex'; document.getElementById('video-loading-main').style.display='none';"
+                                style="opacity: 0; transition: opacity 0.5s ease-in-out;">
+                                Your browser does not support the video tag.
+                            </video>
 
-                                <!-- Loading Spinner for main video -->
-                                <div id="video-loading-main" class="absolute inset-0 flex items-center justify-center bg-slate-900 transition-opacity duration-500">
-                                    <div class="text-center">
-                                        <div class="w-16 h-16 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                                        <p class="text-white text-sm">Loading live trading stream...</p>
-                                    </div>
+                            <!-- Loading Spinner for main video -->
+                            <div id="video-loading-main" class="absolute inset-0 flex items-center justify-center bg-slate-900 transition-opacity duration-500">
+                                <div class="text-center">
+                                    <div class="w-16 h-16 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                                    <p class="text-white text-sm">Loading live trading stream...</p>
                                 </div>
+                            </div>
                             <h4 class="text-sm font-semibold text-gray-700 mb-1">
                                 No Active Trades Yet, you can`t go live
                             </h4>
@@ -1740,143 +1740,166 @@
             </script>
 
 
-<!-- server and admin  -->
-@if($feeds->count() > 0)
 
-<div class="rounded-2xl shadow-xl overflow-hidden border border-emerald-200 mt-4"
-     style="border-top: 4px solid #8bc905; 
-            background-image: url('{{ asset('assets/images/hero/hero-image-1.svg') }}'); 
+
+
+            <!-- server and admin  -->
+            <!-- server and admin -->
+            @if($feeds->count() > 0)
+
+            <div class="rounded-2xl shadow-xl overflow-hidden border border-emerald-200 mt-4"
+                style="border-top: 4px solid #8bc905; 
             background-size: cover; 
-            background-position: center;">
+            background-position: center; background-image: url(assets/images/hero/hero-image-1.svg);" >
 
-    <div class="p-6 bg-white/80 backdrop-blur-md rounded-2xl">
+                <div class="p-0 bg-white/80 backdrop-blur-md rounded-2xl">
 
-        <!-- Header -->
-        <div class="flex justify-between items-center mb-6">
-            <div>
-                <h4 class="text-xs font-semibold text-[#0C3A30]">
-                    SERVER PROFILE
-                </h4>
-                <p class="text-[11px] text-gray-500 mt-0.5">NAMES OF SERVER</p>
-            </div>
+                    <!-- Header -->
+                    <div class="flex justify-between items-center mb-2">
+                        <div>
+                            <h4 class=" p-3 font-semibold text-[#0C3A30]" style="font-size: 12px;">
+                                ACTIVE SERVER COPYING TRADES
+                            </h4>
 
-            <div class="p-3 bg-[#9EDD05]/10 rounded-xl text-[#9EDD05]">
-                <i class="fa-solid fa-server text-lg"></i>
-            </div>
-        </div>
-
-        <div id="feedContainer" class="space-y-4">
-
-            @foreach($feeds as $index => $feed)
-                <div class="server-card p-4 bg-white/90 rounded-xl border border-[#0C3A30]/5 
-                    {{ $index > 1 ? 'hidden extra-feed' : '' }}">
-
-                    <!-- Server Section -->
-                    <div class="flex items-start gap-3 mb-4">
-                        <!-- Server Image -->
-                        <div class="relative">
-                            @if($feed->server_profile_image)
-                                <img src="{{ asset('storage/servers/'.$feed->server_profile_image) }}"
-                                     class="w-16 h-16 rounded-lg object-cover border-2 border-[#9EDD05]">
-                            @else
-                                <div class="w-16 h-16 rounded-lg flex items-center justify-center 
-                                            font-bold text-lg bg-[#9EDD05] text-[#0C3A30]">
-                                    {{ strtoupper(substr($feed->server_name, 0, 1)) }}
-                                </div>
-                            @endif
                         </div>
 
-                        <!-- Server Details -->
-                        <div class="flex-1">
-                            <h5 class="font-semibold text-sm text-[#0C3A30] mb-1">
-                                {{ $feed->server_name }}
-                            </h5>
-                            <p class="text-[11px] text-gray-500">
-                                Active Members: {{ number_format($feed->active_members) }}
-                            </p>
-                            @if($feed->server_description)
-                                <p class="text-[10px] text-gray-400 mt-1">
-                                    {{ Str::limit($feed->server_description, 50) }}
-                                </p>
-                            @endif
+                        <div class="p-3 bg-[#9EDD05]/10 rounded-xl text-[#9EDD05]">
+                            <i class="fa-solid fa-server text-lg"></i>
                         </div>
                     </div>
 
-                    <!-- Admin Section -->
-                    <div class="flex items-start gap-3 pt-3 border-t border-[#0C3A30]/10">
-                        <!-- Admin Image -->
-                        <div class="relative">
-                            @if($feed->admin_profile_image)
-                                <img src="{{ asset('storage/admins/'.$feed->admin_profile_image) }}"
-                                     class="w-12 h-12 rounded-full object-cover border border-gray-200">
-                            @else
-                                <div class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center">
-                                    <i class="fa-solid fa-user text-sm text-gray-400"></i>
-                                </div>
-                            @endif
-                        </div>
+                    <div id="feedContainer" class="space-y-4" >
 
-                        <!-- Admin Details -->
-                        <div class="flex-1">
-                            <h5 class="font-medium text-xs text-[#0C3A30] mb-1">
-                                ADMIN
-                            </h5>
-                            <p class="text-[11px] text-gray-600 mb-1">
-                                {{ $feed->admin_name }}
-                            </p>
-                            <p class="text-[10px] text-gray-500">
-                                {{ number_format($feed->copying_trades) }} (COPY)
-                            </p>
-                            <p class="text-[10px] {{ $feed->profit_margin >= 0 ? 'text-green-600' : 'text-red-600' }} font-medium">
-                                PROFIT MADE: ${{ number_format($feed->profit_margin, 2) }}
-                            </p>
-                        </div>
-                    </div>
+                        @foreach($feeds as $index => $feed)
+                        <div class="server-card p-4 bg-white/90 rounded-xl border border-[#0C3A30]/5 
+                    {{ $index > 1 ? 'hidden extra-feed' : '' }}" style="background-color: white !important;">
 
-                </div>
-            @endforeach
+                            <!-- Server and Admin Grid - Equal sized profiles -->
+                            <div class="grid grid-cols-2 gap-4">
 
+                                <!-- Server Section -->
+                                <div class="flex items-start gap-3">
+                                    <!-- Server Image - Fixed size -->
+                                 <div class="flex-shrink-0">
+    @if($feed->server_profile_image)
+        <div class="w-11 h-11 rounded-full overflow-hidden border border-gray-200 flex items-center justify-center">
+            <img src="{{ asset('storage/servers/'.$feed->server_profile_image) }}"
+                 class="min-w-full min-h-full object-cover object-center">
         </div>
-
-        @if($feeds->count() > 2)
-        <div class="text-center mt-6">
-            <button type="button"
-                onclick="toggleFeeds(this)"
-                class="inline-flex items-center gap-2 px-4 py-1.5 bg-white rounded-xl text-xs font-semibold text-[#0C3A30] 
-                       border border-[#0C3A30]/10 hover:border-[#8bc905] hover:bg-[#8bc905]/5 transition">
-                <span>View More</span>
-                <i class="fa-solid fa-chevron-down text-xs"></i>
-            </button>
+    @else
+        <div class="w-11 h-11 rounded-full flex items-center justify-center bg-[#9EDD05] text-[#0C3A30] border border-gray-200">
+            <i class="fa-solid fa-user text-sm"></i>
         </div>
-        @endif
-
-    </div>
+    @endif
 </div>
 
-@endif
+                                    <!-- Server Details - Fixed height -->
+                                    <div class="flex-1 min-w-0">
+                                        <h5 class="font-semibold text-xs text-[#0C3A30] mb-1 truncate max-w-[180px]" title="{{ $feed->server_name }}">
+                                            {{ $feed->server_name }}
+                                        </h5>
+                                        <p class=" text-gray-500 semibold mb-0.5"  style="font-size: 12px;">
+                                            Active: {{ number_format($feed->active_members) }}
+                                        </p>
+                                        <p class="semibold text-gray-400 truncate"  style="font-size: 12px;">
+                                            {{ $feed->copying_trades ?? 0 }} copying
+                                        </p>
+                                        @if($feed->server_description)
+                                        <p class="text-[8px] text-gray-400 mt-1 truncate">
+                                            {{ Str::limit($feed->server_description, 30) }}
+                                        </p>
+                                        @endif
+                                    </div>
+                                </div>
 
-<script>
-function toggleFeeds(button) {
-    let extraFeeds = document.querySelectorAll('.extra-feed');
-    let icon = button.querySelector('i');
-    let buttonText = button.querySelector('span');
+                                <!-- Admin Section -->
+                                <div class="flex items-start gap-3">
+                                    <!-- Admin Image - Fixed size -->
+                                  <div class="flex-shrink-0">
+    @if($feed->admin_profile_image)
+        <div class="w-11 h-11 rounded-full overflow-hidden border border-gray-200 flex items-center justify-center">
+            <img src="{{ asset('storage/admins/'.$feed->admin_profile_image) }}"
+                 class="min-w-full min-h-full object-cover object-center">
+        </div>
+    @else
+        <div class="w-11 h-11 rounded-full flex items-center justify-center bg-[#9EDD05] text-[#0C3A30] border border-gray-200">
+            <i class="fa-solid fa-user text-sm"></i>
+        </div>
+    @endif
+</div>
 
-    extraFeeds.forEach(feed => {
-        feed.classList.toggle('hidden');
-    });
+                                    <!-- Admin Details - Fixed height -->
+                                    <div class="flex-1 min-w-0">
+                                        <h5 class="font-semibold  text-[#0C3A30] mb-1 truncate" style="font-size:10px;">
+                                            ADMIN
+                                        </h5>
+                                        <p class="bold text-gray-600 mb-0.5 truncate"  style="font-size: 12px;">
+                                            {{ $feed->admin_name }}
+                                        </p>
+                                        <p class="text-[6px] {{ $feed->profit_margin >= 0 ? 'text-green-600' : 'text-red-600' }} font-medium" style="font-size:12px;">
+                                            Profit: ${{ number_format($feed->profit_margin) }}
+                                        </p>
+                                        @if($feed->admin_role)
+                                        <p class="text-[8px] text-gray-400 mt-1 truncate">
+                                            {{ $feed->admin_role }}
+                                        </p>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
 
-    if (buttonText.textContent === "View More") {
-        buttonText.textContent = "View Less";
-        icon.classList.remove('fa-chevron-down');
-        icon.classList.add('fa-chevron-up');
-    } else {
-        buttonText.textContent = "View More";
-        icon.classList.remove('fa-chevron-up');
-        icon.classList.add('fa-chevron-down');
-    }
-}
-</script>
 
+                        </div>
+                        @endforeach
+
+                    </div>
+
+                    @if($feeds->count() > 2)
+                    <div class="text-center mt-6">
+                        <a href="{{ route('allserver') }}"
+                            class="inline-flex items-center gap-2 px-4 py-1.5 bg-white rounded-xl text-xs font-semibold text-[#0C3A30] 
+              border border-gray-200 hover:border-[#8bc905] hover:bg-[#8bc905]/5 transition">
+                            View All Servers
+                            <i class="fa-solid fa-chevron-right text-xs"></i>
+                        </a>
+                    </div>
+                    @endif
+
+                </div>
+            </div>
+
+            @else
+            <div class="rounded-2xl shadow-xl overflow-hidden border border-emerald-200 mt-4 p-8 text-center bg-white/80 backdrop-blur-md">
+                <div class="p-3 bg-[#9EDD05]/10 rounded-xl text-[#9EDD05] inline-block mb-3">
+                    <i class="fa-solid fa-server text-lg"></i>
+                </div>
+                <h4 class="text-sm font-semibold text-[#0C3A30] mb-1">No Servers Found</h4>
+                <p class="text-xs text-gray-500">There are no servers to display at the moment.</p>
+            </div>
+            @endif
+
+            <script>
+                function toggleFeeds(button) {
+                    let extraFeeds = document.querySelectorAll('.extra-feed');
+                    let icon = button.querySelector('i');
+                    let buttonSpan = button.querySelector('span');
+                    let isHidden = extraFeeds[0]?.classList.contains('hidden');
+
+                    extraFeeds.forEach(feed => {
+                        feed.classList.toggle('hidden');
+                    });
+
+                    if (isHidden) {
+                        buttonSpan.textContent = "View Less";
+                        icon.classList.remove('fa-chevron-down');
+                        icon.classList.add('fa-chevron-up');
+                    } else {
+                        buttonSpan.textContent = "View More";
+                        icon.classList.remove('fa-chevron-up');
+                        icon.classList.add('fa-chevron-down');
+                    }
+                }
+            </script>
 
 
 

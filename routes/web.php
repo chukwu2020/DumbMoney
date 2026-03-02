@@ -263,6 +263,11 @@ Route::post('/admin/withdrawals/{id}/unapprove', [AdminController::class,'unappr
     Route::post('/id-verification/alert-dismiss', [UserController::class, 'dismissAlert'])
         ->name('user.kyc.dismiss-alert');
 
+
+        //user view all serve
+         Route::get('/discordcommunitycopyingtrades', [UserController::class, 'all_server'])
+        ->name('allserver');
+
     // Admin KYC management
     Route::prefix('admin')->middleware(['isAdmin'])->group(function () {
         Route::get('kyc', [AdminController::class, 'kycindex'])->name('admin.kyc.index');
