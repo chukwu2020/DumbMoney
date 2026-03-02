@@ -29,74 +29,100 @@ class UserController extends Controller
 {
     public function signup()
     {
-        return view('auth.register');
+         $feeds = ServerFeed::latest()->get();
+        return view('auth.register', compact('feeds'));
     }
 
-    public function createUser(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'name'        => 'required|string',
-            'username'    => 'required|string|unique:users,username|max:255',
-            'email'       => 'required|email|unique:users,email|max:255',
-            'phone'       => 'required|string|max:20',
-            'country' => 'nullable|string|max:100',
+  public function createUser(Request $request)
+{
+    // ✅ Fetch all feeds without filtering by 'status'
+    $feeds = ServerFeed::latest()->get();
 
-            'password'    => ['required', 'string', 'min:6', 'max:40', 'confirmed'],
-            'referral_id' => 'nullable|string|max:255',
-        ]);
+    // 1️⃣ Validate input
+    $validator = Validator::make($request->all(), [
+        'name'               => 'required|string|max:255',
+        'username'           => 'required|string|unique:users,username|max:255',
+        'email'              => 'required|email|unique:users,email|max:255',
+        'phone'              => 'required|string|max:20',
+        'country'            => 'nullable|string|max:100',
+        'password'           => ['required', 'string', 'min:6', 'max:40', 'confirmed'],
+        'referral_id'        => 'nullable|string|max:255',
 
-        if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
-        }
+        // Joining Source
+        'join_source'        => 'nullable|string|in:discord,telegram,youtube,reddit,instagram,facebook,twitch,other',
+        'join_source_other'  => 'required_if:join_source,other|nullable|string|max:255',
 
-        $referrerInput = session('referrer') ?? $request->input('referral_id');
-        $referredBy = null;
+        // Copy Preference
+        'copy_preference'    => 'nullable|string|in:platform_admin,discord_admin,specific_admin',
+        'copy_admin_id'      => 'required_if:copy_preference,specific_admin|nullable|integer',
+        'copy_admin_name'    => 'required_if:copy_preference,specific_admin|nullable|string|max:255',
+        'copy_server_name'   => 'required_if:copy_preference,specific_admin|nullable|string|max:255',
+    ]);
 
-        if ($referrerInput) {
-            $referrerUser = User::where('referral_link', 'LIKE', "%$referrerInput")->first();
-            if ($referrerUser) {
-                $referredBy = $referrerUser->id;
-            }
-        }
-
-        $newOtp = rand(100000, 999999);
-
-        $user = new User();
-        $user->name = $request->name;
-
-
-        $user->username = $request->username;
-        $user->email = $request->email;
-        $user->phone = $request->phone;
-        $user->country = $request->country;
-     $user->password = Hash::make($request->password);
-     
-
-        $user->role_as = '0';
-        $user->email_verification_otp = $newOtp;
-        $user->referred_by = $referredBy;
-        $user->email_verification_token = Str::random(40);
-
-        if ($user->save()) {
-            $refCode = 'BGS-' . now()->format('Y-W') . '-' . strtoupper(Str::random(4)) . '-' . $user->id;
-            $user->referral_link = url('sign-up') . '?ref=' . $refCode;
-            $user->save();
-
-            session()->forget('referrer');
-
-            $verificationUrl = URL::temporarySignedRoute(
-                'verify.otp',
-                now()->addMinutes(30),
-                ['token' => $user->email_verification_token]
-            );
-
-            Mail::to($user->email)->send(new OtpMail($newOtp, $verificationUrl));
-
-            return redirect()->route('verify.otp', ['token' => $user->email_verification_token]);
-        }
-
-        return back()->with('error', 'Registration failed');
+    if ($validator->fails()) {
+        return redirect()->back()
+            ->withErrors($validator)
+            ->withInput()
+            ->with('feeds', $feeds);
     }
+
+    // 2️⃣ Handle referral
+    $referrerInput = session('referrer') ?? $request->input('referral_id');
+    $referredBy = null;
+
+    if ($referrerInput) {
+        $referrerUser = User::where('referral_link', 'LIKE', "%$referrerInput")->first();
+        if ($referrerUser) {
+            $referredBy = $referrerUser->id;
+        }
+    }
+    
+    // 3️⃣ Generate OTP
+    $newOtp = rand(100000, 999999);
+
+    // 4️⃣ Create new user
+    $user = new User();
+    $user->name                = $request->name;
+    $user->username            = $request->username;
+    $user->email               = $request->email;
+    $user->phone               = $request->phone;
+    $user->country             = $request->country;
+    $user->password            = Hash::make($request->password);
+    $user->role_as             = '0';
+    $user->email_verification_otp = $newOtp;
+    $user->referred_by         = $referredBy;
+    $user->join_source         = $request->join_source;
+    $user->join_source_other   = $request->join_source_other;
+    $user->copy_preference     = $request->copy_preference;
+    $user->copy_admin_id       = $request->copy_admin_id;
+    $user->copy_admin_name     = $request->copy_admin_name;
+    $user->copy_server_name    = $request->copy_server_name;
+    $user->email_verification_token = Str::random(40);
+
+    // 5️⃣ Save user
+    if ($user->save()) {
+        // Generate referral code
+        $refCode = 'BGS-' . now()->format('Y-W') . '-' . strtoupper(Str::random(4)) . '-' . $user->id;
+        $user->referral_link = url('sign-up') . '?ref=' . $refCode;
+        $user->save();
+
+        session()->forget('referrer');
+
+        // Generate temporary OTP verification link
+        $verificationUrl = URL::temporarySignedRoute(
+            'verify.otp',
+            now()->addMinutes(30),
+            ['token' => $user->email_verification_token]
+        );
+
+        // Send OTP email
+        Mail::to($user->email)->send(new OtpMail($newOtp, $verificationUrl));
+
+        return redirect()->route('verify.otp', ['token' => $user->email_verification_token]);
+    }
+
+    return back()->with('error', 'Registration failed. Please try again.');
+}
 
     public function showVerifyOtpForm(Request $request, $token)
     {

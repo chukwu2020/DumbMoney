@@ -3,7 +3,19 @@
 @section('content')
 <div class="rounded-2xl shadow-xl border border-emerald-200 p-6 mb-6"
      style="border-top:4px solid #8bc905;">
-
+ <div class="flex flex-wrap items-center justify-between gap-2 mb-6">
+        <h6 class="font-semibold mb-0">active server</h6>
+        <ul class="flex items-center gap-[6px]">
+            <li class="font-medium">
+                <a href="{{ route('admin_dashboard') }}" class="flex items-center gap-2 hover:text-primary-600">
+                    <iconify-icon icon="solar:home-smile-angle-outline" class="icon text-lg"></iconify-icon>
+                    Dashboard
+                </a>
+            </li>
+            <li>-</li>
+            <li class="font-medium">SERVERS</li>
+        </ul>
+    </div>
     <h3 class="text-lg font-semibold text-[#0C3A30] mb-6">
         Add New Server
     </h3>
