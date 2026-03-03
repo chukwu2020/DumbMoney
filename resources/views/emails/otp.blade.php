@@ -45,13 +45,7 @@
                 </a>
               </div>
 
-              <p style="margin: 0 0 10px 0; font-size: 14px;">
-                If the button above doesn't work, copy and paste this link into your browser:
-              </p>
-
-              <p style="margin: 0 0 20px 0; word-break: break-all; font-size: 14px;">
-                {{ $verificationUrl }}
-              </p>
+           
 
               <p style="margin: 0 0 20px 0; font-size: 14px;">
                 This code will expire in 30 minutes. If you didn't request this, you can safely ignore this message.

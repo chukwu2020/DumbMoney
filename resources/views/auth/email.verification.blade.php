@@ -48,12 +48,7 @@
                 </a>
               </div>
 
-              <div style="background-color: #f0fdf4; border-radius: 8px; padding: 16px; margin: 30px 0;">
-                <p style="margin: 0 0 8px; font-size: 14px; color: #5a6d5a;"><strong>Alternative:</strong> If the button doesn't work, copy this link:</p>
-                <p style="word-break: break-all; font-size: 14px; color: #0C3A30; background-color: #ffffff; padding: 10px; border-radius: 4px; margin: 0;">
-                  {{ $verificationUrl }}
-                </p>
-              </div>
+              
 
               <p style="font-size: 14px; color: #5a6d5a; border-top: 1px dashed #e0f7e9; padding-top: 20px;">
                 <strong>Security tip:</strong> Never share this code with anyone. MarketMind will never ask you for your verification code.
