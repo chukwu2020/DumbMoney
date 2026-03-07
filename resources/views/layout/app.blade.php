@@ -21,6 +21,25 @@
     <link rel="stylesheet" href="assets/css/remixicon.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/responsive.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "VideoObject",
+  "name": "MarketMind Hero Video",
+  "description": "Introduction to MarketMind Investments",
+  "thumbnailUrl": "https://www.marketmindinvestments.com/assets/images/Hero-Video-thumbnail.jpg",
+  "contentUrl": "https://www.marketmindinvestments.com/assets/images/Hero-Video.mp4",
+  "uploadDate": "2026-03-07",
+  "duration": "PT30S",
+  "interactionStatistic": {
+    "@type": "InteractionCounter",
+    "interactionType": "https://schema.org/WatchAction",
+    "userInteractionCount": 1000
+  }
+}
+</script>
+
 </head>
 
 

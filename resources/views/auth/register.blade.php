@@ -443,13 +443,12 @@
             <div class="d-flex align-items-center gap-2">
                 <h5 style="font-size: 14px; color: #0C3A30; font-weight: 600; margin: 0;">
                     <i class="ri-user-star-line me-2" style="color: #8bc905;"></i>
-                    Select an admin to copy
-                </h5>
+                    CHoose your admin to copy trades
                 @if(isset($feeds) && $feeds->count() > 0)
                 <span class="badge rounded-pill" style="background: #8bc90520; color: #0C3A30; font-size: 11px; padding: 4px 10px;">
                     <span id="adminCount">{{ $feeds->count() }}</span> available
                 </span>
-                @endif
+                @endif 
             </div>
             
             <!-- Search Bar -->
