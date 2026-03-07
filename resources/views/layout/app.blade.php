@@ -71,8 +71,7 @@
         </div>
     </div>
 
-    <style>
-        .preloader-area {
+    <style> .preloader-area {
             position: fixed;
             top: 0;
             left: 0;
