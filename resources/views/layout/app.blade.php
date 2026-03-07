@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-you mean i should paste this where <head>
+ <head>
     <base href="/public">
 
     <meta charset="UTF-8" />
