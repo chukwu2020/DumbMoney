@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Email Verification - {{ config('app.name') }}</title>
 </head>
+
 <body style="margin: 0; padding: 0; background-color: #f2f2f2; font-family: Helvetica, Arial, sans-serif; color: #0C3A30;">
 
   <table width="100%" cellpadding="0" cellspacing="0" bgcolor="#f2f2f2" style="padding: 30px 0;">
@@ -45,7 +47,7 @@
                 </a>
               </div>
 
-           
+
 
               <p style="margin: 0 0 20px 0; font-size: 14px;">
                 This code will expire in 30 minutes. If you didn't request this, you can safely ignore this message.
@@ -71,4 +73,5 @@
   </table>
 
 </body>
+
 </html>

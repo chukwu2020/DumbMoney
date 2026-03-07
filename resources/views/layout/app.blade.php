@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="assets/css/remixicon.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/responsive.css">
+<<<<<<< HEAD
     <!-- SEO Tags -->
 <meta name="description" content="MarketMind Investments empowers traders worldwide with expert copy trading services, seamless global payments, and real-time learning opportunities. Copy top-performing traders, grow your skills, and trade with confidence.">
 <link rel="canonical" href="https://marketmindinvestments.com/">
@@ -37,6 +38,27 @@
 <meta name="twitter:title" content="MarketMind Investments – Copy Trading & Global Payments">
 <meta name="twitter:description" content="Mirror expert traders, make secure global transactions, and develop your trading skills with MarketMind Investments. Start your copy trading journey today.">
 <meta name="twitter:image" content="https://marketmindinvestments.com/assets/images/social-share-image.jpg">
+=======
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "VideoObject",
+  "name": "MarketMind Hero Video",
+  "description": "Introduction to MarketMind Investments",
+  "thumbnailUrl": "https://www.marketmindinvestments.com/assets/images/Hero-Video-thumbnail.jpg",
+  "contentUrl": "https://www.marketmindinvestments.com/assets/images/Hero-Video.mp4",
+  "uploadDate": "2026-03-07",
+  "duration": "PT30S",
+  "interactionStatistic": {
+    "@type": "InteractionCounter",
+    "interactionType": "https://schema.org/WatchAction",
+    "userInteractionCount": 1000
+  }
+}
+</script>
+
+>>>>>>> ce2ae6385e06b0de6e53d125a61041694c8927bc
 </head>
 
 
