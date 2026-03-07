@@ -21,6 +21,24 @@
     <link rel="stylesheet" href="assets/css/remixicon.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/responsive.css">
+<<<<<<< HEAD
+    <!-- SEO Tags -->
+<meta name="description" content="MarketMind Investments empowers traders worldwide with expert copy trading services, seamless global payments, and real-time learning opportunities. Copy top-performing traders, grow your skills, and trade with confidence.">
+<link rel="canonical" href="https://marketmindinvestments.com/">
+
+<!-- Open Graph / Social Sharing -->
+<meta property="og:title" content="MarketMind Investments – Global Copy Trading & Financial Growth">
+<meta property="og:description" content="Join MarketMind Investments to mirror top traders, access seamless global payments, and learn to trade confidently. Our innovative platform helps beginners and experienced traders alike maximize success.">
+<meta property="og:url" content="https://marketmindinvestments.com/">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://marketmindinvestments.com/assets/images/social-share-image.jpg">
+
+<!-- Twitter Cards -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MarketMind Investments – Copy Trading & Global Payments">
+<meta name="twitter:description" content="Mirror expert traders, make secure global transactions, and develop your trading skills with MarketMind Investments. Start your copy trading journey today.">
+<meta name="twitter:image" content="https://marketmindinvestments.com/assets/images/social-share-image.jpg">
+=======
 
     <!-- SEO Tags -->
     <meta name="description" content="MarketMind Investments empowers traders worldwide with expert copy trading services, seamless global payments, and real-time learning opportunities. Copy top-performing traders, grow your skills, and trade with confidence.">
@@ -58,6 +76,7 @@
     }
     </script>
 
+>>>>>>> ce2ae6385e06b0de6e53d125a61041694c8927bc
 </head>
 
 <body class="bg-white text-neutral-900 !dark:bg-white !dark:text-neutral-900">
