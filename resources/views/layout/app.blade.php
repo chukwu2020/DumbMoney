@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+you mean i should paste this where <head>
     <base href="/public">
 
     <meta charset="UTF-8" />
@@ -22,26 +22,43 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/responsive.css">
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "VideoObject",
-  "name": "MarketMind Hero Video",
-  "description": "Introduction to MarketMind Investments",
-  "thumbnailUrl": "https://www.marketmindinvestments.com/assets/images/Hero-Video-thumbnail.jpg",
-  "contentUrl": "https://www.marketmindinvestments.com/assets/images/Hero-Video.mp4",
-  "uploadDate": "2026-03-07",
-  "duration": "PT30S",
-  "interactionStatistic": {
-    "@type": "InteractionCounter",
-    "interactionType": "https://schema.org/WatchAction",
-    "userInteractionCount": 1000
-  }
-}
-</script>
+    <!-- SEO Tags -->
+    <meta name="description" content="MarketMind Investments empowers traders worldwide with expert copy trading services, seamless global payments, and real-time learning opportunities. Copy top-performing traders, grow your skills, and trade with confidence.">
+    <link rel="canonical" href="https://marketmindinvestments.com/">
+
+    <!-- Open Graph / Social Sharing -->
+    <meta property="og:title" content="MarketMind Investments – Global Copy Trading & Financial Growth">
+    <meta property="og:description" content="Join MarketMind Investments to mirror top traders, access seamless global payments, and learn to trade confidently. Our innovative platform helps beginners and experienced traders alike maximize success.">
+    <meta property="og:url" content="https://marketmindinvestments.com/">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://marketmindinvestments.com/assets/images/social-share-image.jpg">
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="MarketMind Investments – Copy Trading & Global Payments">
+    <meta name="twitter:description" content="Mirror expert traders, make secure global transactions, and develop your trading skills with MarketMind Investments. Start your copy trading journey today.">
+    <meta name="twitter:image" content="https://www.marketmindinvestments.com/assets/images/social-share-image.jpg">
+
+    <!-- Video JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "VideoObject",
+      "name": "MarketMind Hero Video",
+      "description": "Introduction to MarketMind Investments",
+      "thumbnailUrl": "https://www.marketmindinvestments.com/assets/images/Hero-Video-thumbnail.jpg",
+      "contentUrl": "https://www.marketmindinvestments.com/assets/images/Hero-Video.mp4",
+      "uploadDate": "2026-03-07",
+      "duration": "PT30S",
+      "interactionStatistic": {
+        "@type": "InteractionCounter",
+        "interactionType": "https://schema.org/WatchAction",
+        "userInteractionCount": 1000
+      }
+    }
+    </script>
 
 </head>
-
 
 <body class="bg-white text-neutral-900 !dark:bg-white !dark:text-neutral-900">
 
@@ -254,18 +271,25 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Smartsupp Live Chat script -->
-<script type="text/javascript">
-var _smartsupp = _smartsupp || {};
-_smartsupp.key = 'ab7d8d57178631b207de871d693c62b0c7e5d44e';
-window.smartsupp||(function(d) {
-  var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
-  s=d.getElementsByTagName('script')[0];c=d.createElement('script');
-  c.type='text/javascript';c.charset='utf-8';c.async=true;
-  c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
-})(document);
-</script>
-<noscript>Powered by <a href="https://www.smartsupp.com" target="_blank">Smartsupp</a></noscript>
+    <!-- Smartsupp Live Chat script -->
+    <script type="text/javascript">
+        var _smartsupp = _smartsupp || {};
+        _smartsupp.key = 'ab7d8d57178631b207de871d693c62b0c7e5d44e';
+        window.smartsupp || (function(d) {
+            var s, c, o = smartsupp = function() {
+                o._.push(arguments)
+            };
+            o._ = [];
+            s = d.getElementsByTagName('script')[0];
+            c = d.createElement('script');
+            c.type = 'text/javascript';
+            c.charset = 'utf-8';
+            c.async = true;
+            c.src = 'https://www.smartsuppchat.com/loader.js?';
+            s.parentNode.insertBefore(c, s);
+        })(document);
+    </script>
+    <noscript>Powered by <a href="https://www.smartsupp.com" target="_blank">Smartsupp</a></noscript>
 
 
 
