@@ -422,47 +422,51 @@
         </div>
         @endif
 
-        <!-- Contact Address Area -->
-        <div class="contact-address-area mb-5">
-            <div class="address-container">
-                <div class="contact-warp">
-                    
-                    <div class="location">
-                        <i class="flaticon-phone-call call-icon"></i>
-                        <span>PHONE NUMBER</span>
-                        <a href="tel:+4477742663627">+447 7742 (663) 627</a>
-                        <div class="mt-2">
-                            <span class="badge px-2 py-1" style="background: rgba(139,201,5,0.2); color: #8BC905; font-size: 0.7rem;">24/7 Support</span>
-                        </div>
-                    </div>
+   <!-- Contact Address Area -->
+<div class="contact-address-area mb-5">
+    <div class="container">
+        <div class="row g-4">
 
-                    <div class="location">
-                        <i class="flaticon-email-1 call-icon"></i>
-                        <span>EMAIL ADDRESS</span>
-                        <a href="mailto:support@marketmind.com">support@marketmind.com</a>
-                        <div class="mt-2">
-                            <span class="badge px-2 py-1" style="background: rgba(139,201,5,0.2); color: #8BC905; font-size: 0.7rem;">Reply within 1hrs</span>
-                        </div>
-                    </div>
-
-                    <div class="location">
-                        <i class="flaticon-maps-and-flags call-icon"></i>
-                        <span>GLOBAL HEADQUARTERS</span>
-                        <a href="#" target="_blank">WORLDWIDE</a>
-                        <div class="mt-2">
-                            <span class="badge px-2 py-1" style="background: rgba(139,201,5,0.2); color: #8BC905; font-size: 0.7rem;">30+ Countries</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Live Support Indicator -->
-                <div class="d-flex align-items-center justify-content-center gap-2 mt-4 pt-3">
-                    <span class="pulse-dot"></span>
-                    <span class="small text-white-50">Our support team is online 24/7 ready to help with your copy trading questions</span>
+            <!-- Phone -->
+            <div class="col-md-4">
+                <div class="contact-card p-4 rounded-4 text-center shadow-sm" style="background: rgba(139,201,5,0.04); border:1px solid rgba(139,201,5,0.1);">
+                    <i class="flaticon-phone-call call-icon fs-3 mb-2" style="color:#8BC905;"></i>
+                    <h6 class="fw-semibold text-dark mb-1">PHONE NUMBER</h6>
+                    <a href="tel:+4477742663627" class="d-block text-decoration-none fw-bold" style="color:#0C3A30;">+447 742 (663) 627</a>
+                    <span class="badge mt-2 px-2 py-1" style="background: rgba(139,201,5,0.2); color: #8BC905; font-size:0.7rem;">24/7 Support</span>
                 </div>
             </div>
+
+            <!-- Email -->
+            <div class="col-md-4">
+                <div class="contact-card p-4 rounded-4 text-center shadow-sm" style="background: rgba(139,201,5,0.04); border:1px solid rgba(139,201,5,0.1);">
+                    <i class="flaticon-email-1 call-icon fs-3 mb-2" style="color:#8BC905;"></i>
+                    <h6 class="fw-semibold text-dark mb-1">EMAIL ADDRESS</h6>
+                    <a href="mailto:support@marketmind.com" class="d-block text-decoration-none fw-bold" style="color:#0C3A30;">marketmindinvestments@gmail.com</a>
+                    <span class="badge mt-2 px-2 py-1" style="background: rgba(139,201,5,0.2); color: #8BC905; font-size:0.7rem;">Reply within 1hr</span>
+                </div>
+            </div>
+
+            <!-- Headquarters -->
+            <div class="col-md-4">
+                <div class="contact-card p-4 rounded-4 text-center shadow-sm" style="background: rgba(139,201,5,0.04); border:1px solid rgba(139,201,5,0.1);">
+                    <i class="flaticon-maps-and-flags call-icon fs-3 mb-2" style="color:#8BC905;"></i>
+                    <h6 class="fw-semibold text-dark mb-1">GLOBAL HEADQUARTERS</h6>
+                    <a href="#" target="_blank" class="d-block text-decoration-none fw-bold" style="color:#0C3A30;">WORLDWIDE</a>
+                    <span class="badge mt-2 px-2 py-1" style="background: rgba(139,201,5,0.2); color: #8BC905; font-size:0.7rem;">30+ Countries</span>
+                </div>
+            </div>
+
         </div>
-        <!-- End Contact Address Area -->
+
+        <!-- Live Support Indicator -->
+        <div class="d-flex align-items-center justify-content-center gap-2 mt-4 pt-3">
+            <span class="pulse-dot" style="display:inline-block;width:10px;height:10px;background:#8BC905;border-radius:50%;animation:pulse 2s infinite;"></span>
+            <span class="small text-white-50 text-center">Our support team is online 24/7, ready to help with your copy trading questions</span>
+        </div>
+    </div>
+</div>
+<!-- End Contact Address Area -->
 
         <!-- Start Contact Form Area -->
         <div class="contact-form-area">

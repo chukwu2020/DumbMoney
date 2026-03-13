@@ -40,23 +40,28 @@
     <meta name="twitter:image" content="https://www.marketmindinvestments.com/assets/images/social-share-image.jpg">
 
     <!-- Video JSON-LD -->
+  
+
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "VideoObject",
-      "name": "MarketMind Hero Video",
-      "description": "Introduction to MarketMind Investments",
-      "thumbnailUrl": "https://www.marketmindinvestments.com/assets/images/Hero-Video-thumbnail.jpg",
-      "contentUrl": "https://www.marketmindinvestments.com/assets/images/Hero-Video.mp4",
-      "uploadDate": "2026-03-07",
-      "duration": "PT30S",
-      "interactionStatistic": {
-        "@type": "InteractionCounter",
-        "interactionType": "https://schema.org/WatchAction",
-        "userInteractionCount": 1000
-      }
+{
+  "@context": "https://schema.org",
+  "@type": "VideoObject",
+  "name": "MarketMind Hero Video",
+  "description": "MarketMind helps you learn smart trading strategies and track real-time market trends.",
+  "thumbnailUrl": "https://www.marketmindinvestments.com/assets/images/Hero-Video-thumbnail.jpg",
+  "uploadDate": "2026-03-12T00:00:00+00:00",
+  "contentUrl": "https://www.marketmindinvestments.com/assets/images/Hero-Video.mp4",
+  "embedUrl": "https://www.marketmindinvestments.com/",
+  "publisher": {
+    "@type": "Organization",
+    "name": "MarketMind Investments",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://www.marketmindinvestments.com/assets/images/logo.png"
     }
-    </script>
+  }
+}
+</script>
 </head>
 
 <body class="bg-white text-neutral-900 !dark:bg-white !dark:text-neutral-900">
@@ -71,7 +76,8 @@
         </div>
     </div>
 
-    <style> .preloader-area {
+    <style>
+        .preloader-area {
             position: fixed;
             top: 0;
             left: 0;
@@ -128,19 +134,42 @@
         }
 
         @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         @keyframes pulse {
-            0% { transform: scale(0.95); opacity: 0.9; }
-            50% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(0.95); opacity: 0.9; }
+            0% {
+                transform: scale(0.95);
+                opacity: 0.9;
+            }
+
+            50% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(0.95);
+                opacity: 0.9;
+            }
         }
 
         @media (max-width: 768px) {
-            .loader-container { width: 200px; height: 200px; }
-            .logo-img { width: 100px; height: 100px; }
+            .loader-container {
+                width: 200px;
+                height: 200px;
+            }
+
+            .logo-img {
+                width: 100px;
+                height: 100px;
+            }
         }
     </style>
 
@@ -150,7 +179,9 @@
             if (preloader) {
                 preloader.style.transition = 'opacity 0.5s ease';
                 preloader.style.opacity = '0';
-                setTimeout(() => { preloader.style.display = 'none'; }, 500);
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                }, 500);
             }
         });
     </script>
@@ -185,12 +216,23 @@
     <!-- WhatsApp Widget -->
     <script>
         (function() {
-            var options = { whatsapp: "+44 (774) 266‑3627", call_to_action: "Contact us!", position: "left" };
-            var proto = document.location.protocol, host = "getbutton.io", url = proto + "//static." + host;
-            var s = document.createElement("script"); s.type = "text/javascript"; s.async = true;
+            var options = {
+                whatsapp: "+44 (774) 266‑3627",
+                call_to_action: "Contact us!",
+                position: "left"
+            };
+            var proto = document.location.protocol,
+                host = "getbutton.io",
+                url = proto + "//static." + host;
+            var s = document.createElement("script");
+            s.type = "text/javascript";
+            s.async = true;
             s.src = url + "/widget-send-button/js/init.js";
-            s.onload = function() { WhWidgetSendButton.init(host, proto, options); };
-            var x = document.getElementsByTagName("script")[0]; x.parentNode.insertBefore(s, x);
+            s.onload = function() {
+                WhWidgetSendButton.init(host, proto, options);
+            };
+            var x = document.getElementsByTagName("script")[0];
+            x.parentNode.insertBefore(s, x);
         })();
     </script>
 
@@ -203,29 +245,45 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert/dist/sweetalert.min.js"></script>
     @if (session('message'))
-    <script>swal("Successful!", "{{ session('message') }}!", "success");</script>@endif
+    <script>
+        swal("Successful!", "{{ session('message') }}!", "success");
+    </script>@endif
     @if (session('error'))
-    <script>swal("Error!", "{{ session('error') }}!", "warning");</script>@endif
+    <script>
+        swal("Error!", "{{ session('error') }}!", "warning");
+    </script>@endif
     @if (Session::has('success'))
-    <script>swal("Successful!", "{{ Session::get('success') }}!", "success");</script>@endif
+    <script>
+        swal("Successful!", "{{ Session::get('success') }}!", "success");
+    </script>@endif
     @if (Session::has('error'))
-    <script>swal("Error!", "{{ Session::get('error') }}!", "warning");</script>@endif
+    <script>
+        swal("Error!", "{{ Session::get('error') }}!", "warning");
+    </script>@endif
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Smartsupp Live Chat -->
     <script>
-        var _smartsupp = _smartsupp || {}; _smartsupp.key = 'ab7d8d57178631b207de871d693c62b0c7e5d44e';
-        window.smartsupp||(function(d){
-            var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
-            s=d.getElementsByTagName('script')[0];c=d.createElement('script');
-            c.type='text/javascript';c.charset='utf-8';c.async=true;
-            c.src='https://www.smartsuppchat.com/loader.js?';
-            s.parentNode.insertBefore(c,s);
+        var _smartsupp = _smartsupp || {};
+        _smartsupp.key = 'ab7d8d57178631b207de871d693c62b0c7e5d44e';
+        window.smartsupp || (function(d) {
+            var s, c, o = smartsupp = function() {
+                o._.push(arguments)
+            };
+            o._ = [];
+            s = d.getElementsByTagName('script')[0];
+            c = d.createElement('script');
+            c.type = 'text/javascript';
+            c.charset = 'utf-8';
+            c.async = true;
+            c.src = 'https://www.smartsuppchat.com/loader.js?';
+            s.parentNode.insertBefore(c, s);
         })(document);
     </script>
     <noscript>Powered by <a href="https://www.smartsupp.com" target="_blank">Smartsupp</a></noscript>
 
 </body>
+
 </html>

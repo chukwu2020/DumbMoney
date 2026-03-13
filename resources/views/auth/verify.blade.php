@@ -24,7 +24,7 @@
                             <i class="fas fa-info-circle me-2"></i>
                             We've sent a 6-digit verification code to your email address. 
                             <br class="d-none d-sm-block">
-                            <small style="color: red !important;" class="text-muted">Please check your inbox and spam folder.</small>
+                    
                         </div>
 
                         @if (session('success'))
