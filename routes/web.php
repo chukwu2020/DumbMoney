@@ -335,9 +335,9 @@ Route::middleware(['auth'])->group(function () {
        Route::get('/check-membership-status', [UserController::class, 'checkMembership'])->name('check.membership');
 
     //    user terms , privacy settings 
-        Route::get('/terms and privacy policy  ', [UserController::class, 'terms_privacy'])->name('terms.privacy');
+    Route::get('/terms-and-privacy-policy', [UserController::class, 'termsprivacy'])->name('terms.privacy');
 
-            Route::get('/terms $ privacy settings', [planController::class, 'terms_privacyhome'])->name('terms.privacys');
+        
 
 Route::get('/membership-locked', [UserController::class, 'lockedPage'])
     ->middleware('auth')

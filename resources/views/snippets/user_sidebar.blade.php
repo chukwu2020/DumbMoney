@@ -129,6 +129,16 @@
     </a>
 </li>
 
+                <li>
+    <a href="{{ route('terms.privacy')}}" 
+       class="menu-link {{ request()->routeIs('terms.privacy') ? 'active-link' : '' }}" 
+       style="font-size: 16px;">
+        <span>
+            <iconify-icon icon="mdi:shield-outline" class="mr-1"></iconify-icon>
+            Privacy Policy & Terms
+        </span>
+    </a>
+</li>
             
             <!-- STANDALONE LOGOUT BUTTON -->
             <!-- STANDALONE LOGOUT BUTTON -->

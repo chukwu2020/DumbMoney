@@ -601,9 +601,9 @@ public function lockedPage()
 
 // terms and conditions
 
-public function terms_privacyhome()
+public function termsprivacy()
 {
-    return view(' snippets.hometermsprivacy');
+    return view('dashboard.termsprivacy');
 }
 
 

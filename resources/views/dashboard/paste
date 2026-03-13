@@ -1,1519 +1,527 @@
-<?php
+@php
+    use App\Models\WithdrawalCard;
+    $cardExists = auth()->check() ? WithdrawalCard::where('user_id', auth()->id())->exists() : false;
+@endphp
 
-namespace App\Http\Controllers;
-
-use App\Models\ContactUSMessage;
-use App\Models\Deposit;
-use App\Models\Idverification;
-use App\Models\Investment;
-use App\Models\Message;
-use App\Models\Plan;
-use App\Models\User;
-use App\Models\UserKyc;
-use App\Models\Withdrawal;
-use App\Models\WithdrawalCard;
-use App\Notifications\AdminMessageNotification;
-use App\Notifications\IDVerificationSubmitted;
-
-use App\Notifications\TransactionNotification;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Str; // ✅ ADDED THIS IMPORT
-
-class AdminController extends Controller
-{
-    public function userIndex(Request $request)
-    {
-        $query = User::with(['investments', 'profile', 'withdrawalCard'])
-            ->where('role_as', 0);
-
-        if ($request->filled('search')) {
-            $search = $request->input('search');
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%");
-            });
-        }
-
-        if ($request->filled('status')) {
-            $status = $request->input('status');
-            if ($status == 'Active') {
-                $query->where('active', 1);
-            } elseif ($status == 'Inactive') {
-                $query->where('active', 0);
-            }
-        }
-
-        $users = $query->paginate(10);
-
-        foreach ($users as $user) {
-            $user->total_invested = $user->investments->sum('amount_invested');
-        }
-
-        return view('admin.users.index', compact('users'));
-    }
-
-    public function hiddenuser(Request $request)
-    {
-        $query = User::with(['investments', 'profile', 'withdrawalCard'])
-            ->where('role_as', 0);
-
-        if ($request->filled('search')) {
-            $search = $request->input('search');
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%");
-            });
-        }
-
-        if ($request->filled('status')) {
-            $status = $request->input('status');
-            if ($status == 'Active') {
-                $query->where('active', 1);
-            } elseif ($status == 'Inactive') {
-                $query->where('active', 0);
-            }
-        }
-
-        $users = $query->paginate(10);
-
-        foreach ($users as $user) {
-            $user->total_invested = $user->investments->sum('amount_invested');
-        }
-
-        return view('admin.users.indexmain', compact('users'));
-    }
-
-    public function userDestroy($id)
-    {
-        $user = User::findOrFail($id);
-        $user->delete();
-
-        return redirect()->route('user.index')->with('success', 'User deleted successfully.');
-    }
-
-    public function edit($id)
-    {
-        $user = User::findOrFail($id);
-        return view('admin.users.edit', compact('user'));
-    }
-
-    public function pendingDeposits()
-    {
-        $deposits = Deposit::with('user', 'plan', 'wallet')
-            ->where('status', 0)
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        return view('admin.deposits.pending', compact('deposits'));
-    }
-
-    public function approvedDeposits()
-    {
-        $deposits = Deposit::with(['user', 'plan', 'wallet'])
-            ->where('status', 1)
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        return view('admin.deposits.approved', compact('deposits'));
-    }
-
-   
-public function rejectDeposit(Request $request, $id)
-{
-    $request->validate([
-        'rejection_note' => 'required|string|min:5',
-    ]);
-
-    $deposit = Deposit::findOrFail($id);
-
-    if ($deposit->status === 1) {
-        return back()->with('error', 'Cannot reject approved deposit.');
-    }
-
-    $deposit->update([
-        'status' => 2, // rejected
-        'rejection_note' => $request->rejection_note,
-    ]);
-
-    // Optional notification
-    $deposit->user->notify(new TransactionNotification(
-        'Deposit Rejected',
-        'Your deposit was rejected. Please check the reason in your dashboard.'
-    ));
-
-    return back()->with('success', 'Deposit rejected with reason.');
-}
-
-    public function approveDeposit($id)
-    {
-        $deposit = Deposit::findOrFail($id);
-
-        if ($deposit->status === 1) {
-            return redirect()->back()->with('error', 'This deposit has already been approved.');
-        }
-
-        $plan = Plan::find($deposit->plan_id);
-
-        if (!$plan) {
-            return back()->with('error', 'Investment plan not found');
-        }
-
-        $roi = $plan->interest_rate;
-        $totalProfit = ($deposit->amount_deposited * $roi / 100) * $plan->duration;
-
-        Investment::create([
-            'user_id' => $deposit->user_id,
-            'plan_id' => $deposit->plan_id,
-            'amount_invested' => $deposit->amount_deposited,
-            'roi' => $roi,
-            'total_profit' => $totalProfit,
-            'start_date' => Carbon::now(),
-            'end_date' => Carbon::now()->addDays($plan->duration),
-            'withdrawn' => 0,
-        ]);
-
-        $deposit->status = 1;
-        $deposit->save();
-
-        $user = $deposit->user;
-
-        $user->notify(new TransactionNotification(
-            'Deposit Approved',
-            'Your deposit of $' . number_format($deposit->amount_deposited, 2) . ' has been approved and investment started successfully.'
-        ));
-
-        return redirect()->back()->with('success', 'Deposit approved and investment started');
-    }
-
-    public function showApprovedWithdrawals()
-    {
-        $approvedWithdrawals = Withdrawal::where('status', 'approved')
-            ->with(['user'])
-            ->latest()
-            ->get();
-
-        $withdrawalCards = WithdrawalCard::all();
-
-        return view('admin.deposits.withdrawal_approved', compact('approvedWithdrawals', 'withdrawalCards'));
-    }
-
-    public function unapproveBalanceWithdrawal(Request $request, $id)
-    {
-        $withdrawal = Withdrawal::findOrFail($id);
-
-        $withdrawal->user->available_balance += $withdrawal->amount;
-        $withdrawal->user->save();
-
-        $withdrawal->status = 'failed';
-        $withdrawal->admin_note = $request->admin_note;
-        $withdrawal->save();
-
-        return redirect()->back()->with('success', 'Withdrawal has been unapproved and marked as failed.');
-    }
-
-    // ✅ FIXED: Generate Membership Code
-   
-
-
-// Add this to AdminController.php
-
-public function generateMembershipCode(Request $request)
-{
-    $request->validate([
-        'user_id' => 'required|exists:users,id'
-    ]);
-
-    $user = User::findOrFail($request->user_id);
+<aside class="sidebar" style="background: linear-gradient(145deg, #ffffff 0%, #f8faf8 100%); border-right: 1px solid rgba(139, 201, 5, 0.15);">
     
-    // Check if user already has a code
-    if ($user->membership_code) {
-        return response()->json([
-            'success' => false,
-            'message' => 'User already has code: ' . $user->membership_code
-        ], 400);
-    }
-
-    // Generate unique code
-    do {
-        $membershipCode = 'VIP' . date('Y') . strtoupper(Str::random(6));
-    } while (DB::table('membership_codes')->where('code', $membershipCode)->exists());
-    
-    // Insert into membership_codes table
-    DB::table('membership_codes')->insert([
-        'code' => $membershipCode,
-        'is_used' => false,
-        'used_by' => null,
-        'used_at' => null,
-        'created_at' => now(),
-        'updated_at' => now()
-    ]);
-    
-    // Assign to user (but don't activate yet)
-    $user->update([
-        'membership_code' => $membershipCode,
-        'has_membership' => false
-    ]);
-    
-    return response()->json([
-        'success' => true,
-        'membership_code' => $membershipCode,
-        'user_name' => $user->name
-    ]);
-}
-
-// live
-
-public function toggleMembershipLock(User $user)
-{
-    $user->membership_locked = !$user->membership_locked;
-    $user->save();
-
-    $status = $user->membership_locked ? 'locked' : 'unlocked';
-
-    return back()->with('success', "Membership code has been {$status}.");
-}
-
-
-
-    public function withdrawaldestroy($id)
-    {
-        $withdrawal = Withdrawal::findOrFail($id);
-
-        if ($withdrawal->status !== 'approved') {
-            return back()->with('error', 'Only approved withdrawals can be deleted.');
-        }
-
-        $withdrawal->delete();
-
-        return back()->with('success', 'Approved withdrawal deleted successfully.');
-    }
-
-    public function updateBalance(Request $request, $id)
-    {
-        $request->validate([
-            'available_balance' => 'required|numeric|min:0',
-            'investments.*' => 'nullable|numeric|min:0',
-        ]);
-
-        $user = User::findOrFail($id);
-        $user->available_balance = $request->input('available_balance');
-        $user->save();
-
-        return redirect()->route('user.index')->with('success', 'User balance updated successfully.');
-    }
-
-    public function admin_dashboard()
-    {
-        $totalUsers = User::count();
-        $totalDeposits = User::sum('available_balance');
-        $totalWithdrawals = Withdrawal::where('status', 'approved')->sum('amount');
-        $amount_invested = Investment::sum('amount_invested');
-  $user = auth()->user();
-        return view('admin.index', compact(
-            'totalUsers',
-            'totalDeposits',
-            'totalWithdrawals',
-            'amount_invested',
-            'user'
-        ));
-    }
-
-    public function adminViewWithdrawals()
-    {
-        $withdrawals = Withdrawal::with(['user.profile', 'user.withdrawalCard'])
-            ->where('status', 'pending')
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        return view('admin.deposits.withdrawal_pending', compact('withdrawals'));
-    }
-
-    public function approveBalanceWithdrawal($id)
-    {
-        $withdrawal = Withdrawal::findOrFail($id);
-
-        if ($withdrawal->status === 'approved') {
-            return back()->with('error', 'This withdrawal has already been approved.');
-        }
-
-        $withdrawal->status = 'approved';
-        $withdrawal->admin_note = null;
-        $withdrawal->save();
-
-        $user = $withdrawal->user;
-
-        $user->notify(new TransactionNotification(
-            'Withdrawal Approved',
-            'Your withdrawal request of $' . number_format($withdrawal->amount, 2) . ' has been approved.'
-        ));
-
-        return back()->with('success', 'Withdrawal approved successfully.');
-    }
-
-    public function rejectBalanceWithdrawal(Request $request, $id)
-    {
-        $request->validate([
-            'admin_note' => 'required|string|max:500',
-        ]);
-
-        $withdrawal = Withdrawal::findOrFail($id);
-
-        if ($withdrawal->status !== 'pending') {
-            return back()->with('error', 'Only pending withdrawals can be rejected.');
-        }
-
-        $user = $withdrawal->user;
-        $user->available_balance += $withdrawal->amount;
-        $user->save();
-
-        $withdrawal->status = 'rejected';
-        $withdrawal->admin_note = $request->admin_note;
-        $withdrawal->save();
-
-        $user->notify(new TransactionNotification(
-            'Withdrawal Rejected',
-            'Your withdrawal request of $' . number_format($withdrawal->amount, 2) . ' has been rejected. Reason: ' . $request->admin_note
-        ));
-
-        return back()->with('success', 'Withdrawal rejected, amount refunded to user, and notification sent.');
-    }
-
-    public function index()
-    {
-        $messages = ContactUSMessage::orderBy('created_at', 'desc')->paginate(20);
-        return view('admin.contactUs.index', compact('messages'));
-    }
-
-    public function destroy($id)
-    {
-        $message = Message::findOrFail($id);
-        $message->delete();
-
-        return redirect()->route('admin.messages.index')->with('success', 'Message deleted successfully.');
-    }
-
-    public function profile()
-    {
-        $user = User::with('profile')->find(auth()->id());
-        return view('admin.profile', compact('user'));
-    }
-
-    public function updateProfile(Request $request)
-    {
-        $user = auth()->user();
-
-        if ($request->hasFile('profile_pic')) {
-            $file = $request->file('profile_pic');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('uploads'), $filename);
-
-            $profile = $user->profile ?? new \App\Models\UserProfile();
-            $profile->user_id = $user->id;
-            $profile->profile_pic = $filename;
-            $profile->save();
-        }
-
-        $user->update([
-            'name' => $request->input('name'),
-            'phone' => $request->input('phone'),
-        ]);
-
-        if ($user->profile) {
-            $user->profile->update([
-                'address' => $request->input('address'),
-                'bitcoin_address' => $request->input('bitcoin_address'),
-                'etherium_address' => $request->input('etherium_address'),
-            ]);
-        }
-
-        return redirect()->back()->with('success', 'Profile updated successfully.');
-    }
-
-    public function kycindex()
-    {
-        $kycs = UserKyc::with('user')->latest()->get();
-        return view('admin.admin_approve_id_verification', compact('kycs'));
-    }
-
-    public function approve($id)
-    {
-        $kyc = UserKyc::with('user')->findOrFail($id);
-
-        if ($kyc->status === 'approved') {
-            return redirect()->back()->with('error', 'This KYC is already approved.');
-        }
-
-        if ($kyc->status === 'rejected') {
-            return redirect()->back()->with('error', 'This KYC has already been rejected and cannot be approved.');
-        }
-
-        $kyc->status = 'approved';
-        $kyc->admin_note = 'Approved by admin';
-        $kyc->save();
-
-        $user = $kyc->user;
-        $user->notify(new TransactionNotification(
-            'KYC Approved',
-            'Your KYC documents have been reviewed and approved. You have unlocked additional features for your trading.'
-        ));
-
-        return redirect()->back()->with('success', 'KYC approved.');
-    }
-
-    public function reject($id)
-    {
-        $kyc = UserKyc::with('user')->findOrFail($id);
-
-        if ($kyc->status === 'rejected') {
-            return redirect()->back()->with('error', 'This KYC is already rejected.');
-        }
-
-        if ($kyc->status === 'approved') {
-            return redirect()->back()->with('error', 'This KYC has already been approved and cannot be rejected.');
-        }
-
-        $kyc->status = 'rejected';
-        $kyc->admin_note = 'Rejected by admin';
-        $kyc->save();
-
-        $user = $kyc->user;
-        $user->notify(new TransactionNotification(
-            'KYC Rejected',
-            'Your KYC documents were reviewed and rejected. Please upload a clearer image of your ID for verification.'
-        ));
-
-        return redirect()->back()->with('success', 'KYC rejected.');
-    }
-
-
-
-    // admin message controller 
-
-
-
-public function sendMessage(Request $request)
-{
-    $request->validate([
-        'title' => 'required',
-        'message' => 'required',
-        'users' => 'required|array'
-    ]);
-
-    if (in_array('all', $request->users)) {
-        $users = User::all();
-    } else {
-        $users = User::whereIn('id', $request->users)->get();
-    }
-
-    Notification::send($users, new AdminMessageNotification(
-        $request->title,
-        $request->message
-    ));
-
-    return back()->with('success', 'Message sent successfully!');
-}
-
-// **
-//      * Get language code based on country
-//      */
-    private function getLanguageCode($country)
-    {
-        $countryLanguageMap = [
-            'Afghanistan' => 'ps',
-            'Albania' => 'sq',
-            'Algeria' => 'ar',
-            'Argentina' => 'es',
-            'Australia' => 'en',
-            'Austria' => 'de',
-            'Bangladesh' => 'bn',
-            'Belarus' => 'be',
-            'Belgium' => 'nl',
-            'Brazil' => 'pt',
-            'Bulgaria' => 'bg',
-            'Cambodia' => 'km',
-            'Canada' => 'en',
-            'Chile' => 'es',
-            'China' => 'zh-CN',
-            'Colombia' => 'es',
-            'Croatia' => 'hr',
-            'Czech Republic' => 'cs',
-            'Denmark' => 'da',
-            'Egypt' => 'ar',
-            'Estonia' => 'et',
-            'Finland' => 'fi',
-            'France' => 'fr',
-            'Germany' => 'de',
-            'Ghana' => 'en',
-            'Greece' => 'el',
-            'Hong Kong' => 'zh-TW',
-            'Hungary' => 'hu',
-            'Iceland' => 'is',
-            'India' => 'hi',
-            'Indonesia' => 'id',
-            'Iran' => 'fa',
-            'Iraq' => 'ar',
-            'Ireland' => 'en',
-            'Israel' => 'he',
-            'Italy' => 'it',
-            'Japan' => 'ja',
-            'Jordan' => 'ar',
-            'Kazakhstan' => 'kk',
-            'Kenya' => 'sw',
-            'Kuwait' => 'ar',
-            'Latvia' => 'lv',
-            'Lebanon' => 'ar',
-            'Lithuania' => 'lt',
-            'Luxembourg' => 'lb',
-            'Malaysia' => 'ms',
-            'Maldives' => 'dv',
-            'Mexico' => 'es',
-            'Morocco' => 'ar',
-            'Nepal' => 'ne',
-            'Netherlands' => 'nl',
-            'New Zealand' => 'en',
-            'Nigeria' => 'en',
-            'Norway' => 'no',
-            'Pakistan' => 'ur',
-            'Palestine' => 'ar',
-            'Peru' => 'es',
-            'Philippines' => 'tl',
-            'Poland' => 'pl',
-            'Portugal' => 'pt',
-            'Qatar' => 'ar',
-            'Romania' => 'ro',
-            'Russia' => 'ru',
-            'Saudi Arabia' => 'ar',
-            'Serbia' => 'sr',
-            'Singapore' => 'en',
-            'Slovakia' => 'sk',
-            'Slovenia' => 'sl',
-            'South Africa' => 'af',
-            'South Korea' => 'ko',
-            'Spain' => 'es',
-            'Sri Lanka' => 'si',
-            'Sweden' => 'sv',
-            'Switzerland' => 'de',
-            'Syria' => 'ar',
-            'Taiwan' => 'zh-TW',
-            'Tanzania' => 'sw',
-            'Thailand' => 'th',
-            'Tunisia' => 'ar',
-            'Turkey' => 'tr',
-            'Ukraine' => 'uk',
-            'United Arab Emirates' => 'ar',
-            'United Kingdom' => 'en',
-            'United States' => 'en',
-            'Uruguay' => 'es',
-            'Uzbekistan' => 'uz',
-            'Venezuela' => 'es',
-            'Vietnam' => 'vi',
-            'Yemen' => 'ar',
-            'Zambia' => 'en',
-            'Zimbabwe' => 'en',
-        ];
-
-        return $countryLanguageMap[$country] ?? 'en'; // Default to English
-    }
-
-    /**
-     * Translate message to target language
-     */
-    private function translateMessage($text, $targetLanguage)
-    {
-        try {
-            if ($targetLanguage === 'en') {
-                return $text; // No translation needed
-            }
-
-            // Using Google Translate (free version)
-            $tr = new GoogleTranslate();
-            $tr->setSource('en'); // Source language (admin's language)
-            $tr->setTarget($targetLanguage);
-            
-            return $tr->translate($text);
-            
-        } catch (\Exception $e) {
-            \Log::error('Translation failed: ' . $e->getMessage());
-            return $text; // Return original if translation fails
-        }
-    }
-
-    /**
-     * Send message with auto-translation
-     */
-    public function sendMessage(Request $request)
-    {
-        $request->validate([
-            'title' => 'required',
-            'message' => 'required',
-            'users' => 'required|array'
-        ]);
-
-        if (in_array('all', $request->users)) {
-            $users = User::all();
-        } else {
-            $users = User::whereIn('id', $request->users)->get();
-        }
-
-        $originalTitle = $request->title;
-        $originalMessage = $request->message;
-
-        foreach ($users as $user) {
-            // Get user's language based on country
-            $languageCode = $this->getLanguageCode($user->country ?? '');
-            
-            // Translate title and message
-            $translatedTitle = $this->translateMessage($originalTitle, $languageCode);
-            $translatedMessage = $this->translateMessage($originalMessage, $languageCode);
-            
-            // Send notification with translated content
-            $user->notify(new AdminMessageNotification(
-                $translatedTitle,
-                $translatedMessage,
-                $originalTitle, // Pass original for reference
-                $languageCode,   // Pass language code
-                $user->country   // Pass country
-            ));
-        }
-
-        // Log the translation activity
-        \Log::info('Messages sent with translation', [
-            'total_users' => $users->count(),
-            'languages' => $users->pluck('country')->unique()->values()
-        ]);
-
-        return back()->with('success', 'Messages sent successfully with auto-translation!');
-    }
-
-
-
-
-}<?php
-
-namespace App\Notifications;
-
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
-
-class AdminMessageNotification extends Notification
-{
-    use Queueable;
-
-    public $title;
-    public $message;
-    public $originalTitle;
-    public $languageCode;
-    public $country;
-
-    public function __construct($title, $message, $originalTitle = null, $languageCode = 'en', $country = null)
-    {
-        $this->title = $title;
-        $this->message = $message;
-        $this->originalTitle = $originalTitle;
-        $this->languageCode = $languageCode;
-        $this->country = $country;
-    }
-
-    public function via($notifiable)
-    {
-        return ['mail'];
-    }
-
-    public function toMail($notifiable)
-    {
-        return (new MailMessage)
-            ->subject($this->title)
-            ->view('emails.admin-message', [
-                'subject' => $this->title,
-                'userName' => $notifiable->name,
-                'messageBody' => $this->message,
-                'originalTitle' => $this->originalTitle,
-                'languageCode' => $this->languageCode,
-                'country' => $this->country,
-                'actionUrl' => route('user.dashboard'),
-                'actionText' => 'View Dashboard',
-                'previewText' => 'You have a new message from MarketMind'
-            ]);
-    }
-}
-
-
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>{{ $subject }} - {{ config('app.name') }}</title>
-
-<style>
-@media only screen and (max-width: 600px) {
-  .email-container { width: 100% !important; }
-  .mobile-padding { padding: 25px !important; }
-  .stack-column { display: block !important; width: 100% !important; text-align: left !important; }
-}
-</style>
-</head>
-
-<body style="margin:0; padding:0; background-color:#f4f8f5; font-family: Arial, Helvetica, sans-serif; color:#0C3A30;">
-
-<!-- Hidden Preview Text -->
-<div style="display:none; max-height:0; overflow:hidden;">
-  {{ $previewText ?? 'You have a new update from MarketMind.' }}
-</div>
-
-<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f4f8f5">
-<tr>
-<td align="center" style="padding:40px 15px;">
-
-<!-- Email Card -->
-<table class="email-container" width="600" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff" style="border-radius:14px; overflow:hidden; box-shadow:0 6px 20px rgba(0,0,0,0.06);">
-
-<!-- Header -->
-<tr>
-<td style="background:#8bc905; padding:30px 20px; text-align:center;">
-
-<img src="https://res.cloudinary.com/dswwq3xks/image/upload/v1752508147/mymarketmindmainlogo_qonmlk.png"
-     alt="MarketMind Logo"
-     style="height:55px; margin-bottom:12px; display:block; margin-left:auto; margin-right:auto;">
-
-
-</td>
-</tr>
-
-<!-- Body -->
-<tr>
-<td class="mobile-padding" style="padding:40px 45px; font-size:15px; line-height:1.7;">
-<h2 style="margin:0 0 25px 0; font-size:18px; color:#0C3A30; font-weight:500; letter-spacing:1px; text-transform:uppercase;">
-  {{ $subject }}
-</h2>
-
-<p style="margin-top:0; font-size:16px;">
-  Hello {{ $userName ?? 'Valued Investor' }},
-</p>
-
-<p style="margin:20px 0; font-weight:500; letter-spacing:0.4px;">
-  This is an official update from the MarketMind trading desk regarding your account activity:
-</p>
-<!-- Highlighted Message Box -->
-<table width="100%" cellpadding="0" cellspacing="0" style="margin:25px 0;">
-<tr>
-<td style="background:#f0fdf4; border-left:4px solid #8bc905; padding:20px; border-radius:6px;">
-  <p style="margin:0; font-size:15px; line-height:1.7;">
-    {{ $messageBody }}
-  </p>
-</td>
-<!-- Add this near the top of your email template, maybe after the header -->
-<tr>
-<td style="padding:10px 45px 0 45px; text-align:right;">
-    <span style="background:#f0fdf4; color:#8bc905; font-size:12px; padding:4px 12px; border-radius:20px;">
-        🌐 Translated to: {{ strtoupper($languageCode) }} @if($country)({{ $country }})@endif
-    </span>
-</td>
-</tr>
-
-<!-- Optional: Show original message in English -->
-@if($originalTitle && $originalTitle != $subject)
-<tr>
-<td style="padding:10px 45px 0 45px;">
-    <details style="background:#f8f9fa; padding:15px; border-radius:8px;">
-        <summary style="color:#0C3A30; cursor:pointer; font-weight:500;">📝 View Original English Message</summary>
-        <p style="margin-top:15px; color:#4a5f55;">{{ $originalTitle }}</p>
-        <p style="color:#4a5f55;">{{ $messageBody }}</p>
-    </details>
-</td>
-</tr>
-@endif
-</tr>
-</table>
-
-<!-- CTA Button -->
-@if(!empty($actionUrl))
-<table width="100%" cellpadding="0" cellspacing="0" style="margin:35px 0;">
-<tr>
-<td align="center">
-
-<a href="{{ $actionUrl }}"
-   style="background:#8bc905; color:#ffffff; text-decoration:none; padding:14px 28px; border-radius:6px; font-weight:bold; display:inline-block;">
-   {{ $actionText ?? 'View My Account' }}
-</a>
-
-</td>
-</tr>
-</table>
-@endif
-
-<p style="margin-top:30px; font-size:14px; color:#4a5f55;">
-If you have any questions, simply reply to this email our trading team is here to help.
-</p>
-
-<!-- Signature -->
-<table width="100%" cellpadding="0" cellspacing="0" style="margin-top:35px; border-top:1px solid #e5efe9; padding-top:20px;">
-<tr>
-<td>
-
-<p style="margin:0; font-size:14px;">
-Warm regards,
-</p>
-
-<p style="margin:5px 0 0; font-size:16px; font-weight:600; color:#8bc905;">
-The MarketMind Team
-</p>
-
-</td>
-</tr>
-</table>
-
-</td>
-</tr>
-
-<!-- Footer -->
-<tr>
-<td bgcolor="#f0fdf4" style="padding:25px; text-align:center; font-size:12px; color:#5a6d5a;">
-
-<p style="margin:0 0 10px;">
-  © {{ date('Y') }} MarketMind. All rights reserved.
-</p>
-
-<p style="margin:0;">
-  You are receiving this email because you have an active MarketMind account.
-</p>
-
-<p style="margin:15px 0 0;">
-  <a href="#" style="color:#8bc905; text-decoration:none;">Help Center</a>
-  &nbsp;•&nbsp;
-  <a href="#" style="color:#8bc905; text-decoration:none;">Privacy Policy</a>
-  &nbsp;•&nbsp;
-  <a href="#" style="color:#8bc905; text-decoration:none;">Unsubscribe</a>
-</p>
-
-</td>
-</tr>
-
-</table>
-
-</td>
-</tr>
-</table>
-
-</body>
-</html>
-
-
-@extends('layout.admin')
-
-@section('content')
-<div class="container-fluid px-4 py-4">
-    <div class="row justify-content-center">
-        <div class="col-12 col-xl-10">
-            
-            <!-- Page Header -->
-            <div class="d-flex align-items-center justify-content-between mb-4">
-                <div>
-                    <h2 class="fw-bold mb-1" style="color: #0C3A30;">Send Message to Users</h2>
-                </div>
+    <!-- Close Button -->
+    <button type="button" class="sidebar-close-btn lg:hidden absolute top-5 right-5 z-50 w-10 h-10 rounded-full flex items-center justify-center bg-white shadow-md hover:bg-[#8bc905] hover:text-white transition-all duration-300 border border-gray-100">
+        <iconify-icon icon="radix-icons:cross-2" class="text-2xl"></iconify-icon>
+    </button>
+
+    <!-- Logo Section with Premium Styling -->
+    <div class="desktop-logo px-4 pt-1 pb-2 hidden lg:block" style="margin-top: 0;">
+            <img 
+                src="{{ asset('assets/images/mymarketmindmainlogo.png') }}" 
+                alt="Market Mind Logo" 
+                class="brand-logo logo-img"
+            >
+        </div>
+
+    <!-- User Greeting (Optional - adds personal touch) -->
+    <div class="px-5 py-3 border-b border-[#8bc905]/10 bg-gradient-to-r from-[#8bc905]/5 to-transparent">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#0C3A30] to-[#1a5a4a] flex items-center justify-center text-white font-bold shadow-md">
+                {{ substr(auth()->user()->name ?? 'U', 0, 1) }}
             </div>
-
-            @if(session('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <i class="ri-check-circle-line me-2"></i>{{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            @endif
-
-            @if($errors->any())
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <i class="ri-error-warning-line me-2"></i>
-                    <ul class="mb-0">
-                        @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            @endif
-
-            <form action="{{ route('admin.send.message') }}" method="POST" id="messageForm">
-                @csrf
-                
-                <div class="row g-4">
-                    <!-- User Selection Card -->
-                    <div class="col-lg-5">
-                        <div class="card border-0 shadow-sm h-100">
-                            <div class="card-header bg-white border-bottom py-3">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <h5 class="mb-0 fw-semibold" style="color: #0C3A30;">
-                                        <i class="ri-user-3-line me-2"></i>Select Recipients
-                                    </h5>
-                                    <span class="badge bg-light text-dark" id="selectedCount">0 selected</span>
-                                </div>
-                            </div>
-                            <div class="card-body p-0">
-                                <!-- Country Filter Section -->
-                                <div class="p-3 border-bottom" style="background-color: #f8f9fa;">
-                                    <label class="form-label fw-semibold mb-2" style="color: #0C3A30;">
-                                        <i class="ri-earth-line me-1"></i>Filter by Country
-                                    </label>
-                                    
-                                    <!-- Country Selection -->
-                                    <div class="mb-2">
-                                        <select class="form-select" id="countryFilter">
-                                            <option value="">All Countries</option>
-                                            @php
-                                                $countries = \App\Models\User::distinct()->orderBy('country')->pluck('country');
-                                            @endphp
-                                            @foreach($countries as $country)
-                                                @if($country)
-                                                    <option value="{{ $country }}">{{ $country }}</option>
-                                                @endif
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    
-                                    <!-- Quick Country Select Buttons -->
-                                    <div class="d-flex flex-wrap gap-2 mt-2" id="countryQuickSelect">
-                                        @php
-                                            $topCountries = \App\Models\User::select('country')
-                                                ->selectRaw('count(*) as total')
-                                                ->whereNotNull('country')
-                                                ->groupBy('country')
-                                                ->orderBy('total', 'desc')
-                                                ->limit(5)
-                                                ->get();
-                                        @endphp
-                                        @foreach($topCountries as $countryData)
-                                            @if($countryData->country)
-                                                <button type="button" class="btn btn-sm btn-outline-success country-quick-btn" data-country="{{ $countryData->country }}">
-                                                    {{ $countryData->country }} ({{ $countryData->total }})
-                                                </button>
-                                            @endif
-                                        @endforeach
-                                    </div>
-                                </div>
-
-                                <!-- Select All Option -->
-                                <div class="p-3 border-bottom" style="background-color: #f8f9fa;">
-                                    <div class="form-check">
-                                        <input 
-                                            class="form-check-input" 
-                                            type="checkbox" 
-                                            id="selectAll"
-                                            style="cursor: pointer; width: 18px; height: 18px;"
-                                        >
-                                        <label class="form-check-label fw-semibold ms-2" for="selectAll" style="cursor: pointer;">
-                                            Select All Users
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <!-- Search Box -->
-                                <div class="p-3 border-bottom">
-                                    <div class="input-group">
-                                        <span class="input-group-text bg-white border-end-0">
-                                            <i class="ri-search-line text-muted"></i>
-                                        </span>
-                                        <input 
-                                            type="text" 
-                                            class="form-control border-start-0 ps-0" 
-                                            id="searchUsers" 
-                                            placeholder="Search users..."
-                                        >
-                                    </div>
-                                </div>
-
-                                <!-- Users List -->
-                                <div class="user-list-container" style="max-height: 400px; overflow-y: auto;">
-                                    @foreach(\App\Models\User::all() as $user)
-                                        <div class="user-item p-3 border-bottom" 
-                                             data-user-name="{{ strtolower($user->name) }}" 
-                                             data-user-email="{{ strtolower($user->email) }}"
-                                             data-user-country="{{ $user->country ?? 'Not Set' }}">
-                                            <div class="form-check">
-                                                <input 
-                                                    class="form-check-input user-checkbox" 
-                                                    type="checkbox" 
-                                                    name="users[]" 
-                                                    value="{{ $user->id }}" 
-                                                    id="user{{ $user->id }}"
-                                                    @if(old('users') && in_array($user->id, old('users'))) checked @endif
-                                                    @if(auth()->id() == $user->id) checked @endif
-                                                    style="cursor: pointer; width: 18px; height: 18px;"
-                                                >
-                                                <label class="form-check-label ms-2 w-100" for="user{{ $user->id }}" style="cursor: pointer;">
-                                                    <div class="d-flex align-items-center justify-content-between">
-                                                        <div>
-                                                            <div class="fw-semibold" style="color: #0C3A30;">{{ $user->name }}</div>
-                                                            <small class="text-muted">{{ $user->email }}</small>
-                                                            @if($user->country)
-                                                                <div class="mt-1">
-                                                                    <span class="badge bg-info bg-opacity-10 text-info">
-                                                                        <i class="ri-earth-line me-1"></i>{{ $user->country }}
-                                                                    </span>
-                                                                </div>
-                                                            @endif
-                                                        </div>
-                                                        @if(auth()->id() == $user->id)
-                                                            <span class="badge bg-success bg-opacity-10 text-success">You</span>
-                                                        @endif
-                                                    </div>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-
-                                <!-- No Results Message -->
-                                <div id="noResults" class="p-4 text-center text-muted" style="display: none;">
-                                    <i class="ri-search-line fs-1 mb-2"></i>
-                                    <p class="mb-0">No users found</p>
-                                </div>
-                                
-                                <!-- Country Selection Actions -->
-                                <div class="p-3 border-top bg-light">
-                                    <div class="d-grid gap-2">
-                                        <button type="button" class="btn btn-success" id="selectAllFromCountry" disabled>
-                                            <i class="ri-checkbox-multiple-line me-2"></i>
-                                            <span id="countrySelectText">Select All from Selected Country</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Message Composition Card -->
-                    <div class="col-lg-7">
-                        <div class="card border-0 shadow-sm h-100">
-                            <div class="card-header bg-white border-bottom py-3">
-                                <h5 class="mb-0 fw-semibold" style="color: #0C3A30;">
-                                    <i class="ri-mail-line me-2"></i>Compose Message
-                                </h5>
-                            </div>
-                            <div class="card-body">
-                                <!-- Title Field -->
-                                <div class="mb-4">
-                                    <label for="title" class="form-label fw-semibold" style="color: #0C3A30;">
-                                        Message Title <span class="text-danger">*</span>
-                                    </label>
-                                    <input 
-                                        type="text" 
-                                        class="form-control form-control-lg @error('title') is-invalid @enderror" 
-                                        id="title" 
-                                        name="title" 
-                                        placeholder="Enter message title..."
-                                        value="{{ old('title') }}"
-                                        required
-                                    >
-                                    @error('title')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <!-- Message Field -->
-                                <div class="mb-4">
-                                    <label for="message" class="form-label fw-semibold" style="color: #0C3A30;">
-                                        Message Content <span class="text-danger">*</span>
-                                    </label>
-                                    <textarea 
-                                        class="form-control @error('message') is-invalid @enderror" 
-                                        id="message" 
-                                        name="message" 
-                                        rows="10" 
-                                        placeholder="Type your message here..."
-                                        required
-                                    >{{ old('message') }}</textarea>
-                                    @error('message')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                    <small class="text-muted">
-                                        <span id="charCount">0</span> characters
-                                    </small>
-                                </div>
-
-                                <!-- Action Buttons -->
-                                <div class="d-flex gap-3">
-                                    <button 
-                                        type="submit" 
-                                        class="btn btn-lg px-5 fw-semibold" 
-                                        id="sendButton"
-                                        style="background: linear-gradient(145deg, #8BC905, #7AB805); color: white; border: none;"
-                                    >
-                                        <i class="ri-send-plane-fill me-2"></i>
-                                        <span id="buttonText">Send Message</span>
-                                    </button>
-                                    <button 
-                                        type="reset" 
-                                        class="btn btn-outline-secondary btn-lg px-4"
-                                        id="resetButton"
-                                    >
-                                        <i class="ri-refresh-line me-2"></i>Reset
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
-
+            <div>
+                <p class="text-xs text-gray-500">Welcome back,</p>
+                <p class="text-sm font-semibold text-[#0C3A30] truncate max-w-[150px]">{{ auth()->user()->name ?? 'Trader' }}</p>
+            </div>
         </div>
     </div>
-</div>
+
+    <!-- Sidebar Menu -->
+    <div class="sidebar-menu-area px-3 py-4 overflow-y-auto" style="height: calc(100vh - 200px);">
+        <ul class="space-y-1">
+
+            <!-- HOME SECTION -->
+            <li class="menu-title">
+                <span class="text-xs font-bold uppercase tracking-wider text-[#0C3A30]/60">Main</span>
+            </li>
+            
+            <li>
+                <a href="{{ route('user_dashboard') }}" 
+                   class="menu-link {{ request()->routeIs('user_dashboard') ? 'active' : '' }}">
+                    <iconify-icon icon="solar:home-smile-angle-outline" class="menu-icon"></iconify-icon>
+                    <span>Dashboard</span>
+                    @if(request()->routeIs('user_dashboard'))
+                        <span class="ml-auto w-1.5 h-1.5 rounded-full bg-[#8bc905] animate-pulse"></span>
+                    @endif
+                </a>
+            </li>
+            
+            <li>
+                <a href="{{ route('user_live') }}" 
+                   class="menu-link {{ request()->routeIs('user_live') ? 'active' : '' }}">
+                    <i class="fas fa-chart-line menu-icon"></i>
+                    <span>Join Live Trade</span>
+                    <span class="ml-auto text-[10px] px-1.5 py-0.5 rounded-full bg-[#8bc905]/10 text-[#8bc905] font-semibold">LIVE</span>
+                </a>
+            </li>
+
+            <!-- APP SECTION -->
+            <li class="menu-title mt-6">
+                <span class="text-xs font-bold uppercase tracking-wider text-[#0C3A30]/60">App</span>
+            </li>
+            
+            <li>
+                <a href="{{ route('user.investments') }}" 
+                   class="menu-link {{ request()->routeIs('user.investments') ? 'active' : '' }}">
+                    <iconify-icon icon="hugeicons:money-send-square" class="menu-icon"></iconify-icon>
+                    <span>My Investments</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="{{ route('plan.dashboard') }}" 
+                   class="menu-link {{ request()->routeIs('plan.dashboard') ? 'active' : '' }}">
+                    <iconify-icon icon="hugeicons:invoice-03" class="menu-icon"></iconify-icon>
+                    <span>Our Plans</span>
+                </a>
+            </li>
+
+            <!-- TRANSACTIONS SECTION -->
+            <li class="menu-title mt-6">
+                <span class="text-xs font-bold uppercase tracking-wider text-[#0C3A30]/60">Transactions</span>
+            </li>
+
+            <!-- Deposits Dropdown -->
+            <li class="dropdown">
+                <a href="javascript:void(0)" 
+                   class="menu-link {{ request()->routeIs('user.deposit*') ? 'active' : '' }}"
+                   onclick="toggleDropdown(this)">
+                    <iconify-icon icon="hugeicons:bitcoin-circle" class="menu-icon"></iconify-icon>
+                    <span class="flex-1">Deposits</span>
+                    <iconify-icon icon="ep:arrow-down" class="dropdown-arrow text-gray-500 transition-transform duration-300"></iconify-icon>
+                </a>
+                <ul class="sidebar-submenu hidden pl-9 pr-2 space-y-1 mt-1">
+                    <li>
+                        <a href="{{ route('user.deposit') }}" 
+                           class="submenu-link {{ request()->routeIs('user.deposit') ? 'active' : '' }}">
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#8bc905]/50"></span>
+                            <span>Make Deposit</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('user.deposit-history') }}" 
+                           class="submenu-link {{ request()->routeIs('user.deposit-history') ? 'active' : '' }}">
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#8bc905]/50"></span>
+                            <span>Deposit History</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <!-- Withdrawals Dropdown -->
+            <li class="dropdown">
+                <a href="javascript:void(0)" 
+                   class="menu-link {{ request()->routeIs('user.withdrawals*') ? 'active' : '' }}"
+                   onclick="toggleDropdown(this)">
+                    <iconify-icon icon="hugeicons:money-send-square" class="menu-icon"></iconify-icon>
+                    <span class="flex-1">Withdrawals</span>
+                    <iconify-icon icon="ep:arrow-down" class="dropdown-arrow text-gray-500 transition-transform duration-300"></iconify-icon>
+                </a>
+                <ul class="sidebar-submenu hidden pl-9 pr-2 space-y-1 mt-1">
+                    <li>
+                        <a href="{{ route('user.withdrawals.list') }}" 
+                           class="submenu-link {{ request()->routeIs('user.withdrawals.list') ? 'active' : '' }}">
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#8bc905]/50"></span>
+                            <span>Withdrawal List</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <!-- Card Action - Premium Card Design -->
+            @auth
+                <li class="mt-4 px-2">
+                    @if (!$cardExists)
+                        <form action="{{ route('withdrawals.generateCard') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="card-action-btn">
+                                <iconify-icon icon="heroicons:credit-card-20-solid" class="text-xl"></iconify-icon>
+                                <span>Generate Card</span>
+                                <span class="ml-auto text-xs px-2 py-0.5 bg-white/20 rounded-full">New</span>
+                            </button>
+                        </form>
+                    @else
+                        <a href="{{ route('withdrawals.view-card') }}" class="card-action-btn">
+                            <iconify-icon icon="heroicons:credit-card-20-solid" class="text-xl"></iconify-icon>
+                            <span>View Your Card</span>
+                            <span class="ml-auto text-xs px-2 py-0.5 bg-white/20 rounded-full">Active</span>
+                        </a>
+                    @endif
+                </li>
+            @endauth
+
+            <!-- SETTINGS SECTION -->
+            <li class="menu-title mt-6">
+                <span class="text-xs font-bold uppercase tracking-wider text-[#0C3A30]/60">Settings</span>
+            </li>
+            
+            <li>
+                <a href="{{ route('profile.show') }}" 
+                   class="menu-link {{ request()->routeIs('profile.show') ? 'active' : '' }}">
+                    <iconify-icon icon="solar:user-linear" class="menu-icon"></iconify-icon>
+                    <span>Profile</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ route('rules.regulations') }}" 
+                   class="menu-link {{ request()->routeIs('rules.regulations') ? 'active' : '' }}">
+                    <iconify-icon icon="mdi:shield-outline" class="menu-icon"></iconify-icon>
+                    <span>Rules & Guidelines</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ route('terms.privacy') }}" 
+                   class="menu-link {{ request()->routeIs('terms.privacy') ? 'active' : '' }}">
+                    <iconify-icon icon="mdi:shield-outline" class="menu-icon"></iconify-icon>
+                    <span>Privacy & Terms</span>
+                </a>
+            </li>
+
+            <!-- LOGOUT - Premium Styling -->
+            <li class="mt-6 pt-4 border-t border-[#8bc905]/10">
+                <a href="#" 
+                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                   class="logout-btn">
+                    <iconify-icon icon="lucide:power" class="text-xl"></iconify-icon>
+                    <span>Logout</span>
+                    <span class="ml-auto text-xs opacity-60">→</span>
+                </a>
+                <form id="logout-form" method="POST" action="{{ route('signout') }}" class="hidden">
+                    @csrf
+                </form>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Sidebar Footer - Version Info -->
+    <div class="absolute bottom-0 left-0 right-0 p-4 text-center border-t border-[#8bc905]/10 bg-white/50 backdrop-blur-sm">
+        <p class="text-xs text-gray-400">MarketMind v2.1.0</p>
+        <p class="text-[10px] text-gray-300 mt-0.5">© {{ date('Y') }} All rights reserved</p>
+    </div>
+</aside>
 
 <style>
-    /* Custom Styles */
-    .user-item {
-        transition: all 0.2s ease;
-        border-left: 3px solid transparent;
-    }
+/* ============ PREMIUM SIDEBAR STYLES ============ */
 
-    .user-item:hover {
-        background-color: #f8f9fa;
-        border-left-color: #8BC905;
-    }
+.sidebar {
+    width: 280px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    z-index: 1100;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.03);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
 
-    .user-list-container::-webkit-scrollbar {
-        width: 8px;
-    }
+/* Scrollbar Styling */
+.sidebar-menu-area::-webkit-scrollbar {
+    width: 4px;
+}
 
-    .user-list-container::-webkit-scrollbar-track {
-        background: #f1f1f1;
-    }
+.sidebar-menu-area::-webkit-scrollbar-track {
+    background: transparent;
+}
 
-    .user-list-container::-webkit-scrollbar-thumb {
-        background: #8BC905;
-        border-radius: 4px;
-    }
+.sidebar-menu-area::-webkit-scrollbar-thumb {
+    background: rgba(139, 201, 5, 0.2);
+    border-radius: 20px;
+}
 
-    .user-list-container::-webkit-scrollbar-thumb:hover {
-        background: #7AB805;
-    }
+.sidebar-menu-area::-webkit-scrollbar-thumb:hover {
+    background: rgba(139, 201, 5, 0.4);
+}
 
-    .form-check-input:checked {
-        background-color: #8BC905;
-        border-color: #8BC905;
-    }
+/* Menu Title */
+.menu-title {
+    padding: 0 16px;
+    margin-bottom: 8px;
+}
 
-    .form-check-input:focus {
-        border-color: #8BC905;
-        box-shadow: 0 0 0 0.25rem rgba(139, 201, 5, 0.25);
-    }
+.menu-title span {
+    display: inline-block;
+    padding-bottom: 4px;
+    border-bottom: 2px solid rgba(139, 201, 5, 0.2);
+}
 
-    /* Button disabled state */
-    #sendButton:disabled {
-        background: #e9ecef !important;
-        color: #6c757d !important;
-        cursor: not-allowed !important;
-        opacity: 0.65;
-    }
+/* Menu Links - Premium Design */
+.menu-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #2C3E3A;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    background: transparent;
+}
 
-    /* Loading state */
-    .btn-loading {
-        position: relative;
-        pointer-events: none;
-    }
+.menu-link .menu-icon {
+    font-size: 1.3rem;
+    color: #5A6B67;
+    transition: all 0.2s ease;
+}
 
-    .btn-loading::after {
-        content: "";
-        position: absolute;
-        width: 16px;
-        height: 16px;
-        top: 50%;
-        left: 50%;
-        margin-left: -8px;
-        margin-top: -8px;
-        border: 2px solid transparent;
-        border-top-color: currentColor;
-        border-radius: 50%;
-        animation: spinner 0.6s linear infinite;
-    }
+.menu-link:hover {
+    background: rgba(139, 201, 5, 0.08);
+    color: #0C3A30;
+    transform: translateX(4px);
+}
 
-    @keyframes spinner {
-        to { transform: rotate(360deg); }
+.menu-link:hover .menu-icon {
+    color: #8bc905;
+    transform: scale(1.1);
+}
+
+.menu-link.active {
+    background: linear-gradient(90deg, rgba(139, 201, 5, 0.15) 0%, transparent 100%);
+    color: #0C3A30;
+    font-weight: 600;
+    border-left: 3px solid #8bc905;
+}
+
+.menu-link.active .menu-icon {
+    color: #8bc905;
+}
+
+/* Submenu Styling */
+.sidebar-submenu {
+    animation: slideDown 0.2s ease-out;
+}
+
+.submenu-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #4A5A56;
+    font-size: 13px;
+    transition: all 0.2s ease;
+}
+
+.submenu-link:hover {
+    background: rgba(139, 201, 5, 0.08);
+    color: #0C3A30;
+    transform: translateX(4px);
+}
+
+.submenu-link.active {
+    background: rgba(139, 201, 5, 0.12);
+    color: #0C3A30;
+    font-weight: 500;
+}
+
+.submenu-link.active span:first-child {
+    background: #8bc905;
+    animation: pulse 2s infinite;
+}
+
+/* Dropdown Arrow Animation */
+.rotate-180 {
+    transform: rotate(180deg);
+}
+
+.dropdown-arrow {
+    transition: transform 0.3s ease;
+}
+
+/* Card Action Button - Premium */
+.card-action-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 14px 16px;
+    background: linear-gradient(135deg, #8bc905 0%, #9edd05 100%);
+    border: none;
+    border-radius: 14px;
+    color: #0C3A30;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(139, 201, 5, 0.2);
+}
+
+.card-action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(139, 201, 5, 0.3);
+}
+
+.card-action-btn:active {
+    transform: translateY(0);
+}
+
+/* Logout Button */
+.logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #ef4444;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    background: rgba(239, 68, 68, 0.05);
+}
+
+.logout-btn:hover {
+    background: #ef4444;
+    color: white;
+    transform: translateX(4px);
+}
+
+.logout-btn:hover iconify-icon {
+    color: white;
+}
+
+/* Animations */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(1.2);
+    }
+}
+
+/* Mobile Responsive */
+@media (max-width: 1023px) {
+    .sidebar {
+        transform: translateX(-100%);
+        top: 0;
+        height: 100vh;
+        box-shadow: none;
     }
     
-    /* Country filter active state */
-    .country-quick-btn.active {
-        background-color: #8BC905;
-        color: white;
-        border-color: #8BC905;
+    .sidebar.open {
+        transform: translateX(0);
+        box-shadow: 4px 0 30px rgba(0, 0, 0, 0.1);
     }
     
-    .country-quick-btn:hover {
-        background-color: #8BC905;
-        color: white;
-        border-color: #8BC905;
+    .sidebar-close-btn:hover {
+        background: #8bc905 !important;
+        color: white !important;
     }
+}
+
+/* Active Link Indicator */
+.menu-link.active::after {
+    content: '';
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #8bc905;
+    box-shadow: 0 0 10px #8bc905;
+}
+
+/* Custom Utility Classes */
+.hover-scale {
+    transition: transform 0.2s ease;
+}
+
+.hover-scale:hover {
+    transform: scale(1.05);
+}
+
+/* Gradient Text */
+.gradient-text {
+    background: linear-gradient(135deg, #0C3A30, #8bc905);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
 </style>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('messageForm');
-    const sendButton = document.getElementById('sendButton');
-    const buttonText = document.getElementById('buttonText');
-    const resetButton = document.getElementById('resetButton');
-    const selectAllCheckbox = document.getElementById('selectAll');
-    const userCheckboxes = document.querySelectorAll('.user-checkbox');
-    const selectedCountBadge = document.getElementById('selectedCount');
-    const searchInput = document.getElementById('searchUsers');
-    const userItems = document.querySelectorAll('.user-item');
-    const noResults = document.getElementById('noResults');
-    const messageTextarea = document.getElementById('message');
-    const charCount = document.getElementById('charCount');
+function toggleDropdown(element) {
+    // Find the dropdown container
+    const dropdown = element.closest('.dropdown');
+    const submenu = dropdown.querySelector('.sidebar-submenu');
+    const arrow = dropdown.querySelector('.dropdown-arrow');
     
-    // Country filter elements
-    const countryFilter = document.getElementById('countryFilter');
-    const countryQuickBtns = document.querySelectorAll('.country-quick-btn');
-    const selectAllFromCountry = document.getElementById('selectAllFromCountry');
-    const countrySelectText = document.getElementById('countrySelectText');
+    // Toggle submenu visibility
+    submenu.classList.toggle('hidden');
     
-    let currentSelectedCountry = '';
-
-    // Update selected count
-    function updateSelectedCount() {
-        const selectedCount = document.querySelectorAll('.user-checkbox:checked').length;
-        selectedCountBadge.textContent = selectedCount + ' selected';
-        
-        // Update select all checkbox state
-        const allChecked = Array.from(userCheckboxes).every(cb => cb.checked);
-        const someChecked = Array.from(userCheckboxes).some(cb => cb.checked);
-        selectAllCheckbox.checked = allChecked;
-        selectAllCheckbox.indeterminate = someChecked && !allChecked;
+    // Animate arrow
+    if (arrow) {
+        arrow.classList.toggle('rotate-180');
     }
-
-    // Filter users by country and search
-    function filterUsers() {
-        const searchTerm = searchInput.value.toLowerCase().trim();
-        const selectedCountry = countryFilter.value;
-        let visibleCount = 0;
-
-        userItems.forEach(item => {
-            const userName = item.dataset.userName;
-            const userEmail = item.dataset.userEmail;
-            const userCountry = item.dataset.userCountry;
-            
-            const matchesSearch = userName.includes(searchTerm) || userEmail.includes(searchTerm);
-            const matchesCountry = !selectedCountry || userCountry === selectedCountry;
-            
-            if (matchesSearch && matchesCountry) {
-                item.style.display = 'block';
-                visibleCount++;
-            } else {
-                item.style.display = 'none';
-            }
-        });
-
-        // Update country select button
-        if (selectedCountry) {
-            selectAllFromCountry.disabled = false;
-            countrySelectText.textContent = `Select All from ${selectedCountry}`;
-        } else {
-            selectAllFromCountry.disabled = true;
-            countrySelectText.textContent = 'Select All from Selected Country';
-        }
-
-        // Update quick buttons active state
-        countryQuickBtns.forEach(btn => {
-            if (btn.dataset.country === selectedCountry) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        });
-
-        // Show/hide no results message
-        if (visibleCount === 0) {
-            noResults.style.display = 'block';
-        } else {
-            noResults.style.display = 'none';
-        }
-    }
-
-    // Select all users from current country
-    selectAllFromCountry.addEventListener('click', function() {
-        const selectedCountry = countryFilter.value;
-        if (!selectedCountry) return;
-        
-        userItems.forEach(item => {
-            if (item.style.display !== 'none') {
-                const checkbox = item.querySelector('.user-checkbox');
-                if (checkbox) {
-                    checkbox.checked = true;
+    
+    // Close other dropdowns (optional - keeps only one open)
+    document.querySelectorAll('.dropdown').forEach(item => {
+        if (item !== dropdown) {
+            const otherSubmenu = item.querySelector('.sidebar-submenu');
+            const otherArrow = item.querySelector('.dropdown-arrow');
+            if (otherSubmenu && !otherSubmenu.classList.contains('hidden')) {
+                otherSubmenu.classList.add('hidden');
+                if (otherArrow) {
+                    otherArrow.classList.remove('rotate-180');
                 }
             }
-        });
-        
-        updateSelectedCount();
+        }
     });
+}
 
-    // Country filter change
-    countryFilter.addEventListener('change', filterUsers);
-
-    // Quick country buttons
-    countryQuickBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const country = this.dataset.country;
-            countryFilter.value = country;
-            filterUsers();
+// Close sidebar when clicking close button
+document.addEventListener('DOMContentLoaded', function() {
+    const closeBtn = document.querySelector('.sidebar-close-btn');
+    const sidebar = document.querySelector('.sidebar');
+    
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function() {
+            sidebar.classList.remove('open');
         });
-    });
-
-    // Select all functionality
-    selectAllCheckbox.addEventListener('change', function() {
-        // Only affect visible users
-        userItems.forEach(item => {
-            if (item.style.display !== 'none') {
-                const checkbox = item.querySelector('.user-checkbox');
-                if (checkbox) {
-                    checkbox.checked = this.checked;
+    }
+    
+    // Auto-open active dropdowns on page load
+    document.querySelectorAll('.menu-link.active').forEach(activeLink => {
+        const dropdown = activeLink.closest('.dropdown');
+        if (dropdown) {
+            const submenu = dropdown.querySelector('.sidebar-submenu');
+            const arrow = dropdown.querySelector('.dropdown-arrow');
+            if (submenu) {
+                submenu.classList.remove('hidden');
+                if (arrow) {
+                    arrow.classList.add('rotate-180');
                 }
             }
-        });
-        updateSelectedCount();
-    });
-
-    // Individual checkbox change
-    userCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', updateSelectedCount);
-    });
-
-    // Search functionality
-    searchInput.addEventListener('input', filterUsers);
-
-    // Character count
-    messageTextarea.addEventListener('input', function() {
-        charCount.textContent = this.value.length;
-    });
-
-    // Initialize character count
-    charCount.textContent = messageTextarea.value.length;
-
-    // Form submission - prevent double click
-    form.addEventListener('submit', function(e) {
-        // Check if at least one user is selected
-        const selectedUsers = document.querySelectorAll('.user-checkbox:checked').length;
-        
-        if (selectedUsers === 0) {
-            e.preventDefault();
-            alert('Please select at least one user to send the message to.');
-            return false;
         }
-
-        // Disable button and show loading state
-        sendButton.disabled = true;
-        sendButton.classList.add('btn-loading');
-        buttonText.textContent = 'Sending...';
-        
-        // Also disable reset button
-        resetButton.disabled = true;
     });
-
-    // Reset button
-    resetButton.addEventListener('click', function() {
-        setTimeout(() => {
-            updateSelectedCount();
-            charCount.textContent = '0';
-            searchInput.value = '';
-            countryFilter.value = '';
-            userItems.forEach(item => item.style.display = 'block');
-            noResults.style.display = 'none';
-            selectAllFromCountry.disabled = true;
-            countrySelectText.textContent = 'Select All from Selected Country';
-            countryQuickBtns.forEach(btn => btn.classList.remove('active'));
-        }, 10);
-    });
-
-    // Initial count update
-    updateSelectedCount();
 });
 </script>
-<!-- Add this after the Message Composition Card, before the Action Buttons -->
-<div class="mb-4 p-3 bg-light rounded" id="translationPreview" style="display: none;">
-    <h6 class="fw-semibold mb-3" style="color: #0C3A30;">
-        <i class="ri-translate-2 me-2"></i>Translation Preview
-    </h6>
-    <div id="selectedCountriesList" class="mb-2">
-        <span class="badge bg-info me-1">Loading languages...</span>
-    </div>
-    <p class="small text-muted mb-0">
-        <i class="ri-information-line me-1"></i>
-        Messages will be automatically translated to each user's native language based on their country.
-    </p>
-</div>
-
-<script>
-// Add this to your existing JavaScript
-document.addEventListener('DOMContentLoaded', function() {
-    // Function to get unique countries from selected users
-    function updateTranslationPreview() {
-        const selectedCheckboxes = document.querySelectorAll('.user-checkbox:checked');
-        const countries = new Set();
-        
-        selectedCheckboxes.forEach(checkbox => {
-            const userItem = checkbox.closest('.user-item');
-            const country = userItem ? userItem.dataset.userCountry : null;
-            if (country && country !== 'Not Set') {
-                countries.add(country);
-            }
-        });
-        
-        const previewDiv = document.getElementById('translationPreview');
-        const countriesList = document.getElementById('selectedCountriesList');
-        
-        if (countries.size > 0) {
-            previewDiv.style.display = 'block';
-            
-            let html = '';
-            countries.forEach(country => {
-                const langCode = getLanguageCode(country);
-                html += `<span class="badge bg-success bg-opacity-10 text-success me-1 mb-1">
-                    ${country} (${langCode})
-                </span>`;
-            });
-            
-            countriesList.innerHTML = html || '<span class="text-muted">No countries detected</span>';
-        } else {
-            previewDiv.style.display = 'none';
-        }
-    }
-    
-    // Simple language code mapping (you can expand this)
-    function getLanguageCode(country) {
-        const map = {
-            'Belarus': 'be',
-            'Russia': 'ru',
-            'Ukraine': 'uk',
-            'United States': 'en',
-            'United Kingdom': 'en',
-            'France': 'fr',
-            'Germany': 'de',
-            'Spain': 'es',
-            'Italy': 'it',
-            'China': 'zh-CN',
-            'Japan': 'ja',
-            'South Korea': 'ko',
-            'Brazil': 'pt',
-            'India': 'hi',
-            'Nigeria': 'en',
-            'Egypt': 'ar',
-            'Saudi Arabia': 'ar',
-            'UAE': 'ar'
-        };
-        return map[country] || 'en';
-    }
-    
-    // Update preview when checkboxes change
-    userCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', updateTranslationPreview);
-    });
-    
-    // Initial update
-    updateTranslationPreview();
-});
-</script>
-@endsection

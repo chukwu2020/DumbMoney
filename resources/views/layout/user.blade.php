@@ -195,9 +195,9 @@
                 <p class="mb-0">
                     © {{ date('Y') }} <span class="font-semibold text-[#8bc905]"> MarketMind </span>. All rights reserved.
                     <span class="mx-2 text-gray-400">|</span>
-                    <a href="{{ route('user_dashboard') }}" class="hover:text-[#9EDD05] transition-colors duration-200">Privacy Policy</a>
+                    <a href="{{route('terms.privacy')}}" class="hover:text-[#9EDD05] transition-colors duration-200">Privacy Policy</a>
                     <span class="mx-2 text-gray-400">|</span>
-                    <a href="{{ route('user_dashboard') }}" class="hover:text-[#9EDD05] transition-colors duration-200">Terms</a>
+                    <a href="{{ route('terms.privacy')}}" class="hover:text-[#9EDD05] transition-colors duration-200">Terms</a>
                 </p>
             </div>
         </footer>
