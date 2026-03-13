@@ -747,10 +747,7 @@
                 <i class="ri-shield-check-fill" style="color: #8BC905;"></i>
                 SEC Certified
             </span>
-            <span class="trust-badge">
-                <i class="ri-shield-check-fill" style="color: #8BC905;"></i>
-                FCA Regulated
-            </span>
+        
             <span class="trust-badge">
                 <i class="ri-shield-check-fill" style="color: #8BC905;"></i>
                 ISO 27001 Certified
