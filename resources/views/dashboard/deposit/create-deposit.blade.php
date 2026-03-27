@@ -24,33 +24,31 @@
         --dark-green: #0C3A30;
         --accent-green: #8AC304;
     }
-    
-    /* Fix overflow issues */
+
     * {
         box-sizing: border-box;
     }
-    
+
     .dashboard-main-body {
         max-width: 100%;
         overflow-x: hidden;
     }
-    
-    .plan-card {
+
+    .deposit-card {
         border: 2px solid #e5e7eb;
         border-radius: 16px;
-        padding: 1.5rem;
+        padding: 2rem;
         transition: all 0.3s ease;
         background: white;
-        cursor: pointer;
         position: relative;
         overflow: hidden;
-        max-width: 100%;
-        background-image: url(assets/images/hero/hero-image-1.svg);
         background-size: cover;
         background-position: center;
+        margin-bottom: 1.5rem;
+        background-image: url('{{ asset('assets/images/hero/hero-image-1.svg') }}');
     }
-    
-    .plan-card::before {
+
+    .deposit-card::before {
         content: '';
         position: absolute;
         top: 0;
@@ -60,35 +58,94 @@
         background: linear-gradient(90deg, var(--primary-green), var(--accent-green));
         opacity: 0;
         transition: opacity 0.3s ease;
-        border-radius: 16px 16px 0 0;
     }
-    
-    .plan-card:hover {
-        transform: translateY(-4px);
-        border-color: var(--primary-green);
-        box-shadow: 0 12px 24px rgba(158, 221, 5, 0.15);
-    }
-    
-    .plan-card:hover::before {
+
+    .deposit-card:hover::before {
         opacity: 1;
     }
-    
-    .plan-card.selected {
+
+    .generator-section {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .generate-btn {
+        background: linear-gradient(135deg, var(--primary-green) 0%, var(--accent-green) 100%);
+        color: var(--dark-green);
+        font-weight: 700;
+        padding: 1rem 2rem;
+        border-radius: 50px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 1.1rem;
+        box-shadow: 0 4px 15px rgba(158, 221, 5, 0.3);
+    }
+
+    .generate-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(158, 221, 5, 0.4);
+    }
+
+    .generate-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .generation-messages {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-top: 1.5rem;
+        text-align: left;
+        border-left: 3px solid var(--primary-green);
+    }
+
+    .message-item {
+        padding: 0.25rem 0;
+        font-size: 0.8rem;
+        color: #4a5568;
+        font-family: monospace;
+    }
+
+    .wallet-option {
+        border: 2px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 1rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        background: white;
+        position: relative;
+        height: 100%;
+        display: block;
+    }
+
+    .wallet-option:hover {
+        border-color: var(--primary-green);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(158, 221, 5, 0.1);
+    }
+
+    .wallet-option.selected {
         border-color: var(--primary-green);
         background: linear-gradient(135deg, #ffffff 0%, #f0f7ed 100%);
-        box-shadow: 0 12px 24px rgba(158, 221, 5, 0.2);
+        box-shadow: 0 4px 12px rgba(158, 221, 5, 0.2);
     }
-    
-    .plan-card.selected::before {
-        opacity: 1;
+
+    .wallet-option input[type="radio"] {
+        display: none;
     }
-    
-    .plan-checkmark {
+
+    .wallet-checkmark {
         position: absolute;
-        top: 1rem;
-        right: 1rem;
-        width: 24px;
-        height: 24px;
+        top: 0.5rem;
+        right: 0.5rem;
+        width: 20px;
+        height: 20px;
         border-radius: 50%;
         background: var(--primary-green);
         display: none;
@@ -96,158 +153,126 @@
         justify-content: center;
         color: white;
         font-size: 12px;
-        font-weight: bold;
-        z-index: 10;
     }
-    
-    .plan-card.selected .plan-checkmark {
+
+    .wallet-option.selected .wallet-checkmark {
         display: flex;
         animation: checkPop 0.3s ease;
     }
-    
-    .popular-badge {
-        position: absolute;
-        top: 0;
-        left: 0;
-        background: linear-gradient(135deg, #ff6b6b, #ff4757);
-        color: white;
-        padding: 6px 16px;
-        font-size: 11px;
-        font-weight: 700;
-        letter-spacing: 0.5px;
-        border-radius: 16px 0 16px 0;
-        box-shadow: 0 4px 12px rgba(255, 71, 87, 0.4);
-        z-index: 5;
-        text-transform: uppercase;
-    }
-    
+
     @keyframes checkPop {
-        0% { transform: scale(0); }
-        50% { transform: scale(1.2); }
+        0%   { transform: scale(0); }
+        50%  { transform: scale(1.2); }
         100% { transform: scale(1); }
     }
-    
-    .deposit-form-area {
-        max-height: 0;
+
+    .crypto-logo-wrapper {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: #f3f4f6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         overflow: hidden;
-        transition: max-height 0.5s ease, opacity 0.3s ease;
-        opacity: 0;
-        max-width: 100%;
+        flex-shrink: 0;
     }
-    
-    .deposit-form-area.active {
-        max-height: 1200px;
-        opacity: 1;
-        margin-top: 2rem;
+
+    .crypto-logo-wrapper img {
+        width: 34px;
+        height: 34px;
+        object-fit: contain;
     }
-    
-    .form-container {
-        background-image: url(assets/images/hero/hero-image-1.svg);
-        background-size: cover;
-        background-position: center;
-        border-radius: 16px;
-        padding: 2rem;
-        max-width: 100%;
-    }
-    
-    select.form-control, .form-control {
-        border: none;
-        border-top: 4px solid #8AC304;
-        border-radius: 0.5rem;
-        background-color: white !important;
-        font-weight: 600;
-        color: #0C3A30;
-        padding: 0.75rem 1rem;
-        width: 100%;
-    }
-    
-    select.form-control:focus, .form-control:focus {
-        outline: none;
-        border-top-color: var(--primary-green);
-        box-shadow: 0 0 0 3px rgba(158, 221, 5, 0.3);
-    }
-    
-    /* Enhanced dropdown option styling - Works best in Webkit browsers (Chrome, Edge, Safari) */
-    select.form-control option,
-    .currency-switcher option {
-        background-color: white !important;
-        color: #0C3A30;
-        padding: 2px;
-        font-weight: 600;
-    }
-    
-    /* Chrome, Safari, newer Edge */
-    select.form-control option:hover,
-    .currency-switcher option:hover {
-        background-color: #8AC304 !important;
-        background: #8AC304 !important;
-        color: white !important;
-    }
-    
-    select.form-control option:checked,
-    .currency-switcher option:checked {
-        background-color: #9EDD05 !important;
-        background: linear-gradient(#9EDD05, #9EDD05) !important;
-        color: #0C3A30 !important;
-        font-weight: 700;
-    }
-    
-    /* Firefox-specific styling */
-    @-moz-document url-prefix() {
-        select.form-control option:hover,
-        .currency-switcher option:hover {
-            background-color: #8AC304 !important;
-        }
-        
-        select.form-control option:checked,
-        .currency-switcher option:checked {
-            background-color: #9EDD05 !important;
-        }
-    }
-    
-    /* Webkit specific (Chrome/Safari) */
-    select.form-control option:checked,
-    .currency-switcher option:checked {
-        background: #9EDD05 !important;
-        background-color: #9EDD05 !important;
-    }
-    
-    /* Additional targeting for better browser support */
-    select.form-control:focus option:checked,
-    .currency-switcher:focus option:checked {
-        background: linear-gradient(0deg, #9EDD05 0%, #9EDD05 100%) !important;
-        color: #0C3A30 !important;
-    }
-    
-    /* Style the select when opened (focus state) */
-    select.form-control:focus,
-    .currency-switcher:focus {
-        border-top-color: var(--primary-green);
-        box-shadow: 0 0 0 3px rgba(158, 221, 5, 0.3);
-    }
-    
+
     .amount-preset-btn {
         background: white;
         border: 2px solid #e5e7eb;
         border-radius: 8px;
         padding: 0.5rem 1rem;
         font-weight: 600;
-        color: #0C3A30;
+        color: var(--dark-green);
         transition: all 0.2s ease;
         cursor: pointer;
+        min-width: 80px;
     }
-    
+
     .amount-preset-btn:hover {
         border-color: var(--primary-green);
         background: #f8faf7;
     }
-    
+
     .amount-preset-btn.active {
         background: var(--primary-green);
         border-color: var(--primary-green);
-        color: #0C3A30;
+        color: var(--dark-green);
     }
-    
+
+    .continue-btn {
+        background: var(--primary-green);
+        color: var(--dark-green);
+        font-weight: 600;
+        padding: 0.75rem 2.5rem;
+        border-radius: 0.5rem;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+    }
+
+    .continue-btn:hover {
+        background: var(--accent-green);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(158, 221, 5, 0.3);
+    }
+
+    .continue-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .info-box {
+        background: linear-gradient(135deg, #f8faf7 0%, #eef7ea 100%);
+        border-radius: 12px;
+        padding: 1.5rem;
+        border-left: 4px solid var(--primary-green);
+    }
+
+    .step-indicator {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .step {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .step-number {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: #e5e7eb;
+        color: #6b7280;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+    }
+
+    .step.active .step-number {
+        background: var(--primary-green);
+        color: var(--dark-green);
+    }
+
+    .step-line {
+        width: 50px;
+        height: 2px;
+        background: #e5e7eb;
+    }
+
     .guide-modal {
         display: none;
         position: fixed;
@@ -261,21 +286,21 @@
         justify-content: center;
         padding: 1rem;
     }
-    
+
     .guide-modal.active {
         display: flex;
     }
-    
+
     .guide-modal-content {
         background: white;
         border-radius: 16px;
-        max-width: 600px;
+        max-width: 500px;
         width: 100%;
         max-height: 90vh;
         overflow-y: auto;
-        padding: 1rem;
+        padding: 2rem;
     }
-    
+
     .guide-step {
         display: flex;
         gap: 1rem;
@@ -284,8 +309,8 @@
         background: #f9fafb;
         border-radius: 10px;
     }
-    
-    .step-number {
+
+    .guide-step .step-number {
         width: 32px;
         height: 32px;
         background: var(--primary-green);
@@ -297,157 +322,34 @@
         font-weight: bold;
         flex-shrink: 0;
     }
-    
-    .guide-note {
-        padding: 1rem;
-        border-radius: 8px;
-        margin-top: 1rem;
-        display: flex;
-        gap: 0.75rem;
-    }
-    
-    .warning-note {
-        background: #fef3c7;
-        border: 1px solid #fde68a;
-    }
-    
-    .tip-note {
-        background: #dbeafe;
-        border: 1px solid #93c5fd;
-    }
 
-    @keyframes scrollText {
-        0% { transform: translateX(100%); }
-        100% { transform: translateX(-100%); }
-    }
-
-    .animate-marquee {
-        animation: scrollText 10s linear infinite !important;
-        white-space: nowrap !important;
-    }
-
-    .animate-marquee:hover {
-        animation-play-state: paused !important;
-    }
-    
-    .selected-plan-indicator {
+    .toast-notification {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
         background: linear-gradient(135deg, var(--primary-green), var(--accent-green));
         color: var(--dark-green);
-        padding: 6px 12px;
-        border-radius: 20px;
-        font-weight: 600;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        margin-left: 10px;
-    }
-    
-    .currency-switcher {
-        border: 2px solid #e5e7eb;
+        padding: 0.75rem 1.5rem;
         border-radius: 8px;
-        padding: 0.5rem 1rem;
         font-weight: 600;
-        color: #0C3A30;
-        background: white;
-        cursor: pointer;
-        transition: all 0.2s ease;
+        z-index: 9999;
+        animation: slideInRight 0.3s ease-out;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     }
-    
-    .currency-switcher:hover {
-        border-color: var(--primary-green);
+
+    @keyframes slideInRight {
+        from { opacity: 0; transform: translateX(100px); }
+        to   { opacity: 1; transform: translateX(0); }
     }
-    
-    .continue-btn {
-        background: var(--primary-green);
-        color: var(--dark-green);
-        font-weight: 600;
-        padding: 0.75rem 2.5rem;
-        border-radius: 0.5rem;
-        transition: background-color 0.3s ease;
-        border: none;
-        cursor: pointer;
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
     }
-    
-    .continue-btn:hover {
-        background: var(--accent-green);
-    }
-    
-    .continue-btn:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-    }
-    
-    .plan-feature {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.5rem 0;
-        font-size: 0.875rem;
-        color: #6b7280;
-    }
-    
-    .plan-feature iconify-icon {
-        color: var(--primary-green);
-        font-size: 1.1rem;
-    }
-    
-    .web3-heading {
-        font-size: 1rem;
-        font-weight: 700;
-        color: #0C3A30;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-    
-    @keyframes gradientShift {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-    }
-    
-    .profit-display {
-        background: linear-gradient(135deg, rgba(158, 221, 5, 0.1), rgba(138, 195, 4, 0.1));
-        border: 2px solid var(--primary-green);
-        border-radius: 12px;
-        padding: 1rem;
-        margin-top: 1rem;
-    }
-    
-    .profit-amount {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: var(--primary-green);
-    }
-    
-    /* Responsive fixes */
-    @media (max-width: 768px) {
-        .form-container {
-            padding: 1.5rem;
-        }
-        
-        .plan-card {
-            padding: 1.25rem;
-        }
-        
-        .animate-marquee {
-            font-size: 0.875rem;
-        }
-        
-        .selected-plan-indicator {
-            font-size: 0.875rem;
-            padding: 4px 10px;
-        }
-        
-        .web3-heading {
-            font-size: 1.2rem;
-        }
-    }
-    
-    @media (max-width: 640px) {
-        .amount-preset-btn {
-            flex: 1 1 calc(50% - 0.5rem);
-            min-width: 0;
-        }
+
+    input[type="number"] {
+        -moz-appearance: textfield;
     }
 </style>
 
@@ -455,7 +357,7 @@
 
     <!-- Breadcrumb -->
     <div class="flex flex-wrap items-center justify-between gap-2 mb-6">
-        <h5 class="font-semibold mb-0" style="color: #0C3A30;">Deposit</h5>
+        <h5 class="font-semibold mb-0" style="color: #0C3A30;">Deposit Funds</h5>
         <ul class="flex items-center gap-[6px]">
             <li>
                 <a href="{{ route('user_dashboard') }}"
@@ -470,304 +372,118 @@
         </ul>
     </div>
 
- <!-- Investment Status Banner -->
-@php
-$totalInvested = (float) auth()->user()->amount_invested;
-@endphp
-
-@if($totalInvested == 0)
-<div class="relative overflow-hidden rounded-xl bg-gradient-to-r from-orange-100 to-white mb-4"
-    style="box-shadow: 0 4px 24px rgba(249, 115, 22, 0.15); border: 1px solid rgba(249, 115, 22, 0.3) !important; max-width: 100%;">
-    <div class="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-orange-100 to-transparent z-10 pointer-events-none"></div>
-    <div class="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-orange-100 to-transparent z-10 pointer-events-none"></div>
-    <div class="py-3 overflow-hidden bg-white">
-        <div class="animate-marquee inline-flex items-center will-change-transform">
-            <span class="inline-flex items-center px-6 text-base font-medium text-orange-800 tracking-tight">
-                <span class="text-orange-500/90 mr-3 text-lg">🚀</span>
-                <span class="bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-orange-700 font-semibold">
-                    Your trading account is not yet active — complete setup to begin.
-                </span>
-                <span class="mx-4 text-orange-400">•</span>
-                <span>
-                    Once your account is funded, trade updates and notifications will be mirrored automatically based on your selected settings.
-                </span>
-                <span class="ml-4 px-3 py-0.5 rounded-full text-orange-700 text-xs font-bold border border-orange-400/20"
-                    style="background-color: rgba(249, 115, 22, 0.1) !important;">
-                    ACTIVATE TRADING
-                </span>
-            </span>
+    <!-- Step Indicator -->
+    <div class="step-indicator mt-3">
+        <div class="step active">
+            <div class="step-number">1</div>
+            <span class="text-sm font-medium" style="color: var(--dark-green);">Choose Wallet</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+            <div class="step-number">2</div>
+            <span class="text-sm text-gray-500">Enter Amount</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+            <div class="step-number">3</div>
+            <span class="text-sm text-gray-500">Confirm</span>
         </div>
     </div>
-</div>
 
-@elseif($totalInvested >= 100)
-<div class="relative overflow-hidden rounded-xl bg-gradient-to-r from-indigo-100 to-white mb-4"
-    style="box-shadow: 0 4px 24px rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3) !important; max-width: 100%;">
-    <div class="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-indigo-100 to-transparent z-10 pointer-events-none"></div>
-    <div class="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-indigo-100 to-transparent z-10 pointer-events-none"></div>
-    <div class="py-3 overflow-hidden bg-white">
-        <div class="animate-marquee inline-flex items-center will-change-transform">
-            <span class="inline-flex items-center px-6 text-base font-medium text-gray-700 tracking-tight">
-                <span class="text-indigo-600/90 mr-3 text-lg">💎💎💎</span>
-                <span class="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-600 font-semibold">
-                    Advanced Trading Access Enabled
-                </span>
-                <span class="mx-4 text-indigo-300">•</span>
-                <span>
-                    Higher capital allows proportional position sizing and broader access to active trading strategies.
-                </span>
-                <span class="ml-4 px-3 py-0.5 rounded-full text-indigo-700 text-xs font-bold border border-indigo-400/20"
-                    style="background-color: rgba(99, 102, 241, 0.1) !important;">
-                    VIEW TRADE ACCESS
-                </span>
-            </span>
-        </div>
-    </div>
-</div>
-
-@else
-<div class="relative overflow-hidden rounded-xl bg-gradient-to-r from-emerald-50 to-white mb-4"
-    style="box-shadow: 0 4px 24px rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.2) !important; max-width: 100%;">
-    <div class="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-emerald-50 to-transparent z-10 pointer-events-none"></div>
-    <div class="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-emerald-50 to-transparent z-10 pointer-events-none"></div>
-    <div class="py-3 overflow-hidden bg-white">
-        <div class="animate-marquee inline-flex items-center will-change-transform">
-            <span class="inline-flex items-center px-6 text-base font-medium text-gray-600 tracking-tight">
-                <span class="text-emerald-500/90 mr-3 text-lg">📈</span>
-                <span class="bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-green-600 font-semibold">
-                    Your trading setup is active and progressing
-                </span>
-                <span class="mx-4 text-emerald-300">•</span>
-                <span>
-                    Increasing capital improves trade allocation and flexibility, while maintaining risk controls.
-                </span>
-                <span class="ml-4 px-3 py-0.5 rounded-full text-emerald-700 text-xs font-bold border border-emerald-400/20"
-                    style="background-color: rgba(16, 185, 129, 0.1) !important;">
-                   ADJUST CAPITAL
-                </span>
-            </span>
-        </div>
-    </div>
-</div>
-@endif
-    <!-- Header with Currency Switcher and Help Guide -->
+    <!-- Header with Help Guide -->
     <div class="flex items-center justify-between gap-4 mb-6">
-        <button type="button" onclick="openGuide()" class="flex items-center gap-2 px-1 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition">
+        <button type="button" onclick="openGuide()" class="flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition">
             <iconify-icon icon="ph:question-fill" class="text-lg"></iconify-icon>
-            <span class="font-semibold">How to Fund Account</span>
+            <span class="font-semibold">How to Deposit</span>
         </button>
-        
-        <div class="flex items-center gap-2">
-            <select id="currencySwitcher" class="currency-switcher">
-                <option value="USD" selected>USD</option>
-                <option value="EUR">🇪🇺 EUR</option>
-                <option value="GBP">🇬🇧 GBP</option>
-                <option value="NGN">🇳🇬 NGN</option>
-                <option value="AUD">🇦🇺 AUD</option>
-                <option value="CAD">🇨🇦 CAD</option>
-                <option value="TWD">🇹🇼 TWD</option>
-                <option value="JPY">🇯🇵 JPY</option>
-                <option value="CNY">🇨🇳 CNY</option>
-                <option value="INR">🇮🇳 INR</option>
-                
-                <option value="BRL">🇧🇷 BRL</option>
-                <option value="MXN">🇲🇽 MXN</option>
-                <option value="RUB">🇷🇺 RUB</option>
-                <option value="ZAR">🇿🇦 ZAR</option>
-                <option value="CHF">🇨🇭 CHF</option>
-                <option value="AED">🇦🇪 AED</option>
-                <option value="SAR">🇸🇦 SAR</option>
-                <option value="SGD">🇸🇬 SGD</option>
-                <option value="HKD">🇭🇰 HKD</option>
-                <option value="KRW">🇰🇷 KRW</option>
-                <option value="NZD">🇳🇿 NZD</option>
-                <option value="THB">🇹🇭 THB</option>
-                <option value="MYR">🇲🇾 MYR</option>
-                <option value="PHP">🇵🇭 PHP</option>
-                <option value="IDR">🇮🇩 IDR</option>
-                <option value="VND">🇻🇳 VND</option>
-                <option value="EGP">🇪🇬 EGP</option>
-                <option value="KES">🇰🇪 KES</option>
-                <option value="GHS">🇬🇭 GHS</option>
-                <option value="TRY">🇹🇷 TRY</option>
-                <option value="PLN">🇵🇱 PLN</option>
-                <option value="SEK">🇸🇪 SEK</option>
-                <option value="NOK">🇳🇴 NOK</option>
-                <option value="DKK">🇩🇰 DKK</option>
-            </select>
-        </div>
     </div>
 
-    <!-- Investment Plans Cards -->
-    <div class="mb-6">
-        <h3 class="text-xl font-bold mb-4" style="color: #0C3A30;">Select  Trading Plan</h3>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            @php
-                $sortedPlans = $plans->sortBy('minimum_amount');
-                $secondLowestPlan = $sortedPlans->skip(1)->first();
-            @endphp
-            
-            @foreach($plans as $plan)
-            <div class="plan-card" data-plan-id="{{ $plan->id }}" 
-                 data-min="{{ $plan->minimum_amount }}" 
-                 data-max="{{ $plan->maximum_amount }}"
-                 data-rate="{{ rtrim(rtrim($plan->interest_rate, '0'), '.') }}"
-                 data-duration="{{ $plan->duration }}"
-                 onclick="selectPlan(this)">
-                
-                @if($secondLowestPlan && $plan->id == $secondLowestPlan->id)
-                <div class="popular-badge">
-                    ⭐ Popular
-                </div>
-                @endif
-                
-                <div class="plan-checkmark">✓</div>
-                
-                <div class="flex justify-between items-start mb-3" style="margin-top: {{ $secondLowestPlan && $plan->id == $secondLowestPlan->id ? '20px' : '0' }};">
-                    <div>
-                        <h4 class="text-lg font-bold" style="color: #0C3A30;">{{ ucfirst($plan->name) }}</h4>
-                        <div class="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-bold mt-1">
-                            {{ rtrim(rtrim($plan->interest_rate, '0'), '.') }}% ROE Returns
-                        </div>
-                    </div>
-                    <div class="text-right">
-                        <div class="text-xs text-gray-500">Trading Period</div>
-                        <div class="font-bold" style="color: #0C3A30;">{{ $plan->duration }} Days</div>
-                    </div>
-                </div>
+    <!-- Main Deposit Card -->
+    <div class="deposit-card">
+        <form action="{{ route('user.make-deposit') }}" method="POST" id="depositForm">
+            @csrf
 
-                <div class="space-y-2 mb-4">
-                    <div class="flex justify-between">
-                        <span class="text-gray-600 text-sm">Minimum Capital</span>
-                        <span class="font-bold plan-min" data-usd="{{ $plan->minimum_amount }}">${{ number_format($plan->minimum_amount, 2) }}</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span class="text-gray-600 text-sm">Maximum Capital</span>
-                        <span class="font-bold plan-max" data-usd="{{ $plan->maximum_amount }}">${{ number_format($plan->maximum_amount, 2) }}</span>
-                    </div>
+            <!-- Generator Section -->
+            <div id="generatorSection" class="generator-section">
+                <h3 class="text-2xl font-bold mb-2" style="color: var(--dark-green);">Generate Your Secure Wallet</h3>
+                <p class="text-gray-600 mb-4">Click the button below to generate your personal deposit wallets</p>
+                <button type="button" onclick="generateWallets()" class="generate-btn" id="generateBtn">
+                    Generate Secure Wallet
+                </button>
+                <div id="generationMessages" style="display: none;" class="generation-messages">
+                    <div id="messagesList"></div>
                 </div>
-
-                <!-- Additional Plan Features -->
-                <div class="border-t border-gray-100 pt-3 space-y-2">
-                    <div class="plan-feature">
-                        <iconify-icon icon="ph:chart-line-up-fill"></iconify-icon>
-                        <span>Daily profit tracking</span>
-                    </div>
-                    <div class="plan-feature">
-                        <iconify-icon icon="ph:shield-check-fill"></iconify-icon>
-                        <span>Automated risk management</span>
-                    </div>
-                    <div class="plan-feature">
-                        <iconify-icon icon="ph:users-three-fill"></iconify-icon>
-                        <span>Access the live tradings</span>
-                    </div>
-                    <div class="plan-feature">
-                        <iconify-icon icon="ph:wallet-fill"></iconify-icon>
-                        <span>Instant withdrawals</span>
-                    </div>
-                </div>
-
-                <div class="text-center pt-3 mt-3 border-t border-gray-100" >
-                    <span style="font-size:1rem !important; font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;" class="text-sm text-gray-500 :">Click to select trading plan</span>
-                </div>
-            </div>
-            @endforeach
-        </div>
-    </div>
-
-    <!-- Deposit Form (Hidden Initially) -->
-    <div class="deposit-form-area" id="depositFormArea">
-        <div class="form-container">
-            <div class="flex items-center gap-4 mb-6" style="flex-wrap: nowrap;">
-                <div class="flex-1" style="display: flex; flex-wrap:nowrap;">
-                    <h3 class="web3-heading">You Selected </h3>
-                    <div id="selectedPlanDisplay" class="selected-plan-indicator">
-                        <iconify-icon icon="ph:check-circle-fill"></iconify-icon>
-                        <span id="selectedPlanText">Plan Selected</span>
-                    </div>
-                </div>
+                <button type="button" onclick="handleOtherPayment()" 
+    class="generate-btn" 
+    style="background: #e5e7eb; color: #0C3A30; box-shadow: none;">
+    
+    Other Payment Methods
+</button>
             </div>
 
-            <form action="{{ route('user.make-deposit') }}" method="POST" id="depositForm" 
-                  @if(session('reinvestment_mode') && session('reinvestment_expires')> now()) onsubmit="return validateReinvestment()" @endif>
-                @csrf
-                <input type="hidden" name="plan_id" id="plan_id_input">
-                <input type="hidden" name="interest_rate" id="interest_rate_input">
-                <input type="hidden" name="amount_usd" id="amount_usd_input">
-                
-                @if(session('reinvestment_mode') && session('reinvestment_expires') > now())
-                <input type="hidden" name="reinvestment" value="1">
-                @endif
+            <!-- Step 1: Select Wallet (Hidden initially) -->
+            <div class="mb-8" id="walletSection" style="display: none;">
+                <h4 class="text-lg font-semibold mb-4" style="color: #0C3A30;">1. Choose Payment Method</h4>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="walletOptionsGrid">
+                    <!-- Wallet options populated by JS -->
+                </div>
+                @error('wallet_id')
+                    <span class="text-red-600 text-sm mt-2 block">{{ $message }}</span>
+                @enderror
+            </div>
 
+            <!-- Step 2: Enter Amount (Hidden initially) -->
+            <div class="mb-8" id="amountSection" style="display: none;">
+                <h4 class="text-lg font-semibold mb-4" style="color: #0C3A30;">2. Enter Amount</h4>
                 <div class="grid md:grid-cols-2 gap-6">
-                    <!-- Wallet Select -->
                     <div>
-                        <label for="wallet_id" class="block mb-2 font-bold text-neutral-900">
-                            Select Your Account Wallet <span class="text-red-600">*</span>
-                        </label>
-                        <select name="wallet_id" id="wallet_id" class="form-control w-full" required>
-                            <option value="" disabled selected class="text-gray-500 font-medium">Choose Cryptocurrency Wallet</option>
-                            @foreach($wallets as $wallet)
-                            <option value="{{ $wallet->id }}">
-                                {{ ucfirst($wallet->crypto_name) }} Wallet
-                            </option>
-                            @endforeach
-                        </select>
-                        @error('wallet_id')<span class="text-red-600 text-sm mt-1 block">{{ $message }}</span>@enderror
+                        <label class="block mb-2 font-semibold text-gray-700">Amount to Deposit</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-3 text-gray-500 font-semibold" id="inputCurrencySymbol">$</span>
+                            <input type="number" name="amount" id="amount_input" step="0.01"
+                                class="w-full p-3 pl-8 border-2 border-gray-200 rounded-lg focus:border-[#9EDD05] focus:outline-none"
+                                placeholder="0.00" required>
+                        </div>
+                        <input type="hidden" name="amount_usd" id="amount_usd_input">
+                        <div class="flex justify-between mt-2 text-sm">
+                            <span class="text-gray-500">No minimum</span>
+                            <span class="text-gray-500">No maximum</span>
+                        </div>
                     </div>
-
-                    <!-- Amount Input -->
                     <div>
-                        <label for="amount_input" class="block mb-2 font-bold text-neutral-900">
-                          Trading Capital <span class="text-red-600">*</span>
-                        </label>
-                        <input type="number" name="amount" id="amount_input" step="0.01" 
-                               class="form-control w-full" 
-                               placeholder="Enter capital amount" 
-                               oninput="calculateProfit()" required>
-                        <div class="text-sm text-gray-500 mt-1">
-                            Min: <span id="currencySymbolMin"></span><span id="minAmountDisplay">0</span> • Max: <span id="currencySymbolMax"></span><span id="maxAmountDisplay">0</span>
-                        </div>
-                        @error('amount')<span class="text-red-600 text-sm mt-1 block">{{ $message }}</span>@enderror
-                    </div>
-
-                    <!-- Expected Profit Display -->
-                    <div class="md:col-span-2" id="profitDisplaySection" style="display: none;">
-                        <div class="profit-display">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <div class="text-sm text-gray-600 font-semibold">Expected Profit After <span id="planDuration">0</span> Days</div>
-                                    <div class="profit-amount"><span id="currencySymbolProfit"></span><span id="expectedProfit">0.00</span></div>
-                                </div>
-                                <div class="text-right">
-                                    <div class="text-sm text-gray-600 font-semibold">Total Return</div>
-                                    <div class="text-xl font-bold" style="color: #0C3A30;"><span id="currencySymbolReturn"></span><span id="totalReturn">0.00</span></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Quick Amounts -->
-                    <div class="md:col-span-2">
-                        <label class="block mb-2 font-bold text-neutral-900">Quick Capital Select</label>
-                        <div class="flex flex-wrap gap-2" id="quickAmountButtons">
-                            <!-- Buttons will be dynamically generated -->
-                        </div>
-                    </div>
-
-                    <!-- Buttons -->
-                    <div class="md:col-span-2 flex flex-wrap justify-center gap-4 mt-8 pt-6 border-t border-gray-200">
-                        <button type="button" onclick="resetForm()" 
-                                class="px-10 py-3 border-2 border-red-600 text-red-600 rounded-lg hover:bg-red-100 transition">
-                            Reset
-                        </button>
-                        <button type="submit" id="submitButton" class="continue-btn" disabled>
-                            Continue to Fund
-                        </button>
+                        <label class="block mb-2 font-semibold text-gray-700">Quick Select</label>
+                        <div class="flex flex-wrap gap-2" id="quickAmountButtons"></div>
                     </div>
                 </div>
-            </form>
+            </div>
+
+            <!-- Action Buttons (Hidden initially) -->
+            <div class="flex justify-center gap-4 mt-8 pt-6 border-t border-gray-200" id="actionButtons" style="display: none;">
+                <button type="button" onclick="resetForm()"
+                    class="px-8 py-3 border-2 border-red-500 text-red-500 rounded-lg hover:bg-red-50 transition">
+                    Reset
+                </button>
+                <button type="submit" id="submitButton" class="continue-btn" disabled>
+                    Continue to Payment
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Info Card -->
+    <div class="info-box">
+        <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-full bg-[#9EDD05] bg-opacity-20 flex items-center justify-center flex-shrink-0">
+                <iconify-icon icon="ph:info-fill" style="color: #9EDD05;" class="text-xl"></iconify-icon>
+            </div>
+            <div>
+                <h5 class="font-semibold mb-2" style="color: #0C3A30;">Deposit Information</h5>
+                <p class="text-sm text-gray-600">
+                    After clicking Continue, you'll receive a wallet address to send your payment.
+                    Deposits are processed within 1–10 minutes after blockchain confirmation from your trader.
+                    Funds will be added to your available balance once approved.
+                </p>
+            </div>
         </div>
     </div>
 
@@ -777,425 +493,381 @@ $totalInvested = (float) auth()->user()->amount_invested;
 <div class="guide-modal" id="guideModal" onclick="if(event.target === this) closeGuide()">
     <div class="guide-modal-content">
         <div class="flex justify-between items-center mb-6">
-            <h3 class="text-2xl font-bold" style="color: #0C3A30;">How to Fund Your Copy Trading Account</h3>
+            <h3 class="text-2xl font-bold" style="color: #0C3A30;">Deposit Guide</h3>
             <button onclick="closeGuide()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
         </div>
-
         <div class="space-y-3">
             <div class="guide-step">
                 <div class="step-number">1</div>
                 <div>
-                    <div class="font-bold">Select Copy Trading Plan Just By Clicking </div>
-                    <div class="text-sm text-gray-600">Choose your capital tier for copying </div>
+                    <div class="font-bold">Choose Payment Method</div>
+                    <div class="text-sm text-gray-600">Select your preferred cryptocurrency wallet</div>
                 </div>
             </div>
-
             <div class="guide-step">
                 <div class="step-number">2</div>
                 <div>
-                    <div class="font-bold">Choose Cryptocurrency Wallet</div>
-                    <div class="text-sm text-gray-600">Pick from available crypto wallets (USDT, BTC, ETH, etc.)</div>
+                    <div class="font-bold">Enter Amount</div>
+                    <div class="text-sm text-gray-600">Input the amount you want to deposit</div>
                 </div>
             </div>
-
             <div class="guide-step">
                 <div class="step-number">3</div>
                 <div>
-                    <div class="font-bold">Enter Trading Capital Amount And Click Continue</div>
-                    <div class="text-sm text-gray-600">Input your copy trading capital within plan limits</div>
+                    <div class="font-bold">Copy Wallet Address</div>
+                    <div class="text-sm text-gray-600">Copy the generated wallet address</div>
                 </div>
             </div>
-
             <div class="guide-step">
                 <div class="step-number">4</div>
                 <div>
-                    <div class="font-bold">Copy Generated Wallet Address</div>
-                    <div class="text-sm text-gray-600">Next page shows unique wallet address for your deposit</div>
+                    <div class="font-bold">Send Payment</div>
+                    <div class="text-sm text-gray-600">Send crypto from your exchange or wallet</div>
                 </div>
             </div>
-
             <div class="guide-step">
                 <div class="step-number">5</div>
                 <div>
-                    <div class="font-bold">Open Your Crypto Exchange</div>
-                    <div class="text-sm text-gray-600">Go to Binance, Bybit, OKX, Trust-wallet, Crypto.com, Coinbase, or your preferred exchange</div>
-                </div>
-            </div>
-
-            <div class="guide-step">
-                <div class="step-number">6</div>
-                <div>
-                    <div class="font-bold">Initiate Withdrawal</div>
-                    <div class="text-sm text-gray-600">Select matching cryptocurrency and paste wallet address</div>
-                </div>
-            </div>
-
-            <div class="guide-step">
-                <div class="step-number">7</div>
-                <div>
-                    <div class="font-bold">Complete Transaction</div>
-                    <div class="text-sm text-gray-600">Confirm and send your copy trading capital</div>
-                </div>
-            </div>
-
-            <div class="guide-step">
-                <div class="step-number">8</div>
-                <div>
-                    <div class="font-bold">Capture Transaction Proof</div>
-                    <div class="text-sm text-gray-600">Screenshot the transaction confirmation</div>
-                </div>
-            </div>
-
-            <div class="guide-step">
-                <div class="step-number">9</div>
-                <div>
-                    <div class="font-bold">Upload Proof of Payment</div>
-                    <div class="text-sm text-gray-600">Return and upload your screenshot for verification</div>
-                </div>
-            </div>
-
-            <div class="guide-step">
-                <div class="step-number">10</div>
-                <div>
-                    <div class="font-bold">Start Copy Trading</div>
-                    <div class="text-sm text-gray-600">Get notified when confirmed — copy trading begins!</div>
-                </div>
-            </div>
-
-            <div class="guide-note warning-note">
-                <span class="text-xl">⏱️</span>
-                <div>
-                    <strong>Processing Time:</strong> 1-10 minutes (network dependent). Copy trading activates instantly after approval.
-                </div>
-            </div>
-
-            <div class="guide-note tip-note">
-                <span class="text-xl">💡</span>
-                <div>
-                    <strong>Pro Tip:</strong> Larger capital = Better copy positions with elite traders = Higher potential returns!
+                    <div class="font-bold">Upload Proof</div>
+                    <div class="text-sm text-gray-600">Submit transaction screenshot for verification</div>
                 </div>
             </div>
         </div>
+        <div class="mt-6 p-4 bg-yellow-50 rounded-lg">
+            <p class="text-sm text-yellow-800">
+                <strong>⏱️ Processing Time:</strong> 1–10 minutes after network confirmation
+            </p>
+        </div>
     </div>
 </div>
-
+<!-- Temporary debug button - remove after testing -->
+<div style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;">
+    <button onclick="localStorage.removeItem('wallets_generated'); location.reload();" 
+            style="background: #ff4444; color: white; padding: 10px 15px; border-radius: 8px; border: none; cursor: pointer; font-size: 12px; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+        🔄 Reset Wallet Generation
+    </button>
+</div>
 <script>
-const rates = {};
-let selectedPlanId = null;
-let minAmount = 0;
-let maxAmount = 0;
-let selectedPlanName = '';
-let selectedPlanRate = 0;
-let selectedPlanDuration = 0;
-let currentCurrency = 'USD';
+    const rates = {};
+    let currentCurrency = 'USD';
+    let selectedWallet = null;
 
-// Quick amount presets in USD
-const quickAmountsUSD = [500, 1000, 2000, 5000, 10000];
+    const quickAmountsUSD = [1000, 2000, 5000, 10000];
 
-// Fetch exchange rates
-fetch('https://v6.exchangerate-api.com/v6/a8e67b756f551b68d4ada293/latest/USD')
-    .then(response => response.json())
-    .then(data => {
-        if (data.result === 'success') {
-            Object.assign(rates, data.conversion_rates);
-            // Initialize quick amount buttons after rates are loaded
+    const generationMessages = [
+        "Initializing secure wallet generator...",
+        "Connecting to blockchain network...",
+        "Establishing secure encryption...",
+        "Secure connection established",
+        "Generating Bitcoin wallet...",
+        "Bitcoin wallet generated successfully",
+        "Generating Ethereum wallet...",
+        "Ethereum wallet generated successfully",
+        "Generating USDT wallet...",
+        "USDT wallet generated successfully",
+        "Securing wallets with multi-layer encryption...",
+        "All wallets generated successfully."
+    ];
+
+    // -------------------------------------------------------
+    // CRYPTO LOGO HELPER
+    // The spothq CDN uses lowercase filenames (btc.png, eth.png).
+    // We convert whatever comes from the DB to lowercase and build
+    // the URL dynamically. If the coin is not in the supported list
+    // we fall back to generic.png so you never see a broken image.
+    // -------------------------------------------------------
+    const supportedCoins = [
+        'btc','eth','usdt','bnb','sol','xrp','ada','doge','ltc','trx',
+        'matic','link','dot','avax','uni','atom','xlm','algo','vet','icp',
+        'fil','egld','theta','xtz','eos','cake','aave','grt','mkr','comp',
+        'snx','crv','yfi','bat','zec','dash','xmr','neo','waves','hbar',
+        'near','ftm','one','usdc','busd','shib','apt','arb','op','sui'
+    ];
+
+    function getCryptoLogo(symbol) {
+        const lower = (symbol || '').toLowerCase().trim();
+        const base  = 'https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/';
+        return supportedCoins.includes(lower)
+            ? base + lower + '.png'
+            : base + 'generic.png';
+    }
+
+    // -------------------------------------------------------
+    // EXCHANGE RATES
+    // -------------------------------------------------------
+    fetch('https://v6.exchangerate-api.com/v6/a8e67b756f551b68d4ada293/latest/USD')
+        .then(r => r.json())
+        .then(data => {
+            if (data.result === 'success') {
+                Object.assign(rates, data.conversion_rates);
+                updateQuickAmountButtons();
+            }
+        })
+        .catch(() => {
+            rates.USD = 1;
+            rates.EUR = 0.92;
+            rates.GBP = 0.79;
+            rates.NGN = 1500;
             updateQuickAmountButtons();
-        }
-    })
-    .catch(error => {
-        console.error('Error fetching exchange rates:', error);
-        // Set default rates if API fails
-        rates.USD = 1;
-        rates.EUR = 0.92;
-        rates.GBP = 0.79;
-        rates.NGN = 1500;
-        updateQuickAmountButtons();
-    });
+        });
 
-// Currency switcher
-document.getElementById('currencySwitcher').addEventListener('change', function() {
-    currentCurrency = this.value;
-    updateCurrencyDisplay(currentCurrency);
-});
-
-function updateCurrencyDisplay(currency) {
-    const rate = rates[currency] || 1;
-    const symbol = getCurrencySymbol(currency);
-    
-    // Update plan cards
-    document.querySelectorAll('.plan-card').forEach(card => {
-        const minSpan = card.querySelector('.plan-min');
-        const maxSpan = card.querySelector('.plan-max');
-        
-        if (minSpan && maxSpan) {
-            const minUsd = parseFloat(minSpan.dataset.usd);
-            const maxUsd = parseFloat(maxSpan.dataset.usd);
-            
-            minSpan.textContent = symbol + formatNumber(minUsd * rate);
-            maxSpan.textContent = symbol + formatNumber(maxUsd * rate);
-        }
-    });
-    
-    // Update form display if plan is selected
-    if (selectedPlanId) {
-        const minDisplay = document.getElementById('minAmountDisplay');
-        const maxDisplay = document.getElementById('maxAmountDisplay');
-        
-        if (minDisplay && maxDisplay) {
-            document.getElementById('currencySymbolMin').textContent = symbol;
-            document.getElementById('currencySymbolMax').textContent = symbol;
-            minDisplay.textContent = formatNumber(minAmount * rate);
-            maxDisplay.textContent = formatNumber(maxAmount * rate);
-        }
-        
-        calculateProfit();
+    function getCurrencySymbol(currency) {
+        return { USD: '$', EUR: '€', GBP: '£', NGN: '₦' }[currency] || '$';
     }
-    
-    // Update quick amount buttons
-    updateQuickAmountButtons();
-    
-    // Update available balance display if in reinvestment mode
-    @if(session('reinvestment_mode') && session('reinvestment_expires') > now())
-    const availableBalance = {{ auth()->user()->available_balance }};
-    const balanceDisplay = document.getElementById('availableBalanceDisplay');
-    if (balanceDisplay) {
-        balanceDisplay.textContent = symbol + formatNumber(availableBalance * rate);
+
+    function updateCurrencySymbol() {
+        const el = document.getElementById('inputCurrencySymbol');
+        if (el) el.textContent = getCurrencySymbol(currentCurrency);
     }
-    @endif
-}
 
-function updateQuickAmountButtons() {
-    const currency = currentCurrency;
-    const rate = rates[currency] || 1;
-    const symbol = getCurrencySymbol(currency);
-    const container = document.getElementById('quickAmountButtons');
-    
-    if (!container) return;
-    
-    container.innerHTML = '';
-    
-    quickAmountsUSD.forEach(amountUSD => {
-        const convertedAmount = amountUSD * rate;
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.className = 'amount-preset-btn';
-        button.onclick = function() { setAmount(amountUSD); };
-        button.textContent = symbol + formatNumber(convertedAmount);
-        container.appendChild(button);
-    });
-}
+    function formatNumber(num) {
+        return num.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
 
-function getCurrencySymbol(currency) {
-    const symbols = {
-        USD: '$', EUR: '€', GBP: '£', NGN: '₦', AUD: 'A$', CAD: 'C$',  TWD: 'NT$',
-        JPY: '¥', CNY: '¥', INR: '₹', BRL: 'R$', MXN: 'MX$', RUB: '₽',
-        ZAR: 'R', CHF: 'CHF ', AED: 'د.إ', SAR: 'ر.س', SGD: 'S$', HKD: 'HK$',
-        KRW: '₩', NZD: 'NZ$', THB: '฿', MYR: 'RM', PHP: '₱', IDR: 'Rp',
-        VND: '₫', EGP: 'E£', KES: 'KSh', GHS: '₵', TRY: '₺', PLN: 'zł',
-        SEK: 'kr', NOK: 'kr', DKK: 'kr'
-    };
-    return symbols[currency] || currency + ' ';
-}
+    function updateQuickAmountButtons() {
+        const rate     = rates[currentCurrency] || 1;
+        const symbol   = getCurrencySymbol(currentCurrency);
+        const container = document.getElementById('quickAmountButtons');
+        if (!container) return;
+        container.innerHTML = '';
+        quickAmountsUSD.forEach(amountUSD => {
+            const btn = document.createElement('button');
+            btn.type      = 'button';
+            btn.className = 'amount-preset-btn';
+            btn.onclick   = (e) => setAmount(amountUSD, e);
+            btn.textContent = symbol + formatNumber(amountUSD * rate);
+            container.appendChild(btn);
+        });
+    }
 
-function formatNumber(num) {
-    return num.toLocaleString(undefined, {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-    });
-}
-
-function selectPlan(card) {
-    // Remove selected class from all cards
-    document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
-    
-    // Add selected class to clicked card
-    card.classList.add('selected');
-    
-    // Get plan data
-    selectedPlanId = card.dataset.planId;
-    minAmount = parseFloat(card.dataset.min);
-    maxAmount = parseFloat(card.dataset.max);
-    selectedPlanRate = parseFloat(card.dataset.rate);
-    selectedPlanDuration = parseInt(card.dataset.duration);
-    selectedPlanName = card.querySelector('h4').textContent.trim();
-    
-    // Update form
-    document.getElementById('plan_id_input').value = selectedPlanId;
-    document.getElementById('interest_rate_input').value = selectedPlanRate;
-    document.getElementById('selectedPlanText').textContent = selectedPlanName;
-    document.getElementById('planDuration').textContent = selectedPlanDuration;
-    
-    // Get current currency
-    const rate = rates[currentCurrency] || 1;
-    const symbol = getCurrencySymbol(currentCurrency);
-    
-    // Update min/max display
-    document.getElementById('currencySymbolMin').textContent = symbol;
-    document.getElementById('currencySymbolMax').textContent = symbol;
-    document.getElementById('minAmountDisplay').textContent = formatNumber(minAmount * rate);
-    document.getElementById('maxAmountDisplay').textContent = formatNumber(maxAmount * rate);
-    
-    // Show deposit form
-    const depositForm = document.getElementById('depositFormArea');
-    depositForm.classList.add('active');
-    
-    // Scroll to form
-    setTimeout(() => {
-        depositForm.scrollIntoView({behavior: 'smooth', block: 'center'});
-    }, 300);
-    
-    // Calculate profit if amount already entered
-    calculateProfit();
-    
-    // Validate form
-    validateForm();
-}
-
-function calculateProfit() {
-    const amountInput = document.getElementById('amount_input');
-    const profitSection = document.getElementById('profitDisplaySection');
-    
-    if (!amountInput || !selectedPlanRate) return;
-    
-    const amount = parseFloat(amountInput.value) || 0;
-    
-    if (amount > 0) {
-        // Get current currency rate
+    function setAmount(valueUSD, event) {
         const rate = rates[currentCurrency] || 1;
-        const symbol = getCurrencySymbol(currentCurrency);
-        
-        // Convert amount to USD for calculation (since it's entered in selected currency)
-        const amountUSD = amount / rate;
-        
-        // Calculate profit in USD
-        const profitUSD = (amountUSD * selectedPlanRate) / 100;
-        const totalReturnUSD = amountUSD + profitUSD;
-        
-        // Convert back to selected currency for display
-        const profit = profitUSD * rate;
-        const totalReturn = totalReturnUSD * rate;
-        
-        // Update currency symbols
-        document.getElementById('currencySymbolProfit').textContent = symbol;
-        document.getElementById('currencySymbolReturn').textContent = symbol;
-        
-        // Update amounts
-        document.getElementById('expectedProfit').textContent = formatNumber(profit);
-        document.getElementById('totalReturn').textContent = formatNumber(totalReturn);
-        
-        // Store USD amount for form submission
-        document.getElementById('amount_usd_input').value = amountUSD.toFixed(2);
-        
-        profitSection.style.display = 'block';
-    } else {
-        profitSection.style.display = 'none';
+        document.getElementById('amount_input').value    = (valueUSD * rate).toFixed(2);
+        document.getElementById('amount_usd_input').value = valueUSD.toFixed(2);
+        document.querySelectorAll('.amount-preset-btn').forEach(b => b.classList.remove('active'));
+        event.target.classList.add('active');
+        validateForm();
     }
-}
 
-function setAmount(valueUSD) {
-    const rate = rates[currentCurrency] || 1;
-    const convertedAmount = valueUSD * rate;
-    document.getElementById('amount_input').value = convertedAmount.toFixed(2);
-    
-    // Remove active class from all preset buttons
-    document.querySelectorAll('.amount-preset-btn').forEach(btn => btn.classList.remove('active'));
-    
-    // Add active class to clicked button
-    event.target.classList.add('active');
-    
-    calculateProfit();
-    validateForm();
-}
 
-function validateForm() {
-    const submitButton = document.getElementById('submitButton');
+    function handleOtherPayment() {
+    showToast("Other payment system is not available now. Please proceed to use cryptocurrency payment to fund your account.");
+}   
+
+
+    function validateForm() {
+        const submitBtn = document.getElementById('submitButton');
+        const amount    = parseFloat(document.getElementById('amount_input').value) || 0;
+        if (submitBtn) submitBtn.disabled = !(selectedWallet !== null && amount > 0);
+    }
+
+    // -------------------------------------------------------
+    // WALLET GENERATION
+    // -------------------------------------------------------
+    async function generateWallets() {
+        const btn          = document.getElementById('generateBtn');
+        const messagesDiv  = document.getElementById('generationMessages');
+        const messagesList = document.getElementById('messagesList');
+
+        btn.disabled    = true;
+        btn.textContent = 'Generating...';
+        messagesList.innerHTML = '';
+        messagesDiv.style.display = 'block';
+
+        for (const message of generationMessages) {
+            await addMessage(message);
+            await delay(500);
+        }
+
+        await fetchWallets();
+        playSound();
+
+        setTimeout(() => {
+            document.getElementById('generatorSection').style.display = 'none';
+            document.getElementById('walletSection').style.display    = 'block';
+            document.getElementById('actionButtons').style.display    = 'flex';
+            localStorage.setItem('wallets_generated', 'true');
+        }, 500);
+    }
+
+    async function addMessage(message) {
+        const messagesList = document.getElementById('messagesList');
+        if (!messagesList) return;
+        const div = document.createElement('div');
+        div.className   = 'message-item';
+        div.textContent = message;
+        messagesList.appendChild(div);
+        div.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        await delay(100);
+    }
+
+    async function fetchWallets() {
+        try {
+            const response = await fetch("{{ route('user.wallets.generate') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                    'Accept': 'application/json'
+                }
+            });
+            const data = await response.json();
+            if (data.success && data.wallets) {
+                displayWallets(data.wallets);
+            }
+        } catch (error) {
+            console.error('Error fetching wallets:', error);
+        }
+    }
+
+    // -------------------------------------------------------
+    // DISPLAY WALLETS — uses getCryptoLogo()
+    // -------------------------------------------------------
+    function displayWallets(wallets) {
+        const grid = document.getElementById('walletOptionsGrid');
+        if (!grid) return;
+        grid.innerHTML = '';
+
+        if (!wallets || wallets.length === 0) {
+            grid.innerHTML = '<div class="col-span-full text-center text-gray-500">No wallets available</div>';
+            return;
+        }
+
+        wallets.forEach(wallet => {
+            const cryptoName = wallet.crypto_name;
+            const logoUrl    = getCryptoLogo(cryptoName);   // ← dynamic, lowercase-safe
+
+            const option = document.createElement('label');
+            option.className = 'wallet-option';
+            option.setAttribute('data-wallet-id', wallet.id);
+            option.onclick = () => selectWallet(wallet.id);
+
+            option.innerHTML = `
+                <input type="radio" name="wallet_id" value="${wallet.id}" required>
+                <div class="wallet-checkmark">✓</div>
+                <div class="flex items-center gap-3">
+                    <div class="crypto-logo-wrapper">
+                        <img
+                            src="${logoUrl}"
+                            alt="${cryptoName} logo"
+                            onerror="this.src='https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/generic.png'"
+                        >
+                    </div>
+                    <div>
+                        <h6 class="font-bold" style="color: #0C3A30;">${cryptoName}</h6>
+                        <p class="text-xs text-gray-500">Mainnet</p>
+                    </div>
+                </div>
+                <div class="mt-3 text-xs text-gray-400 flex items-center gap-1">
+                    <iconify-icon icon="ph:lightning-fill" style="color: #9EDD05;"></iconify-icon>
+                    <span>Instant settlement</span>
+                </div>
+            `;
+
+            grid.appendChild(option);
+        });
+    }
+
+    function selectWallet(walletId) {
+        document.querySelectorAll('.wallet-option').forEach(opt => opt.classList.remove('selected'));
+
+        const selected = document.querySelector(`.wallet-option[data-wallet-id="${walletId}"]`);
+        if (selected) {
+            selected.classList.add('selected');
+            const radio = selected.querySelector('input[type="radio"]');
+            if (radio) radio.checked = true;
+        }
+
+        selectedWallet = walletId;
+
+        const amountSection = document.getElementById('amountSection');
+        if (amountSection) amountSection.style.display = 'block';
+
+        const steps = document.querySelectorAll('.step');
+        if (steps[1]) steps[1].classList.add('active');
+
+        validateForm();
+    }
+
+    function playSound() {
+        try {
+            const ctx  = new (window.AudioContext || window.webkitAudioContext)();
+            const osc  = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.frequency.value = 523.25;
+            gain.gain.value     = 0.3;
+            osc.start();
+            gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.5);
+            osc.stop(ctx.currentTime + 0.5);
+        } catch (e) {}
+    }
+
+    function delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function showToast(message) {
+        const toast = document.createElement('div');
+        toast.className   = 'toast-notification';
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            setTimeout(() => toast.remove(), 300);
+        }, 2000);
+    }
+
+    function resetForm() {
+        document.getElementById('depositForm').reset();
+        document.querySelectorAll('.wallet-option').forEach(w => w.classList.remove('selected'));
+        document.getElementById('amountSection').style.display = 'none';
+        document.getElementById('submitButton').disabled       = true;
+        document.querySelectorAll('.amount-preset-btn').forEach(b => b.classList.remove('active'));
+        selectedWallet = null;
+        const steps = document.querySelectorAll('.step');
+        if (steps[1]) steps[1].classList.remove('active');
+    }
+
+    function openGuide() {
+        document.getElementById('guideModal').classList.add('active');
+    }
+
+    function closeGuide() {
+        document.getElementById('guideModal').classList.remove('active');
+    }
+
+    // Amount input listener
     const amountInput = document.getElementById('amount_input');
-    const walletSelect = document.getElementById('wallet_id');
-    
-    if (!selectedPlanId || !amountInput || !walletSelect) {
-        submitButton.disabled = true;
-        return;
-    }
-    
-    const amount = parseFloat(amountInput.value) || 0;
-    const walletSelected = walletSelect.value !== '';
-    
-    // Get current currency conversion
-    const rate = rates[currentCurrency] || 1;
-    const convertedMin = minAmount * rate;
-    const convertedMax = maxAmount * rate;
-    
-    if (amount >= convertedMin && amount <= convertedMax && walletSelected) {
-        submitButton.disabled = false;
-    } else {
-        submitButton.disabled = true;
-    }
-}
-
-// Add event listeners for form validation
-document.addEventListener('DOMContentLoaded', function() {
-    const amountInput = document.getElementById('amount_input');
-    const walletSelect = document.getElementById('wallet_id');
-    
     if (amountInput) {
-        amountInput.addEventListener('input', function() {
-            calculateProfit();
+        amountInput.addEventListener('input', function () {
+            const rate = rates[currentCurrency] || 1;
+            const amount = parseFloat(this.value) || 0;
+            const usdInput = document.getElementById('amount_usd_input');
+            if (usdInput) usdInput.value = (amount / rate).toFixed(2);
             validateForm();
         });
     }
-    
-    if (walletSelect) {
-        walletSelect.addEventListener('change', validateForm);
-    }
-    
-    // Initialize quick amount buttons
-    updateQuickAmountButtons();
-});
 
-function resetForm() {
-    // Reset plan selection
-    document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
-    selectedPlanId = null;
-    minAmount = 0;
-    maxAmount = 0;
-    selectedPlanRate = 0;
-    
-    // Reset form
-    document.getElementById('depositForm').reset();
-    document.getElementById('depositFormArea').classList.remove('active');
-    document.getElementById('profitDisplaySection').style.display = 'none';
-    
-    // Remove active class from preset buttons
-    document.querySelectorAll('.amount-preset-btn').forEach(btn => btn.classList.remove('active'));
-    
-    // Disable submit button
-    document.getElementById('submitButton').disabled = true;
-}
+    // -------------------------------------------------------
+    // INIT
+    // -------------------------------------------------------
+    document.addEventListener('DOMContentLoaded', function () {
+        updateCurrencySymbol();
+        updateQuickAmountButtons();
 
-function openGuide() {
-    document.getElementById('guideModal').classList.add('active');
-}
+        if (localStorage.getItem('wallets_generated') === 'true') {
+            document.getElementById('generatorSection').style.display = 'none';
+            document.getElementById('walletSection').style.display    = 'block';
+            document.getElementById('actionButtons').style.display    = 'flex';
+            fetchWallets();
+        }
 
-function closeGuide() {
-    document.getElementById('guideModal').classList.remove('active');
-}
-
-// Reinvestment validation
-@if(session('reinvestment_mode') && session('reinvestment_expires') > now())
-window.validateReinvestment = function() {
-    const amount = parseFloat(document.getElementById('amount_input').value);
-    const rate = rates[currentCurrency] || 1;
-    const amountUSD = amount / rate;
-    const availableBalance = parseFloat({{ auth()->user()->available_balance }});
-
-    if (amountUSD > availableBalance) {
-        const symbol = getCurrencySymbol(currentCurrency);
-        alert('Reinvestment amount cannot exceed your available balance of ' + symbol + formatNumber(availableBalance * rate));
-        return false;
-    }
-    return true;
-}
-@endif
+        @if(session('reinvestment_mode') && session('reinvestment_expires') > now())
+        updateReinvestmentBalance();
+        @endif
+    });
 </script>
 
 @endsection

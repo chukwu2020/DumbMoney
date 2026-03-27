@@ -78,18 +78,20 @@ class LoginController extends Controller
         session()->forget('showTradingOverlay');
     }
 
-    if (is_null($user->email_verified_at)) {
+    // 🔒 Block incomplete users
+    if ($user->registration_step < 2 || $user->account_status !== 'active') {
         Auth::logout();
+
         return redirect()->route('login')->withErrors([
-            'email' => 'You must verify your email address before logging in.'
+            'email' => 'You must complete registration before logging in.'
         ]);
     }
 
+    // ✅ Allow valid users
     return redirect()->route(
         $user->role_as == 1 ? 'admin_dashboard' : 'user_dashboard'
     );
 }
-
 
 
     /**

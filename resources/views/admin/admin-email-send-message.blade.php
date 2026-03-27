@@ -22,7 +22,7 @@
 
   <!-- Hidden Preview Text -->
   <div style="display:none; max-height:0; overflow:hidden;">
-    {{ $previewText ?? 'You have a new update from MarketMind.' }}
+    {{ $previewText ?? 'You have a new update from Chartmasters Circle.' }}
   </div>
 
   <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f4f8f5">
@@ -47,8 +47,8 @@
          
 <tr>
   <td style="background:#8bc905; padding:15px 10px; text-align:center;">
-    <img src="https://res.cloudinary.com/dswwq3xks/image/upload/v1752508147/mymarketmindmainlogo_qonmlk.png"
-         alt="MarketMind Logo"
+    <img src="https://res.cloudinary.com/dswwq3xks/image/upload/v1774272450/chartmasterlogo1_z25kgc.png"
+         alt="Chartmasters Circle Logo"
          style="height:80px; margin:0 auto; display:block;">
   </td>
 </tr>
@@ -88,7 +88,7 @@
                 <tr>
                   <td>
                     <p style="margin:0; font-size:14px;">Warm regards,</p>
-                    <p style="margin:5px 0 0; font-size:16px; font-weight:600; color:#8bc905;">The MarketMind Team</p>
+                    <p style="margin:5px 0 0; font-size:16px; font-weight:600; color:#8bc905;">The Chartmasters Circle Team</p>
                   </td>
                 </tr>
               </table>
@@ -99,8 +99,8 @@
           <!-- Footer -->
           <tr>
             <td bgcolor="#f0fdf4" style="padding:25px; text-align:center; font-size:12px; color:#5a6d5a;">
-              <p style="margin:0 0 10px;">© {{ date('Y') }} MarketMind. All rights reserved.</p>
-              <p style="margin:0;">You are receiving this email because you have an active MarketMind account.</p>
+              <p style="margin:0 0 10px;">© {{ date('Y') }} Chartmasters Circle. All rights reserved.</p>
+              <p style="margin:0;">You are receiving this email because you have an active Chartmasters Circle account.</p>
               <p style="margin:15px 0 0;">
                 <a href="#" style="color:#8bc905; text-decoration:none;">Help Center</a> •
                 <a href="#" style="color:#8bc905; text-decoration:none;">Privacy Policy</a> •

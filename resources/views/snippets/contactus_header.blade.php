@@ -442,7 +442,7 @@
                 <div class="contact-card p-4 rounded-4 text-center shadow-sm" style="background: rgba(139,201,5,0.04); border:1px solid rgba(139,201,5,0.1);">
                     <i class="flaticon-email-1 call-icon fs-3 mb-2" style="color:#8BC905;"></i>
                     <h6 class="fw-semibold text-dark mb-1">EMAIL ADDRESS</h6>
-                    <a href="mailto:support@marketmind.com" class="d-block text-decoration-none fw-bold" style="color:#0C3A30;">marketmindinvestments@gmail.com</a>
+                    <a href="mailto:support@chartmasterscircle.com" class="d-block text-decoration-none fw-bold" style="color:#0C3A30;">support@chartmasterscircle.com</a>
                     <span class="badge mt-2 px-2 py-1" style="background: rgba(139,201,5,0.2); color: #8BC905; font-size:0.7rem;">Reply within 1hr</span>
                 </div>
             </div>

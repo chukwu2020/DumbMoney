@@ -1,3 +1,4 @@
+{{-- resources/views/admin/plans/index.blade.php --}}
 @extends('layout.admin')
 @section('content')
 
@@ -19,12 +20,10 @@
     <div class="grid grid-cols-12">
         <div class="col-span-12">
             <div class="card h-full p-0 rounded-xl border-0 overflow-hidden">
-                <div
-                    class="card-header border-b border-neutral-200  bg-white  py-4 px-6 flex items-center flex-wrap gap-3 justify-between">
+                <div class="card-header border-b border-neutral-200 bg-white py-4 px-6 flex items-center flex-wrap gap-3 justify-between">
                     <div class="flex items-center flex-wrap gap-3">
                         <span class="text-base font-medium text-secondary-light mb-0">Show</span>
-                        <select
-                            class="form-select form-select-sm w-auto border-neutral-200 rounded-lg">
+                        <select class="form-select form-select-sm w-auto border-neutral-200 rounded-lg">
                             <option>1</option>
                             <option>2</option>
                             <option>3</option>
@@ -37,19 +36,16 @@
                             <option>10</option>
                         </select>
                         <form class="navbar-search">
-                            <input type="text" class="bg-white  h-10 w-auto" name="search"
-                                placeholder="Search">
+                            <input type="text" class="bg-white h-10 w-auto" name="search" placeholder="Search">
                             <iconify-icon icon="ion:search-outline" class="icon"></iconify-icon>
                         </form>
-                        <select
-                            class="form-select form-select-sm w-autoborder-neutral-200rounded-lg">
+                        <select class="form-select form-select-sm w-auto border-neutral-200 rounded-lg">
                             <option>Status</option>
                             <option>Active</option>
                             <option>Inactive</option>
                         </select>
                     </div>
-                    <a href="{{ route('create_plan') }}"
-                        class="btn btn-primary text-sm btn-sm px-3 py-3 rounded-lg flex items-center gap-2">
+                    <a href="{{ route('create_plan') }}" class="btn btn-primary text-sm btn-sm px-3 py-3 rounded-lg flex items-center gap-2">
                         <iconify-icon icon="ic:baseline-plus" class="icon text-xl line-height-1"></iconify-icon>
                         Add New Plan
                     </a>
@@ -58,12 +54,14 @@
                     <div class="table-responsive scroll-sm">
                         <table class="table bordered-table sm-table mb-0">
                             <thead>
-                                <tr>
+                                看到
                                     <th scope="col">Name</th>
                                     <th scope="col">Min Deposit</th>
                                     <th scope="col">Max Deposit</th>
                                     <th scope="col">Duration</th>
                                     <th scope="col">Interest Rate</th>
+                                    <th scope="col">Trading Style</th>
+                                    <th scope="col">Risk Level</th>
                                     <th scope="col" class="text-center">Status</th>
                                     <th scope="col" class="text-center">Action</th>
                                 </tr>
@@ -75,38 +73,58 @@
                                         <div class="flex items-center">
                                             <div class="grow">
                                                 <span class="text-base mb-0 font-normal text-secondary-light">{{ ucfirst($plan->name) }}</span>
+                                                @if($plan->popular_badge)
+                                                <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full ml-2">Popular</span>
+                                                @endif
                                             </div>
                                         </div>
                                     </td>
-                                    <td><span class="text-base mb-0 font-normal text-secondary-light">{{ number_format($plan->minimum_amount) }}</span></td>
-                                    <td>{{ number_format($plan->maximum_amount) }}</td>
-                                    <td>{{ $plan->duration }}</td>
-                                    <td>{{ $plan->interest_rate }}</td>
+                                    <td><span class="text-base mb-0 font-normal text-secondary-light">${{ number_format($plan->minimum_amount) }}</span></td>
+                                    <td>${{ number_format($plan->maximum_amount) }}</td>
+                                    <td>
+                                        {{ $plan->duration }} 
+                                        @if($plan->duration_unit == 'minutes')
+                                            minutes
+                                        @elseif($plan->duration_unit == 'hours')
+                                            hours
+                                        @else
+                                            days
+                                        @endif
+                                    </td>
+                                    <td>{{ $plan->interest_rate }}%</td>
+                                    <td>{{ $plan->trading_style ?? 'N/A' }}</td>
+                                    <td>
+                                        @if($plan->risk_level)
+                                        <span class="px-2 py-1 rounded-full text-xs 
+                                            @if($plan->risk_level == 'Low') bg-green-100 text-green-800
+                                            @elseif($plan->risk_level == 'Medium') bg-yellow-100 text-yellow-800
+                                            @elseif($plan->risk_level == 'High') bg-red-100 text-red-800
+                                            @endif">
+                                            {{ $plan->risk_level }}
+                                        </span>
+                                        @else
+                                        N/A
+                                        @endif
+                                    </td>
                                     <td class="text-center">
                                         @if($plan->status == "active" )
-                                        <span
-                                            class="bg-success-100  text-success-600 border border-success-600 px-6 py-1.5 rounded font-medium text-sm">Active</span>
+                                        <span class="bg-success-100 text-success-600 border border-success-600 px-6 py-1.5 rounded font-medium text-sm">Active</span>
                                         @else
-                                        <span
-                                            class="bg-danger-100 text-danger-600  border border-danger-600 px-6 py-1.5 rounded font-medium text-sm">Inactive</span>
-
+                                        <span class="bg-danger-100 text-danger-600 border border-danger-600 px-6 py-1.5 rounded font-medium text-sm">Inactive</span>
                                         @endif
                                     </td>
                                     <td class="text-center">
                                         <div class="flex items-center gap-3 justify-center">
-                                            <button type="button"
-                                                class="bg-info-100  hover:bg-info-200 text-info-600  font-medium w-10 h-10 flex justify-center items-center rounded-full">
+                                            <button type="button" class="bg-info-100 hover:bg-info-200 text-info-600 font-medium w-10 h-10 flex justify-center items-center rounded-full">
                                                 <iconify-icon icon="majesticons:eye-line" class="icon text-xl"></iconify-icon>
                                             </button>
                                             <a href="{{ route('plan.edit', $plan->id) }}">
-                                                <button type="button"
-                                                    class="bg-success-100 text-success-600 bg-hover-success-200 font-medium w-10 h-10 flex justify-center items-center rounded-full">
+                                                <button type="button" class="bg-success-100 text-success-600 hover:bg-success-200 font-medium w-10 h-10 flex justify-center items-center rounded-full">
                                                     <iconify-icon icon="lucide:edit" class="menu-icon"></iconify-icon>
                                                 </button>
                                             </a>
-                                            <a href="{{ route('plan.delete', $plan->id) }}">
-                                                <button type="button"
-                                                    class="remove-item-btn bg-danger-100 hover:bg-danger-200 text-danger-600  font-medium w-10 h-10 flex justify-center items-center rounded-full">
+                                            <a href="{{ route('plan.delete', $plan->id) }}" onclick="return confirm('Are you sure you want to delete this plan?')">
+                                                <button type="button" class="remove-item-btn bg-danger-100 hover:bg-danger-200 text-danger-600 font-medium w-10 h-10 flex justify-center items-center rounded-full">
                                                     <iconify-icon icon="fluent:delete-24-regular" class="menu-icon"></iconify-icon>
                                                 </button>
                                             </a>
@@ -114,41 +132,24 @@
                                     </td>
                                 </tr>
                                 @endforeach
-
                             </tbody>
                         </table>
                     </div>
 
                     <div class="flex items-center justify-between flex-wrap gap-2 mt-6">
-                        <span>Showing 1 to 10 of 12 entries</span>
+                        <span>Showing 1 to {{ count($plans) }} of {{ count($plans) }} entries</span>
                         <ul class="pagination flex flex-wrap items-center gap-2 justify-center">
                             <li class="page-item">
-                                <a class="page-link bg-neutral-300 text-secondary-light font-semibold rounded-lg border-0 flex items-center justify-center h-8 w-8 text-base"
-                                    href="javascript:void(0)"><iconify-icon icon="ep:d-arrow-left" class=""></iconify-icon></a>
+                                <a class="page-link bg-neutral-300 text-secondary-light font-semibold rounded-lg border-0 flex items-center justify-center h-8 w-8 text-base" href="javascript:void(0)"><iconify-icon icon="ep:d-arrow-left" class=""></iconify-icon></a>
                             </li>
                             <li class="page-item">
-                                <a class="page-link text-secondary-light font-semibold rounded-lg border-0 flex items-center justify-center h-8 w-8 text-base bg-primary-600 text-white"
-                                    href="javascript:void(0)">1</a>
+                                <a class="page-link text-secondary-light font-semibold rounded-lg border-0 flex items-center justify-center h-8 w-8 text-base bg-primary-600 text-white" href="javascript:void(0)">1</a>
                             </li>
                             <li class="page-item">
-                                <a class="page-link bg-neutral-300text-secondary-light font-semibold rounded-lg border-0 flex items-center justify-center h-8 w-8"
-                                    href="javascript:void(0)">2</a>
+                                <a class="page-link bg-neutral-300 text-secondary-light font-semibold rounded-lg border-0 flex items-center justify-center h-8 w-8" href="javascript:void(0)">2</a>
                             </li>
                             <li class="page-item">
-                                <a class="page-link bg-neutral-300  text-secondary-light font-semibold rounded-lg border-0 flex items-center justify-center h-8 w-8 text-base"
-                                    href="javascript:void(0)">3</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link bg-neutral-300  text-secondary-light font-semibold rounded-lg border-0 flex items-center justify-center h-8 w-8 text-base"
-                                    href="javascript:void(0)">4</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link bg-neutral-300  text-secondary-light font-semibold rounded-lg border-0 flex items-center justify-center h-8 w-8 text-base"
-                                    href="javascript:void(0)">5</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link bg-neutral-300  text-secondary-light font-semibold rounded-lg border-0 flex items-center justify-center h-8 w-8 text-base"
-                                    href="javascript:void(0)"> <iconify-icon icon="ep:d-arrow-right" class=""></iconify-icon> </a>
+                                <a class="page-link bg-neutral-300 text-secondary-light font-semibold rounded-lg border-0 flex items-center justify-center h-8 w-8 text-base" href="javascript:void(0)"><iconify-icon icon="ep:d-arrow-right" class=""></iconify-icon></a>
                             </li>
                         </ul>
                     </div>
@@ -156,8 +157,6 @@
             </div>
         </div>
     </div>
-
 </div>
-
 
 @endsection

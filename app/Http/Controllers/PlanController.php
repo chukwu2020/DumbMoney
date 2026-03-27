@@ -10,11 +10,12 @@ class PlanController extends Controller
 
 
     // terms$policy 
-    public function terms_privacy()
-{
-    return view(' dashboard.terms_privacy');
-}
-    //
+    public function termsprivacy()
+    {
+        return view(' dashboard.termsprivacy');
+    }
+    
+    
 
     public function addPlan()
     {
@@ -22,20 +23,7 @@ class PlanController extends Controller
     }
 
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'minimum_amount' => 'required|numeric|min:0',
-            'maximum_amount' => 'required|numeric|gte:minimum_amount',
-            'interest_rate' => 'required|numeric|min:0',
-            'duration' => 'required|integer|min:1',
-            'status' => 'required|in:active,inactive',
-        ]);
 
-        Plan::create($request->all());
-        return redirect()->back()->with('success', 'Plan created succesfully');
-    }
 
 
     public function planList()
@@ -59,37 +47,105 @@ class PlanController extends Controller
         return view('admin.plans.edit', compact('data'));
     }
 
-    public function updatePlan(Request $request, $id)
-    {
+    // In app/Http/Controllers/PlanController.php
 
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'minimum_amount' => 'required|numeric|min:0',
-            'maximum_amount' => 'required|numeric|gte:minimum_amount',
-            'interest_rate' => 'required|numeric|min:0',
-            'duration' => 'required|integer|min:1',
-            'status' => 'required|in:active,inactive',
-        ]);
+    // In PlanController.php - update the store method validation rules:
 
-        $plan = Plan::find($id);
+   // In PlanController.php - update the store method validation rules:
 
-        $plan->name = $request->name;
-        $plan->minimum_amount = $request->minimum_amount;
-        $plan->maximum_amount = $request->maximum_amount;
-        $plan->interest_rate = $request->interest_rate;
-        $plan->duration = $request->duration;
-        $plan->status = $request->status;
+public function store(Request $request)
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'minimum_amount' => 'required|numeric|min:0',
+        'maximum_amount' => 'required|numeric|gte:minimum_amount',
+        'interest_rate' => 'required|numeric|min:0',
+        'duration' => 'required|integer|min:1',
+        'duration_unit' => 'nullable|in:minutes,hours,days',
+        'status' => 'required|in:active,inactive',
+        'max_participations' => 'nullable|integer|min:0',
+        // ... other validations
+    ]);
 
-        $plan->save();
-
-        return redirect()->route('plan.list')->with('message', 'Plan updated successfully');
+    $data = $request->all();
+    
+    // Set default values
+    if (!isset($data['duration_unit'])) {
+        $data['duration_unit'] = 'days';
     }
+    if (!isset($data['max_participations']) || $data['max_participations'] === null) {
+        $data['max_participations'] = 3;
+    }
+    
+    // Handle JSON fields
+    if ($request->has('assets_traded')) {
+        $data['assets_traded'] = json_encode($request->assets_traded);
+    }
+    
+    if ($request->has('features')) {
+        $features = array_filter($request->features, function($value) {
+            return !empty(trim($value));
+        });
+        $data['features'] = json_encode(array_values($features));
+    }
+    
+    $data['popular_badge'] = $request->has('popular_badge') ? true : false;
+
+    Plan::create($data);
+    
+    return redirect()->back()->with('success', 'Trading plan created successfully');
+}
+
+// Update the updatePlan method similarly:
+
+public function updatePlan(Request $request, $id)
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'minimum_amount' => 'required|numeric|min:0',
+        'maximum_amount' => 'required|numeric|gte:minimum_amount',
+        'interest_rate' => 'required|numeric|min:0',
+        'duration' => 'required|integer|min:1',
+        'duration_unit' => 'nullable|in:minutes,hours,days',
+        'status' => 'required|in:active,inactive',
+        'max_participations' => 'nullable|integer|min:0',
+        // ... other validations
+    ]);
+
+    $plan = Plan::find($id);
+    $data = $request->all();
+    
+    // Set default values
+    if (!isset($data['duration_unit'])) {
+        $data['duration_unit'] = 'days';
+    }
+    if (!isset($data['max_participations']) || $data['max_participations'] === null) {
+        $data['max_participations'] = 3;
+    }
+    
+    // Handle JSON fields
+    if ($request->has('assets_traded')) {
+        $data['assets_traded'] = json_encode($request->assets_traded);
+    }
+    
+    if ($request->has('features')) {
+        $features = array_filter($request->features, function($value) {
+            return !empty(trim($value));
+        });
+        $data['features'] = json_encode(array_values($features));
+    }
+    
+    $data['popular_badge'] = $request->has('popular_badge') ? true : false;
+    
+    $plan->update($data);
+    
+    return redirect()->route('plan.list')->with('message', 'Plan updated successfully');
+}
+
 
     public function plan_dashboard()
     {
-        $plans = Plan::where('status','active')->get();
+        $plans = Plan::where('status', 'active')->get();
         return view('dashboard.plans_userdashboard.plan_dashboard', compact('plans'));
-       
     }
-    
 }

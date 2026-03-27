@@ -1,4 +1,5 @@
 <?php
+// app/Http/Controllers/DepositController.php
 
 namespace App\Http\Controllers;
 
@@ -15,14 +16,12 @@ class DepositController extends Controller
     // Show deposit form
     public function userDeposit()
     {
-        $plans = Plan::where('status', 'active')->get();
         $wallets = Wallet::all();
-
         $reinvestmentMode = $this->checkReinvestmentMode();
 
         return view(
             'dashboard.deposit.create-deposit',
-            compact('plans', 'wallets', 'reinvestmentMode')
+            compact('wallets', 'reinvestmentMode')
         );
     }
 
@@ -30,27 +29,14 @@ class DepositController extends Controller
     public function userMakeDeposit(Request $request)
     {
         $request->validate([
-            'plan_id'    => 'required|exists:plans,id',
             'wallet_id'  => 'required|exists:wallets,id',
             'amount'     => 'required|numeric|min:0.01',     // entered amount (any currency)
             'amount_usd' => 'required|numeric|min:0.01',     // converted USD (truth)
         ]);
 
         $user = auth()->user();
-        $plan = Plan::findOrFail($request->plan_id);
-
+        $wallet = Wallet::findOrFail($request->wallet_id);
         $amountUSD = round($request->amount_usd, 2);
-
-        // ✅ Validate PLAN LIMITS IN USD ONLY
-        if (
-            $amountUSD < $plan->minimum_amount ||
-            $amountUSD > $plan->maximum_amount
-        ) {
-            return back()->with(
-                'error',
-                "Deposit must be between \${$plan->minimum_amount} and \${$plan->maximum_amount} USD."
-            );
-        }
 
         /**
          * =========================
@@ -58,7 +44,6 @@ class DepositController extends Controller
          * =========================
          */
         if ($this->checkReinvestmentMode()) {
-
             if ($amountUSD > $user->available_balance) {
                 return back()->with(
                     'error',
@@ -66,46 +51,24 @@ class DepositController extends Controller
                 );
             }
 
-            Investment::create([
-                'user_id'           => $user->id,
-                'plan_id'           => $plan->id,
-                'amount_invested'   => $amountUSD,
-                'expected_profit'   => ($amountUSD * $plan->interest_rate) / 100,
-                'status'            => 'active',
-                'start_date'        => now(),
-                'end_date'          => now()->addDays($plan->duration),
-                'is_reinvestment'   => true,
-            ]);
-
-            $user->decrement('available_balance', $amountUSD);
-
-            session()->forget([
-                'reinvestment_mode',
-                'reinvestment_expires',
-                'reinvestment_balance',
-            ]);
-
+            // For reinvestment, we need a plan - redirect to plans page
             return redirect()
-                ->route('user_dashboard')
-                ->with('success', 'Reinvestment successful!');
+                ->route('user.invest')
+                ->with('reinvestment_amount', $amountUSD)
+                ->with('reinvestment_wallet', $wallet->id)
+                ->with('info', 'Please select a plan for reinvestment');
         }
 
         /**
          * =========================
          * NORMAL DEPOSIT FLOW
          * =========================
+         * Store in session and go to confirmation page
          */
         Session::put('deposit_details', [
             'user_id'          => $user->id,
-            'plan_id'          => $plan->id,
             'wallet_id'        => $request->wallet_id,
-
-            // ✅ ALWAYS USD (core logic)
             'amount_deposited' => $amountUSD,
-
-            // ✅ UI / audit only
-        
-         
         ]);
 
         return redirect()->route('deposit.confirm');
@@ -123,6 +86,7 @@ class DepositController extends Controller
         $depositDetails = Session::get('deposit_details');
         $wallet = Wallet::findOrFail($depositDetails['wallet_id']);
 
+        // For confirmation page, we don't need plan details anymore
         return view(
             'dashboard.deposit.confirm-deposit',
             compact('wallet', 'depositDetails')
@@ -131,35 +95,35 @@ class DepositController extends Controller
 
     // Submit deposit proof
     public function submitDeposit(Request $request)
-    {
-        if (!Session::has('deposit_details')) {
-            return redirect()
-                ->route('dashboard.deposit.deposit-history')
-                ->with('error', 'Deposit session expired.');
-        }
+{
+    if (!Session::has('deposit_details')) {
+        return redirect()
+            ->route('user.deposit-history')
+            ->with('error', 'Deposit session expired.');
+    }
 
-        $request->validate([
-            'proof' => 'required|image|mimes:jpeg,png,jpg|max:5120',
-        ]);
+    $request->validate([
+        'proof' => 'required|image|mimes:jpeg,png,jpg|max:5120',
+    ]);
 
-        $depositDetails = Session::get('deposit_details');
+    $depositDetails = Session::get('deposit_details');
 
-        $proofPath = $request->file('proof')->store('proofs', 'public');
+    $proofPath = $request->file('proof')->store('proofs', 'public');
 
-        $deposit = Deposit::create([
-            'user_id'          => $depositDetails['user_id'],
-            'plan_id'          => $depositDetails['plan_id'],
-            'wallet_id'        => $depositDetails['wallet_id'],
-            'amount_deposited' => $depositDetails['amount_deposited'], // USD
-            
-            
-            'proof'            => $proofPath,
-            'status'           => 0,
-        ]);
+    // Create deposit WITHOUT plan_id - it will now be NULL
+    $deposit = Deposit::create([
+        'user_id'          => $depositDetails['user_id'],
+        'wallet_id'        => $depositDetails['wallet_id'],
+        'amount_deposited' => $depositDetails['amount_deposited'],
+        'proof'            => $proofPath,
+        'status'           => 0, // Pending
+        // No plan_id needed!
+    ]);
 
-        Session::forget('deposit_details');
+    Session::forget('deposit_details');
 
-        $user = User::find($deposit->user_id);
+    $user = User::find($deposit->user_id);
+    try {
         $user->notify(
             new \App\Notifications\TransactionNotification(
                 'Deposit Submitted',
@@ -167,28 +131,29 @@ class DepositController extends Controller
                 ' USD is awaiting approval.'
             )
         );
-
-        return redirect()
-            ->route('user.deposit-history')
-            
-            ->with('success', 'Deposit submitted successfully.');
-            
+    } catch (\Exception $e) {
+        \Log::error('Notification failed: ' . $e->getMessage());
     }
 
-    // Deposit history
-    public function depositHistory()
-    {
-        $deposits = Deposit::with(['plan', 'wallet'])
-            ->where('user_id', auth()->id())
-            ->latest()
-            ->get();
+    return redirect()
+        ->route('user.deposit-history')
+        ->with('success', 'Deposit submitted successfully. Awaiting approval.');
+}
 
-        return view(
-            'dashboard.deposit.deposit-history',
-            compact('deposits')
-        );
-    }
+// deposit history
 
+public function depositHistory()
+{
+    $deposits = Deposit::with(['plan', 'wallet'])
+    ->where('user_id', auth()->id())
+    ->latest()
+    ->get();
+
+    return view(
+        'dashboard.deposit.deposit-history',
+        compact('deposits')
+    );
+}
     // Reinvestment mode checker
     protected function checkReinvestmentMode()
     {

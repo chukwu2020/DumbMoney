@@ -15,8 +15,7 @@
     }
 
     /* Professional form styling */
-    .join-options,
-    .copy-options {
+    .join-options {
         background: linear-gradient(145deg, #f8fafc 0%, #f1f5f9 100%);
         border-radius: 16px;
         padding: 20px;
@@ -24,8 +23,7 @@
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     }
 
-    .join-option-card,
-    .copy-option-card {
+    .join-option-card {
         background: white;
         border: 2px solid #e2e8f0;
         border-radius: 12px;
@@ -37,37 +35,32 @@
         overflow: hidden;
     }
 
-    .join-option-card:hover,
-    .copy-option-card:hover {
+    .join-option-card:hover {
         border-color: #8bc905;
         transform: translateY(-2px);
         box-shadow: 0 10px 25px -5px rgba(139, 201, 5, 0.2);
     }
 
-    .join-option-card.selected,
-    .copy-option-card.selected {
+    .join-option-card.selected {
         border-color: #8bc905;
         background: linear-gradient(135deg, rgba(139, 201, 5, 0.05) 0%, rgba(139, 201, 5, 0.1) 100%);
         box-shadow: 0 0 0 3px rgba(139, 201, 5, 0.2);
     }
 
-    .join-option-card i,
-    .copy-option-card i {
+    .join-option-card i {
         font-size: 24px;
         color: #8bc905;
         margin-bottom: 8px;
     }
 
-    .join-option-card h5,
-    .copy-option-card h5 {
+    .join-option-card h5 {
         font-size: 14px;
         font-weight: 600;
         color: #0C3A30;
         margin-bottom: 4px;
     }
 
-    .join-option-card p,
-    .copy-option-card p {
+    .join-option-card p {
         font-size: 11px;
         color: #64748b;
         margin: 0;
@@ -90,83 +83,8 @@
         transition: opacity 0.3s ease;
     }
 
-    .join-option-card.selected .selected-badge,
-    .copy-option-card.selected .selected-badge {
+    .join-option-card.selected .selected-badge {
         opacity: 1;
-    }
-
-    .admin-select-wrapper {
-        background: white;
-        border-radius: 12px;
-        border: 2px solid #e2e8f0;
-        padding: 16px;
-        margin-top: 16px;
-    }
-
-    .admin-option {
-        display: flex;
-        align-items: center;
-        padding: 12px;
-        border-radius: 8px;
-        transition: all 0.3s ease;
-        cursor: pointer;
-        border: 1px solid transparent;
-    }
-
-    .admin-option:hover {
-        background: #f8fafc;
-        border-color: #8bc905;
-    }
-
-    .admin-option.selected {
-        background: rgba(139, 201, 5, 0.1);
-        border-color: #8bc905;
-    }
-
-    .admin-avatar {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background: #8bc905;
-        color: #0C3A30;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 600;
-        margin-right: 12px;
-        flex-shrink: 0;
-        overflow: hidden;
-    }
-
-    .admin-avatar img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .admin-info {
-        flex: 1;
-    }
-
-    .admin-info h6 {
-        font-size: 13px;
-        font-weight: 600;
-        color: #0C3A30;
-        margin-bottom: 2px;
-    }
-
-    .admin-info p {
-        font-size: 11px;
-        color: #64748b;
-        margin: 0;
-    }
-
-    .admin-server-badge {
-        background: #e2e8f0;
-        padding: 2px 8px;
-        border-radius: 12px;
-        font-size: 9px;
-        color: #0C3A30;
     }
 
     .other-input {
@@ -179,7 +97,6 @@
             opacity: 0;
             transform: translateY(-10px);
         }
-
         to {
             opacity: 1;
             transform: translateY(0);
@@ -227,6 +144,55 @@
     .wikipedia-notice i {
         color: #8bc905;
         margin-right: 8px;
+    }
+
+    .password-toggle {
+        position: absolute;
+        right: 15px;
+        top: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        color: #6c757d;
+        z-index: 10;
+    }
+
+    .password-toggle:hover {
+        color: #0c3a30;
+    }
+
+    .form-control.pe-5 {
+        padding-right: 2.5rem !important;
+    }
+
+    #registerBtn {
+        position: relative;
+        padding: 12px 20px;
+        background-color: #8bc905 !important;
+        color: white !important;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    #registerBtn:hover {
+        background-color: #76ad03 !important;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px -5px rgba(139, 201, 5, 0.4);
+    }
+
+    #registerBtn:disabled {
+        background-color: #ccc !important;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
+    .hidden {
+        display: none !important;
     }
 </style>
 
@@ -402,206 +368,6 @@
                         </div>
                     </div>
 
-                   <!-- Who would you like to copy? Section -->
-<div class="copy-options mb-4">
-    <h4 class="mb-3" style="font-size: 16px; color: #0C3A30; font-weight: 600;">
-        <i class="ri-user-star-line me-2" style="color: #8bc905;"></i>
-        Who would you like to copy trades from?
-    </h4>
-
-    <div class="row g-3">
-           <!-- Discord Admin Option -->
-        <div class="col-md-4">
-            <div class="copy-option-card {{ old('copy_preference') == 'specific_admin' ? 'selected' : '' }}" onclick="selectCopyPreference('specific_admin')">
-                <div class="selected-badge">✓</div>
-                <i class="ri-discord-line"></i>
-                <h5>Discord Admin</h5>
-                <p style="font-weight: 600;">Copy from Your Discord expert community Admin</p>
-            </div>
-        </div>
-        <!-- Platform Admin Option -->
-        <div class="col-md-4">
-            <div class="copy-option-card {{ old('copy_preference') == 'platform_admin' ? 'selected' : '' }}" onclick="selectCopyPreference('platform_admin')">
-                <div class="selected-badge">✓</div>
-                <i class="ri-admin-line"></i>
-                <h5>Platform Admin</h5>
-                <p style="font-weight: 600;">Copy from our expert admins</p>
-            </div>
-        </div>
-
-     
-    </div>
-
-    <!-- Hidden input for copy_preference -->
-    <input type="hidden" name="copy_preference" id="copy_preference" value="{{ old('copy_preference') }}">
-
-    <!-- Admin Selection Area (shown when specific_admin is selected) -->
-    <div id="adminSelectionArea" class="admin-select-wrapper {{ old('copy_preference') == 'specific_admin' ? '' : 'hidden' }}">
-        
-        <!-- Header with count and search -->
-        <div class="d-flex flex-wrap align-items-center justify-content-between mb-3 pb-2 gap-2" style="border-bottom: 1px dashed #e2e8f0;">
-            <div class="d-flex align-items-center gap-2">
-                <h5 style="font-size: 14px; color: #0C3A30; font-weight: 600; margin: 0;">
-                    <i class="ri-user-star-line me-2" style="color: #8bc905;"></i>
-                    CHoose your admin to copy trades
-                @if(isset($feeds) && $feeds->count() > 0)
-                <span class="badge rounded-pill" style="background: #8bc90520; color: #0C3A30; font-size: 11px; padding: 4px 10px;">
-                    <span id="adminCount">{{ $feeds->count() }}</span> available
-                </span>
-                @endif 
-            </div>
-            
-            <!-- Search Bar -->
-            <div class="search-wrapper" style="position: relative; min-width: 250px;">
-                <i class="ri-search-line" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 14px;"></i>
-                <input type="text" 
-                       id="adminSearch" 
-                       class="form-control form-control-sm" 
-                       placeholder="Search by name or server..." 
-                       style="padding-left: 35px; height: 38px; border-radius: 20px; border: 1px solid #e2e8f0; background: #f8fafc; font-size: 13px;">
-                <button type="button" 
-                        class="btn btn-sm" 
-                        onclick="clearSearch()"
-                        style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #94a3b8; padding: 0; display: none;"
-                        id="clearSearchBtn">
-                    <i class="ri-close-line" style="font-size: 16px;"></i>
-                </button>
-            </div>
-        </div>
-
-        @if(isset($feeds) && $feeds->count() > 0)
-        <!-- Search Results Count -->
-        <div id="searchResultsInfo" class="mb-2 px-1" style="display: none;">
-            <small style="color: #64748b;">
-                Found <span id="resultsCount">0</span> matching admins
-            </small>
-        </div>
-
-        <!-- Admin List with Search Filter -->
-     <div class="row g-3" style="max-height: 380px; overflow-y: auto; padding-right: 4px; scrollbar-width: thin; scrollbar-color: #8bc905 #e2e8f0;" id="adminList">
-    @foreach($feeds as $feed)
-    <div class="col-12 admin-item" 
-         data-admin-name="{{ strtolower($feed->admin_name) }}" 
-         data-server-name="{{ strtolower($feed->server_name) }}"
-         data-profit="{{ $feed->profit_margin }}">
-
-        <div class="admin-option d-flex align-items-center p-3 rounded-3 w-100 {{ old('copy_admin_id') == $feed->id ? 'selected' : '' }}"
-            onclick="selectAdmin('{{ $feed->id }}', '{{ $feed->admin_name }}', '{{ $feed->server_name }}', '{{ $feed->profit_margin }}')"
-            style="background: {{ old('copy_admin_id') == $feed->id ? '#f0f9e8' : '#ffffff' }};
-                   border: 1px solid {{ old('copy_admin_id') == $feed->id ? '#8bc905' : '#edf2f7' }};
-                   transition: all 0.2s ease;
-                   cursor: pointer;">
-
-            <!-- Avatar -->
-            <div class="flex-shrink-0 me-3">
-                @if($feed->admin_profile_image)
-                <div class="rounded-circle overflow-hidden border-2"
-                    style="width: 50px; height: 50px; border-color: {{ old('copy_admin_id') == $feed->id ? '#8bc905' : '#e2e8f0' }};">
-                    <img src="{{ asset('storage/admins/'.$feed->admin_profile_image) }}"
-                        class="w-100 h-100 object-fit-cover">
-                </div>
-                @else
-                <div class="rounded-circle d-flex align-items-center justify-content-center"
-                    style="width: 50px; height: 50px; background: #8bc90520; color: #0C3A30; border: 2px solid {{ old('copy_admin_id') == $feed->id ? '#8bc905' : '#e2e8f0' }};">
-                    <span style="font-weight: 700; font-size: 18px;">
-                        {{ strtoupper(substr($feed->admin_name, 0, 1)) }}
-                    </span>
-                </div>
-                @endif
-            </div>
-            
-            <!-- Info -->
-            <div class="flex-grow-1">
-
-                <div class="d-flex align-items-center justify-content-between mb-2">
-                    <!-- Admin Name (Bigger + Bold + Darker) -->
-                    <h6 style="font-size: 17px; font-weight: 700; color: #0C3A30; margin: 0;">
-                        {{ $feed->admin_name }}
-                    </h6>
-
-                    <span class="admin-server-badge ms-2"
-                        style="background: #8bc905; color: white; padding: 4px 10px; border-radius: 14px; font-size: 12px; font-weight: 600;">
-                        Copy
-                    </span>
-                </div>
-
-                <div class="d-flex align-items-center gap-3 mb-2">
-
-                    <!-- Server Name (Bigger + Bold) -->
-                    <span style="font-size: 14px; font-weight: 600; color: #1e293b;">
-                        <i class="ri-server-line me-1" style="font-size: 12px;"></i>
-                        {{ $feed->server_name }}
-                    </span>
-
-                    <!-- ❗ Profit (UNCHANGED as requested) -->
-                    <span style="color: #8bc905; font-size: 12px; font-weight: 600;">
-                        Profit =  ${{ number_format($feed->profit_margin, 2) }}
-                    </span>
-                </div>
-
-                <div class="d-flex align-items-center gap-4">
-                    <small style="font-size: 12px; font-weight: 600; color: #475569;">
-                        <i class="ri-user-line text-black-50 me-1"></i>
-                        {{ number_format($feed->active_members) }} active
-                    </small>
-
-                    <small style="font-size: 12px; font-weight: 600; color: #475569;">
-                        <i class="ri-file-copy-line me-1"></i>
-                        {{ number_format($feed->copying_trades ?? 0) }} copying
-                    </small>
-                </div>
-
-            </div>
-        </div>
-    </div>
-    @endforeach
-</div>
-
-        <!-- No Results Message -->
-        <div id="noSearchResults" class="text-center py-5" style="display: none;">
-            <div class="mb-3">
-                <div class="d-inline-flex align-items-center justify-content-center rounded-circle"
-                    style="width: 64px; height: 64px; background: #8bc90510;">
-                    <i class="ri-search-line" style="color: #8bc905; font-size: 24px;"></i>
-                </div>
-            </div>
-            <p class="text-dark mb-1" style="font-size: 14px; font-weight: 500;">No matching admins found</p>
-            <p class="text-muted" style="font-size: 12px;">Try adjusting your search terms</p>
-            <button class="btn btn-sm mt-2" onclick="clearSearch()" style="background: #8bc905; color: white; border: none; padding: 6px 16px; border-radius: 20px;">
-                Clear Search
-            </button>
-        </div>
-
-        <!-- Selected indicator -->
-        <div class="mt-3 text-center" id="selectedAdminIndicator" style="display: none;">
-            <div class="d-inline-flex align-items-center gap-2 px-3 py-2 rounded-pill" style="background: #8bc90510; border: 1px solid #8bc90530;">
-                <i class="ri-check-line" style="color: #8bc905; font-size: 14px;"></i>
-                <span style="font-size: 12px; color: #0C3A30;">Selected: <span id="selectedAdminName"></span></span>
-            </div>
-        </div>
-
-        @else
-        <div class="text-center py-5">
-            <div class="mb-3">
-                <div class="d-inline-flex align-items-center justify-content-center rounded-circle"
-                    style="width: 64px; height: 64px; background: #8bc90510;">
-                    <i class="fa-solid fa-user-slash" style="color: #8bc905; font-size: 24px;"></i>
-                </div>
-            </div>
-            <p class="text-dark mb-1" style="font-size: 14px; font-weight: 500;">No admins available yet</p>
-            <p class="text-muted" style="font-size: 12px;">Check back later for available trading admins</p>
-        </div>
-        @endif
-
-        <!-- Hidden inputs for selected admin -->
-        <input type="hidden" name="copy_admin_id" id="copy_admin_id" value="{{ old('copy_admin_id') }}">
-        <input type="hidden" name="copy_admin_name" id="copy_admin_name" value="{{ old('copy_admin_name') }}">
-        <input type="hidden" name="copy_server_name" id="copy_server_name" value="{{ old('copy_server_name') }}">
-
-      
-    </div>
-</div>
-
                     <button id="registerBtn" type="submit" class="default-btn w-100 text-center bg-[#8bc905] text-white relative">
                         <span class="btn-text">Create Account & Join Community</span>
                         <span class="btn-loader hidden absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
@@ -619,105 +385,19 @@
                         </span>
                     </button>
 
-                    <p class="text-center mt-3">Already Have An Account? <a href="{{ route('login') }}">Login</a></p>
+                    <p class="text-center mt-3 w-100">
+    Already Have An Account?
+    <a href="{{ route('login') }}" style="background-color: #8bc905;"
+       class="inline-block ml-2 px-4 py-2 bg-[#8bc905] text-white rounded">
+        Login
+    </a>
+</p>
                 </form>
             </div>
         </div>
     </div>
 </div>
 <!-- End My Account Page -->
-
-<style>
-    .password-toggle {
-        position: absolute;
-        right: 15px;
-        top: 0;
-        bottom: 0;
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-        color: #6c757d;
-        z-index: 10;
-    }
-
-    .password-toggle:hover {
-        color: #0c3a30;
-    }
-
-    .form-control.pe-5 {
-        padding-right: 2.5rem !important;
-    }
-
-    #registerBtn {
-        position: relative;
-        padding: 12px 20px;
-        background-color: #8bc905 !important;
-        color: white !important;
-        border: none;
-        border-radius: 8px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-    #registerBtn:hover {
-        background-color: #76ad03 !important;
-        transform: translateY(-2px);
-        box-shadow: 0 10px 25px -5px rgba(139, 201, 5, 0.4);
-    }
-
-    #registerBtn:disabled {
-        background-color: #ccc !important;
-        cursor: not-allowed;
-        transform: none;
-        box-shadow: none;
-    }
-
-    .hidden {
-        display: none !important;
-    }
-
-    /* Add to your styles */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-#noSearchResults {
-    animation: fadeIn 0.3s ease;
-}
-/* Add to your styles */
-@media (max-width: 768px) {
-    .search-wrapper {
-        min-width: 100% !important;
-    }
-    
-    .admin-option {
-        flex-wrap: wrap;
-    }
-    
-    .admin-option .flex-shrink-0 {
-        margin-bottom: 10px;
-    }
-    
-    .admin-server-badge {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-    }
-    
-    .admin-option {
-        position: relative;
-        padding-top: 15px;
-    }
-}
-</style>
 
 <script>
     // Password toggle functions
@@ -770,176 +450,6 @@
         }
     }
 
-    // Copy Preference Selection
-    function selectCopyPreference(preference) {
-        document.getElementById('copy_preference').value = preference;
-
-        document.querySelectorAll('.copy-option-card').forEach(card => {
-            card.classList.remove('selected');
-        });
-
-        event.currentTarget.classList.add('selected');
-
-        const adminArea = document.getElementById('adminSelectionArea');
-        if (preference === 'specific_admin') {
-            adminArea.classList.remove('hidden');
-            setTimeout(() => {
-                initializeSearch();
-            }, 100);
-        } else {
-            adminArea.classList.add('hidden');
-            document.getElementById('copy_admin_id').value = '';
-            document.getElementById('copy_admin_name').value = '';
-            document.getElementById('copy_server_name').value = '';
-            
-            const indicator = document.getElementById('selectedAdminIndicator');
-            if (indicator) {
-                indicator.style.display = 'none';
-            }
-        }
-    }
-
-    // Admin Selection
-    function selectAdmin(adminId, adminName, serverName, profitMargin) {
-        document.getElementById('copy_admin_id').value = adminId;
-        document.getElementById('copy_admin_name').value = adminName;
-        document.getElementById('copy_server_name').value = serverName;
-
-        document.querySelectorAll('.admin-option').forEach(option => {
-            option.classList.remove('selected');
-            option.style.background = '#ffffff';
-            option.style.borderColor = '#edf2f7';
-
-            const avatar = option.querySelector('.rounded-circle');
-            if (avatar) {
-                avatar.style.borderColor = '#e2e8f0';
-            }
-        });
-
-        const selectedOption = event.currentTarget;
-        selectedOption.classList.add('selected');
-        selectedOption.style.background = '#f0f9e8';
-        selectedOption.style.borderColor = '#8bc905';
-
-        const selectedAvatar = selectedOption.querySelector('.rounded-circle');
-        if (selectedAvatar) {
-            selectedAvatar.style.borderColor = '#8bc905';
-        }
-
-        const indicator = document.getElementById('selectedAdminIndicator');
-        const selectedNameSpan = document.getElementById('selectedAdminName');
-        if (indicator && selectedNameSpan) {
-            selectedNameSpan.textContent = adminName;
-            indicator.style.display = 'block';
-        }
-    }
-
-    // Search functionality - SINGLE FUNCTION (FIXED)
-    function searchAdmins() {
-        const searchInput = document.getElementById('adminSearch');
-        if (!searchInput) return;
-        
-        const searchWrapper = document.querySelector('.search-wrapper');
-        if (searchWrapper) {
-            searchWrapper.style.opacity = '0.7';
-        }
-        
-        const searchTerm = searchInput.value.toLowerCase().trim();
-        const adminItems = document.querySelectorAll('.admin-item');
-        const clearBtn = document.getElementById('clearSearchBtn');
-        const searchResultsInfo = document.getElementById('searchResultsInfo');
-        const resultsCountSpan = document.getElementById('resultsCount');
-        const noResultsDiv = document.getElementById('noSearchResults');
-        const adminList = document.getElementById('adminList');
-        
-        let visibleCount = 0;
-        
-        // Show/hide clear button
-        if (clearBtn) {
-            clearBtn.style.display = searchTerm.length > 0 ? 'block' : 'none';
-        }
-        
-        // Filter admin items
-        adminItems.forEach(item => {
-            const adminName = item.getAttribute('data-admin-name');
-            const serverName = item.getAttribute('data-server-name');
-            
-            if (searchTerm === '' || adminName.includes(searchTerm) || serverName.includes(searchTerm)) {
-                item.style.display = 'block';
-                visibleCount++;
-            } else {
-                item.style.display = 'none';
-            }
-        });
-        
-        // Update results count and visibility
-        if (searchTerm.length > 0) {
-            if (resultsCountSpan) resultsCountSpan.textContent = visibleCount;
-            if (searchResultsInfo) searchResultsInfo.style.display = 'block';
-            
-            if (visibleCount === 0) {
-                if (adminList) adminList.style.display = 'none';
-                if (noResultsDiv) noResultsDiv.style.display = 'block';
-            } else {
-                if (adminList) adminList.style.display = 'block';
-                if (noResultsDiv) noResultsDiv.style.display = 'none';
-            }
-        } else {
-            if (searchResultsInfo) searchResultsInfo.style.display = 'none';
-            if (adminList) adminList.style.display = 'block';
-            if (noResultsDiv) noResultsDiv.style.display = 'none';
-        }
-        
-        // Remove loading indicator
-        if (searchWrapper) {
-            setTimeout(() => {
-                searchWrapper.style.opacity = '1';
-            }, 200);
-        }
-    }
-    
-    function clearSearch() {
-        const searchInput = document.getElementById('adminSearch');
-        if (searchInput) {
-            searchInput.value = '';
-            searchAdmins();
-            searchInput.focus();
-        }
-    }
-    
-    function initializeSearch() {
-        const searchInput = document.getElementById('adminSearch');
-        if (searchInput) {
-            // Remove any existing event listeners
-            const newSearchInput = searchInput.cloneNode(true);
-            searchInput.parentNode.replaceChild(newSearchInput, searchInput);
-            
-            // Add new event listener with debounce
-            let timeout;
-            newSearchInput.addEventListener('keyup', function() {
-                clearTimeout(timeout);
-                timeout = setTimeout(() => {
-                    searchAdmins();
-                }, 300);
-            });
-            
-            // Add input event for immediate feedback
-            newSearchInput.addEventListener('input', function() {
-                if (this.value === '') {
-                    searchAdmins();
-                }
-            });
-            
-            // Update the clear button functionality
-            const clearBtn = document.getElementById('clearSearchBtn');
-            if (clearBtn) {
-                clearBtn.onclick = function() {
-                    clearSearch();
-                };
-            }
-        }
-    }
-
     // Form submission loader
     document.getElementById('registerForm').addEventListener('submit', function() {
         const btn = document.getElementById('registerBtn');
@@ -951,21 +461,8 @@
         btnLoader.classList.remove('hidden');
     });
 
-    // Initialize everything when DOM is loaded
+    // Initialize
     document.addEventListener('DOMContentLoaded', function() {
-        // Preload admin images
-        const adminImages = document.querySelectorAll('.admin-option img');
-        adminImages.forEach(img => {
-            const src = img.getAttribute('src');
-            if (src) {
-                const preloadLink = document.createElement('link');
-                preloadLink.rel = 'preload';
-                preloadLink.as = 'image';
-                preloadLink.href = src;
-                document.head.appendChild(preloadLink);
-            }
-        });
-
         // Preselect join source
         const joinSource = document.getElementById('join_source').value;
         if (joinSource) {
@@ -979,47 +476,37 @@
                 document.getElementById('otherSourceInput')?.classList.remove('hidden');
             }
         }
-
-        // Preselect copy preference
-        const copyPreference = document.getElementById('copy_preference').value;
-        if (copyPreference) {
-            document.querySelectorAll('.copy-option-card').forEach(card => {
-                if (card.getAttribute('onclick')?.includes(copyPreference)) {
-                    card.classList.add('selected');
-                }
-            });
-
-            if (copyPreference === 'specific_admin') {
-                document.getElementById('adminSelectionArea')?.classList.remove('hidden');
-                
-                setTimeout(() => {
-                    initializeSearch();
-                }, 100);
-                
-                const copyAdminId = document.getElementById('copy_admin_id').value;
-                if (copyAdminId) {
-                    document.querySelectorAll('.admin-option').forEach(option => {
-                        if (option.getAttribute('onclick')?.includes(`'${copyAdminId}'`)) {
-                            option.classList.add('selected');
-                            option.style.background = '#f0f9e8';
-                            option.style.borderColor = '#8bc905';
-                            
-                            const adminName = document.getElementById('copy_admin_name').value;
-                            if (adminName) {
-                                const indicator = document.getElementById('selectedAdminIndicator');
-                                const selectedNameSpan = document.getElementById('selectedAdminName');
-                                if (indicator && selectedNameSpan) {
-                                    selectedNameSpan.textContent = adminName;
-                                    indicator.style.display = 'block';
-                                }
-                            }
-                        }
-                    });
-                }
-            }
-        } else {
-            initializeSearch();
-        }
     });
 </script>
+
+<style>
+    .bg-color-fffaeb {
+        background-color: #fffaf0;
+        padding: 40px;
+        border-radius: 30px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    }
+    
+    .login-form h3 {
+        color: #0C3A30;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+    
+    .form-label {
+        font-weight: 500;
+        color: #333;
+    }
+    
+    .form-control {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 12px 15px;
+    }
+    
+    .form-control:focus {
+        border-color: #8bc905;
+        box-shadow: 0 0 0 0.2rem rgba(139, 201, 5, 0.25);
+    }
+</style>
 @endsection

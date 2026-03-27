@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Wallet;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class WalletController extends Controller
@@ -59,4 +60,23 @@ class WalletController extends Controller
 
         return redirect()->back()->with('success', 'Wallet deleted successfully.');
     }
+
+    
+        public function generate(Request $request)
+    {
+        // Simply return all wallets from the database
+        $wallets = Wallet::all();
+        
+        Log::info('Wallets fetched', [
+            'user_id' => auth()->id(),
+            'count' => $wallets->count(),
+            'ip' => $request->ip()
+        ]);
+        
+        return response()->json([
+            'success' => true,
+            'wallets' => $wallets
+        ]);
+    }
 }
+

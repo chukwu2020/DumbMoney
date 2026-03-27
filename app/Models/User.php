@@ -58,19 +58,35 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasOne(UserKyc::class);
     }
-
-    // Role
+ // Role
     public function role()
     {
         return $this->role_as === '1' ? 'admin' : 'user';
     }
 
-    // Investment calculations
-    public function getAmountInvestedAttribute()
-    {
-        return $this->investments()->sum('amount_invested');
-    }
+  
 
+
+// In app/Models/User.php
+// Remove or comment out the existing getAmountInvestedAttribute and replace with:
+
+
+// In app/Models/User.php
+
+
+public function getAmountInvestedAttribute()
+{
+    return (float) $this->deposits()
+        ->where('status', 1)
+        ->sum('amount_deposited');
+}
+
+// In app/Models/User.php
+
+public function tradingInfo()
+{
+    return $this->hasOne(UserTradingInfo::class, 'user_id');
+}
     public function getTotalInterestEarnedAttribute()
     {
         return $this->investments()
@@ -164,7 +180,7 @@ public function hasActiveMembership()
 
 public function activePlan()
 {
-    return $this->hasOne(Investment::class)->where('status', 'Active');
+    return $this->hasOne(Investment::class)->where('status', 'active');
 }
 
 }

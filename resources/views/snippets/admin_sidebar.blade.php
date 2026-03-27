@@ -2,13 +2,13 @@
     <button type="button" class="sidebar-close-btn">
         <iconify-icon icon="radix-icons:cross-2"></iconify-icon>
     </button>
-     <div class="lg:hidden mobile-logo">
-            <img 
-                src="{{ asset('assets/images/mymarketmindmainlogo.png') }}" 
-                alt="Market Mind Logo" 
-                class="brand-logo logo-img" style="width:180px; height:170px; justify-content:center; "
-            >
-        </div>
+    <div class="lg:hidden mobile-logo">
+        <img 
+            src="{{ asset('assets/images/mymarketmindmainlogo.png') }}" 
+            alt="Market Mind Logo" 
+            class="brand-logo logo-img" style="width:180px; height:170px; justify-content:center;"
+        >
+    </div>
 
     <div class="sidebar-menu-area">
         <ul class="sidebar-menu" id="sidebar-menu">
@@ -18,6 +18,28 @@
                     <span>Dashboard</span>
                 </a>
             </li>
+
+            <!-- Copy Trading Menu - ADD THIS -->
+           <!-- Copy Trading Menu -->
+<li class="dropdown">
+    <a href="javascript:void(0)">
+        <iconify-icon icon="ph:copy-bold" class="menu-icon"></iconify-icon>
+        <span>Copy Trading</span>
+        @if(isset($pendingCopyCount) && $pendingCopyCount > 0)
+            <span class="ml-1 inline-block bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full" style="background-color: red !important;">
+                {{ $pendingCopyCount }}
+            </span>
+        @endif
+    </a>
+    <ul class="sidebar-submenu">
+        <li>
+            <a href="{{ route('admin.copy-trading.pendingCopyRequests') }}">
+                <i class="ri-circle-fill circle-icon text-primary-600 w-auto"></i> 
+                All Requests
+            </a>
+        </li>
+    </ul>
+</li>
 
             <li class="dropdown">
                 <a href="javascript:void(0)">
@@ -122,12 +144,12 @@
                             </a>
                         @endif
                     </li>
-             <li>
-                                        <a class="text-black px-0 py-2 hover:text-danger-600 flex items-center gap-4" href="{{ route('signout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                            <iconify-icon icon="lucide:power" class="icon text-xl"></iconify-icon> Log Out</a>
-                                    </li>
-                                    <form action="{{ route('signout') }}" method="post" class="d-none" id="logout-form">@csrf</form>
-
+                    <li>
+                        <a class="text-black px-0 py-2 hover:text-danger-600 flex items-center gap-4" href="{{ route('signout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <iconify-icon icon="lucide:power" class="icon text-xl"></iconify-icon> Log Out
+                        </a>
+                    </li>
+                    <form action="{{ route('signout') }}" method="post" class="d-none" id="logout-form">@csrf</form>
                 </ul>
             </li>
         </ul>

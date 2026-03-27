@@ -16,7 +16,7 @@
           <!-- Header -->
           <tr>
             <td style="background-color: #8bc905; padding: 30px 20px; text-align: center;">
-              <img src="https://res.cloudinary.com/dswwq3xks/image/upload/v1752508147/mymarketmindmainlogo_qonmlk.png" alt="MarketMind" style="height: 80px; width: auto; display: block; margin: 0 auto;">
+              <img src="https://res.cloudinary.com/dswwq3xks/image/upload/v1774272450/chartmasterlogo1_z25kgc.png" alt="Chartmasters Circle" style="height: 80px; width: auto; display: block; margin: 0 auto;">
             </td>
           </tr>
 
@@ -55,7 +55,7 @@
 
               <p style="margin-top: 40px; font-size: 14px;">
                 Regards,<br>
-                The MarketMind Team
+                The Chartmasters Circle Team
               </p>
             </td>
           </tr>
@@ -63,7 +63,7 @@
           <!-- Footer -->
           <tr>
             <td style="background-color: #f2f2f2; text-align: center; padding: 20px; font-size: 12px; color: #0C3A30;">
-              &copy; {{ date('Y') }} MarketMind. All rights reserved.
+              &copy; {{ date('Y') }} Chartmasters Circle. All rights reserved.
             </td>
           </tr>
 

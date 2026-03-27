@@ -5,103 +5,60 @@ $cardExists = auth()->check() ? WithdrawalCard::where('user_id', auth()->id())->
 @endphp
 
 <header class="main-header">
-    <style>
-        .main-header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background-color: #fffaeb;
-            z-index: 1100;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            height: 80px;
-        }
+   <style>
+    .main-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fffaeb;
+    z-index: 1100;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    height: 80px;
+}
 
-        body {
-            padding-top: 80px;
-        }
+body {
+    padding-top: 80px;
+}
 
-        .brand-logo {
-            max-height: 500px;
-            /* increased max-height */
-        }
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+    height: 100%;
+    position: relative;
+}
 
-        .header-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 1.5rem;
-            height: 100%;
-            position: relative;
-        }
+/* Logo (simple + controlled) */
+.brand-logo {
+    height: 30px;
+    width: auto;
+    object-fit: contain;
+    margin-bottom: 3rem !important;
+}
 
-        .mobile-logo {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        @media (min-width: 1024px) {
-            .mobile-logo {
-                display: none;
-            }
-        }
-
-        /* Main logo image styling */
-        .logo-img {
-            height: 120px;
-            /* default base height */
-            width: auto;
-            max-width: 300px;
-            object-fit: contain;
-            filter: contrast(150%) brightness(120%) saturate(130%);
-
-
-            transition: height 0.3s ease;
-        }
-
-        /* Tablets - bigger logo for common tablet widths */
-        @media (min-width: 700px) and (max-width: 1150px) {
-            .logo-img {
-                height: 180px;
-                /* significantly bigger on tablets */
-                max-width: 400px;
-            }
-        }
-
-        /* Desktops - largest logo */
-        @media (min-width: 1151px) {
-            .logo-img {
-                height: 200px;
-                max-width: 500px;
-            }
-        }
-
-        /* Smaller phones */
-        @media (max-width: 699px) {
-            .logo-img {
-                height: 100px;
-                max-width: 220px;
-            }
-        }
-
-        /* For small screens: center it visually */
-        @media (max-width: 767.98px) {
-            .mobile-logo {
-                position: absolute;
-                left: 50%;
-                top: 50%;
-                transform: translate(-50%, -50%);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                height: 120px;
-                max-width: 260px;
-            }
-        }
-    </style>
-
+/* Center ONLY on mobile */
+.mobile-logo {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
     
+}
+
+/* Hide mobile logo on desktop */
+@media (min-width: 1024px) {
+    .mobile-logo {
+        display: none;
+        margin-bottom: 3rem !important;
+           height: 45px;
+    }
+}
+   </style>
+
+
 
     <div class="header-content">
         <!-- Mobile Hamburger -->
@@ -112,10 +69,9 @@ $cardExists = auth()->check() ? WithdrawalCard::where('user_id', auth()->id())->
         <!-- Mobile Logo -->
         <div class="lg:hidden mobile-logo">
             <a href="{{ route('user_dashboard') }}">
-                <img
-                    src="{{ asset('assets/images/mymarketmindmainlogo.png') }}"
-                    alt="Market Mind Logo"
-                    class="brand-logo logo-img">
+
+                <img src="/assets/images/chartmasterbrandname1.png" alt="ChartMasters Circle"
+                    class="brand-logo">
             </a>
 
         </div>

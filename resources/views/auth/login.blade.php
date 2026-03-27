@@ -386,7 +386,7 @@
             <h1 style="font-size: 20px; margin: 0; color: #0C3A30 !important;">Welcome Back!</h1>
             <ul style="font-size: 20px; margin: 0; color: #0C3A30 !important;">
                 <li ><a style=" color: #0C3A30 !important;" href="/">Home</a></li>
-                <li style=" color: #0C3A30 !important;"> / My Account</li>
+                <li style=" color: #0C3A30 !important;">  My Account</li>
             </ul>
         </div>
     </div>
@@ -475,8 +475,11 @@
 
                     <p>
                         Don't have an account? 
-                        <a href="{{ route('signup') }}">Create one now</a>
+                        <a href="{{ route('signup') }}" style="background-color: #8bc905;"
+       class="inline-block ml-2 px-4 py-2 bg-[#8bc905] text-white rounded">Create one now</a>
                     </p>
+
+                    
                 </form>
             </div>
         </div>

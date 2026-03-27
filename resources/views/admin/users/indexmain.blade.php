@@ -78,11 +78,11 @@
                                     <td>{{ $user->email }}</td>
                                     <td>{{ $user->created_at->format('d M Y') }}</td>
                                     
-                                    <td>${{ number_format($user->total_invested, 2) }}</td>
+                                   <td>${{ number_format($user->amount_invested, 2) }}</td>
 
  
 
-                                    <td>${{ number_format($user->total_income, 2) }}</td>
+                                    <td>${{ number_format($user->available_balance, 2) }}</td>
 
                                     <td class="text-center">
                                         @if ($user->active == 1)

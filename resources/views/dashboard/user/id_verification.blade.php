@@ -1,7 +1,7 @@
 @component('mail::layout')
 @slot('header')
     @component('mail::header', ['url' => config('app.url')])
-        <img src="https://res.cloudinary.com/dswwq3xks/image/upload/v1752508147/mymarketmindmainlogo_qonmlk.png" alt="MarketMind Logo" style="height: 60px;">
+          <img src="https://res.cloudinary.com/dswwq3xks/image/upload/v1774272450/chartmasterlogo1_z25kgc.png" alt="{{ config('app.name') }}" style="height: 80px; width: auto; display: block; margin: 0 auto;">
         
     @endcomponent
 @endslot
@@ -40,7 +40,7 @@
                 <td>
                     <h4 style="margin: 0; font-size: 16px; font-weight: normal;">
                         To your financial success,<br>
-                        <strong style="color: #8bc905; font-size: 18px;">The MarketMind Team</strong>
+                        <strong style="color: #8bc905; font-size: 18px;">The ChartMasters Circle Team</strong>
                     </h4>
                 </td>
                 <td width="80" align="right">
@@ -62,7 +62,7 @@
             <a href="{{ config('app.url') }}/unsubscribe" style="color: #8bc905; text-decoration: none; margin: 0 12px; font-weight: 500;">Unsubscribe</a>
         </p>
         <p style="margin: 10px 0 0; font-size: 12px;">
-            © {{ date('Y') }} MarketMind. All rights reserved.<br>
+            © {{ date('Y') }} ChartMasters Circle. All rights reserved.<br>
             We are worldwide
         </p>
     </div>

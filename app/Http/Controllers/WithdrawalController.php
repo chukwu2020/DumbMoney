@@ -2,21 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Investment;
 use App\Models\Withdrawal;
 use App\Models\WithdrawalCard;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class WithdrawalController extends Controller
 {
     public function index()
     {
-        $user = Auth::user();
-
-        $withdrawals = Withdrawal::with(['investment.plan'])
-            ->where('user_id', $user->id)
+        $withdrawals = Withdrawal::with(['investment.plan', 'user.profile'])
+            ->where('user_id', Auth::id())
             ->latest()
             ->get();
 
@@ -32,9 +31,9 @@ class WithdrawalController extends Controller
         }
 
         WithdrawalCard::create([
-            'user_id' => $user->id,
-            'card_number' => str_pad(mt_rand(0, 9999999999999999), 16, '0', STR_PAD_LEFT),
-            'pin' => rand(1000, 9999),
+            'user_id'      => $user->id,
+            'card_number'  => str_pad(mt_rand(0, 9999999999999999), 16, '0', STR_PAD_LEFT),
+            'pin'          => rand(1000, 9999),
             'name_on_card' => $user->name,
         ]);
 
@@ -43,11 +42,11 @@ class WithdrawalController extends Controller
 
     public function viewCard()
     {
-        $user = Auth::user();
-        $card = WithdrawalCard::where('user_id', $user->id)->first();
+        $card = WithdrawalCard::where('user_id', Auth::id())->first();
 
         if (!$card) {
-            return redirect()->route('withdrawals.generateCard')->with('error', 'No card found. Please generate one first.');
+            return redirect()->route('withdrawals.generateCard')
+                ->with('error', 'No card found. Please generate one first.');
         }
 
         return view('dashboard.user.card', compact('card'));
@@ -66,107 +65,147 @@ class WithdrawalController extends Controller
 
     public function withdrawalList()
     {
-        // ✅ FIX: Eager load user and profile relationships
         $withdrawals = auth()->user()
             ->withdrawals()
-            ->with(['user.profile']) // Load the user and their profile
+            ->with(['investment.plan', 'user.profile'])
             ->latest()
             ->get();
-            
+
         return view('dashboard.withdrawal.index', compact('withdrawals'));
     }
 
+    /**
+     * AJAX: calculate fees preview for the withdrawal form.
+     * Balance withdrawals only ever incur a bank transfer fee (if applicable).
+     * Management & performance fees are NEVER charged on balance withdrawals.
+     */
+    public function calculateFees(Request $request)
+    {
+        $request->validate([
+            'amount'         => 'required|numeric|min:0.01',
+            'payment_method' => 'nullable|in:cryptocurrency,digital_wallet',
+        ]);
+
+        $grossAmount   = (float) $request->amount;
+        $paymentMethod = $request->payment_method ?? 'cryptocurrency';
+
+        // Bank fee: only applies when paying via bank transfer
+        $bankFee = $paymentMethod === 'digital_wallet'
+            ? round($grossAmount * 0.05, 2)
+            : 0.0;
+
+        $totalFees = $bankFee;
+        $netAmount = round($grossAmount - $totalFees, 2);
+
+        return response()->json([
+            'total_management_fee'  => 0,
+            'total_performance_fee' => 0,
+            'bank_fee'              => $bankFee,
+            'total_fees'            => $totalFees,
+            'net_amount'            => $netAmount,
+            'fee_breakdown'         => [],
+        ]);
+    }
+
+    /**
+     * Process a balance withdrawal (external — crypto or bank transfer).
+     * Only a 5% bank transfer fee applies. No management or performance fees.
+     */
     public function withdrawFromBalance(Request $request)
     {
-        // Combine PIN digits
-        $cardPin = $request->input('digit1') . $request->input('digit2') . 
-                   $request->input('digit3') . $request->input('digit4');
+        // Assemble PIN from 4 digit fields
+        $cardPin = $request->digit1 . $request->digit2
+                 . $request->digit3 . $request->digit4;
         $request->merge(['card_pin' => $cardPin]);
 
-        // FIXED VALIDATION - Now accepts both crypto and bank choices
         $request->validate([
-            'amount' => 'required|numeric|min:1',
-            'payment_method' => 'required|string|in:cryptocurrency,digital_wallet',
-            'card_pin' => 'required|string|size:4',
-            'wallet_choice' => 'required|string', // Removed restrictive validation
+            'amount'         => 'required|numeric|min:1',
+            'payment_method' => 'required|in:cryptocurrency,digital_wallet',
+            'card_pin'       => 'required|string|size:4',
+            'wallet_choice'  => 'required|string',
         ]);
 
-        $user = User::find(Auth::id());
-        $card = WithdrawalCard::where('user_id', $user->id)->first();
+        return DB::transaction(function () use ($request) {
 
-        // Verify PIN
-        if (!$card || (string)$card->pin !== (string)$request->card_pin) {
-            return back()->with('error', 'Incorrect card PIN.')->withInput();
-        }
+            /** @var \App\Models\User $user */
+            $user = User::where('id', auth()->id())->lockForUpdate()->first();
+            $card = WithdrawalCard::where('user_id', $user->id)->first();
 
-        // Check balance
-        if ($request->amount > $user->available_balance) {
-            return back()->with('error', 'Insufficient balance to withdraw.');
-        }
-
-        // Prevent duplicate submissions
-        $recent = Withdrawal::where('user_id', $user->id)
-            ->where('status', 'pending')
-            ->where('created_at', '>=', Carbon::now()->subMinutes(1))
-            ->first();
-
-        if ($recent) {
-            return back()->with('error', 'You already submitted a withdrawal recently. Please wait.');
-        }
-
-        // Additional validation based on payment method
-        if ($request->payment_method === 'cryptocurrency') {
-            // Validate crypto wallet choice
-            if (!in_array($request->wallet_choice, ['bitcoin', 'etherium', 'usdt'])) {
-                return back()->with('error', 'Invalid cryptocurrency wallet selected.');
+            // ── PIN check ─────────────────────────────────────────────
+            if (!$card || (string) $card->pin !== (string) $request->card_pin) {
+                return back()->with('error', 'Incorrect card PIN.');
             }
 
-            // Verify user has the selected wallet
-            $profile = $user->profile;
-            $walletField = $request->wallet_choice . '_address';
-            
-            if (!$profile || !$profile->$walletField) {
-                return back()->with('error', 'Selected wallet address not found in your profile.');
+            $grossAmount = (float) $request->amount;
+
+            // ── Balance check ─────────────────────────────────────────
+            if ($grossAmount > $user->available_balance) {
+                return back()->with('error', 'Insufficient balance.');
             }
-        } elseif ($request->payment_method === 'digital_wallet') {
-            // Validate bank information exists
-            $profile = $user->profile;
-            
-            if (!$profile || !$profile->recipient_name || !$profile->bank_name || 
-                (!$profile->account_number && !$profile->iban) || !$profile->swift_bic) {
-                return back()->with('error', 'Please complete your bank information in your profile first.');
+
+            // ── Duplicate / spam guard ────────────────────────────────
+            $recentPending = Withdrawal::where('user_id', $user->id)
+                ->where('status', 'pending')
+                ->where('created_at', '>=', now()->subMinute())
+                ->exists();
+
+            if ($recentPending) {
+                return back()->with('error', 'Please wait a moment before submitting another request.');
             }
-            
-            // For bank withdrawals, set wallet_choice to 'bank' or 'primary'
-            $request->merge(['wallet_choice' => 'primary']);
-        }
 
-        // Create withdrawal
-        Withdrawal::create([
-            'user_id' => $user->id,
-            'amount' => $request->amount,
-            'payment_method' => $request->payment_method,
-            'wallet_choice' => $request->wallet_choice,
-            'status' => 'pending',
-            'investment_id' => null,
-            'type' => 'balance',
-        ]);
+            // ── Fee calculation — bank fee only ───────────────────────
+            // Management and performance fees are NEVER charged on balance withdrawals.
+            // Those fees are already deducted when profits are moved from investments
+            // into the available balance (via InvestmentController::withdraw / takeProfit).
+            $bankFee   = $request->payment_method === 'digital_wallet'
+                ? round($grossAmount * 0.05, 2)
+                : 0.0;
 
-        // Deduct from user's available balance
-        $user->available_balance -= $request->amount;
-        $user->save();
+            $totalFees = $bankFee;
+            $netAmount = round($grossAmount - $totalFees, 2);
 
-        // Notify user
-        $user->notify(new \App\Notifications\TransactionNotification(
-            'Withdrawal Submitted',
-            'Your withdrawal request of $' . number_format($request->amount, 2) . ' is pending awaiting approval.'
-        ));
+            // ── Net amount sanity check ───────────────────────────────
+            if ($netAmount <= 0) {
+                return back()->with('error',
+                    'Your withdrawal amount ($' . number_format($grossAmount, 2) . ') '
+                    . 'is fully consumed by the bank transfer fee ($' . number_format($totalFees, 2) . '). '
+                    . 'Please withdraw a larger amount.'
+                );
+            }
 
-        // Different success messages based on payment method
-        $successMessage = $request->payment_method === 'digital_wallet' 
-            ? 'Withdrawal request submitted. Bank transfer will process shortly.'
-            : 'Withdrawal request submitted successfully.';
+            // ── Save withdrawal record ────────────────────────────────
+            Withdrawal::create([
+                'user_id'         => $user->id,
+                'amount'          => $grossAmount,
+                'net_amount'      => $netAmount,
+                'management_fee'  => 0,
+                'performance_fee' => 0,
+                'bank_fee'        => $bankFee,
+                'fee_breakdown'   => [],
+                'payment_method'  => $request->payment_method,
+                'wallet_choice'   => $request->wallet_choice,
+                'status'          => 'pending',
+                'investment_id'   => null,
+                'type'            => Withdrawal::TYPE_BALANCE,
+            ]);
 
-        return redirect()->route('user.withdrawals.list')->with('success', $successMessage);
+            // ── Deduct gross amount from balance ──────────────────────
+            $user->available_balance -= $grossAmount;
+            $user->save();
+
+            $message = $bankFee > 0
+                ? sprintf(
+                    'Withdrawal submitted! Amount: $%s | Bank Fee (5%%): $%s | You receive: $%s',
+                    number_format($grossAmount, 2),
+                    number_format($bankFee, 2),
+                    number_format($netAmount, 2)
+                )
+                : sprintf(
+                    'Withdrawal submitted! Amount: $%s — no fees applied.',
+                    number_format($grossAmount, 2)
+                );
+
+            return redirect()->route('user.withdrawals.list')->with('success', $message);
+        });
     }
 }

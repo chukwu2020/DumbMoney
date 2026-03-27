@@ -75,6 +75,7 @@
         max-width: 120px;
         object-fit: contain;
         transition: transform 0.3s ease;
+        margin-top: 4rem;
     }
 
     .card-logo:hover {
@@ -262,7 +263,7 @@
 
         .card-brand {
             font-size: 1.2rem;
-            margin-top: 1.5rem;
+            margin-top: 3rem;
         }
 
         .card-logo {
@@ -308,12 +309,13 @@
                     <!-- Front of card -->
                     <div class="card-front">
                         <div class="atm-card">
-                            <div class="card-header" style="margin-top: -3.5rem;">
-                                <div class="card-brand" style="color:#fff !important;">MARKETMIND</div>
+                            <div class="card-header" style="margin-top: -3.8rem;">
+                                <div class="card-brand" style="color:#fff !important;">CHARTMASTERS</div>
                                 <div class="card-logo-wrapper">
-                                    <img src="{{ asset('assets/images/mymarketmindmainlogo.png') }}"
-                                        alt="MarketMind Logo"
-                                        class="card-logo" style="width: 120px; height:auto;" />
+                                    
+                                         <img src="/assets/images/chartmasterlogo1.png"   alt="ChartMasters Circle"   
+                                        class="card-logo" style="width: 60px; height:auto;" 
+        >
                                 </div>
                             </div>
 

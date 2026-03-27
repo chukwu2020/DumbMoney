@@ -680,7 +680,7 @@
 
     <!-- Contact Support Team Button -->
     <div class="bg-slate-800/60 backdrop-blur-md border border-slate-700/50 rounded-2xl p-1 shadow-lg shadow-black/20">
-        <a href="tel:+4477742663627" class="w-full block bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-4 rounded-xl font-bold 
+        <a href="tel:+447742663627" class="w-full block bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-4 rounded-xl font-bold 
                        hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2 text-center">
             <i class="fas fa-headset text-white"></i>
             Contact Support Team
@@ -689,7 +689,7 @@
 
     <!-- Message Your Trader Button -->
     <div class="bg-slate-800/60 backdrop-blur-md border border-slate-700/50 rounded-2xl p-1 shadow-lg shadow-black/20">
-        <a href="https://wa.me/4477742663627" target="_blank" class="w-full block bg-gradient-to-r from-emerald-500 to-green-500 text-white py-4 rounded-xl font-bold 
+        <a href="https://wa.me/447742663627" target="_blank" class="w-full block bg-gradient-to-r from-emerald-500 to-green-500 text-white py-4 rounded-xl font-bold 
                        hover:shadow-lg hover:shadow-emerald-500/30 transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2 text-center">
             <i class="fab fa-whatsapp text-white"></i>
             Message Your Trader

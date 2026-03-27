@@ -65,7 +65,7 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="default-btn w-100 text-center" style="color:#0C3A30;">
+                        <button type="submit" class="default-btn w-100 text-center" style="color:white;">
                             Update Password
                         </button>
                     </form>

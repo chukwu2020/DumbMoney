@@ -41,7 +41,18 @@
                        value="{{ $feed->copying_trades }}"
                        class="border rounded-lg p-2 w-full" required>
             </div>
+<div>
+    <label>Win Rate (%)</label>
+    <input type="number" step="0.01" name="win_rate"
+           value="{{ $feed->win_rate }}"
+           class="border rounded-lg p-2 w-full" min="0" max="100">
+</div>
 
+<div class="flex items-center gap-2 mt-4">
+    <input type="checkbox" name="copy_trading_enabled" value="1"
+        {{ $feed->copy_trading_enabled ? 'checked' : '' }}>
+    <label>Enable Copy Trading</label>
+</div>
             <div>
                 <label>Profit Margin</label>
                 <input type="number" step="0.01" name="profit_margin"

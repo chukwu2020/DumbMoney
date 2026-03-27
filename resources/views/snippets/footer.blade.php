@@ -1,5 +1,5 @@
     <!-- Start Footer Area -->
-    <div class="footer-area bg-color-0c3a30 pt-120">
+    <div class="footer-area  pt-120  bg-color-0c3a30"  >
         <div class="container">
             <div class="row" data-cues="slideInUp" data-duration="800">
                 <div class="col-xl-4 col-lg-9 col-md-6">
@@ -98,46 +98,45 @@ function showError(input, errorElement, message) {
                     <div class="footer-weight part-two ps-5">
                         <h3 class="text-white">Quick Links</h3>
 
-                        <ul class="service-link">
-                            <li>
-                                <a href="/">Terms & Conditions</a>
-                            </li>
-                            <li>
-                                <a href="{{route('our.services')}}">Blog & News</a>
-                            </li>
-                            <li>
-                                <a href="{{route('our.services')}}">Mobile App</a>
-                            </li>
-                            <li>
-                                <a href="{{route('our.services')}}">Why Choose Us</a>
-                            </li>
-                            <li>
-                                <a href="/">Pricing Plan</a>
-                            </li>
-                        </ul>
+                       <ul class="service-link">
+    <li>
+        <a href="{{ route('terms.privacy') }}">Terms & Conditions</a>
+    </li>
+    <li>
+        <a href="{{ route('affiliates') }}">Blog & News</a>
+    </li>
+    <li>
+        <a href="{{ route('plans.header') }}">Mobile App</a>
+    </li>
+    <li>
+        <a href="{{ route('about.us') }}">Why Choose Us</a>
+    </li>
+    <li>
+        <a href="{{ route('plans.header') }}">Pricing Plan</a>
+    </li>
+</ul>
                     </div>
                 </div>
                 <div class="col-xl-3 col-lg-4 col-md-6">
                     <div class="footer-weight part-three ps-5">
                         <h3 class="text-white">Our Services</h3>
-
-                        <ul class="service-link">
-                            <li>
-                                <a href="{{route('our.services')}}">Mobile Banking</a>
-                            </li>
-                            <li>
-                                <a href="{{route('our.services')}}">Advanced Security</a>
-                            </li>
-                            <li>
-                                <a href="{{route('our.services')}}">Digital Wallet</a>
-                            </li>
-                            <li>
-                                <a href="{{route('our.services')}}">Budgeting Tools</a>
-                            </li>
-                            <li>
-                                <a href="{{route('our.services')}}">Making Transactions</a>
-                            </li>
-                        </ul>
+<ul class="service-link">
+    <li>
+        <a href="{{ route('education.funding') }}">Mobile Banking</a>
+    </li>
+    <li>
+        <a href="{{ route('education.evaluations') }}">Advanced Security</a>
+    </li>
+    <li>
+        <a href="{{ route('education.prop-firms') }}">Digital Wallet</a>
+    </li>
+    <li>
+        <a href="{{ route('education.consistency-rules') }}">Budgeting Tools</a>
+    </li>
+    <li>
+        <a href="{{ route('education.make-living-trading') }}">Making Transactions</a>
+    </li>
+</ul>
                     </div>
                 </div>
                 <div class="col-xl-3 col-lg-4 col-md-6">
@@ -169,36 +168,54 @@ function showError(input, errorElement, message) {
     <!-- End Footer Area -->
 
     <!-- Start Copyright Area -->
-    <div class="copyright-area bg-color-0c3a30">
+    <div class="copyright-area ">
         <div class="container">
             <div class="copyright-border">
-                <div class="row g-4 align-items-center">
+                <div class="row g-2 align-items-center">
                     <div class="col-lg-4 col-md-6">
-                        <p>© <span>MarketMind</span>  Is Proudly Owned By US <a href="/" target="_blank">View More</a></p>
+                        <p style="color:#0C3A30;">© <span>CHARTMASTERS CIRCLE</span>  Is Proudly Owned By US <a href="/" target="_blank">View More</a></p>
                         
                     </div>
                     <div class="col-lg-4 col-md-6">
                         <div class="copy-image" data-cues="zoomIn" data-duration="700">
                            <a href="/">
-                <img
-                    src="{{ asset('assets/images/mymarketmindmainlogo.png') }}"
-                    alt="Market Mind Logo"
-                    class="z-100 logo-img">
+                
+                     <img src="/assets/images/chartmasterbrandname1.png"  
+         alt="ChartMasters Circle" 
+         class="z-100 logo-img">
             </a>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-12">
                         <ul>
                             <li>
-                                <a href="/">Privacy Policy</a>
+                               <a href="{{ route('terms.privacy') }}" style="color:#0C3A30;">Privacy Policy</a>
                             </li>
                             <li>
-                                <a href="/">Terms & Conditions</a>
+                                <a href="{{ route('terms.privacy') }}" style="color:#0C3A30;">Terms & Conditions</a>
                             </li>
+
                         </ul>
-                    </div>
+                    </div> 
                 </div>
             </div>
         </div>
     </div>
+
+    <style>
+        .copyright-area p {
+    margin-bottom: 0;
+    font-size: 14px;
+}
+
+.copyright-area ul {
+    margin-bottom: 0;
+    padding-left: 0;
+}
+
+.copyright-area ul li {
+    display: inline-block;
+    margin-right: 10px;
+}
+    </style>
     <!-- End Copyright Area -->

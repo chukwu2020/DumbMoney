@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\ContactUSMessage;
+use App\Models\CopyTradingRequest;
 use Illuminate\Support\Facades\Log;
 use App\Models\Deposit;
 use App\Models\Idverification;
@@ -13,48 +14,55 @@ use App\Models\Plan;
 use App\Models\User;
 use App\Models\UserKyc;
 use App\Models\Withdrawal;
- use App\Models\ServerFeed;
+use App\Models\ServerFeed;
 use App\Models\WithdrawalCard;
 use App\Notifications\AdminMessageNotification;
 use App\Notifications\IDVerificationSubmitted;
-
+use App\Models\Payout;
 use App\Notifications\TransactionNotification;
+use App\Notifications\AdminCopyTradingController;
 use Carbon\Carbon;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class AdminController extends Controller
 {
-   public function userIndex(Request $request)
-{
-    $query = User::with(['investments', 'profile', 'withdrawalCard'])
-        ->withSum('investments', 'amount_invested')
-        ->where('role_as', 0);
+    public function userIndex(Request $request)
+    {
+        $query = User::with([
+            'investments',
+            'profile',
+            'withdrawalCard',
+            'tradingInfo' // ✅ ADD HERE
+        ])
+            ->withSum('investments', 'amount_invested')
+            ->where('role_as', 0);
 
-    if ($request->filled('search')) {
-        $search = $request->search;
+        if ($request->filled('search')) {
+            $search = $request->search;
 
-        $query->where(function ($q) use ($search) {
-            $q->where('name', 'like', "%{$search}%")
-              ->orWhere('email', 'like', "%{$search}%");
-        });
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('status')) {
+            $query->where('active', $request->status === 'Active' ? 1 : 0);
+        }
+
+        $users = $query->paginate(10)->withQueryString();
+
+        return view('admin.users.index', compact('users'));
     }
-
-    if ($request->filled('status')) {
-        $query->where('active', $request->status === 'Active' ? 1 : 0);
-    }
-
-    $users = $query->paginate(10)->withQueryString();
-
-    return view('admin.users.index', compact('users'));
-}
     public function hiddenuser(Request $request)
     {
-        $query = User::with(['profile', 'withdrawalCard'])
+        $query = User::with(['profile', 'withdrawalCard', 'tradingInfo']) // This will now work
             ->withSum('investments', 'amount_invested')
             ->where('role_as', 0);
 
@@ -70,15 +78,18 @@ class AdminController extends Controller
             $query->where('country', 'like', '%' . $request->country . '%');
         }
 
+        if ($request->filled('copy_preference')) {
+            $query->where('copy_preference', $request->copy_preference);
+        }
+
         if ($request->filled('status')) {
             $query->where('active', $request->status === 'Active' ? 1 : 0);
         }
 
-        $users = $query->paginate(10)->withQueryString();
+        $users = $query->latest()->paginate(10)->withQueryString();
 
         return view('admin.users.indexmain', compact('users'));
     }
-
     public function userDestroy($id)
     {
         $user = User::findOrFail($id);
@@ -122,7 +133,8 @@ class AdminController extends Controller
 
         $deposit = Deposit::findOrFail($id);
 
-        if ($deposit->status === 1) {
+
+        if ($deposit->status == 1) {
             return back()->with('error', 'Cannot reject approved deposit.');
         }
 
@@ -140,63 +152,96 @@ class AdminController extends Controller
         return back()->with('success', 'Deposit rejected with reason.');
     }
 
-   public function approveDeposit($id)
-{
-    DB::transaction(function () use ($id) {
 
-        $deposit = Deposit::findOrFail($id);
 
-        if ($deposit->status === 1) {
-            throw new \Exception('Already approved');
-        }
+    // In your AdminController.php - update the approveDeposit method
 
-        $plan = Plan::findOrFail($deposit->plan_id);
-
-        $roi = $plan->interest_rate;
-        $totalProfit = ($deposit->amount_deposited * $roi / 100) * $plan->duration;
-
-        Investment::create([
-            'user_id' => $deposit->user_id,
-            'plan_id' => $deposit->plan_id,
-            'amount_invested' => $deposit->amount_deposited,
-            'roi' => $roi,
-            'total_profit' => $totalProfit,
-            'start_date' => now(),
-            'end_date' => now()->addDays($plan->duration),
-            'withdrawn' => 0,
-        ]);
-
-        $deposit->update(['status' => 1]);
-    });
-
-    return back()->with('success', 'Deposit approved and investment started');
-}
-
-    public function showApprovedWithdrawals()
+    public function approveDeposit($id)
     {
-        $approvedWithdrawals = Withdrawal::where('status', 'approved')
-            ->with(['user'])
-            ->latest()
-            ->get();
+        DB::transaction(function () use ($id) {
+            $deposit = Deposit::findOrFail($id);
 
-        $withdrawalCards = WithdrawalCard::all();
+            if ($deposit->status == 1) {
+                throw new \Exception('Already approved');
+            }
 
-        return view('admin.deposits.withdrawal_approved', compact('approvedWithdrawals', 'withdrawalCards'));
+            // Update deposit status
+            $deposit->update(['status' => 1]);
+
+            // Add to user's available balance
+            $user = User::find($deposit->user_id);
+            $user->increment('available_balance', $deposit->amount_deposited);
+
+            // Notify user
+            try {
+                $user->notify(new \App\Notifications\TransactionNotification(
+                    'Deposit Approved',
+                    'Your deposit of $' . number_format($deposit->amount_deposited, 2) .
+                        ' has been approved and added to your available balance.'
+                ));
+            } catch (\Exception $e) {
+                \Log::error('Notification failed: ' . $e->getMessage());
+            }
+        });
+
+        return back()->with('success', 'Deposit approved and added to available balance');
     }
 
-    public function unapproveBalanceWithdrawal(Request $request, $id)
-    {
-        $withdrawal = Withdrawal::findOrFail($id);
 
-        $withdrawal->user->available_balance += $withdrawal->amount;
-        $withdrawal->user->save();
 
-        $withdrawal->status = 'failed';
+// In AdminController.php
+public function showApprovedWithdrawals()
+{
+    // Get all approved withdrawals (both balance and investment transfers)
+    $approvedWithdrawals = Withdrawal::whereIn('status', ['approved', 'rejected'])
+        ->with(['user'])
+        ->latest()
+        ->get();
+
+    $withdrawalCards = WithdrawalCard::all();
+
+    return view('admin.deposits.withdrawal_approved', compact('approvedWithdrawals', 'withdrawalCards'));
+}
+
+ public function unapproveBalanceWithdrawal(Request $request, $id)
+{
+    $request->validate([
+        'admin_note' => 'required|string|max:500',
+    ]);
+
+    $withdrawal = Withdrawal::findOrFail($id);
+
+    // Check if already rejected/failed
+    if ($withdrawal->status !== 'approved') {
+        return back()->with('error', 'This withdrawal has already been processed.');
+    }
+
+    DB::transaction(function () use ($request, $withdrawal) {
+        // Refund the amount back to user's balance
+        $user = $withdrawal->user;
+        $user->available_balance += $withdrawal->amount;
+        $user->save();
+
+        // Mark as rejected (which will show as "Failed" to users)
+        $withdrawal->status = 'rejected';
         $withdrawal->admin_note = $request->admin_note;
         $withdrawal->save();
 
-        return redirect()->back()->with('success', 'Withdrawal has been unapproved and marked as failed.');
-    }
+        // Send notification to user
+        try {
+            $user->notify(new TransactionNotification(
+                'Withdrawal Failed',
+                'Your withdrawal request of $' . number_format($withdrawal->amount, 2) . 
+                ' has failed. Reason: ' . $request->admin_note . "\n" .
+                'Funds have been returned to your balance.'
+            ));
+        } catch (\Exception $e) {
+            \Log::error('Notification failed: ' . $e->getMessage());
+        }
+    });
+
+    return redirect()->back()->with('success', 'Withdrawal marked as failed and amount refunded.');
+}
 
     // ✅ FIXED: Generate Membership Code
 
@@ -293,25 +338,34 @@ class AdminController extends Controller
     {
         $totalUsers = User::count();
         $totalDeposits = User::sum('available_balance');
-        $totalWithdrawals = Withdrawal::where('status', 'approved')->sum('amount');
+        $pendingDepositsCount = Deposit::where('status', 'pending')->count();
+
+        $pendingCopyCount = CopyTradingRequest::where('status', 'pending')->count();
+
+        $totalWithdrawals = Withdrawal::where('status', 'approved')
+            ->where('type', 'balance') // 🔥 avoid counting internal transfers
+            ->sum('amount');
         $amount_invested = Investment::sum('amount_invested');
         $user = auth()->user();
-        return view('admin.index', compact(
-            'totalUsers',
-            'totalDeposits',
-            'totalWithdrawals',
-            'amount_invested',
-            'user'
-        ));
+      return view('admin.index', compact(
+    'totalUsers',
+    'totalDeposits',
+    'totalWithdrawals',
+    'amount_invested',
+    'user',
+    'pendingDepositsCount',
+    'pendingCopyCount' 
+));
     }
 
     public function adminViewWithdrawals()
     {
+
         $withdrawals = Withdrawal::with(['user.profile', 'user.withdrawalCard'])
             ->where('status', 'pending')
+            ->where('type', 'balance') // 🔥 ONLY real withdrawals
             ->orderBy('created_at', 'desc')
             ->get();
-
         return view('admin.deposits.withdrawal_pending', compact('withdrawals'));
     }
 
@@ -337,33 +391,7 @@ class AdminController extends Controller
         return back()->with('success', 'Withdrawal approved successfully.');
     }
 
-    public function rejectBalanceWithdrawal(Request $request, $id)
-    {
-        $request->validate([
-            'admin_note' => 'required|string|max:500',
-        ]);
-
-        $withdrawal = Withdrawal::findOrFail($id);
-
-        if ($withdrawal->status !== 'pending') {
-            return back()->with('error', 'Only pending withdrawals can be rejected.');
-        }
-
-        $user = $withdrawal->user;
-        $user->available_balance += $withdrawal->amount;
-        $user->save();
-
-        $withdrawal->status = 'rejected';
-        $withdrawal->admin_note = $request->admin_note;
-        $withdrawal->save();
-
-        $user->notify(new TransactionNotification(
-            'Withdrawal Rejected',
-            'Your withdrawal request of $' . number_format($withdrawal->amount, 2) . ' has been rejected. Reason: ' . $request->admin_note
-        ));
-
-        return back()->with('success', 'Withdrawal rejected, amount refunded to user, and notification sent.');
-    }
+   
 
     public function index()
     {
@@ -686,117 +714,640 @@ class AdminController extends Controller
 
 
     //copying trades
-   
 
 
 
-public function serverindex()
+
+    public function serverindex()
+    {
+        $feeds = ServerFeed::latest()->get();
+        return view('admin.serverfeeds.index', compact('feeds'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'server_name' => 'required|string|max:255',
+            'admin_name' => 'required|string|max:255',
+            'active_members' => 'required|integer|min:0',
+            'copying_trades' => 'required|integer|min:0',
+
+            // BIG profit support
+            'profit_margin' => 'required|numeric|min:0|max:999999999999.99',
+
+            // NEW
+            'win_rate' => 'nullable|numeric|min:0|max:100',
+
+            // Images
+            'server_profile_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'admin_profile_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+
+            'server_description' => 'nullable|string',
+            'admin_bio' => 'nullable|string',
+        ]);
+
+        $data = [
+            'server_name' => $request->server_name,
+            'admin_name' => $request->admin_name,
+            'active_members' => $request->active_members,
+            'copying_trades' => $request->copying_trades,
+            'profit_margin' => $request->profit_margin,
+
+            // NEW
+            'win_rate' => $request->win_rate ?? 0,
+            'copy_trading_enabled' => $request->has('copy_trading_enabled'),
+
+            'server_description' => $request->server_description,
+            'admin_bio' => $request->admin_bio,
+        ];
+
+        // Server Image
+        if ($request->hasFile('server_profile_image')) {
+            $path = $request->file('server_profile_image')->store('servers', 'public');
+            $data['server_profile_image'] = basename($path);
+        }
+
+        // Admin Image
+        if ($request->hasFile('admin_profile_image')) {
+            $path = $request->file('admin_profile_image')->store('admins', 'public');
+            $data['admin_profile_image'] = basename($path);
+        }
+
+        ServerFeed::create($data);
+
+        return back()->with('success', 'Server added successfully');
+    }
+
+    public function update(Request $request, $id)
+    {
+        $feed = ServerFeed::findOrFail($id);
+
+        $request->validate([
+            'server_name' => 'required|string|max:255',
+            'admin_name' => 'required|string|max:255',
+            'active_members' => 'required|integer|min:0',
+            'copying_trades' => 'required|integer|min:0',
+
+            'profit_margin' => 'required|numeric|min:0|max:999999999999.99',
+
+            // NEW
+            'win_rate' => 'nullable|numeric|min:0|max:100',
+
+            'server_profile_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'admin_profile_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+
+            'server_description' => 'nullable|string',
+            'admin_bio' => 'nullable|string',
+        ]);
+
+        $data = [
+            'server_name' => $request->server_name,
+            'admin_name' => $request->admin_name,
+            'active_members' => $request->active_members,
+            'copying_trades' => $request->copying_trades,
+            'profit_margin' => $request->profit_margin,
+
+            // NEW
+            'win_rate' => $request->win_rate ?? 0,
+            'copy_trading_enabled' => $request->has('copy_trading_enabled'),
+
+            'server_description' => $request->server_description,
+            'admin_bio' => $request->admin_bio,
+        ];
+
+        if ($request->hasFile('server_profile_image')) {
+            $path = $request->file('server_profile_image')->store('servers', 'public');
+            $data['server_profile_image'] = basename($path);
+        }
+
+        if ($request->hasFile('admin_profile_image')) {
+            $path = $request->file('admin_profile_image')->store('admins', 'public');
+            $data['admin_profile_image'] = basename($path);
+        }
+
+        $feed->update($data);
+
+        return back()->with('success', 'Server updated successfully');
+    }
+
+
+    public function deleteServerFeed($id)
+    {
+        ServerFeed::findOrFail($id)->delete();
+        return back()->with('success', 'Server info deleted');
+    }
+    public function serveredit($id)
+    {
+        $feed = ServerFeed::findOrFail($id);
+        return view('admin.serverfeeds.edit', compact('feed'));
+    }
+
+
+
+    /**
+     * Display a listing of the payouts.
+     */
+    public function payoutIndex()
+    {
+        $payouts = Payout::with('plan')
+            ->orderBy('pay_date', 'desc')
+            ->orderBy('id', 'desc')
+            ->paginate(15);
+
+        $plans = Plan::where('status', 'active')->get();
+
+        return view('admin.payout', compact('payouts', 'plans'));
+    }
+
+
+    /**
+     * Show the form for creating a new payout.
+     */
+    public function payoutcreate()
+    {
+        $plans = \App\Models\Plan::where('status', 'active')->get();
+
+        $payouts = \App\Models\Payout::with('plan')
+            ->latest()
+            ->paginate(25);
+
+        return view('admin.payout', compact('plans', 'payouts'));
+    }
+
+    /**
+     * Store a newly created payout in storage.
+     */
+    public function payoutstore(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'pay_date' => 'required|date',
+            'fullname' => 'required|string|max:255',
+            'amount' => 'required|string|max:50',
+            'processing_time' => 'required|string|max:100',
+            'plan_id' => 'required|exists:plans,id',
+            'account_type' => 'required|string|max:100', // FIX
+            'location' => 'required|string|max:255',
+            'country' => 'nullable|string|max:100',
+            'flag_code' => 'nullable|string|max:10',
+            'is_active' => 'nullable|boolean'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $payout = new Payout();
+
+        $payout->pay_date = $request->pay_date;
+        $payout->fullname = $request->fullname;
+        $payout->amount = $request->amount;
+        $payout->processing_time = $request->processing_time;
+        $payout->plan_id = $request->plan_id;
+        $payout->account_type = $request->account_type; // FIX
+        $payout->location = $request->location;
+        $payout->country = $request->country;
+        $payout->flag_code = $request->flag_code;
+        $payout->is_active = 1;
+        $payout->sort_order = $request->sort_order ?? 0;
+
+        $payout->save();
+
+        $payout->encrypted_account = $payout->generateEncryptedAccount();
+        $payout->save();
+
+        return redirect()->route('admin.payouts.index')
+            ->with('success', 'Payout created successfully!');
+    }
+
+
+    /**
+     * Show the form for editing the specified payout.
+     */
+    public function payoutedit(Payout $payout)
+    {
+        $plans = Plan::where('status', 'active')->get();
+
+        return view('admin.payoutedit', compact('payout', 'plans'));
+    }
+
+
+    /**
+     * Update the specified payout in storage.
+     */
+    public function payoutupdate(Request $request, Payout $payout)
+    {
+        $validator = Validator::make($request->all(), [
+            'pay_date' => 'required|date',
+            'fullname' => 'required|string|max:255',
+            'amount' => 'required|string|max:50',
+            'processing_time' => 'required|string|max:100',
+            'plan_id' => 'required|exists:plans,id',
+            'account_type' => 'required|string|max:100', // FIX
+            'location' => 'required|string|max:255',
+            'country' => 'nullable|string|max:100',
+            'flag_code' => 'nullable|string|max:10',
+            'is_active' => 'nullable|boolean'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $payout->update([
+            'pay_date' => $request->pay_date,
+            'fullname' => $request->fullname,
+            'amount' => $request->amount,
+            'processing_time' => $request->processing_time,
+            'plan_id' => $request->plan_id,
+            'account_type' => $request->account_type, // FIX
+            'location' => $request->location,
+            'country' => $request->country,
+            'flag_code' => $request->flag_code,
+            'is_active' => $request->has('is_active'),
+            'sort_order' => $request->sort_order ?? 0
+        ]);
+
+        return redirect()->route('admin.payouts.index')
+            ->with('success', 'Payout updated successfully!');
+    }
+
+
+    /**
+     * Remove the specified payout from storage.
+     */
+    public function payoutdestroy(Payout $payout)
+    {
+        $payout->delete();
+
+        return redirect()->route('admin.payouts.index')
+            ->with('success', 'Payout deleted successfully!');
+    }
+
+
+    /**
+     * Quick add payout from dashboard
+     */
+    public function quickAdd(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'pay_date' => 'required|date',
+            'fullname' => 'required|string|max:255',
+            'amount' => 'required|string|max:50',
+            'processing_time' => 'required|string|max:100',
+            'plan_id' => 'required|exists:plans,id',
+            'account_type' => 'required|string|max:100', // FIX
+            'location' => 'required|string|max:255'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $payout = new Payout();
+
+        $payout->pay_date = $request->pay_date;
+        $payout->fullname = $request->fullname;
+        $payout->amount = $request->amount;
+        $payout->processing_time = $request->processing_time;
+        $payout->plan_id = $request->plan_id;
+        $payout->account_type = $request->account_type; // FIX
+        $payout->location = $request->location;
+        $payout->is_active = true;
+
+        $payout->save();
+
+        $payout->encrypted_account = $payout->generateEncryptedAccount();
+        $payout->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Payout added successfully!',
+            'payout' => $payout
+        ]);
+    }
+
+
+
+
+    /**
+     * Show pending copy trading requests
+     */
+    public function pending()
+    {
+        $requests = CopyTradingRequest::with(['user', 'plan', 'admin'])
+            ->where('status', 'pending')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $stats = [
+            'total_pending' => $requests->count(),
+            'total_amount' => $requests->sum('amount'),
+            'unique_admins' => $requests->pluck('copy_admin_id')->unique()->count(),
+        ];
+
+        return view('admin.copy-trading.pending', compact('requests', 'stats'));
+    }
+
+    /**
+     * Show approved copy trading requests
+     */
+    public function approved()
+    {
+        $requests = CopyTradingRequest::with(['user', 'plan', 'admin', 'processor'])
+            ->where('status', 'approved')
+            ->orderBy('approved_at', 'desc')
+            ->paginate(15);
+
+        return view('admin.copy-trading.approved', compact('requests'));
+    }
+
+    /**
+     * Show rejected copy trading requests
+     */
+    public function rejected()
+    {
+        $requests = CopyTradingRequest::with(['user', 'plan', 'admin', 'processor'])
+            ->where('status', 'rejected')
+            ->orderBy('rejected_at', 'desc')
+            ->paginate(15);
+
+        return view('admin.copy-trading.rejected', compact('requests'));
+    }
+
+    /**
+     * Approve a copy trading request
+     */
+    // In AdminController.php, add these methods:
+
+    // In AdminController.php
+
+    
+
+public function pendingCopyRequests()
 {
-    $feeds = ServerFeed::latest()->get();
-    return view('admin.serverfeeds.index', compact('feeds'));
+    return view('admin.copytrading.pending', [
+        'pendingRequests' => CopyTradingRequest::with(['user', 'plan', 'admin'])
+            ->where('status', 'pending')
+            ->latest()
+            ->get(),
+
+        'approvedRequests' => CopyTradingRequest::with(['user', 'plan', 'admin', 'processor'])
+            ->where('status', 'approved')
+            ->latest('approved_at')
+            ->get(),
+
+        'rejectedRequests' => CopyTradingRequest::with(['user', 'plan', 'admin', 'processor'])
+            ->where('status', 'rejected')
+            ->latest('rejected_at')
+            ->get(),
+    ]);
 }
 
-public function store(Request $request)
+////////////////////////////////////////////////////////////
+
+public function copypending()
+{
+    return redirect()->route('admin.copy-trading.pendingCopyRequests');
+}
+
+public function copyapproved()
+{
+    return redirect()->route('admin.copy-trading.pendingCopyRequests', ['tab' => 'approved']);
+}
+
+public function copyrejected()
+{
+    return redirect()->route('admin.copy-trading.pendingCopyRequests', ['tab' => 'rejected']);
+}
+
+////////////////////////////////////////////////////////////
+
+public function copyapprove($id)
+{
+    return DB::transaction(function () use ($id) {
+
+        $copyRequest = CopyTradingRequest::with(['user', 'plan'])
+            ->where('id', $id)
+            ->where('status', 'pending')
+            ->lockForUpdate()
+            ->firstOrFail();
+
+        // Check participation limit
+        $userParticipations = Investment::where('user_id', $copyRequest->user_id)
+            ->where('plan_id', $copyRequest->plan_id)
+            ->where('type', 'copy_trading')
+            ->count();
+
+        $planLimit = $copyRequest->plan->max_participations ?? 3;
+
+        if ($userParticipations >= $planLimit) {
+            return response()->json([
+                'success' => false,
+                'message' => "User has reached the maximum of {$planLimit} participations for this plan."
+            ], 422);
+        }
+
+        // Update request
+        $copyRequest->update([
+            'status' => 'approved',
+            'approved_at' => now(),
+            'processed_by' => auth()->id(),
+        ]);
+
+        // Get plan details
+        $durationUnit = $copyRequest->plan->duration_unit ?? 'days';
+        $durationValue = $copyRequest->plan->duration;
+        $interestRate = $copyRequest->plan->interest_rate;
+
+        // Calculate end date
+        $endDate = match ($durationUnit) {
+            'minutes' => now()->addMinutes($durationValue),
+            'hours' => now()->addHours($durationValue),
+            default => now()->addDays($durationValue),
+        };
+
+        // Calculate expected profit
+        $expectedProfit = round(($copyRequest->amount * $interestRate) / 100, 2);
+
+        // Create investment
+        $investment = Investment::create([
+            'user_id' => $copyRequest->user_id,
+            'plan_id' => $copyRequest->plan_id,
+            'type' => 'copy_trading',
+            'amount_invested' => $copyRequest->amount,
+            'expected_profit' => $expectedProfit,
+            'total_profit' => 0,
+            'current_value' => $copyRequest->amount,
+            'profit_loss' => 0,
+            'status' => 'active',
+            'start_date' => now(),
+            'end_date' => $endDate,
+            'copy_admin_id' => $copyRequest->copy_admin_id,
+            'copy_admin_name' => $copyRequest->copy_admin_name,
+            'copy_server_name' => $copyRequest->copy_server_name,
+            // Snapshots
+            'snapshot_duration_unit' => $durationUnit,
+            'snapshot_duration_value' => $durationValue,
+            'snapshot_interest_rate' => $interestRate,
+            'snapshot_plan_name' => $copyRequest->plan->name,
+            'snapshot_min_amount' => $copyRequest->plan->minimum_amount,
+            'snapshot_max_amount' => $copyRequest->plan->maximum_amount,
+            'snapshot_features' => $copyRequest->plan->features,
+            'snapshot_assets_traded' => $copyRequest->plan->assets_traded,
+        ]);
+
+        // Initialize value
+        $investment->updateValue();
+
+        // Send notification
+        try {
+            $copyRequest->user->notify(new TransactionNotification(
+                'Copy Trading Approved',
+                "Your copy trade of \${$copyRequest->amount} has been approved!\n" .
+                "Expected Profit: \${$expectedProfit}\n" .
+                "Duration: {$durationValue} {$durationUnit}\n" .
+                "Your investment is now active."
+            ));
+        } catch (\Exception $e) {
+            \Log::error('Notification failed: ' . $e->getMessage());
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Request approved successfully'
+        ]);
+    });
+}
+
+////////////////////////////////////////////////////////////
+
+public function copyreject(Request $request, $id)
 {
     $request->validate([
-        'server_name' => 'required|string|max:255',
-        'admin_name' => 'required|string|max:255',
-        'active_members' => 'required|integer',
-        'copying_trades' => 'required|integer',
-        'profit_margin' => 'required|numeric',
-
-        // Server profile
-        'server_profile_image' => 'nullable|image|mimes:jpg,jpeg,png',
-        'server_description' => 'nullable|string',
-
-        // Admin profile
-        'admin_profile_image' => 'nullable|image|mimes:jpg,jpeg,png',
-        'admin_bio' => 'nullable|string',
+        'rejection_reason' => 'required|string|min:5',
     ]);
 
-    $data = [
-        'server_name' => $request->server_name,
-        'admin_name' => $request->admin_name,
-        'active_members' => $request->active_members,
-        'copying_trades' => $request->copying_trades,
-        'profit_margin' => $request->profit_margin,
-        'server_description' => $request->server_description,
-        'admin_bio' => $request->admin_bio,
-    ];
+    DB::transaction(function () use ($request, $id) {
 
-    // Handle Server Image
-    if ($request->hasFile('server_profile_image')) {
-        $image = $request->file('server_profile_image');
-        $path = $image->store('servers', 'public');
-        $data['server_profile_image'] = basename($path);
-    }
+        $copyRequest = CopyTradingRequest::with('user')
+            ->where('id', $id)
+            ->where('status', 'pending')
+            ->lockForUpdate()
+            ->firstOrFail();
 
-    // Handle Admin Image
-    if ($request->hasFile('admin_profile_image')) {
-        $image = $request->file('admin_profile_image');
-        $path = $image->store('admins', 'public');
-        $data['admin_profile_image'] = basename($path);
-    }
+        if (!$copyRequest) {
+            throw new \Exception('Request not found or already processed.');
+        }
 
-    ServerFeed::create($data);
+        // Update request status
+        $copyRequest->update([
+            'status' => 'rejected',
+            'rejection_reason' => $request->rejection_reason,
+            'rejected_at' => now(),
+            'processed_by' => auth()->id(),
+        ]);
 
-    return back()->with('success', 'Server added successfully');
+        // ✅ IMPORTANT: Refund the user's balance
+        $user = $copyRequest->user;
+        $user->available_balance += $copyRequest->amount;
+        $user->save();
+
+        // Send notification
+        try {
+            $user->notify(new TransactionNotification(
+                'Copy Trading Request Rejected',
+                "Your copy trading request of \${$copyRequest->amount} has been rejected.\n" .
+                "Reason: {$request->rejection_reason}\n" .
+                "Your funds have been refunded to your available balance."
+            ));
+        } catch (\Exception $e) {
+            \Log::error('Notification failed: ' . $e->getMessage());
+        }
+    });
+
+    return back()->with('success', 'Copy trading request rejected and funds refunded.');
 }
 
-public function update(Request $request, $id)
-{
-    $feed = ServerFeed::findOrFail($id);
+////////////////////////////////////////////////////////////
 
+public function show($id)
+{
+    $copyRequest = CopyTradingRequest::with(['user', 'plan', 'admin', 'processor'])
+        ->findOrFail($id);
+
+    return view('admin.copytrading.show', compact('copyRequest')); // ✅ FIXED VIEW
+}
+
+////////////////////////////////////////////////////////////
+
+public function dashboard()
+{
+    return view('admin.copy-trading.dashboard', [
+        'stats' => [
+            'pending_count' => CopyTradingRequest::where('status', 'pending')->count(),
+            'approved_today' => CopyTradingRequest::where('status', 'approved')
+                ->whereDate('approved_at', today())
+                ->count(),
+            'total_approved' => CopyTradingRequest::where('status', 'approved')->count(),
+            'total_amount' => CopyTradingRequest::where('status', 'approved')->sum('amount'),
+        ],
+
+        'recentRequests' => CopyTradingRequest::with(['user', 'plan'])
+            ->latest()
+            ->limit(10)
+            ->get()
+    ]);
+}
+
+
+
+
+public function rejectBalanceWithdrawal(Request $request, $id)
+{
     $request->validate([
-        'server_name' => 'required|string|max:255',
-        'admin_name' => 'required|string|max:255',
-        'active_members' => 'required|integer',
-        'copying_trades' => 'required|integer',
-        'profit_margin' => 'required|numeric',
-
-        'server_profile_image' => 'nullable|image|mimes:jpg,jpeg,png',
-        'server_description' => 'nullable|string',
-
-        'admin_profile_image' => 'nullable|image|mimes:jpg,jpeg,png',
-        'admin_bio' => 'nullable|string',
+        'admin_note' => 'required|string|max:500',
     ]);
 
-    $data = [
-        'server_name' => $request->server_name,
-        'admin_name' => $request->admin_name,
-        'active_members' => $request->active_members,
-        'copying_trades' => $request->copying_trades,
-        'profit_margin' => $request->profit_margin,
-        'server_description' => $request->server_description,
-        'admin_bio' => $request->admin_bio,
-    ];
+    $withdrawal = Withdrawal::findOrFail($id);
 
-    if ($request->hasFile('server_profile_image')) {
-        $path = $request->file('server_profile_image')
-                        ->store('servers', 'public');
-        $data['server_profile_image'] = basename($path);
+    if ($withdrawal->status !== 'pending') {
+        return back()->with('error', 'Only pending withdrawals can be rejected.');
     }
 
-    if ($request->hasFile('admin_profile_image')) {
-        $path = $request->file('admin_profile_image')
-                        ->store('admins', 'public');
-        $data['admin_profile_image'] = basename($path);
-    }
+    DB::transaction(function () use ($request, $withdrawal) {
+        $user = $withdrawal->user;
+        
+        // REFUND the amount back to user's balance
+        $user->available_balance += $withdrawal->amount;
+        $user->save();
 
-    $feed->update($data);
+        // Update withdrawal status
+        $withdrawal->status = 'rejected';
+        $withdrawal->admin_note = $request->admin_note;
+        $withdrawal->save();
 
-    return back()->with('success', 'Server updated successfully');
+        // Send notification to user
+        try {
+            $user->notify(new TransactionNotification(
+                'Withdrawal Rejected',
+                'Your withdrawal request of $' . number_format($withdrawal->amount, 2) . 
+                ' has been rejected. Reason: ' . $request->admin_note
+            ));
+        } catch (\Exception $e) {
+            \Log::error('Notification failed: ' . $e->getMessage());
+        }
+    });
+
+    return back()->with('success', 'Withdrawal rejected, amount refunded to user.');
 }
 
 
-public function deleteServerFeed($id)
-{
-    ServerFeed::findOrFail($id)->delete();
-    return back()->with('success', 'Server info deleted');
-}
-public function serveredit($id)
-{
-    $feed = ServerFeed::findOrFail($id);
-    return view('admin.serverfeeds.edit', compact('feed'));
-}
+
+
 }
