@@ -540,13 +540,7 @@
         </div>
     </div>
 </div>
-<!-- Temporary debug button - remove after testing -->
-<div style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;">
-    <button onclick="localStorage.removeItem('wallets_generated'); location.reload();" 
-            style="background: #ff4444; color: white; padding: 10px 15px; border-radius: 8px; border: none; cursor: pointer; font-size: 12px; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
-        🔄 Reset Wallet Generation
-    </button>
-</div>
+
 <script>
     const rates = {};
     let currentCurrency = 'USD';

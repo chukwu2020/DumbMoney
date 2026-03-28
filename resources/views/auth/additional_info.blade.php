@@ -289,6 +289,7 @@
             opacity: 0;
             transform: translateY(-10px);
         }
+
         to {
             opacity: 1;
             transform: translateY(0);
@@ -316,7 +317,7 @@
     }
 
     .page-header .breadcrumb-item a {
-        color: rgba(255,255,255,0.7);
+        color: rgba(255, 255, 255, 0.7);
         text-decoration: none;
     }
 
@@ -334,63 +335,65 @@
         box-shadow: 0 0 0 2px rgba(139, 201, 5, 0.2) !important;
         outline: none;
     }
-/* Add to your existing styles */
-.win-rate-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-    transition: all 0.2s ease;
-}
 
-.win-rate-badge.high {
-    background: #dcfce7;
-    color: #166534;
-}
+    /* Add to your existing styles */
+    .win-rate-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
 
-.win-rate-badge.medium {
-    background: #fef9c3;
-    color: #a16207;
-}
+    .win-rate-badge.high {
+        background: #dcfce7;
+        color: #166534;
+    }
 
-.win-rate-badge.low {
-    background: #fee2e2;
-    color: #b91c1c;
-}
+    .win-rate-badge.medium {
+        background: #fef9c3;
+        color: #a16207;
+    }
 
-.profit-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-}
+    .win-rate-badge.low {
+        background: #fee2e2;
+        color: #b91c1c;
+    }
 
-.profit-badge.positive {
-    background: #dcfce7;
-    color: #166534;
-}
+    .profit-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+    }
 
-.profit-badge.negative {
-    background: #fee2e2;
-    color: #b91c1c;
-}
+    .profit-badge.positive {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .profit-badge.negative {
+        background: #fee2e2;
+        color: #b91c1c;
+    }
+
     /* Responsive fixes */
     @media (max-width: 768px) {
         .form-section {
             padding: 25px;
         }
-        
+
         .goals-grid,
         .assets-grid {
             grid-template-columns: 1fr;
         }
-        
+
         .step-line {
             width: 50px;
         }
@@ -398,17 +401,17 @@
         .admin-option {
             flex-wrap: wrap;
         }
-        
+
         .admin-option .flex-shrink-0 {
             margin-bottom: 10px;
         }
-        
+
         .admin-server-badge {
             position: absolute;
             top: 10px;
             right: 10px;
         }
-        
+
         .admin-option {
             position: relative;
             padding-top: 15px;
@@ -458,82 +461,82 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-10">
-                
+
                 @if (session('error'))
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <i class="fas fa-exclamation-circle me-2"></i>{{ session('error') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i>{{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
                 @endif
 
                 <form id="additionalInfoForm" action="{{ route('user.additional.info.save') }}" method="POST">
                     @csrf
-                    
+
                     <!-- Trading Experience -->
                     <div class="form-section" data-aos="fade-up">
                         <h3>Your Trading Experience</h3>
                         <p class="section-desc">Help us understand your background</p>
 
-                     <div class="mb-4">
-    <label class="section-title">
-        What is your experience with Stock & Cryptocurrency Investing?
-    </label>
+                        <div class="mb-4">
+                            <label class="section-title">
+                                What is your experience with Stock & Cryptocurrency Investing?
+                            </label>
 
-    <p class="text-muted small mb-3">
-        No matter your level, our team will guide you step-by-step to help you make confident and informed investment decisions.
-    </p>
+                            <p class="text-muted small mb-3">
+                                No matter your level, our team will guide you step-by-step to help you make confident and informed investment decisions.
+                            </p>
 
-    <div class="row g-3 mt-2">
+                            <div class="row g-3 mt-2">
 
-        <!-- Experienced -->
-        <div class="col-md-4">
-            <div class="option-card {{ old('stock_experience') == 'yes' ? 'selected' : '' }}" onclick="selectExperience('yes')">
-                <input type="radio" name="stock_experience" id="exp_yes" value="yes" class="form-check-input" {{ old('stock_experience') == 'yes' ? 'checked' : '' }} required>
-                <div>
-                    <strong>Experienced Investor</strong>
-                    <p class="small text-muted mb-0">
-                        I have traded Stocks and/or Cryptocurrencies before and understand the market basics.
-                    </p>
-                </div>
-            </div>
-        </div>
+                                <!-- Experienced -->
+                                <div class="col-md-4">
+                                    <div class="option-card {{ old('stock_experience') == 'yes' ? 'selected' : '' }}" onclick="selectExperience('yes')">
+                                        <input type="radio" name="stock_experience" id="exp_yes" value="yes" class="form-check-input" {{ old('stock_experience') == 'yes' ? 'checked' : '' }} required>
+                                        <div>
+                                            <strong>Experienced Investor</strong>
+                                            <p class="small text-muted mb-0">
+                                                I have traded Stocks and/or Cryptocurrencies before and understand the market basics.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
 
-        <!-- Intermediate -->
-        <div class="col-md-4">
-            <div class="option-card {{ old('stock_experience') == 'no' ? 'selected' : '' }}" onclick="selectExperience('no')">
-                <input type="radio" name="stock_experience" id="exp_no" value="no" class="form-check-input" {{ old('stock_experience') == 'no' ? 'checked' : '' }}>
-                <div>
-                    <strong>Some Experience</strong>
-                    <p class="small text-muted mb-0">
-                        I have a basic understanding of Stocks or Crypto and have made a few investments.
-                    </p>
-                </div>
-            </div>
-        </div>
+                                <!-- Intermediate -->
+                                <div class="col-md-4">
+                                    <div class="option-card {{ old('stock_experience') == 'no' ? 'selected' : '' }}" onclick="selectExperience('no')">
+                                        <input type="radio" name="stock_experience" id="exp_no" value="no" class="form-check-input" {{ old('stock_experience') == 'no' ? 'checked' : '' }}>
+                                        <div>
+                                            <strong>Some Experience</strong>
+                                            <p class="small text-muted mb-0">
+                                                I have a basic understanding of Stocks or Crypto and have made a few investments.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
 
-        <!-- Beginner -->
-        <div class="col-md-4">
-            <div class="option-card {{ old('stock_experience') == 'novice' ? 'selected' : '' }}" onclick="selectExperience('novice')">
-                <input type="radio" name="stock_experience" id="exp_novice" value="novice" class="form-check-input" {{ old('stock_experience') == 'novice' ? 'checked' : '' }}>
-                <div>
-                    <strong>Beginner</strong>
-                    <p class="small text-muted mb-0">
-                        I’m new to investing, but I’m ready to learn  I’ll need guidance to get started.
-                    </p>
-                </div>
-            </div>
-        </div>
+                                <!-- Beginner -->
+                                <div class="col-md-4">
+                                    <div class="option-card {{ old('stock_experience') == 'novice' ? 'selected' : '' }}" onclick="selectExperience('novice')">
+                                        <input type="radio" name="stock_experience" id="exp_novice" value="novice" class="form-check-input" {{ old('stock_experience') == 'novice' ? 'checked' : '' }}>
+                                        <div>
+                                            <strong>Beginner</strong>
+                                            <p class="small text-muted mb-0">
+                                                I’m new to investing, but I’m ready to learn I’ll need guidance to get started.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
 
-    </div>
+                            </div>
 
-    <small class="text-success d-block mt-2">
-        ✔ Don’t worry — we provide expert guidance, tools, and support tailored to your experience level.
-    </small>
+                            <small class="text-success d-block mt-2">
+                                ✔ Don’t worry — we provide expert guidance, tools, and support tailored to your experience level.
+                            </small>
 
-    @error('stock_experience') 
-        <span class="text-danger small">{{ $message }}</span> 
-    @enderror
-</div>
+                            @error('stock_experience')
+                            <span class="text-danger small">{{ $message }}</span>
+                            @enderror
+                        </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
@@ -662,178 +665,178 @@
 
                         <!-- Admin Selection Area (shown only for corporate accounts) -->
                         <div id="corporateAdminArea" class="admin-select-wrapper mt-4 {{ old('account_type') == 'corporate' ? '' : 'hidden' }}">
-                            
+
                             <!-- Header with count and search -->
                             <div class="d-flex flex-wrap align-items-center justify-content-between mb-3 pb-2 gap-2" style="border-bottom: 1px dashed #e2e8f0;">
                                 <div class="d-flex align-items-center gap-2">
                                     <h5 style="font-size: 14px; color: #0C3A30; font-weight: 600; margin: 0;">
                                         <i class="ri-user-star-line me-2" style="color: #8bc905;"></i>
                                         Choose your admin to copy trades
-                                    @if(isset($feeds) && $feeds->count() > 0)
-                                    <span class="badge rounded-pill" style="background: #8bc90520; color: #0C3A30; font-size: 11px; padding: 4px 10px;">
-                                        <span id="adminCount">{{ $feeds->count() }}</span> available
-                                    </span>
-                                    @endif 
+                                        @if(isset($feeds) && $feeds->count() > 0)
+                                        <span class="badge rounded-pill" style="background: #8bc90520; color: #0C3A30; font-size: 11px; padding: 4px 10px;">
+                                            <span id="adminCount">{{ $feeds->count() }}</span> available
+                                        </span>
+                                        @endif
                                 </div>
-                                
+
                                 <!-- Search Bar -->
                                 <div class="search-wrapper" style="position: relative; min-width: 250px;">
                                     <i class="ri-search-line" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 14px;"></i>
-                                    <input type="text" 
-                                           id="adminSearch" 
-                                           class="form-control form-control-sm" 
-                                           placeholder="Search by name or server..." 
-                                           style="padding-left: 35px; height: 38px; border-radius: 20px; border: 1px solid #e2e8f0; background: #f8fafc; font-size: 13px;">
-                                    <button type="button" 
-                                            class="btn btn-sm" 
-                                            onclick="clearSearch()"
-                                            style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #94a3b8; padding: 0; display: none;"
-                                            id="clearSearchBtn">
+                                    <input type="text"
+                                        id="adminSearch"
+                                        class="form-control form-control-sm"
+                                        placeholder="Search by name or server..."
+                                        style="padding-left: 35px; height: 38px; border-radius: 20px; border: 1px solid #e2e8f0; background: #f8fafc; font-size: 13px;">
+                                    <button type="button"
+                                        class="btn btn-sm"
+                                        onclick="clearSearch()"
+                                        style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #94a3b8; padding: 0; display: none;"
+                                        id="clearSearchBtn">
                                         <i class="ri-close-line" style="font-size: 16px;"></i>
                                     </button>
                                 </div>
                             </div>
 
                             @if(isset($feeds) && $feeds->count() > 0)
-                                <!-- Search Results Count -->
-                                <div id="searchResultsInfo" class="mb-2 px-1" style="display: none;">
-                                    <small style="color: #64748b;">
-                                        Found <span id="resultsCount">0</span> matching admins
-                                    </small>
-                                </div>
+                            <!-- Search Results Count -->
+                            <div id="searchResultsInfo" class="mb-2 px-1" style="display: none;">
+                                <small style="color: #64748b;">
+                                    Found <span id="resultsCount">0</span> matching admins
+                                </small>
+                            </div>
 
-                                <!-- Admin List with Search Filter -->
-                                <div class="row g-3" style="max-height: 380px; overflow-y: auto; padding-right: 4px; scrollbar-width: thin; scrollbar-color: #8bc905 #e2e8f0;" id="adminList">
-                                    @foreach($feeds as $feed)
-                                    <div class="col-12 admin-item" 
-                                         data-admin-name="{{ strtolower($feed->admin_name) }}" 
-                                         data-server-name="{{ strtolower($feed->server_name) }}"
-                                         data-profit="{{ $feed->profit_margin }}">
+                            <!-- Admin List with Search Filter -->
+                            <div class="row g-3" style="max-height: 380px; overflow-y: auto; padding-right: 4px; scrollbar-width: thin; scrollbar-color: #8bc905 #e2e8f0;" id="adminList">
+                                @foreach($feeds as $feed)
+                                <div class="col-12 admin-item"
+                                    data-admin-name="{{ strtolower($feed->admin_name) }}"
+                                    data-server-name="{{ strtolower($feed->server_name) }}"
+                                    data-profit="{{ $feed->profit_margin }}">
 
-                                        <div class="admin-option d-flex align-items-center p-3 rounded-3 w-100 {{ old('copy_admin_id') == $feed->id ? 'selected' : '' }}"
-                                            onclick="selectCorporateAdmin('{{ $feed->id }}', '{{ $feed->admin_name }}', '{{ $feed->server_name }}')"
-                                            style="background: {{ old('copy_admin_id') == $feed->id ? '#f0f9e8' : '#ffffff' }};
+                                    <div class="admin-option d-flex align-items-center p-3 rounded-3 w-100 {{ old('copy_admin_id') == $feed->id ? 'selected' : '' }}"
+                                        onclick="selectCorporateAdmin('{{ $feed->id }}', '{{ $feed->admin_name }}', '{{ $feed->server_name }}')"
+                                        style="background: {{ old('copy_admin_id') == $feed->id ? '#f0f9e8' : '#ffffff' }};
                                                    border: 1px solid {{ old('copy_admin_id') == $feed->id ? '#8bc905' : '#edf2f7' }};
                                                    transition: all 0.2s ease;
                                                    cursor: pointer;">
 
-                                            <!-- Avatar -->
-                                            <div class="flex-shrink-0 me-3">
-                                                @if($feed->admin_profile_image)
-                                                <div class="rounded-circle overflow-hidden border-2"
-                                                    style="width: 50px; height: 50px; border-color: {{ old('copy_admin_id') == $feed->id ? '#8bc905' : '#e2e8f0' }};">
-                                                    <img src="{{ asset('storage/admins/'.$feed->admin_profile_image) }}"
-                                                        class="w-100 h-100 object-fit-cover">
-                                                        
-                                                </div>
-                                                @else
-                                                <div class="rounded-circle d-flex align-items-center justify-content-center"
-                                                    style="width: 50px; height: 50px; background: #8bc90520; color: #0C3A30; border: 2px solid {{ old('copy_admin_id') == $feed->id ? '#8bc905' : '#e2e8f0' }};">
-                                                    <span style="font-weight: 700; font-size: 18px;">
-                                                        {{ strtoupper(substr($feed->admin_name, 0, 1)) }}
-                                                    </span>
-                                                </div>
-                                                @endif
+                                        <!-- Avatar -->
+                                        <div class="flex-shrink-0 me-3">
+                                            @if($feed->admin_profile_image)
+                                            <div class="rounded-circle overflow-hidden border-2"
+                                                style="width: 50px; height: 50px; border-color: {{ old('copy_admin_id') == $feed->id ? '#8bc905' : '#e2e8f0' }};">
+                                                <img src="{{ asset('storage/admins/'.$feed->admin_profile_image) }}"
+                                                    class="w-100 h-100 object-fit-cover">
+
                                             </div>
-                                            
-                                            <!-- Info -->
-                                          <div class="flex-grow-1">
-    <div class="d-flex align-items-center justify-content-between mb-2 flex-wrap gap-2">
-        <h6 style="font-size: 17px; font-weight: 700; color: #0C3A30; margin: 0;">
-            {{ $feed->admin_name }}
-        </h6>
+                                            @else
+                                            <div class="rounded-circle d-flex align-items-center justify-content-center"
+                                                style="width: 50px; height: 50px; background: #8bc90520; color: #0C3A30; border: 2px solid {{ old('copy_admin_id') == $feed->id ? '#8bc905' : '#e2e8f0' }};">
+                                                <span style="font-weight: 700; font-size: 18px;">
+                                                    {{ strtoupper(substr($feed->admin_name, 0, 1)) }}
+                                                </span>
+                                            </div>
+                                            @endif
+                                        </div>
 
-        <span class="admin-server-badge ms-2"
-            style="background: #8bc905; color: white; padding: 4px 10px; border-radius: 14px; font-size: 12px; font-weight: 600;">
-            Copy
-        </span>
-    </div>
+                                        <!-- Info -->
+                                        <div class="flex-grow-1">
+                                            <div class="d-flex align-items-center justify-content-between mb-2 flex-wrap gap-2">
+                                                <h6 style="font-size: 17px; font-weight: 700; color: #0C3A30; margin: 0;">
+                                                    {{ $feed->admin_name }}
+                                                </h6>
 
-    <div class="d-flex align-items-center gap-3 mb-2 flex-wrap">
-        <span style="font-size: 14px; font-weight: 600; color: #1e293b;">
-            <i class="ri-server-line me-1" style="font-size: 12px;"></i>
-            {{ $feed->server_name }}
-        </span>
+                                                <span class="admin-server-badge ms-2"
+                                                    style="background: #8bc905; color: white; padding: 4px 10px; border-radius: 14px; font-size: 12px; font-weight: 600;">
+                                                    Copy
+                                                </span>
+                                            </div>
 
-        <!-- Profit Badge -->
-        <span class="profit-badge {{ $feed->profit_margin >= 0 ? 'positive' : 'negative' }}">
-            <i class="ri-money-dollar-circle-line me-1"></i>
-           Profit = ${{ number_format(abs($feed->profit_margin), 2) }}
-        </span>
-    </div>
+                                            <div class="d-flex align-items-center gap-3 mb-2 flex-wrap">
+                                                <span style="font-size: 14px; font-weight: 600; color: #1e293b;">
+                                                    <i class="ri-server-line me-1" style="font-size: 12px;"></i>
+                                                    {{ $feed->server_name }}
+                                                </span>
 
-    <div class="d-flex align-items-center gap-4 flex-wrap">
-        <small style="font-size: 12px; font-weight: 600; color: #475569;">
-            <i class="ri-user-line text-black-50 me-1"></i>
-            {{ number_format($feed->active_members) }} active
-        </small>
+                                                <!-- Profit Badge -->
+                                                <span class="profit-badge {{ $feed->profit_margin >= 0 ? 'positive' : 'negative' }}">
+                                                    <i class="ri-money-dollar-circle-line me-1"></i>
+                                                    Profit = ${{ number_format(abs($feed->profit_margin), 2) }}
+                                                </span>
+                                            </div>
 
-        <small style="font-size: 12px; font-weight: 600; color: #475569;">
-            <i class="ri-file-copy-line me-1"></i>
-            {{ number_format($feed->copying_trades ?? 0) }} copying
-        </small>
-        
-        <!-- Win Rate Badge with Color Classes -->
-        @php
-            $winRate = $feed->win_rate ?? 0;
-            $winRateClass = 'low';
-            if ($winRate >= 70) {
-                $winRateClass = 'high';
-            } elseif ($winRate >= 50) {
-                $winRateClass = 'medium';
-            }
-        @endphp
-        
-        <span class="win-rate-badge {{ $winRateClass }}">
-            <i class="ri-trophy-line me-1"></i>
-           win rate = {{ number_format($winRate, 1) }}%
-        </span>
-    </div>
-</div>
+                                            <div class="d-flex align-items-center gap-4 flex-wrap">
+                                                <small style="font-size: 12px; font-weight: 600; color: #475569;">
+                                                    <i class="ri-user-line text-black-50 me-1"></i>
+                                                    {{ number_format($feed->active_members) }} active
+                                                </small>
+
+                                                <small style="font-size: 12px; font-weight: 600; color: #475569;">
+                                                    <i class="ri-file-copy-line me-1"></i>
+                                                    {{ number_format($feed->copying_trades ?? 0) }} copying
+                                                </small>
+
+                                                <!-- Win Rate Badge with Color Classes -->
+                                                @php
+                                                $winRate = $feed->win_rate ?? 0;
+                                                $winRateClass = 'low';
+                                                if ($winRate >= 70) {
+                                                $winRateClass = 'high';
+                                                } elseif ($winRate >= 50) {
+                                                $winRateClass = 'medium';
+                                                }
+                                                @endphp
+
+                                                <span class="win-rate-badge {{ $winRateClass }}">
+                                                    <i class="ri-trophy-line me-1"></i>
+                                                    win rate = {{ number_format($winRate, 1) }}%
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
-                                    @endforeach
                                 </div>
+                                @endforeach
+                            </div>
 
-                                <!-- No Results Message -->
-                                <div id="noSearchResults" class="text-center py-5" style="display: none;">
-                                    <div class="mb-3">
-                                        <div class="d-inline-flex align-items-center justify-content-center rounded-circle"
-                                            style="width: 64px; height: 64px; background: #8bc90510;">
-                                            <i class="ri-search-line" style="color: #8bc905; font-size: 24px;"></i>
-                                        </div>
-                                    </div>
-                                    <p class="text-dark mb-1" style="font-size: 14px; font-weight: 500;">No matching admins found</p>
-                                    <p class="text-muted" style="font-size: 12px;">Try adjusting your search terms</p>
-                                    <button class="btn btn-sm mt-2" onclick="clearSearch()" style="background: #8bc905; color: white; border: none; padding: 6px 16px; border-radius: 20px;">
-                                        Clear Search
-                                    </button>
-                                </div>
-
-                                <!-- Selected indicator -->
-                                <div class="mt-3 text-center" id="selectedAdminIndicator" style="display: none;">
-                                    <div class="d-inline-flex align-items-center gap-2 px-3 py-2 rounded-pill" style="background: #8bc90510; border: 1px solid #8bc90530;">
-                                        <i class="ri-check-line" style="color: #8bc905; font-size: 14px;"></i>
-                                        <span style="font-size: 12px; color: #0C3A30;">Selected: <span id="selectedAdminName"></span></span>
+                            <!-- No Results Message -->
+                            <div id="noSearchResults" class="text-center py-5" style="display: none;">
+                                <div class="mb-3">
+                                    <div class="d-inline-flex align-items-center justify-content-center rounded-circle"
+                                        style="width: 64px; height: 64px; background: #8bc90510;">
+                                        <i class="ri-search-line" style="color: #8bc905; font-size: 24px;"></i>
                                     </div>
                                 </div>
+                                <p class="text-dark mb-1" style="font-size: 14px; font-weight: 500;">No matching admins found</p>
+                                <p class="text-muted" style="font-size: 12px;">Try adjusting your search terms</p>
+                                <button class="btn btn-sm mt-2" onclick="clearSearch()" style="background: #8bc905; color: white; border: none; padding: 6px 16px; border-radius: 20px;">
+                                    Clear Search
+                                </button>
+                            </div>
 
-                                <!-- Hidden inputs for corporate selection -->
-                                <input type="hidden" name="copy_admin_id" id="copy_admin_id" value="{{ old('copy_admin_id') }}">
-                                <input type="hidden" name="copy_admin_name" id="copy_admin_name" value="{{ old('copy_admin_name') }}">
-                                <input type="hidden" name="copy_server_name" id="copy_server_name" value="{{ old('copy_server_name') }}">
+                            <!-- Selected indicator -->
+                            <div class="mt-3 text-center" id="selectedAdminIndicator" style="display: none;">
+                                <div class="d-inline-flex align-items-center gap-2 px-3 py-2 rounded-pill" style="background: #8bc90510; border: 1px solid #8bc90530;">
+                                    <i class="ri-check-line" style="color: #8bc905; font-size: 14px;"></i>
+                                    <span style="font-size: 12px; color: #0C3A30;">Selected: <span id="selectedAdminName"></span></span>
+                                </div>
+                            </div>
+
+                            <!-- Hidden inputs for corporate selection -->
+                            <input type="hidden" name="copy_admin_id" id="copy_admin_id" value="{{ old('copy_admin_id') }}">
+                            <input type="hidden" name="copy_admin_name" id="copy_admin_name" value="{{ old('copy_admin_name') }}">
+                            <input type="hidden" name="copy_server_name" id="copy_server_name" value="{{ old('copy_server_name') }}">
 
                             @else
-                                <div class="text-center py-5">
-                                    <div class="mb-3">
-                                        <div class="d-inline-flex align-items-center justify-content-center rounded-circle"
-                                            style="width: 64px; height: 64px; background: #8bc90510;">
-                                            <i class="fa-solid fa-user-slash" style="color: #8bc905; font-size: 24px;"></i>
-                                        </div>
+                            <div class="text-center py-5">
+                                <div class="mb-3">
+                                    <div class="d-inline-flex align-items-center justify-content-center rounded-circle"
+                                        style="width: 64px; height: 64px; background: #8bc90510;">
+                                        <i class="fa-solid fa-user-slash" style="color: #8bc905; font-size: 24px;"></i>
                                     </div>
-                                    <p class="text-dark mb-1" style="font-size: 14px; font-weight: 500;">No admins available yet</p>
-                                    <p class="text-muted" style="font-size: 12px;">Check back later for available trading admins</p>
                                 </div>
+                                <p class="text-dark mb-1" style="font-size: 14px; font-weight: 500;">No admins available yet</p>
+                                <p class="text-muted" style="font-size: 12px;">Check back later for available trading admins</p>
+                            </div>
                             @endif
                         </div>
                         @error('account_type') <span class="text-danger small">{{ $message }}</span> @enderror
@@ -915,7 +918,7 @@
         document.getElementById('exp_yes').checked = (value === 'yes');
         document.getElementById('exp_no').checked = (value === 'no');
         document.getElementById('exp_novice').checked = (value === 'novice');
-        
+
         // Update UI
         document.querySelectorAll('[onclick^="selectExperience"]').forEach(card => {
             card.classList.remove('selected');
@@ -927,7 +930,7 @@
     function toggleCheckbox(id, element) {
         const checkbox = document.getElementById(id);
         checkbox.checked = !checkbox.checked;
-        
+
         if (checkbox.checked) {
             element.classList.add('selected');
         } else {
@@ -939,14 +942,14 @@
     function selectAccountType(type) {
         document.getElementById('account_personal').checked = (type === 'personal');
         document.getElementById('account_corporate').checked = (type === 'corporate');
-        
+
         // Update UI
         document.querySelectorAll('[onclick^="selectAccountType"]').forEach(card => {
             card.classList.remove('selected');
         });
-        
+
         event.currentTarget.classList.add('selected');
-        
+
         // Show/hide admin area
         const adminArea = document.getElementById('corporateAdminArea');
         if (type === 'corporate') {
@@ -960,7 +963,7 @@
             document.getElementById('copy_admin_id').value = '';
             document.getElementById('copy_admin_name').value = '';
             document.getElementById('copy_server_name').value = '';
-            
+
             const indicator = document.getElementById('selectedAdminIndicator');
             if (indicator) {
                 indicator.style.display = 'none';
@@ -1008,12 +1011,12 @@
     function searchAdmins() {
         const searchInput = document.getElementById('adminSearch');
         if (!searchInput) return;
-        
+
         const searchWrapper = document.querySelector('.search-wrapper');
         if (searchWrapper) {
             searchWrapper.style.opacity = '0.7';
         }
-        
+
         const searchTerm = searchInput.value.toLowerCase().trim();
         const adminItems = document.querySelectorAll('.admin-item');
         const clearBtn = document.getElementById('clearSearchBtn');
@@ -1021,19 +1024,19 @@
         const resultsCountSpan = document.getElementById('resultsCount');
         const noResultsDiv = document.getElementById('noSearchResults');
         const adminList = document.getElementById('adminList');
-        
+
         let visibleCount = 0;
-        
+
         // Show/hide clear button
         if (clearBtn) {
             clearBtn.style.display = searchTerm.length > 0 ? 'block' : 'none';
         }
-        
+
         // Filter admin items
         adminItems.forEach(item => {
             const adminName = item.getAttribute('data-admin-name');
             const serverName = item.getAttribute('data-server-name');
-            
+
             if (searchTerm === '' || adminName.includes(searchTerm) || serverName.includes(searchTerm)) {
                 item.style.display = 'block';
                 visibleCount++;
@@ -1041,12 +1044,12 @@
                 item.style.display = 'none';
             }
         });
-        
+
         // Update results count and visibility
         if (searchTerm.length > 0) {
             if (resultsCountSpan) resultsCountSpan.textContent = visibleCount;
             if (searchResultsInfo) searchResultsInfo.style.display = 'block';
-            
+
             if (visibleCount === 0) {
                 if (adminList) adminList.style.display = 'none';
                 if (noResultsDiv) noResultsDiv.style.display = 'block';
@@ -1059,7 +1062,7 @@
             if (adminList) adminList.style.display = 'block';
             if (noResultsDiv) noResultsDiv.style.display = 'none';
         }
-        
+
         // Remove loading indicator
         if (searchWrapper) {
             setTimeout(() => {
@@ -1067,7 +1070,7 @@
             }, 200);
         }
     }
-    
+
     function clearSearch() {
         const searchInput = document.getElementById('adminSearch');
         if (searchInput) {
@@ -1076,14 +1079,14 @@
             searchInput.focus();
         }
     }
-    
+
     function initializeSearch() {
         const searchInput = document.getElementById('adminSearch');
         if (searchInput) {
             // Remove any existing event listeners
             const newSearchInput = searchInput.cloneNode(true);
             searchInput.parentNode.replaceChild(newSearchInput, searchInput);
-            
+
             // Add new event listener with debounce
             let timeout;
             newSearchInput.addEventListener('keyup', function() {
@@ -1092,14 +1095,14 @@
                     searchAdmins();
                 }, 300);
             });
-            
+
             // Add input event for immediate feedback
             newSearchInput.addEventListener('input', function() {
                 if (this.value === '') {
                     searchAdmins();
                 }
             });
-            
+
             // Update the clear button functionality
             const clearBtn = document.getElementById('clearSearchBtn');
             if (clearBtn) {
@@ -1115,7 +1118,7 @@
         const btn = document.getElementById('submitBtn');
         const btnText = btn.querySelector('.btn-text');
         const btnLoader = btn.querySelector('.btn-loader');
-        
+
         btn.disabled = true;
         btnText.classList.add('hidden');
         btnLoader.classList.remove('hidden');
@@ -1140,11 +1143,11 @@
         const accountType = document.querySelector('input[name="account_type"]:checked')?.value;
         if (accountType === 'corporate') {
             document.getElementById('corporateAdminArea')?.classList.remove('hidden');
-            
+
             setTimeout(() => {
                 initializeSearch();
             }, 100);
-            
+
             const copyAdminId = document.getElementById('copy_admin_id').value;
             if (copyAdminId) {
                 document.querySelectorAll('.admin-option').forEach(option => {
@@ -1152,7 +1155,7 @@
                         option.classList.add('selected');
                         option.style.background = '#f0f9e8';
                         option.style.borderColor = '#8bc905';
-                        
+
                         const adminName = document.getElementById('copy_admin_name').value;
                         if (adminName) {
                             const indicator = document.getElementById('selectedAdminIndicator');
@@ -1172,8 +1175,13 @@
 </script>
 
 <style>
-    .hidden { display: none !important; }
-    .btn-loader { margin-left: 10px; }
+    .hidden {
+        display: none !important;
+    }
+
+    .btn-loader {
+        margin-left: 10px;
+    }
 </style>
 
 @endsection
