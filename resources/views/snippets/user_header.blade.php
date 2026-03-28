@@ -97,8 +97,9 @@ body {
                         ->join('') ?: 'U';
                         @endphp
 
-                        @if ($profilePic && file_exists(public_path('storage/profile_pics/' . $profilePic)))
-                        <img src="{{ asset('storage/profile_pics/' . $profilePic) }}" alt="{{ $user->name }}" class="mx-auto rounded-full object-cover w-11 h-11" />
+                  @if ($profilePic)
+                          <img src="{{ asset('storage/profile_pics/' . $profilePic) }}"  alt="{{ $user->name }}" class="mx-auto rounded-full object-cover w-11 h-11"  onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"/>
+                 
                         @else
                         <div
                             class="mx-auto w-11 h-11 rounded-full flex items-center justify-center font-semibold text-base select-none"

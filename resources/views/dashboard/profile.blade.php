@@ -35,11 +35,13 @@
                     ->join('') ?: 'U';
                     @endphp
 
-                    @if ($profilePic && file_exists(public_path('storage/profile_pics/' . $profilePic)))
+                    @if ($profilePic)
                     <img src="{{ asset('storage/profile_pics/' . $profilePic) }}"
-                        alt="{{ $user->name }}"
+                        alt="{{ $user->name }}"onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                          class="mx-auto rounded-full flex items-center justify-center font-semibold text-3xl select-none"
                         style="width: 7rem; height: 7rem; border: 2px solid #8bc905;" />
+
+               
                     @else
                     <div
                         class="mx-auto rounded-full flex items-center justify-center font-semibold text-3xl select-none"

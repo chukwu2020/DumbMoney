@@ -72,7 +72,7 @@
                         ['icon' => 'ph:crown', 'title' => 'Age Requirement', 'desc' => 'Users must be 18+ and legally allowed to trade in their jurisdiction. Proof of age may be required.'],
                         ['icon' => 'ph:globe', 'title' => 'International Use', 'desc' => 'Trading services operate globally. Data may be transferred internationally with appropriate safeguards in place.'],
                         ['icon' => 'ph:note-pencil', 'title' => 'Policy Updates', 'desc' => 'Material changes are communicated with 30 days notice via email and website notification.'],
-                        ['icon' => 'ph:envelope', 'title' => 'Contact Us', 'desc' => 'support@chartmasterscircle.com | Data Protection Officer available 24/7 for privacy concerns.']
+                        ['icon' => 'ph:envelope', 'title' => 'Contact Us', 'desc' => 'tradesupport@chartmasterscircle.com | Data Protection Officer available 24/7 for privacy concerns.']
                     ] as $item)
                     <div class="group p-5 rounded-xl border border-gray-100 hover:border-[#9EDD05] hover:shadow-md transition-all duration-300">
                         <div class="flex items-start gap-3">
@@ -92,7 +92,7 @@
                             <h4 class="font-semibold" style="color: #0C3A30;">Have privacy questions?</h4>
                             <p class="text-sm text-gray-500">Our Data Protection Officer is here to help</p>
                         </div>
-                        <a href="mailto:support@chartmasterscircle.com" class="px-5 py-2 rounded-lg text-sm font-semibold transition-all" style="background: #9EDD05; color: #0C3A30; hover:background: #8AC304;">
+                        <a href="mailto:tradesupport@chartmasterscircle.com" class="px-5 py-2 rounded-lg text-sm font-semibold transition-all" style="background: #9EDD05; color: #0C3A30; hover:background: #8AC304;">
                             Contact DPO
                         </a>
                     </div>
@@ -256,9 +256,9 @@
     <div class="mt-12 text-center border-t border-gray-100 pt-8">
         <p class="text-sm text-gray-500">For any questions regarding these policies, please contact us:</p>
         <div class="flex justify-center gap-4 mt-3">
-            <a href="mailto:support@chartmasterscircle.com" class="text-sm" style="color: #9EDD05;">support@chartmasterscircle.com</a>
+            <a href="mailto:tradesupport@chartmasterscircle.com" class="text-sm" style="color: #9EDD05;">tradesupport@chartmasterscircle.com</a>
             <span>•</span>
-            <a href="mailto:support@chartmasterscircle.com" class="text-sm" style="color: #9EDD05;">support@chartmasterscircle.com</a>
+            <a href="mailto:tradesupport@chartmasterscircle.com" class="text-sm" style="color: #9EDD05;">tradesupport@chartmasterscircle.com</a> 
         </div>
         <p class="text-xs text-gray-400 mt-4">© 2025 ChartMasters Circle Investment. All rights reserved.</p>
     </div>
