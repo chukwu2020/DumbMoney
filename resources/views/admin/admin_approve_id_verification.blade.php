@@ -3,154 +3,483 @@
 @section('content')
 
 <style>
-    :root { --brand-green:#9EDD05; --brand-dark:#0C3A30; }
-
-    .dashboard-main-body { max-width:100%; overflow-x:hidden; }
-
-    .tbl-shell {
-        display: block;
-        width: 100%;
-        max-width: 100%;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
+    :root {
+        --brand-green: #9EDD05;
+        --brand-dark: #0C3A30;
     }
-    .tbl-shell::-webkit-scrollbar { height:5px; }
-    .tbl-shell::-webkit-scrollbar-thumb { background:var(--brand-green); border-radius:10px; }
-    .tbl-shell::-webkit-scrollbar-track { background:#f3f4f6; border-radius:10px; }
+
+    /* Sticky header - prevents scrolling with table */
+    .sticky-header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background: white;
+        margin: 0;
+        padding: 1rem 0;
+    }
+
+    .card-header-custom {
+        border-bottom: 1px solid #e5e7eb;
+        padding: 1rem 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
+        background: white;
+    }
+
+    .table-scroll {
+        overflow-x: auto;
+        overflow-y: auto;
+        max-height: calc(100vh - 280px);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.78rem;
+        min-width: 900px;
+    }
+
+    thead th {
+        background: linear-gradient(135deg, #0C3A30, #1a5c47);
+        color: white;
+        font-size: 0.65rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 0.85rem 1rem;
+        white-space: nowrap;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        border-right: 1px solid rgba(255,255,255,0.08);
+    }
+
+    thead th:first-child {
+        position: sticky;
+        left: 0;
+        z-index: 20;
+        background: linear-gradient(135deg, #0C3A30, #1a5c47);
+    }
+
+    tbody tr {
+        border-bottom: 1px solid #f3f4f6;
+        transition: background 0.15s;
+    }
+
+    tbody tr:hover {
+        background: #f8fffe;
+    }
+
+    tbody td {
+        padding: 0.85rem 1rem;
+        color: #374151;
+        vertical-align: middle;
+        white-space: nowrap;
+        border-right: 1px solid #f3f4f6;
+    }
+
+    tbody td:first-child {
+        position: sticky;
+        left: 0;
+        background: white;
+        z-index: 5;
+        box-shadow: 2px 0 6px rgba(0,0,0,0.06);
+    }
+
+    tbody tr:hover td:first-child {
+        background: #f8fffe;
+    }
+
+    
+
+    .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 2px solid var(--brand-green);
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #9EDD05, #8AC304);
+        font-weight: 700;
+        font-size: 1rem;
+        color: var(--brand-dark);
+        overflow: hidden;
+    }
+
+    .avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+    .user-meta strong {
+        display: block;
+        font-weight: 700;
+        color: #111827;
+        font-size: 0.85rem;
+    }
+
+    .user-meta span {
+        font-size: 0.7rem;
+        color: #6b7280;
+    }
+
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.68rem;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .badge-pending {
+        background: #fef9c3;
+        color: #854d0e;
+        border: 1px solid #fde047;
+    }
+
+    .badge-approved {
+        background: #dcfce7;
+        color: #166534;
+        border: 1px solid #86efac;
+    }
+
+    .badge-rejected {
+        background: #fee2e2;
+        color: #991b1b;
+        border: 1px solid #fca5a5;
+    }
+
+    .doc-preview {
+        width: 56px;
+        height: 56px;
+        object-fit: cover;
+        border-radius: 10px;
+        cursor: pointer;
+        border: 2px solid #e5e7eb;
+        transition: all 0.2s ease;
+    }
+
+    .doc-preview:hover {
+        border-color: var(--brand-green);
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .action-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 6px 14px;
+        border-radius: 8px;
+        font-size: 0.72rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: none;
+    }
+
+    .action-btn.approve {
+        background: #16a34a;
+        color: white;
+    }
+
+    .action-btn.approve:hover {
+        background: #15803d;
+        transform: translateY(-1px);
+    }
+
+    .action-btn.reject {
+        background: #dc2626;
+        color: white;
+    }
+
+    .action-btn.reject:hover {
+        background: #b91c1c;
+        transform: translateY(-1px);
+    }
+
+    .search-bar {
+        background: white;
+        border-radius: 12px;
+        border: 1px solid #e5e7eb;
+        padding: 1.25rem 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .navbar-search {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .navbar-search input {
+        padding: 0.5rem 2rem 0.5rem 1rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        font-size: 0.875rem;
+        width: 250px;
+    }
+
+    .navbar-search iconify-icon {
+        position: absolute;
+        right: 0.75rem;
+        color: #9ca3af;
+        pointer-events: none;
+    }
+
+    .form-select {
+        padding: 0.5rem 2rem 0.5rem 0.75rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        font-size: 0.875rem;
+        background: white;
+        cursor: pointer;
+    }
+
+    /* Image Modal */
+    .image-modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.9);
+        z-index: 9999;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+    }
+
+    .image-modal.active {
+        display: flex;
+    }
+
+    .modal-content {
+        position: relative;
+        max-width: 90vw;
+        max-height: 90vh;
+    }
+
+    .modal-content img {
+        width: 100%;
+        height: auto;
+        max-height: 85vh;
+        object-fit: contain;
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+
+    .close-modal {
+        position: absolute;
+        top: -40px;
+        right: 0;
+        background: none;
+        border: none;
+        color: white;
+        font-size: 28px;
+        cursor: pointer;
+        transition: opacity 0.2s;
+    }
+
+    .close-modal:hover {
+        opacity: 0.7;
+    }
 </style>
 
-<div class="dashboard-main-body px-6 py-8">
+<div class="dashboard-main-body">
 
-    <div class="flex flex-wrap items-center justify-between gap-2 mb-6">
-        <h6 class="font-semibold mb-0" style="color:#0C3A30;">KYC Submissions</h6>
-        <ul class="flex items-center gap-[6px]">
-            <li class="font-medium"><a href="{{ route('admin_dashboard') }}" class="flex items-center gap-2 hover:text-[#9EDD05]" style="color:#0C3A30;"><iconify-icon icon="solar:home-smile-angle-outline" class="icon text-lg"></iconify-icon> Dashboard</a></li>
-            <li>-</li>
-            <li class="font-medium" style="color:#9EDD05;">KYC Requests</li>
-        </ul>
+    <!-- Sticky Header -->
+    <div class="sticky-header">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+            <h6 class="font-semibold mb-0" style="color:#0C3A30;">KYC Submissions</h6>
+            <ul class="flex items-center gap-[6px] text-sm">
+                <li class="font-medium">
+                    <a href="{{ route('admin_dashboard') }}" class="flex items-center gap-2 hover:text-[#9EDD05]" style="color:#0C3A30;">
+                        <iconify-icon icon="solar:home-smile-angle-outline" class="icon text-lg"></iconify-icon> Dashboard
+                    </a>
+                </li>
+                <li>-</li>
+                <li class="font-medium" style="color:#9EDD05;">KYC Requests</li>
+            </ul>
+        </div>
     </div>
 
-    <!-- Table Card — overflow:hidden is THE key containment boundary -->
-    <div style="background:#fff; border-radius:12px; border:1px solid #e5e7eb; box-shadow:0 1px 3px rgba(0,0,0,.06); overflow:hidden; min-width:0; max-width:100%;">
+    <!-- Main Card -->
+    <div class="grid grid-cols-12">
+        <div class="col-span-12">
+            <div class="card h-full p-0 rounded-xl border-0 overflow-hidden">
 
-        <!-- Header — does NOT scroll -->
-        <div style="padding:1rem 1.5rem; border-bottom:1px solid #f1f5f9;">
-            <h6 class="font-bold text-lg mb-0" style="color:#0C3A30;">Recent KYC Requests</h6>
-        </div>
+            
 
-        <!-- ONLY this scrolls -->
-        <div class="tbl-shell">
-            <table style="width:max-content; min-width:100%; border-collapse:separate; border-spacing:0; font-size:.85rem;">
-                <thead>
-                    <tr>
-                        @foreach(['User','Status','Submitted','ID Document','Selfie','Actions'] as $h)
-                        <th style="background:#0C3A30; color:#fff; padding:.75rem 1.25rem; text-align:left; font-size:.72rem; font-weight:600; text-transform:uppercase; letter-spacing:.5px; white-space:nowrap;">{{ $h }}</th>
-                        @endforeach
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($kycs as $kyc)
-                    <tr style="border-bottom:1px solid #f1f5f9;" onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background=''">
+                <!-- Table Body -->
+                <div class="card-body p-0">
+                    <div class="table-scroll">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Status</th>
+                                    <th>Submitted</th>
+                                    <th>ID Document</th>
+                                    <th>Selfie/Utility</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($kycs as $kyc)
+                                @php
+                                    $statusColors = [
+                                        'pending' => 'badge-pending',
+                                        'approved' => 'badge-approved',
+                                        'rejected' => 'badge-rejected',
+                                    ];
+                                    $statusClass = $statusColors[$kyc->status] ?? 'badge-pending';
+                                @endphp
+                                <tr>
 
-                        <td style="padding:.85rem 1.25rem; white-space:nowrap; vertical-align:middle;">
-                            <div style="display:flex;align-items:center;gap:10px;">
-                                <div style="width:38px;height:38px;border-radius:50%;background:#9EDD05;display:flex;align-items:center;justify-content:center;color:#0C3A30;font-weight:700;font-size:.8rem;flex-shrink:0;">
-                                    {{ strtoupper(substr($kyc->user->name,0,1)) }}
-                                </div>
-                                <div>
-                                    <div style="font-weight:600;color:#111827;font-size:.85rem;">{{ $kyc->user->name }}</div>
-                                    <div style="font-size:.72rem;color:#6b7280;">{{ $kyc->user->email }}</div>
-                                </div>
-                            </div>
-                        </td>
+                                    {{-- User Info (sticky) --}}
+                                    <td>
+                                        <div class="user-cell">
+                                            <div class="avatar">
+                                                {{ strtoupper(substr($kyc->user->name, 0, 1)) }}
+                                            </div>
+                                            <div class="user-meta">
+                                                <strong>{{ $kyc->user->name }}</strong>
+                                              
+                                            </div>
+                                        </div>
+                                    </td>
 
-                        <td style="padding:.85rem 1.25rem; white-space:nowrap; vertical-align:middle;">
-                            @php
-                                $styles = [
-                                    'pending'  => 'background:#fef9c3;color:#854d0e;border:1px solid #fde047;',
-                                    'approved' => 'background:#dcfce7;color:#166534;border:1px solid #86efac;',
-                                    'rejected' => 'background:#fee2e2;color:#991b1b;border:1px solid #fca5a5;',
-                                ][$kyc->status] ?? 'background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;';
-                            @endphp
-                            <span style="padding:3px 12px;border-radius:20px;font-size:.72rem;font-weight:600;text-transform:capitalize;{{ $styles }}">{{ $kyc->status }}</span>
-                        </td>
+                                    {{-- Status --}}
+                                    <td>
+                                        <span class="badge {{ $statusClass }}">
+                                            @if($kyc->status == 'pending')
+                                                <iconify-icon icon="ph:clock-fill"></iconify-icon>
+                                            @elseif($kyc->status == 'approved')
+                                                <iconify-icon icon="ph:check-circle-fill"></iconify-icon>
+                                            @else
+                                                <iconify-icon icon="ph:x-circle-fill"></iconify-icon>
+                                            @endif
+                                            {{ ucfirst($kyc->status) }}
+                                        </span>
+                                    </td>
 
-                        <td style="padding:.85rem 1.25rem; white-space:nowrap; vertical-align:middle;">
-                            <div style="font-size:.82rem;color:#374151;">{{ $kyc->created_at->format('d M, Y') }}</div>
-                            <div style="font-size:.7rem;color:#9ca3af;">{{ $kyc->created_at->diffForHumans() }}</div>
-                        </td>
+                                    {{-- Submitted Date --}}
+                                    <td>
+                                        <div style="font-size:0.8rem; color:#374151;">{{ $kyc->created_at->format('d M, Y') }}</div>
+                                        <div style="font-size:0.65rem; color:#9ca3af;">{{ $kyc->created_at->diffForHumans() }}</div>
+                                    </td>
 
-                        <td style="padding:.85rem 1.25rem; vertical-align:middle;">
-                            @if($kyc->id_document)
-                                <img src="{{ Storage::url($kyc->id_document) }}" alt="ID"
-                                     style="width:52px;height:52px;object-fit:cover;border-radius:8px;cursor:pointer;border:1px solid #e5e7eb;"
-                                     onmouseover="this.style.borderColor='#9EDD05'" onmouseout="this.style.borderColor='#e5e7eb'"
-                                     onclick="openModal('{{ Storage::url($kyc->id_document) }}')">
-                            @else
-                                <span style="color:#9ca3af;font-size:.8rem;">No ID</span>
-                            @endif
-                        </td>
+                                    {{-- ID Document --}}
+                                    <td>
+                                        @if($kyc->id_document)
+                                            <img src="{{ Storage::url($kyc->id_document) }}" alt="ID Document"
+                                                 class="doc-preview"
+                                                 onclick="openImageModal('{{ Storage::url($kyc->id_document) }}')">
+                                        @else
+                                            <span class="text-gray-400 text-xs">No ID uploaded</span>
+                                        @endif
+                                    </td>
 
-                        <td style="padding:.85rem 1.25rem; vertical-align:middle;">
-                            @if($kyc->utility_bill)
-                                <img src="{{ Storage::url($kyc->utility_bill) }}" alt="Selfie"
-                                     style="width:52px;height:52px;object-fit:cover;border-radius:8px;cursor:pointer;border:1px solid #e5e7eb;"
-                                     onmouseover="this.style.borderColor='#9EDD05'" onmouseout="this.style.borderColor='#e5e7eb'"
-                                     onclick="openModal('{{ Storage::url($kyc->utility_bill) }}')">
-                            @else
-                                <span style="color:#9ca3af;font-size:.8rem;">No photo</span>
-                            @endif
-                        </td>
+                                    {{-- Selfie/Utility Bill --}}
+                                    <td>
+                                        @if($kyc->utility_bill)
+                                            <img src="{{ Storage::url($kyc->utility_bill) }}" alt="Selfie/Utility"
+                                                 class="doc-preview"
+                                                 onclick="openImageModal('{{ Storage::url($kyc->utility_bill) }}')">
+                                        @else
+                                            <span class="text-gray-400 text-xs">No photo uploaded</span>
+                                        @endif
+                                    </td>
 
-                        <td style="padding:.85rem 1.25rem; white-space:nowrap; vertical-align:middle;">
-                            @if($kyc->status === 'pending')
-                                <div style="display:flex;align-items:center;gap:8px;">
-                                    <form method="POST" action="{{ route('admin.kyc.approve',$kyc->id) }}" style="display:inline;">
-                                        @csrf @method('PATCH')
-                                        <button type="submit" style="display:inline-flex;align-items:center;gap:4px;padding:5px 12px;background:#16a34a;color:#fff;border:none;border-radius:8px;font-size:.75rem;font-weight:600;cursor:pointer;" onmouseover="this.style.background='#15803d'" onmouseout="this.style.background='#16a34a'">
-                                            <iconify-icon icon="mdi:check"></iconify-icon> Approve
-                                        </button>
-                                    </form>
-                                    <form method="POST" action="{{ route('admin.kyc.reject',$kyc->id) }}" style="display:inline;">
-                                        @csrf @method('PATCH')
-                                        <button type="submit" style="display:inline-flex;align-items:center;gap:4px;padding:5px 12px;background:#dc2626;color:#fff;border:none;border-radius:8px;font-size:.75rem;font-weight:600;cursor:pointer;" onmouseover="this.style.background='#b91c1c'" onmouseout="this.style.background='#dc2626'">
-                                            <iconify-icon icon="mdi:close"></iconify-icon> Reject
-                                        </button>
-                                    </form>
-                                </div>
-                            @else
-                                <span style="color:#9ca3af;font-style:italic;font-size:.82rem;">Already {{ $kyc->status }}</span>
-                            @endif
-                        </td>
+                                    {{-- Actions --}}
+                                    <td>
+                                        @if($kyc->status === 'pending')
+                                            <div style="display: flex; align-items: center; gap: 8px;">
+                                                <form method="POST" action="{{ route('admin.kyc.approve', $kyc->id) }}" style="display:inline;">
+                                                    @csrf @method('PATCH')
+                                                    <button type="submit" class="action-btn approve">
+                                                        <iconify-icon icon="ph:check-bold"></iconify-icon> Approve
+                                                    </button>
+                                                </form>
+                                                <form method="POST" action="{{ route('admin.kyc.reject', $kyc->id) }}" style="display:inline;">
+                                                    @csrf @method('PATCH')
+                                                    <button type="submit" class="action-btn reject">
+                                                        <iconify-icon icon="ph:x-bold"></iconify-icon> Reject
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        @else
+                                            <span class="text-gray-400 italic text-sm">Already {{ $kyc->status }}</span>
+                                        @endif
+                                    </td>
 
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="6" style="text-align:center; padding:3rem; color:#9ca3af;">
+                                        <iconify-icon icon="mdi:file-document-outline" style="font-size:2.5rem; display:block; margin:0 auto 0.75rem;"></iconify-icon>
+                                        No KYC submissions found.
+                                    </td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            
+            </div>
         </div>
     </div>
 </div>
 
 <!-- Image Modal -->
-<div id="imageModal" class="fixed inset-0 bg-black bg-opacity-80 z-50 hidden items-center justify-center p-4" onclick="closeModal()">
-    <div class="relative max-w-4xl w-full">
-        <button onclick="closeModal()" class="absolute -top-10 right-0 text-white hover:text-gray-300">
-            <iconify-icon icon="ph:x-bold" class="text-2xl"></iconify-icon>
+<div id="imageModal" class="image-modal" onclick="closeImageModal()">
+    <div class="modal-content">
+        <button class="close-modal" onclick="closeImageModal()">
+            <iconify-icon icon="ph:x-bold"></iconify-icon>
         </button>
-        <img id="modalImage" class="w-full max-h-[80vh] rounded-lg shadow-2xl object-contain" onclick="event.stopPropagation();">
+        <img id="modalImage" src="" alt="Document Preview" onclick="event.stopPropagation()">
     </div>
 </div>
 
 <script>
-function openModal(url) {
-    document.getElementById('modalImage').src = url;
-    document.getElementById('imageModal').classList.remove('hidden');
-    document.getElementById('imageModal').classList.add('flex');
-}
-function closeModal() {
-    document.getElementById('imageModal').classList.add('hidden');
-    document.getElementById('imageModal').classList.remove('flex');
-}
-document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
+    function openImageModal(url) {
+        const modal = document.getElementById('imageModal');
+        const img = document.getElementById('modalImage');
+        img.src = url;
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeImageModal() {
+        const modal = document.getElementById('imageModal');
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeImageModal();
+        }
+    });
+
+    // Per page select functionality
+    document.getElementById('perPageSelect')?.addEventListener('change', function() {
+        const url = new URL(window.location.href);
+        url.searchParams.set('per_page', this.value);
+        window.location.href = url.toString();
+    });
 </script>
+
 @endsection

@@ -57,56 +57,25 @@ class CopyTradingController extends Controller
     /**
      * Submit a copy trading request
      */
-   public function store(Request $request)
+  public function store(Request $request)
 {
     $request->validate([
         'plan_id' => 'required|exists:plans,id',
         'amount'  => 'required|numeric|min:0.01',
     ]);
 
-    $user = auth()->user();
-    $plan = Plan::findOrFail($request->plan_id);
+    $user   = auth()->user();
+    $plan   = Plan::findOrFail($request->plan_id);
     $amount = $request->amount;
 
-    // ✅ CRITICAL FIX: Check limit BEFORE anything else
-    // Count active investments for this plan
-    $userActivePlanParticipations = Investment::where('user_id', $user->id)
-        ->where('plan_id', $plan->id)
-        ->where('type', 'copy_trading')
-        ->where('status', 'active')
-        ->count();
-
-    // Count pending requests for this plan
-    $userPendingPlanParticipations = CopyTradingRequest::where('user_id', $user->id)
-        ->where('plan_id', $plan->id)
-        ->where('status', 'pending')
-        ->count();
-
-    $planLimit = $plan->max_participations ?? 3;
-    $totalPlanParticipations = $userActivePlanParticipations + $userPendingPlanParticipations;
-
-    // ✅ BLOCK immediately if limit is reached
-    if ($totalPlanParticipations >= $planLimit) {
+    // Early checks (no DB lock needed yet)
+    if ($amount < $plan->minimum_amount || $amount > $plan->maximum_amount) {
         return response()->json([
             'success' => false,
-            'message' => "You have reached the maximum limit of {$planLimit} participations for this plan (including pending requests).",
+            'message' => "Amount must be between \${$plan->minimum_amount} and \${$plan->maximum_amount}",
         ], 422);
     }
 
-    // Check overall active copy trades limit (max 3 across all plans)
-    $totalActiveTrades = Investment::where('user_id', $user->id)
-        ->where('type', 'copy_trading')
-        ->where('status', 'active')
-        ->count();
-
-    if ($totalActiveTrades >= 3) {
-        return response()->json([
-            'success' => false,
-            'message' => 'You have reached the maximum limit of 3 active copy trades. Please wait for existing trades to complete.',
-        ], 422);
-    }
-
-    // Check balance
     if ($user->available_balance < $amount) {
         return response()->json([
             'success'  => false,
@@ -115,17 +84,60 @@ class CopyTradingController extends Controller
         ], 422);
     }
 
-    // Check plan amount limits
-    if ($amount < $plan->minimum_amount || $amount > $plan->maximum_amount) {
-        return response()->json([
-            'success' => false,
-            'message' => "Amount must be between \${$plan->minimum_amount} and \${$plan->maximum_amount}",
-        ], 422);
-    }
-
-    // ✅ Only now save the request
     DB::beginTransaction();
     try {
+        // Lock this user's row for the entire transaction.
+        // Any second request for the same user will WAIT here
+        // until this transaction finishes — no two requests can
+        // pass the limit check at the same time.
+        $user = \App\Models\User::where('id', $user->id)->lockForUpdate()->first();
+
+        // Re-check balance inside the lock (a concurrent request
+        // may have already decremented it)
+        if ($user->available_balance < $amount) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Insufficient balance. Please deposit more funds.',
+                'redirect' => route('user.deposit'),
+            ], 422);
+        }
+
+        $planLimit = $plan->max_participations ?? 3;
+
+        $activePlanCount = Investment::where('user_id', $user->id)
+            ->where('plan_id', $plan->id)
+            ->where('type', 'copy_trading')
+            ->where('status', 'active')
+            ->count();
+
+        $pendingPlanCount = CopyTradingRequest::where('user_id', $user->id)
+            ->where('plan_id', $plan->id)
+            ->where('status', 'pending')
+            ->count();
+
+        if (($activePlanCount + $pendingPlanCount) >= $planLimit) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => "You have reached the maximum of {$planLimit} participations for this plan (including pending requests).",
+            ], 422);
+        }
+
+        $totalActiveTrades = Investment::where('user_id', $user->id)
+            ->where('type', 'copy_trading')
+            ->where('status', 'active')
+            ->count();
+
+        if ($totalActiveTrades >= 3) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'You have reached the maximum of 3 active copy trades.',
+            ], 422);
+        }
+
+        // All checks passed — safe to write
         $copyRequest = CopyTradingRequest::create([
             'user_id'          => $user->id,
             'plan_id'          => $plan->id,
@@ -136,7 +148,6 @@ class CopyTradingController extends Controller
             'status'           => 'pending',
         ]);
 
-        // Reserve amount from available balance
         $user->decrement('available_balance', $amount);
 
         DB::commit();
@@ -151,6 +162,7 @@ class CopyTradingController extends Controller
             'message' => 'Copy trading request submitted for approval!',
             'request' => $copyRequest,
         ]);
+
     } catch (\Exception $e) {
         DB::rollBack();
         return response()->json([

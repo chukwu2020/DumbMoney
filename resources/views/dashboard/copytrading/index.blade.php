@@ -1083,12 +1083,17 @@ async function checkPlanLimit(planId) {
 document.getElementById('copyTradingForm')?.addEventListener('submit', function (e) {
     e.preventDefault();
 
+    // Prevent double-submit
+    if (this.dataset.submitting === 'true') return;
+    this.dataset.submitting = 'true';
+
     if (submitBtn.disabled || submitBtn.classList.contains('submitting')) return;
 
     const amount = parseFloat(amountInput.value);
 
     if (amount > userBalance) {
         showToast('Insufficient balance', 'error');
+        this.dataset.submitting = 'false';
         return;
     }
 
@@ -1105,21 +1110,6 @@ document.getElementById('copyTradingForm')?.addEventListener('submit', function 
     .then(data => {
         if (data.success) {
             showToast(data.message, 'success');
-            
-            // ✅ CRITICAL: Immediately refresh the plan card status
-            // This updates the UI to show limit reached without page refresh
-            if (selectedPlan) {
-                // Force refresh the plan limit check
-                checkPlanLimit(selectedPlan.id).then(() => {
-                    // Also mark the card as limit reached if needed
-                    const planCard = document.querySelector(`.plan-card[data-plan-id="${selectedPlan.id}"]`);
-                    if (planCard && planLimitWarning.classList.contains('hidden') === false) {
-                        planCard.classList.add('limit-reached');
-                        planCard.dataset.limitReached = 'true';
-                    }
-                });
-            }
-            
             setTimeout(() => window.location.href = '{{ route("copy-trading.history") }}', 1500);
         } else {
             throw new Error(data.message);
@@ -1130,6 +1120,7 @@ document.getElementById('copyTradingForm')?.addEventListener('submit', function 
         submitBtn.disabled = false;
         submitBtn.classList.remove('submitting');
         submitBtn.innerHTML = 'Submit Request';
+        this.dataset.submitting = 'false'; // re-enable on failure
     });
 });
 
