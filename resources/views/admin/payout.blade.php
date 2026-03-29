@@ -5,6 +5,11 @@
 <style>
     :root { --brand-green:#9EDD05; --brand-dark:#0C3A30; }
 
+    .dashboard-main-body {
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
     .admin-input {
         width: 100%;
         padding: .5rem .75rem;
@@ -44,9 +49,11 @@
     }
     .btn-brand:hover { background: #8bc905; }
 
-    /* ── Scrollable table shell ── */
+    /* Scrollable table shell */
     .tbl-shell {
+        display: block;
         width: 100%;
+        max-width: 100%;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
     }
@@ -96,8 +103,8 @@
         </div>
     @endif
 
-    {{-- ── QUICK ADD FORM ── --}}
-    <div class="bg-white rounded-2xl border border-gray-200 p-6 mb-8 shadow-sm" style="border-top: 4px solid var(--brand-green);">
+    {{-- Quick Add Form --}}
+    <div style="background:#fff; border-radius:16px; border:1px solid #e5e7eb; border-top:4px solid var(--brand-green); padding:1.5rem; margin-bottom:2rem; box-shadow:0 1px 3px rgba(0,0,0,.06);">
         <h3 class="text-sm font-bold mb-5" style="color:var(--brand-dark);">Quick Add Payout</h3>
 
         <form action="{{ route('admin.payouts.store') }}" method="POST">
@@ -148,15 +155,16 @@
         </form>
     </div>
 
-    {{-- ── PAYOUT TABLE ── --}}
-    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm" style="min-width:0; overflow:hidden;">
+    {{-- Payout Table Card: overflow:hidden is the key fix --}}
+    <div style="background:#fff; border-radius:16px; border:1px solid #e5e7eb; box-shadow:0 1px 3px rgba(0,0,0,.06); overflow:hidden; min-width:0; max-width:100%;">
 
         {{-- Card header — does NOT scroll --}}
-        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:1rem 1.5rem; border-bottom:1px solid #f1f5f9;">
             <h3 class="text-sm font-bold" style="color:var(--brand-dark);">Payout Records</h3>
             <a href="{{ route('admin.payouts.create') }}"
-               class="flex items-center gap-1 text-xs font-semibold px-4 py-2 rounded-lg transition"
-               style="background:var(--brand-green); color:var(--brand-dark);">
+               style="display:inline-flex;align-items:center;gap:4px;font-size:.75rem;font-weight:600;padding:.4rem 1rem;border-radius:8px;background:var(--brand-green);color:var(--brand-dark);text-decoration:none;transition:background .2s;"
+               onmouseover="this.style.background='#8bc905'"
+               onmouseout="this.style.background='var(--brand-green)'">
                 <iconify-icon icon="ic:baseline-plus"></iconify-icon> Add New
             </a>
         </div>
@@ -224,7 +232,7 @@
         </div>
 
         {{-- Pagination — does NOT scroll --}}
-        <div class="px-6 py-4 border-t border-gray-100">
+        <div style="padding:1rem 1.5rem; border-top:1px solid #f1f5f9;">
             {{ $payouts->links() }}
         </div>
     </div>
