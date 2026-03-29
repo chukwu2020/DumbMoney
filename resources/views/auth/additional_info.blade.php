@@ -474,7 +474,7 @@
 
                     <!-- Trading Experience -->
                     <div class="form-section" data-aos="fade-up">
-                        <h3>Your Trading Experience</h3>
+                        <h3>Your Trading Experience - click to select</h3>
                         <p class="section-desc">Help us understand your background</p>
 
                         <div class="mb-4">

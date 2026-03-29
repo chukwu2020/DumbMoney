@@ -55,14 +55,40 @@
     </div>
 
     <!-- Table -->
-    <div class="card rounded-xl overflow-hidden border-0 bg-white shadow-sm">
+    <div class="card rounded-xl border-0 bg-white shadow-sm" style="max-width:100%; min-width:0;">
         <div class="card-body p-6">
-            <div class="table-responsive scroll-sm">
-                <table class="table bordered-table sm-table mb-0">
+
+            {{-- Scroll wrapper — only the table scrolls, nothing else --}}
+            <div style="
+                width: 100%;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                border-radius: 8px;
+            ">
+                <table style="
+                    width: max-content;
+                    min-width: 100%;
+                    border-collapse: separate;
+                    border-spacing: 0;
+                    font-size: .8rem;
+                ">
                     <thead>
-                        <tr style="background:#0C3A30 !important;">
+                        <tr style="background:#0C3A30;">
                             @foreach(['Profile','Name','Contact','Country','Join Source','Copy Preference','Selected Admin','Join Date','Experience','Trading Freq','Transaction Vol','Investment Goals','Asset Classes','Account Type','Copy Admin','Investment Amount','Financial Alt','Annual Income','Deposit Source','Ongoing Source','Balance','Total Invested','Active Trades','Membership Code','Control','Status','Action'] as $h)
-                            <th style="background:#0C3A30 !important; color:#fff !important; white-space:nowrap;" class="py-3">{{ $h }}</th>
+                            <th style="
+                                background:#0C3A30 !important;
+                                color:#fff !important;
+                                white-space: nowrap;
+                                padding: .65rem 1rem;
+                                text-align: left;
+                                font-size: .7rem;
+                                font-weight: 600;
+                                text-transform: uppercase;
+                                letter-spacing: .4px;
+                                position: sticky;
+                                top: 0;
+                                z-index: 2;
+                            ">{{ $h }}</th>
                             @endforeach
                         </tr>
                     </thead>
@@ -75,163 +101,187 @@
                             $initials      = collect(explode(' ', $user->name))->map(fn($w) => strtoupper(substr($w,0,1)))->take(2)->join('') ?: 'U';
                             $tradingInfo   = $user->tradingInfo;
                         @endphp
-                        <tr class="hover:bg-gray-50">
+                        <tr style="border-bottom:1px solid #f1f5f9; transition: background .15s;" onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background=''">
 
                             {{-- Profile --}}
-                            <td class="text-center">
+                            <td style="padding:.65rem 1rem; vertical-align:middle; text-align:center;">
                                 @if($profilePic)
                                     <img src="{{ asset('storage/profile_pics/' . $profilePic) }}"
                                          alt="{{ $user->name }}"
-                                         class="w-10 h-10 rounded-full object-cover mx-auto"
+                                         style="width:36px;height:36px;border-radius:50%;object-fit:cover;display:block;margin:auto;"
                                          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                                    <div class="w-10 h-10 rounded-full bg-gradient-to-r from-[#8bc905] to-[#6ea003] text-white items-center justify-center font-semibold mx-auto" style="display:none;">{{ $initials }}</div>
+                                    <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#8bc905,#6ea003);color:#fff;align-items:center;justify-content:center;font-weight:600;font-size:.75rem;display:none;margin:auto;">{{ $initials }}</div>
                                 @else
-                                    <div class="w-10 h-10 rounded-full bg-gradient-to-r from-[#8bc905] to-[#6ea003] text-white flex items-center justify-center font-semibold mx-auto">{{ $initials }}</div>
+                                    <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#8bc905,#6ea003);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:.75rem;margin:auto;">{{ $initials }}</div>
                                 @endif
                             </td>
 
-                            <td><div class="font-semibold text-gray-800">{{ $user->name }}</div><div class="text-xs text-gray-500">@{{ $user->username }}</div></td>
-                            <td><div class="text-sm text-gray-700">{{ $user->phone ?? 'N/A' }}</div><div class="text-xs text-gray-500 truncate max-w-[150px]">{{ $user->email }}</div></td>
-                            <td class="text-sm text-gray-700">{{ $user->country ?? 'N/A' }}</td>
+                            <td style="padding:.65rem 1rem; vertical-align:middle; white-space:nowrap;">
+                                <div style="font-weight:600;color:#111827;">{{ $user->name }}</div>
+                                <div style="font-size:.7rem;color:#6b7280;">@{{ $user->username }}</div>
+                            </td>
+
+                            <td style="padding:.65rem 1rem; vertical-align:middle; white-space:nowrap;">
+                                <div style="font-size:.8rem;color:#374151;">{{ $user->phone ?? 'N/A' }}</div>
+                                <div style="font-size:.7rem;color:#6b7280;max-width:160px;overflow:hidden;text-overflow:ellipsis;">{{ $user->email }}</div>
+                            </td>
+
+                            <td style="padding:.65rem 1rem; vertical-align:middle; white-space:nowrap; font-size:.8rem; color:#374151;">{{ $user->country ?? 'N/A' }}</td>
 
                             {{-- Join Source --}}
-                            <td>
+                            <td style="padding:.65rem 1rem; vertical-align:middle; white-space:nowrap;">
                                 @if($user->join_source)
-                                    <div class="flex items-center gap-1">
-                                        @if($user->join_source == 'discord')    <iconify-icon icon="ri:discord-line"   style="color:#5865F2;"></iconify-icon>
-                                        @elseif($user->join_source == 'telegram') <iconify-icon icon="ri:telegram-line" style="color:#26A5E4;"></iconify-icon>
-                                        @elseif($user->join_source == 'youtube')  <iconify-icon icon="ri:youtube-line"  style="color:#FF0000;"></iconify-icon>
+                                    <div style="display:flex;align-items:center;gap:4px;">
+                                        @if($user->join_source == 'discord')    <iconify-icon icon="ri:discord-line"    style="color:#5865F2;"></iconify-icon>
+                                        @elseif($user->join_source == 'telegram') <iconify-icon icon="ri:telegram-line"  style="color:#26A5E4;"></iconify-icon>
+                                        @elseif($user->join_source == 'youtube')  <iconify-icon icon="ri:youtube-line"   style="color:#FF0000;"></iconify-icon>
                                         @elseif($user->join_source == 'instagram')<iconify-icon icon="ri:instagram-line" style="color:#E4405F;"></iconify-icon>
-                                        @elseif($user->join_source == 'facebook') <iconify-icon icon="ri:facebook-line" style="color:#1877F2;"></iconify-icon>
+                                        @elseif($user->join_source == 'facebook') <iconify-icon icon="ri:facebook-line"  style="color:#1877F2;"></iconify-icon>
                                         @else <iconify-icon icon="ri:global-line"></iconify-icon>
                                         @endif
-                                        <span class="capitalize text-sm text-gray-700">{{ str_replace('_',' ',$user->join_source) }}</span>
+                                        <span style="font-size:.8rem;color:#374151;text-transform:capitalize;">{{ str_replace('_',' ',$user->join_source) }}</span>
                                     </div>
-                                @else <span class="text-gray-400 text-sm">Not specified</span>
+                                @else <span style="color:#9ca3af;font-size:.8rem;">Not specified</span>
                                 @endif
                             </td>
 
                             {{-- Copy Preference --}}
-                            <td>
+                            <td style="padding:.65rem 1rem; vertical-align:middle; white-space:nowrap;">
                                 @if($user->copy_preference)
-                                    <div class="flex items-center gap-1">
-                                        @if($user->copy_preference == 'platform_admin') <iconify-icon icon="ri:admin-line" style="color:#8bc905;"></iconify-icon><span class="text-sm text-gray-700">Platform Admin</span>
-                                        @elseif($user->copy_preference == 'specific_admin') <iconify-icon icon="ri:discord-line" style="color:#5865F2;"></iconify-icon><span class="text-sm text-gray-700">Specific Admin</span>
+                                    <div style="display:flex;align-items:center;gap:4px;">
+                                        @if($user->copy_preference == 'platform_admin') <iconify-icon icon="ri:admin-line" style="color:#8bc905;"></iconify-icon><span style="font-size:.8rem;color:#374151;">Platform Admin</span>
+                                        @elseif($user->copy_preference == 'specific_admin') <iconify-icon icon="ri:discord-line" style="color:#5865F2;"></iconify-icon><span style="font-size:.8rem;color:#374151;">Specific Admin</span>
                                         @endif
                                     </div>
-                                @else <span class="text-gray-400 text-sm">Not specified</span>
+                                @else <span style="color:#9ca3af;font-size:.8rem;">Not specified</span>
                                 @endif
                             </td>
 
-                            <td>
+                            <td style="padding:.65rem 1rem; vertical-align:middle; white-space:nowrap;">
                                 @if($user->copy_preference == 'specific_admin' && $user->copy_admin_name)
-                                    <div class="font-medium text-sm text-gray-800">{{ $user->copy_admin_name }}</div>
-                                    <div class="text-xs text-gray-500">{{ $user->copy_server_name ?? 'N/A' }}</div>
-                                @else <span class="text-gray-400 text-sm">—</span>
+                                    <div style="font-weight:500;font-size:.8rem;color:#111827;">{{ $user->copy_admin_name }}</div>
+                                    <div style="font-size:.7rem;color:#6b7280;">{{ $user->copy_server_name ?? 'N/A' }}</div>
+                                @else <span style="color:#9ca3af;font-size:.8rem;">—</span>
                                 @endif
                             </td>
 
-                            <td class="text-sm text-gray-700">{{ $user->created_at->format('d M Y') }}</td>
+                            <td style="padding:.65rem 1rem; vertical-align:middle; white-space:nowrap; font-size:.8rem; color:#374151;">{{ $user->created_at->format('d M Y') }}</td>
 
-                            <td class="text-sm text-gray-700">
+                            <td style="padding:.65rem 1rem; vertical-align:middle; white-space:nowrap; font-size:.8rem; color:#374151;">
                                 @if($tradingInfo)
-                                    <span class="font-medium">{{ $tradingInfo->stock_experience == 'yes' ? 'Experienced' : ($tradingInfo->stock_experience == 'no' ? 'Little Exp.' : 'Novice') }}</span>
-                                @else <span class="text-gray-400 text-xs">—</span>
+                                    <span style="font-weight:500;">{{ $tradingInfo->stock_experience == 'yes' ? 'Experienced' : ($tradingInfo->stock_experience == 'no' ? 'Little Exp.' : 'Novice') }}</span>
+                                @else <span style="color:#9ca3af;font-size:.75rem;">—</span>
                                 @endif
                             </td>
 
-                            <td class="text-sm text-gray-700">{{ $tradingInfo ? $tradingInfo->trading_frequency.' times' : '—' }}</td>
-                            <td class="text-sm text-gray-700">{{ $tradingInfo ? str_replace('_',' ',str_replace('k',',000',$tradingInfo->transaction_volume)) : '—' }}</td>
+                            <td style="padding:.65rem 1rem; vertical-align:middle; white-space:nowrap; font-size:.8rem; color:#374151;">{{ $tradingInfo ? $tradingInfo->trading_frequency.' times' : '—' }}</td>
+                            <td style="padding:.65rem 1rem; vertical-align:middle; white-space:nowrap; font-size:.8rem; color:#374151;">{{ $tradingInfo ? str_replace('_',' ',str_replace('k',',000',$tradingInfo->transaction_volume)) : '—' }}</td>
 
-                            <td class="text-sm">
+                            <td style="padding:.65rem 1rem; vertical-align:middle;">
                                 @if($tradingInfo)
                                     @php $goals = is_array($tradingInfo->investment_goals) ? $tradingInfo->investment_goals : (json_decode($tradingInfo->investment_goals, true) ?? []); @endphp
-                                    <div class="flex flex-wrap gap-1">@foreach($goals as $g)<span class="px-1.5 py-0.5 bg-blue-50 text-blue-700 rounded text-xs whitespace-nowrap">{{ ucfirst(str_replace('_',' ',$g)) }}</span>@endforeach</div>
-                                @else <span class="text-gray-400 text-xs">—</span>
+                                    <div style="display:flex;flex-wrap:wrap;gap:3px;min-width:120px;">
+                                        @foreach($goals as $g)
+                                        <span style="padding:2px 6px;background:#eff6ff;color:#1d4ed8;border-radius:4px;font-size:.68rem;white-space:nowrap;">{{ ucfirst(str_replace('_',' ',$g)) }}</span>
+                                        @endforeach
+                                    </div>
+                                @else <span style="color:#9ca3af;font-size:.75rem;">—</span>
                                 @endif
                             </td>
 
-                            <td class="text-sm">
+                            <td style="padding:.65rem 1rem; vertical-align:middle;">
                                 @if($tradingInfo)
                                     @php $assets = is_array($tradingInfo->asset_classes) ? $tradingInfo->asset_classes : (json_decode($tradingInfo->asset_classes, true) ?? []); @endphp
-                                    <div class="flex flex-wrap gap-1">@foreach($assets as $a)<span class="px-1.5 py-0.5 bg-green-50 text-green-700 rounded text-xs whitespace-nowrap">{{ ucfirst($a) }}</span>@endforeach</div>
-                                @else <span class="text-gray-400 text-xs">—</span>
+                                    <div style="display:flex;flex-wrap:wrap;gap:3px;min-width:100px;">
+                                        @foreach($assets as $a)
+                                        <span style="padding:2px 6px;background:#f0fdf4;color:#15803d;border-radius:4px;font-size:.68rem;white-space:nowrap;">{{ ucfirst($a) }}</span>
+                                        @endforeach
+                                    </div>
+                                @else <span style="color:#9ca3af;font-size:.75rem;">—</span>
                                 @endif
                             </td>
 
-                            <td class="text-sm text-gray-700">{{ $tradingInfo ? ucfirst($tradingInfo->account_type) : '—' }}</td>
-                            <td class="text-sm text-gray-700">{{ ($tradingInfo && $tradingInfo->copy_admin_name) ? $tradingInfo->copy_admin_name : '—' }}</td>
-                            <td class="text-sm font-semibold text-green-600">{{ $tradingInfo ? '$'.number_format($tradingInfo->investment_amount,2) : '—' }}</td>
-                            <td class="text-sm text-gray-700">{{ ($tradingInfo && $tradingInfo->financial_alternative) ? $tradingInfo->financial_alternative : '—' }}</td>
-                            <td class="text-sm text-gray-700">{{ $tradingInfo ? $tradingInfo->annual_income : '—' }}</td>
-                            <td class="text-sm text-gray-700">{{ $tradingInfo ? ucfirst(str_replace('_',' ',$tradingInfo->deposit_source)) : '—' }}</td>
-                            <td class="text-sm text-gray-700">{{ $tradingInfo ? ucfirst(str_replace('_',' ',$tradingInfo->ongoing_deposit_source)) : '—' }}</td>
-                            <td class="font-semibold text-green-600">${{ number_format($user->available_balance ?? 0, 2) }}</td>
-                            <td class="font-semibold text-blue-600">${{ number_format($user->amount_invested, 2) }}</td>
+                            <td style="padding:.65rem 1rem; vertical-align:middle; white-space:nowrap; font-size:.8rem; color:#374151;">{{ $tradingInfo ? ucfirst($tradingInfo->account_type) : '—' }}</td>
+                            <td style="padding:.65rem 1rem; vertical-align:middle; white-space:nowrap; font-size:.8rem; color:#374151;">{{ ($tradingInfo && $tradingInfo->copy_admin_name) ? $tradingInfo->copy_admin_name : '—' }}</td>
+                            <td style="padding:.65rem 1rem; vertical-align:middle; white-space:nowrap; font-size:.8rem; font-weight:600; color:#16a34a;">{{ $tradingInfo ? '$'.number_format($tradingInfo->investment_amount,2) : '—' }}</td>
+                            <td style="padding:.65rem 1rem; vertical-align:middle; white-space:nowrap; font-size:.8rem; color:#374151;">{{ ($tradingInfo && $tradingInfo->financial_alternative) ? $tradingInfo->financial_alternative : '—' }}</td>
+                            <td style="padding:.65rem 1rem; vertical-align:middle; white-space:nowrap; font-size:.8rem; color:#374151;">{{ $tradingInfo ? $tradingInfo->annual_income : '—' }}</td>
+                            <td style="padding:.65rem 1rem; vertical-align:middle; white-space:nowrap; font-size:.8rem; color:#374151;">{{ $tradingInfo ? ucfirst(str_replace('_',' ',$tradingInfo->deposit_source)) : '—' }}</td>
+                            <td style="padding:.65rem 1rem; vertical-align:middle; white-space:nowrap; font-size:.8rem; color:#374151;">{{ $tradingInfo ? ucfirst(str_replace('_',' ',$tradingInfo->ongoing_deposit_source)) : '—' }}</td>
 
-                            <td class="text-center">
+                            <td style="padding:.65rem 1rem; vertical-align:middle; white-space:nowrap; font-weight:600; color:#16a34a;">${{ number_format($user->available_balance ?? 0, 2) }}</td>
+                            <td style="padding:.65rem 1rem; vertical-align:middle; white-space:nowrap; font-weight:600; color:#2563eb;">${{ number_format($user->amount_invested, 2) }}</td>
+
+                            <td style="padding:.65rem 1rem; vertical-align:middle; text-align:center; white-space:nowrap;">
                                 @if($activeTrades > 0)
-                                    <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700"><iconify-icon icon="ph:chart-line-up-fill"></iconify-icon>{{ $activeTrades }}</span>
-                                @else <span class="text-gray-400 text-sm">0</span>
+                                    <span style="display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:20px;background:#dcfce7;color:#15803d;font-size:.72rem;font-weight:600;">
+                                        <iconify-icon icon="ph:chart-line-up-fill"></iconify-icon>{{ $activeTrades }}
+                                    </span>
+                                @else <span style="color:#9ca3af;font-size:.8rem;">0</span>
                                 @endif
                             </td>
 
-                            <td class="text-center">
+                            <td style="padding:.65rem 1rem; vertical-align:middle; text-align:center;">
                                 @if($user->membership_code)
-                                    <div class="inline-block text-left">
-                                        <div class="bg-gradient-to-r from-green-50 to-emerald-50 px-3 py-2 rounded-xl border border-green-200">
-                                            <div class="text-xs font-semibold text-green-700 mb-1">✅ Code</div>
-                                            <div class="font-mono text-sm font-bold text-gray-800 mb-2" id="membershipCode-{{ $user->id }}">{{ $user->membership_code }}</div>
-                                            <div class="flex items-center justify-between gap-2">
-                                                <span class="text-xs {{ $user->has_membership ? 'text-green-600' : 'text-yellow-600' }}">{{ $user->has_membership ? 'Active' : 'Pending' }}</span>
-                                                <button id="copyBtn-{{ $user->id }}" onclick="copyMembershipCode({{ $user->id }})" class="px-2 py-1 bg-[#8AC304] text-black rounded-lg text-xs font-semibold hover:bg-[#7AB503] transition">📋 Copy</button>
-                                            </div>
+                                    <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);padding:8px 10px;border-radius:10px;border:1px solid #86efac;min-width:130px;display:inline-block;text-align:left;">
+                                        <div style="font-size:.65rem;font-weight:700;color:#15803d;margin-bottom:3px;">Code</div>
+                                        <div id="membershipCode-{{ $user->id }}" style="font-family:monospace;font-size:.8rem;font-weight:700;color:#111827;margin-bottom:6px;">{{ $user->membership_code }}</div>
+                                        <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;">
+                                            <span style="font-size:.65rem;color:{{ $user->has_membership ? '#16a34a' : '#ca8a04' }};">{{ $user->has_membership ? 'Active' : 'Pending' }}</span>
+                                            <button id="copyBtn-{{ $user->id }}" onclick="copyMembershipCode({{ $user->id }})" style="padding:2px 8px;background:#8AC304;color:#0C3A30;border:none;border-radius:6px;font-size:.65rem;font-weight:700;cursor:pointer;">Copy</button>
                                         </div>
                                     </div>
                                 @else
-                                    <button onclick="generateMembershipCode({{ $user->id }})" class="px-3 py-2 bg-gradient-to-r from-[#8AC304] to-[#6ea003] text-black rounded-lg text-sm font-semibold hover:shadow-md transition">
-                                        <iconify-icon icon="mdi:ticket-confirmation" class="mr-1"></iconify-icon> Generate
+                                    <button onclick="generateMembershipCode({{ $user->id }})" style="padding:5px 10px;background:linear-gradient(135deg,#8AC304,#6ea003);color:#0C3A30;border:none;border-radius:8px;font-size:.75rem;font-weight:600;cursor:pointer;white-space:nowrap;">
+                                        Generate
                                     </button>
                                 @endif
                             </td>
 
-                            <td class="text-center">
+                            <td style="padding:.65rem 1rem; vertical-align:middle; text-align:center;">
                                 @if($user->membership_code)
                                     <form method="POST" action="{{ route('admin.membership.lock', $user->id) }}">
                                         @csrf @method('PATCH')
-                                        <button type="submit" class="w-8 h-8 rounded-full {{ $user->membership_locked ? 'bg-yellow-100 text-yellow-600' : 'bg-gray-100 text-gray-600' }} hover:bg-yellow-200 flex items-center justify-center mx-auto transition" title="{{ $user->membership_locked ? 'Unlock' : 'Lock' }} Membership">
+                                        <button type="submit" style="width:32px;height:32px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;margin:auto;background:{{ $user->membership_locked ? '#fef9c3' : '#f3f4f6' }};color:{{ $user->membership_locked ? '#ca8a04' : '#6b7280' }};" title="{{ $user->membership_locked ? 'Unlock' : 'Lock' }} Membership">
                                             <iconify-icon icon="{{ $user->membership_locked ? 'mdi:lock-open' : 'mdi:lock' }}"></iconify-icon>
                                         </button>
                                     </form>
-                                @else <span class="text-xs text-gray-400">—</span>
+                                @else <span style="color:#9ca3af;font-size:.75rem;">—</span>
                                 @endif
                             </td>
 
-                            <td class="text-center">
+                            <td style="padding:.65rem 1rem; vertical-align:middle; text-align:center; white-space:nowrap;">
                                 @if($user->active)
-                                    <span class="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-medium">Active</span>
+                                    <span style="padding:3px 10px;border-radius:20px;background:#dcfce7;color:#15803d;font-size:.72rem;font-weight:600;">Active</span>
                                 @else
-                                    <span class="px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-medium">Inactive</span>
+                                    <span style="padding:3px 10px;border-radius:20px;background:#fee2e2;color:#dc2626;font-size:.72rem;font-weight:600;">Inactive</span>
                                 @endif
                             </td>
 
-                            <td class="text-center">
-                                <div class="flex justify-center gap-2">
-                                    <a href="" class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200 flex items-center justify-center transition"><iconify-icon icon="heroicons:eye"></iconify-icon></a>
-                                    <a href="{{ route('user.edit', $user->id) }}" class="w-8 h-8 rounded-full bg-green-100 text-green-600 hover:bg-green-200 flex items-center justify-center transition"><iconify-icon icon="lucide:edit"></iconify-icon></a>
-                                    <form method="POST" action="{{ route('user.destroy', $user->id) }}" onsubmit="return confirm('Delete this user?');">
+                            <td style="padding:.65rem 1rem; vertical-align:middle; text-align:center; white-space:nowrap;">
+                                <div style="display:flex;justify-content:center;gap:6px;">
+                                    <a href="" style="width:30px;height:30px;border-radius:50%;background:#dbeafe;color:#2563eb;display:flex;align-items:center;justify-content:center;text-decoration:none;" title="View">
+                                        <iconify-icon icon="heroicons:eye" style="font-size:14px;"></iconify-icon>
+                                    </a>
+                                    <a href="{{ route('user.edit', $user->id) }}" style="width:30px;height:30px;border-radius:50%;background:#dcfce7;color:#16a34a;display:flex;align-items:center;justify-content:center;text-decoration:none;" title="Edit">
+                                        <iconify-icon icon="lucide:edit" style="font-size:14px;"></iconify-icon>
+                                    </a>
+                                    <form method="POST" action="{{ route('user.destroy', $user->id) }}" onsubmit="return confirm('Delete this user?');" style="display:inline;">
                                         @csrf @method('DELETE')
-                                        <button type="submit" class="w-8 h-8 rounded-full bg-red-100 text-red-600 hover:bg-red-200 flex items-center justify-center transition"><iconify-icon icon="fluent:delete-24-regular"></iconify-icon></button>
+                                        <button type="submit" style="width:30px;height:30px;border-radius:50%;background:#fee2e2;color:#dc2626;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;" title="Delete">
+                                            <iconify-icon icon="fluent:delete-24-regular" style="font-size:14px;"></iconify-icon>
+                                        </button>
                                     </form>
                                 </div>
                             </td>
                         </tr>
                         @empty
-                        <tr><td colspan="27" class="text-center py-8 text-gray-500">No users found matching your search criteria.</td></tr>
+                        <tr><td colspan="27" style="text-align:center;padding:2rem;color:#9ca3af;">No users found matching your search criteria.</td></tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
+
             <div class="mt-4">{{ $users->links('vendor.pagination.tailwind') }}</div>
         </div>
     </div>
@@ -243,15 +293,15 @@ function copyMembershipCode(userId) {
     const btn  = document.getElementById(`copyBtn-${userId}`);
     const orig = btn.innerHTML;
     navigator.clipboard.writeText(code).then(() => {
-        btn.innerHTML = "✓ Copied!"; btn.style.background="#22c55e"; btn.style.color="white";
-        setTimeout(() => { btn.innerHTML=orig; btn.style.background="#8AC304"; btn.style.color="black"; }, 2000);
+        btn.innerHTML = "Copied!"; btn.style.background="#22c55e"; btn.style.color="white";
+        setTimeout(() => { btn.innerHTML=orig; btn.style.background="#8AC304"; btn.style.color="#0C3A30"; }, 2000);
     });
 }
 function generateMembershipCode(userId) {
     const btn = event.currentTarget;
     const orig = btn.innerHTML;
     btn.disabled = true;
-    btn.innerHTML = '<iconify-icon icon="svg-spinners:3-dots-fade"></iconify-icon> Generating...';
+    btn.innerHTML = 'Generating...';
     fetch("{{ route('admin.generate.membership.code') }}", {
         method: "POST",
         headers: { "Content-Type": "application/json", "X-CSRF-TOKEN": "{{ csrf_token() }}" },

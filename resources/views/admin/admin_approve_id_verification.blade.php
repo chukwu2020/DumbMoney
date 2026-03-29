@@ -17,92 +17,136 @@
         </ul>
     </div>
 
-    <div class="card border-0 rounded-xl shadow-sm overflow-hidden">
+    <div class="card border-0 rounded-xl shadow-sm" style="overflow:hidden; min-width:0; max-width:100%;">
         <div class="card-header border-b border-gray-100 px-6 py-4">
             <h6 class="font-bold text-lg mb-0" style="color:#0C3A30;">Recent KYC Requests</h6>
         </div>
-        <div class="card-body p-6">
-            <div class="overflow-x-auto">
-                <table class="min-w-[900px] w-full">
-                    <thead>
-                        <tr style="background:#0C3A30 !important;">
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide" style="color:#fff !important;">User</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide" style="color:#fff !important;">Status</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide" style="color:#fff !important;">Submitted</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide" style="color:#fff !important;">ID Document</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide" style="color:#fff !important;">Selfie</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide" style="color:#fff !important;">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-100">
-                        @foreach ($kycs as $kyc)
-                        <tr class="hover:bg-gray-50 transition-colors duration-150">
+        <div class="card-body p-0">
 
-                            <td class="px-4 py-3 whitespace-nowrap">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-full bg-[#9EDD05] flex items-center justify-center text-[#0C3A30] font-bold text-sm flex-shrink-0">
-                                        {{ strtoupper(substr($kyc->user->name, 0, 1)) }}
+            {{-- Scroll wrapper — ONLY this div scrolls horizontally --}}
+            <div style="
+                width: 100%;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                padding: 1.5rem;
+                box-sizing: border-box;
+            ">
+                {{-- Custom scrollbar --}}
+                <style>
+                    .kyc-scroll::-webkit-scrollbar { height: 5px; }
+                    .kyc-scroll::-webkit-scrollbar-thumb { background: #9EDD05; border-radius: 10px; }
+                    .kyc-scroll::-webkit-scrollbar-track { background: #f3f4f6; border-radius: 10px; }
+                </style>
+
+                <div class="kyc-scroll" style="width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch;">
+                    <table style="
+                        width: max-content;
+                        min-width: 100%;
+                        border-collapse: separate;
+                        border-spacing: 0;
+                        font-size: .85rem;
+                    ">
+                        <thead>
+                            <tr style="background:#0C3A30;">
+                                @foreach(['User','Status','Submitted','ID Document','Selfie','Actions'] as $h)
+                                <th style="
+                                    background:#0C3A30 !important;
+                                    color:#fff !important;
+                                    padding: .75rem 1.25rem;
+                                    text-align: left;
+                                    font-size: .72rem;
+                                    font-weight: 600;
+                                    text-transform: uppercase;
+                                    letter-spacing: .5px;
+                                    white-space: nowrap;
+                                ">{{ $h }}</th>
+                                @endforeach
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($kycs as $kyc)
+                            <tr style="border-bottom:1px solid #f1f5f9; transition:background .15s;" onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background=''">
+
+                                <td style="padding:.85rem 1.25rem; white-space:nowrap; vertical-align:middle;">
+                                    <div style="display:flex;align-items:center;gap:10px;">
+                                        <div style="width:38px;height:38px;border-radius:50%;background:#9EDD05;display:flex;align-items:center;justify-content:center;color:#0C3A30;font-weight:700;font-size:.8rem;flex-shrink:0;">
+                                            {{ strtoupper(substr($kyc->user->name, 0, 1)) }}
+                                        </div>
+                                        <div>
+                                            <div style="font-weight:600;color:#111827;font-size:.85rem;">{{ $kyc->user->name }}</div>
+                                            <div style="font-size:.72rem;color:#6b7280;">{{ $kyc->user->email }}</div>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <div class="text-sm font-semibold text-gray-900">{{ $kyc->user->name }}</div>
-                                        <div class="text-xs text-gray-500">{{ $kyc->user->email }}</div>
-                                    </div>
-                                </div>
-                            </td>
+                                </td>
 
-                            <td class="px-4 py-3 whitespace-nowrap">
-                                @php
-                                    $sc = ['pending'=>'bg-amber-50 text-amber-800 border border-amber-200','approved'=>'bg-green-50 text-green-800 border border-green-200','rejected'=>'bg-red-50 text-red-800 border border-red-200'][$kyc->status] ?? 'bg-gray-50 text-gray-800 border border-gray-200';
-                                @endphp
-                                <span class="px-3 py-1 inline-flex text-xs font-semibold rounded-full {{ $sc }} capitalize">{{ $kyc->status }}</span>
-                            </td>
+                                <td style="padding:.85rem 1.25rem; white-space:nowrap; vertical-align:middle;">
+                                    @php
+                                        $styles = [
+                                            'pending'  => 'background:#fef9c3;color:#854d0e;border:1px solid #fde047;',
+                                            'approved' => 'background:#dcfce7;color:#166534;border:1px solid #86efac;',
+                                            'rejected' => 'background:#fee2e2;color:#991b1b;border:1px solid #fca5a5;',
+                                        ][$kyc->status] ?? 'background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;';
+                                    @endphp
+                                    <span style="padding:3px 12px;border-radius:20px;font-size:.72rem;font-weight:600;text-transform:capitalize;{{ $styles }}">
+                                        {{ $kyc->status }}
+                                    </span>
+                                </td>
 
-                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
-                                {{ $kyc->created_at->format('d M, Y') }}<br>
-                                <span class="text-gray-400 text-xs">{{ $kyc->created_at->diffForHumans() }}</span>
-                            </td>
+                                <td style="padding:.85rem 1.25rem; white-space:nowrap; vertical-align:middle;">
+                                    <div style="font-size:.82rem;color:#374151;">{{ $kyc->created_at->format('d M, Y') }}</div>
+                                    <div style="font-size:.7rem;color:#9ca3af;">{{ $kyc->created_at->diffForHumans() }}</div>
+                                </td>
 
-                            <td class="px-4 py-3 whitespace-nowrap">
-                                @if($kyc->id_document)
-                                    <img src="{{ Storage::url($kyc->id_document) }}" alt="ID" class="w-14 h-14 object-cover rounded-lg cursor-pointer border border-gray-200 hover:border-[#9EDD05] transition" onclick="openModal('{{ Storage::url($kyc->id_document) }}')">
-                                @else
-                                    <span class="text-gray-400 text-sm">No ID</span>
-                                @endif
-                            </td>
+                                <td style="padding:.85rem 1.25rem; vertical-align:middle;">
+                                    @if($kyc->id_document)
+                                        <img src="{{ Storage::url($kyc->id_document) }}" alt="ID"
+                                             style="width:52px;height:52px;object-fit:cover;border-radius:8px;cursor:pointer;border:1px solid #e5e7eb;transition:border-color .2s;"
+                                             onmouseover="this.style.borderColor='#9EDD05'"
+                                             onmouseout="this.style.borderColor='#e5e7eb'"
+                                             onclick="openModal('{{ Storage::url($kyc->id_document) }}')">
+                                    @else
+                                        <span style="color:#9ca3af;font-size:.8rem;">No ID</span>
+                                    @endif
+                                </td>
 
-                            <td class="px-4 py-3 whitespace-nowrap">
-                                @if($kyc->utility_bill)
-                                    <img src="{{ Storage::url($kyc->utility_bill) }}" alt="Selfie" class="w-14 h-14 object-cover rounded-lg cursor-pointer border border-gray-200 hover:border-[#9EDD05] transition" onclick="openModal('{{ Storage::url($kyc->utility_bill) }}')">
-                                @else
-                                    <span class="text-gray-400 text-sm">No photo</span>
-                                @endif
-                            </td>
+                                <td style="padding:.85rem 1.25rem; vertical-align:middle;">
+                                    @if($kyc->utility_bill)
+                                        <img src="{{ Storage::url($kyc->utility_bill) }}" alt="Selfie"
+                                             style="width:52px;height:52px;object-fit:cover;border-radius:8px;cursor:pointer;border:1px solid #e5e7eb;transition:border-color .2s;"
+                                             onmouseover="this.style.borderColor='#9EDD05'"
+                                             onmouseout="this.style.borderColor='#e5e7eb'"
+                                             onclick="openModal('{{ Storage::url($kyc->utility_bill) }}')">
+                                    @else
+                                        <span style="color:#9ca3af;font-size:.8rem;">No photo</span>
+                                    @endif
+                                </td>
 
-                            <td class="px-4 py-3 whitespace-nowrap">
-                                @if($kyc->status === 'pending')
-                                    <div class="flex items-center gap-2">
-                                        <form method="POST" action="{{ route('admin.kyc.approve', $kyc->id) }}">
-                                            @csrf @method('PATCH')
-                                            <button type="submit" class="inline-flex items-center gap-1 px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-xs font-semibold rounded-lg transition">
-                                                <iconify-icon icon="mdi:check"></iconify-icon> Approve
-                                            </button>
-                                        </form>
-                                        <form method="POST" action="{{ route('admin.kyc.reject', $kyc->id) }}">
-                                            @csrf @method('PATCH')
-                                            <button type="submit" class="inline-flex items-center gap-1 px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-semibold rounded-lg transition">
-                                                <iconify-icon icon="mdi:close"></iconify-icon> Reject
-                                            </button>
-                                        </form>
-                                    </div>
-                                @else
-                                    <span class="text-gray-400 italic text-sm">Already {{ $kyc->status }}</span>
-                                @endif
-                            </td>
+                                <td style="padding:.85rem 1.25rem; white-space:nowrap; vertical-align:middle;">
+                                    @if($kyc->status === 'pending')
+                                        <div style="display:flex;align-items:center;gap:8px;">
+                                            <form method="POST" action="{{ route('admin.kyc.approve', $kyc->id) }}" style="display:inline;">
+                                                @csrf @method('PATCH')
+                                                <button type="submit" style="display:inline-flex;align-items:center;gap:4px;padding:5px 12px;background:#16a34a;color:#fff;border:none;border-radius:8px;font-size:.75rem;font-weight:600;cursor:pointer;transition:background .2s;" onmouseover="this.style.background='#15803d'" onmouseout="this.style.background='#16a34a'">
+                                                    <iconify-icon icon="mdi:check"></iconify-icon> Approve
+                                                </button>
+                                            </form>
+                                            <form method="POST" action="{{ route('admin.kyc.reject', $kyc->id) }}" style="display:inline;">
+                                                @csrf @method('PATCH')
+                                                <button type="submit" style="display:inline-flex;align-items:center;gap:4px;padding:5px 12px;background:#dc2626;color:#fff;border:none;border-radius:8px;font-size:.75rem;font-weight:600;cursor:pointer;transition:background .2s;" onmouseover="this.style.background='#b91c1c'" onmouseout="this.style.background='#dc2626'">
+                                                    <iconify-icon icon="mdi:close"></iconify-icon> Reject
+                                                </button>
+                                            </form>
+                                        </div>
+                                    @else
+                                        <span style="color:#9ca3af;font-style:italic;font-size:.82rem;">Already {{ $kyc->status }}</span>
+                                    @endif
+                                </td>
 
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -111,7 +155,9 @@
 <!-- Image Modal -->
 <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-80 z-50 hidden items-center justify-center p-4" onclick="closeModal()">
     <div class="relative max-w-4xl w-full">
-        <button onclick="closeModal()" class="absolute -top-10 right-0 text-white hover:text-gray-300"><iconify-icon icon="ph:x-bold" class="text-2xl"></iconify-icon></button>
+        <button onclick="closeModal()" class="absolute -top-10 right-0 text-white hover:text-gray-300">
+            <iconify-icon icon="ph:x-bold" class="text-2xl"></iconify-icon>
+        </button>
         <img id="modalImage" class="w-full max-h-[80vh] rounded-lg shadow-2xl object-contain" onclick="event.stopPropagation();">
     </div>
 </div>

@@ -5,7 +5,7 @@
     <div class="lg:hidden mobile-logo">
        <img src="/assets/images/chartmasterbrandname1.png"  
          alt="ChartMasters Circle" 
-            class="brand-logo logo-img" style="width:180px; height:170px; justify-content:center;"
+            class="brand-logo logo-img" style="width:1400px; height:auto; justify-content:center;"
         >
     </div>
 

@@ -32,13 +32,10 @@
         transition: opacity 0.3s ease;
     }
 
-    .glass-card:hover::before {
-        opacity: 1;
-    }
-
+    .glass-card:hover::before { opacity: 1; }
     .glass-card:hover {
         transform: translateY(-2px);
-        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 12px 24px rgba(0,0,0,0.08);
     }
 
     /* ===== ADMIN/SERVER GRID ===== */
@@ -61,7 +58,7 @@
     .admin-card:hover {
         border-color: var(--primary-green);
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(158, 221, 5, 0.15);
+        box-shadow: 0 8px 20px rgba(158,221,5,0.15);
     }
 
     .admin-avatar {
@@ -76,24 +73,11 @@
         background: #f3f4f6;
     }
 
-    .admin-avatar img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .admin-avatar .fallback-icon {
-        color: var(--dark-green);
-        font-size: 1.25rem;
-    }
+    .admin-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .admin-avatar .fallback-icon { color: var(--dark-green); font-size: 1.25rem; }
 
     /* ===== STAT BADGES ===== */
-    .admin-stats {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        margin-top: 0.5rem;
-    }
+    .admin-stats { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
 
     .stat-badge {
         display: inline-flex;
@@ -107,88 +91,26 @@
         border: 1px solid #e5e7eb;
     }
 
-    .stat-badge:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    }
+    .stat-badge:hover { transform: translateY(-1px); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .stat-badge .stat-icon { font-size: 0.75rem; }
+    .stat-badge .stat-label { font-weight: 500; color: #6b7280; }
+    .stat-badge .stat-value { font-weight: 700; }
 
-    .stat-badge .stat-icon {
-        font-size: 0.75rem;
-    }
-
-    .stat-badge .stat-label {
-        font-weight: 500;
-        color: #6b7280;
-    }
-
-    .stat-badge .stat-value {
-        font-weight: 700;
-    }
-
-    .stat-badge.win-rate.high {
-        background: linear-gradient(135deg, #f0fdf4, #dcfce7);
-        border-color: #86efac;
-    }
-
-    .stat-badge.win-rate.high .stat-icon {
-        color: #16a34a;
-    }
-
-    .stat-badge.win-rate.high .stat-value {
-        color: #15803d;
-    }
-
-    .stat-badge.win-rate.medium {
-        background: linear-gradient(135deg, #fef9c3, #fef08a);
-        border-color: #fde047;
-    }
-
-    .stat-badge.win-rate.medium .stat-icon {
-        color: #ca8a04;
-    }
-
-    .stat-badge.win-rate.medium .stat-value {
-        color: #a16207;
-    }
-
-    .stat-badge.win-rate.low {
-        background: linear-gradient(135deg, #fee2e2, #fecaca);
-        border-color: #fca5a5;
-    }
-
-    .stat-badge.win-rate.low .stat-icon {
-        color: #dc2626;
-    }
-
-    .stat-badge.win-rate.low .stat-value {
-        color: #b91c1c;
-    }
-
-    .stat-badge.profit.high {
-        background: linear-gradient(135deg, #f0fdf4, #dcfce7);
-        border-color: #86efac;
-    }
-
-    .stat-badge.profit.high .stat-icon {
-        color: #16a34a;
-    }
-
-    .stat-badge.profit.high .stat-value {
-        color: #15803d;
-    }
-
-    .stat-badge.profit.low {
-        background: linear-gradient(135deg, #fee2e2, #fecaca);
-        border-color: #fca5a5;
-    }
-
-    .stat-badge.profit.low .stat-icon {
-        color: #dc2626;
-    }
-
-    .stat-badge.profit.low .stat-value {
-        color: #b91c1c;
-    }
+    .stat-badge.win-rate.high { background: linear-gradient(135deg,#f0fdf4,#dcfce7); border-color: #86efac; }
+    .stat-badge.win-rate.high .stat-icon { color: #16a34a; }
+    .stat-badge.win-rate.high .stat-value { color: #15803d; }
+    .stat-badge.win-rate.medium { background: linear-gradient(135deg,#fef9c3,#fef08a); border-color: #fde047; }
+    .stat-badge.win-rate.medium .stat-icon { color: #ca8a04; }
+    .stat-badge.win-rate.medium .stat-value { color: #a16207; }
+    .stat-badge.win-rate.low { background: linear-gradient(135deg,#fee2e2,#fecaca); border-color: #fca5a5; }
+    .stat-badge.win-rate.low .stat-icon { color: #dc2626; }
+    .stat-badge.win-rate.low .stat-value { color: #b91c1c; }
+    .stat-badge.profit.high { background: linear-gradient(135deg,#f0fdf4,#dcfce7); border-color: #86efac; }
+    .stat-badge.profit.high .stat-icon { color: #16a34a; }
+    .stat-badge.profit.high .stat-value { color: #15803d; }
+    .stat-badge.profit.low { background: linear-gradient(135deg,#fee2e2,#fecaca); border-color: #fca5a5; }
+    .stat-badge.profit.low .stat-icon { color: #dc2626; }
+    .stat-badge.profit.low .stat-value { color: #b91c1c; }
 
     /* ===== PLAN CARDS ===== */
     .plan-grid {
@@ -208,21 +130,22 @@
         display: flex;
         flex-direction: column;
         height: 100%;
+        /* FIX: default — allow events */
+        pointer-events: auto;
+        user-select: none;
     }
 
     .plan-card:hover {
         border-color: var(--primary-green);
         transform: translateY(-4px);
-        box-shadow: 0 12px 24px rgba(158, 221, 5, 0.15);
+        box-shadow: 0 12px 24px rgba(158,221,5,0.15);
     }
 
     .plan-card.selected {
         border-color: var(--primary-green);
         background: linear-gradient(135deg, #ffffff, #f8fff5);
-        box-shadow: 0 12px 24px rgba(158, 221, 5, 0.2);
+        box-shadow: 0 12px 24px rgba(158,221,5,0.2);
     }
-
-
 
     .change-trader-btn {
         background: linear-gradient(135deg, #9EDD05, #8AC304);
@@ -231,37 +154,34 @@
         border-radius: 12px;
         font-weight: 600;
         transition: all 0.25s ease;
-        box-shadow: 0 4px 12px rgba(158, 221, 5, 0.25);
+        box-shadow: 0 4px 12px rgba(158,221,5,0.25);
     }
+    .change-trader-btn:hover { background: linear-gradient(135deg,#8AC304,#9EDD05); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(158,221,5,0.35); }
+    .change-trader-btn:active { transform: scale(0.97); box-shadow: 0 3px 8px rgba(158,221,5,0.2); }
+    .change-trader-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
-    /* Hover */
-    .change-trader-btn:hover {
-        background: linear-gradient(135deg, #8AC304, #9EDD05);
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(158, 221, 5, 0.35);
-    }
-
-    /* Click effect */
-    .change-trader-btn:active {
-        transform: scale(0.97);
-        box-shadow: 0 3px 8px rgba(158, 221, 5, 0.2);
-    }
-
-    /* Disabled state (optional) */
-    .change-trader-btn:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-    }
-
+    /* ─────────────────────────────────────────────────────────────
+       FIX: limit-reached — block ALL interaction completely
+       pointer-events:none  → no clicks, no taps, no hover
+       We overlay a transparent shield div instead for the tooltip
+    ───────────────────────────────────────────────────────────── */
     .plan-card.limit-reached {
-        opacity: 0.6;
-        cursor: not-allowed;
+        opacity: 0.55;
+        cursor: not-allowed !important;
         border-color: #ef4444 !important;
+        pointer-events: none;          /* ← KEY FIX: blocks click/touch */
+        transform: none !important;
+        box-shadow: none !important;
     }
 
-    .plan-card.limit-reached:hover {
-        transform: none;
-        box-shadow: none;
+    /* Shield sits on top, absorbs any remaining events and shows cursor */
+    .plan-card.limit-reached .limit-shield {
+        position: absolute;
+        inset: 0;
+        z-index: 20;
+        cursor: not-allowed;
+        pointer-events: auto;          /* shield is clickable, card content is not */
+        border-radius: 18px;
     }
 
     .plan-checkmark {
@@ -280,23 +200,12 @@
         font-weight: bold;
     }
 
-    .plan-card.selected .plan-checkmark {
-        display: flex;
-        animation: popIn 0.3s ease;
-    }
+    .plan-card.selected .plan-checkmark { display: flex; animation: popIn 0.3s ease; }
 
     @keyframes popIn {
-        0% {
-            transform: scale(0);
-        }
-
-        50% {
-            transform: scale(1.2);
-        }
-
-        100% {
-            transform: scale(1);
-        }
+        0%   { transform: scale(0); }
+        50%  { transform: scale(1.2); }
+        100% { transform: scale(1); }
     }
 
     /* ===== BADGES & TAGS ===== */
@@ -312,30 +221,11 @@
         color: #374151;
     }
 
-    .style-badge.purple {
-        background: #f3e8ff;
-        color: #6b21a8;
-    }
-
-    .style-badge.green {
-        background: #dcfce7;
-        color: #166534;
-    }
-
-    .style-badge.yellow {
-        background: #fef9c3;
-        color: #854d0e;
-    }
-
-    .style-badge.red {
-        background: #fee2e2;
-        color: #991b1b;
-    }
-
-    .style-badge.blue {
-        background: #dbeafe;
-        color: #1e40af;
-    }
+    .style-badge.purple { background: #f3e8ff; color: #6b21a8; }
+    .style-badge.green  { background: #dcfce7; color: #166534; }
+    .style-badge.yellow { background: #fef9c3; color: #854d0e; }
+    .style-badge.red    { background: #fee2e2; color: #991b1b; }
+    .style-badge.blue   { background: #dbeafe; color: #1e40af; }
 
     .feature-pill {
         display: inline-flex;
@@ -349,11 +239,7 @@
         color: #4b5563;
         transition: all 0.2s ease;
     }
-
-    .feature-pill:hover {
-        border-color: var(--primary-green);
-        background: #f0fdf4;
-    }
+    .feature-pill:hover { border-color: var(--primary-green); background: #f0fdf4; }
 
     /* ===== FORM ELEMENTS ===== */
     .amount-input {
@@ -364,17 +250,8 @@
         font-size: 1rem;
         transition: all 0.2s ease;
     }
-
-    .amount-input:focus {
-        outline: none;
-        border-color: var(--primary-green);
-        box-shadow: 0 0 0 3px rgba(158, 221, 5, 0.1);
-    }
-
-    .amount-input:disabled {
-        background: #f9fafb;
-        cursor: not-allowed;
-    }
+    .amount-input:focus { outline: none; border-color: var(--primary-green); box-shadow: 0 0 0 3px rgba(158,221,5,0.1); }
+    .amount-input:disabled { background: #f9fafb; cursor: not-allowed; }
 
     .preset-btn {
         padding: 0.5rem 1rem;
@@ -387,17 +264,8 @@
         cursor: pointer;
         font-size: 13px;
     }
-
-    .preset-btn:hover {
-        border-color: var(--primary-green);
-        background: #f8faf7;
-    }
-
-    .preset-btn.active {
-        background: var(--primary-green);
-        border-color: var(--primary-green);
-        color: var(--dark-green);
-    }
+    .preset-btn:hover { border-color: var(--primary-green); background: #f8faf7; }
+    .preset-btn.active { background: var(--primary-green); border-color: var(--primary-green); color: var(--dark-green); }
 
     .submit-btn {
         width: 100%;
@@ -411,138 +279,56 @@
         cursor: pointer;
         transition: all 0.3s ease;
     }
-
-    .submit-btn:hover:not(:disabled) {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 16px rgba(158, 221, 5, 0.3);
-    }
-
-    .submit-btn:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-        transform: none !important;
-        box-shadow: none !important;
-    }
-
-    .submit-btn.submitting {
-        background: linear-gradient(135deg, #8AC304, #7AB503);
-        cursor: wait;
-        pointer-events: none;
-        opacity: 0.8;
-    }
+    .submit-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(158,221,5,0.3); }
+    .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+    .submit-btn.submitting { background: linear-gradient(135deg,#8AC304,#7AB503); cursor: wait; pointer-events: none; opacity: 0.8; }
 
     .loading-spinner {
         display: inline-block;
         width: 18px;
         height: 18px;
-        border: 2px solid rgba(12, 58, 48, 0.3);
+        border: 2px solid rgba(12,58,48,0.3);
         border-top-color: #0C3A30;
         border-radius: 50%;
         animation: spin 0.8s linear infinite;
         margin-right: 8px;
         vertical-align: middle;
     }
-
-    @keyframes spin {
-        to {
-            transform: rotate(360deg);
-        }
-    }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
     /* ===== STAT CARDS ===== */
     .stat-card {
         background: white;
         border-radius: 16px;
         padding: 1.25rem;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         border-left: 4px solid;
         transition: all 0.2s ease;
     }
-
-    .stat-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
-    }
-
-    .stat-card.green {
-        border-color: var(--primary-green);
-    }
-
-    .stat-card.success {
-        border-color: #10b981;
-    }
-
-    .stat-card.info {
-        border-color: #3b82f6;
-    }
-
-    .stat-card.warning {
-        border-color: #f59e0b;
-    }
+    .stat-card:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(0,0,0,0.08); }
+    .stat-card.green   { border-color: var(--primary-green); }
+    .stat-card.success { border-color: #10b981; }
+    .stat-card.info    { border-color: #3b82f6; }
+    .stat-card.warning { border-color: #f59e0b; }
 
     /* ===== UTILITY ===== */
-    .balance-highlight {
-        font-size: 2rem;
-        font-weight: 700;
-        line-height: 1.2;
-        color: var(--dark-green);
-    }
-
-    .text-small {
-        font-size: 0.75rem;
-        color: #6b7280;
-    }
+    .balance-highlight { font-size: 2rem; font-weight: 700; line-height: 1.2; color: var(--dark-green); }
+    .text-small { font-size: 0.75rem; color: #6b7280; }
 
     @keyframes slideUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        from { opacity: 0; transform: translateY(20px); }
+        to   { opacity: 1; transform: translateY(0); }
     }
+    .animate-slide-up { animation: slideUp 0.5s ease forwards; }
 
-    .animate-slide-up {
-        animation: slideUp 0.5s ease forwards;
-    }
-
-    .asset-tag {
-        background: #f3f4f6;
-        padding: 2px 8px;
-        border-radius: 20px;
-        font-size: 0.7rem;
-        color: #4b5563;
-    }
+    .asset-tag { background: #f3f4f6; padding: 2px 8px; border-radius: 20px; font-size: 0.7rem; color: #4b5563; }
 
     /* ===== CHANGE ADMIN ===== */
-    #changeAdminSelect {
-        transition: all 0.2s ease;
-        cursor: pointer;
-        background-color: #ffffff;
-    }
-
-    #changeAdminSelect:hover {
-        border-color: var(--primary-green);
-        box-shadow: 0 2px 8px rgba(158, 221, 5, 0.1);
-    }
-
-    #changeAdminSelect:focus {
-        border-color: var(--primary-green);
-        box-shadow: 0 0 0 3px rgba(158, 221, 5, 0.1);
-        outline: none;
-    }
-
-    #changeAdminBtn {
-        transition: all 0.3s ease;
-        cursor: pointer;
-    }
-
-    #changeAdminBtn:active {
-        transform: scale(0.98);
-    }
+    #changeAdminSelect { transition: all 0.2s ease; cursor: pointer; background-color: #ffffff; }
+    #changeAdminSelect:hover { border-color: var(--primary-green); box-shadow: 0 2px 8px rgba(158,221,5,0.1); }
+    #changeAdminSelect:focus { border-color: var(--primary-green); box-shadow: 0 0 0 3px rgba(158,221,5,0.1); outline: none; }
+    #changeAdminBtn { transition: all 0.3s ease; cursor: pointer; }
+    #changeAdminBtn:active { transform: scale(0.98); }
 
     /* ===== TOAST ===== */
     .toast-message {
@@ -555,92 +341,34 @@
         font-weight: 600;
         z-index: 9999;
         animation: slideUp 0.3s ease;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.15);
     }
-
-    .toast-message.success {
-        background: #dcfce7;
-        color: #166534;
-        border: 1px solid #86efac;
-    }
-
-    .toast-message.error {
-        background: #fee2e2;
-        color: #991b1b;
-        border: 1px solid #fca5a5;
-    }
+    .toast-message.success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+    .toast-message.error   { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
 
     /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
-        .admin-grid {
-            grid-template-columns: 1fr;
-            gap: 1rem;
-        }
-
-        .admin-card {
-            padding: 1rem;
-        }
-
-        .admin-avatar {
-            width: 40px;
-            height: 40px;
-        }
-
-        .glass-card {
-            padding: 1rem;
-        }
-
-        .gap-6 {
-            gap: 1rem;
-        }
-
-        .admin-stats {
-            gap: 0.375rem;
-        }
-
-        .stat-badge {
-            padding: 0.1875rem 0.5rem;
-            font-size: 0.65rem;
-        }
-
-        select#changeAdminSelect,
-        button#changeAdminBtn {
-            width: 100%;
-        }
-
-        button#changeAdminBtn {
-            justify-content: center;
-        }
+        .admin-grid { grid-template-columns: 1fr; gap: 1rem; }
+        .admin-card { padding: 1rem; }
+        .admin-avatar { width: 40px; height: 40px; }
+        .glass-card { padding: 1rem; }
+        .gap-6 { gap: 1rem; }
+        .admin-stats { gap: 0.375rem; }
+        .stat-badge { padding: 0.1875rem 0.5rem; font-size: 0.65rem; }
+        select#changeAdminSelect, button#changeAdminBtn { width: 100%; }
+        button#changeAdminBtn { justify-content: center; }
     }
 
     @media (max-width: 480px) {
-        .admin-card {
-            padding: 0.75rem;
-        }
-
-        .admin-avatar {
-            width: 36px;
-            height: 36px;
-        }
-
-        .glass-card {
-            padding: 0.75rem;
-        }
-
-        .mt-6 {
-            margin-top: 0.8rem;
-        }
+        .admin-card { padding: 0.75rem; }
+        .admin-avatar { width: 36px; height: 36px; }
+        .glass-card { padding: 0.75rem; }
+        .mt-6 { margin-top: 0.8rem; }
     }
 
     @media (min-width: 1025px) {
-        #changeAdminSelect {
-            max-width: 450px;
-        }
-
-        #changeAdminBtn {
-            min-width: 160px;
-            padding: 0.75rem 2rem;
-        }
+        #changeAdminSelect { max-width: 450px; }
+        #changeAdminBtn { min-width: 160px; padding: 0.75rem 2rem; }
     }
 </style>
 
@@ -720,10 +448,10 @@
                             </p>
                             @if($copyAdmin)
                             @php
-                            $profitClass = $copyAdmin->profit_margin >= 0 ? 'high' : 'low';
-                            $winRateClass = 'low';
-                            if ($copyAdmin->win_rate >= 70) $winRateClass = 'high';
-                            elseif ($copyAdmin->win_rate >= 50) $winRateClass = 'medium';
+                                $profitClass = $copyAdmin->profit_margin >= 0 ? 'high' : 'low';
+                                $winRateClass = 'low';
+                                if ($copyAdmin->win_rate >= 70) $winRateClass = 'high';
+                                elseif ($copyAdmin->win_rate >= 50) $winRateClass = 'medium';
                             @endphp
                             <div class="admin-stats">
                                 <div class="stat-badge profit {{ $profitClass }}">
@@ -785,7 +513,6 @@
                 <div class="lg:col-span-1 flex justify-start lg:justify-end">
                     <button id="changeAdminBtn"
                         class="change-trader-btn inline-flex items-center gap-2 px-6 py-3 font-bold rounded-xl text-sm">
-
                         <iconify-icon icon="ph:arrows-clockwise-fill" class="text-lg"></iconify-icon>
                         <span>Change Trader</span>
                     </button>
@@ -828,20 +555,20 @@
             <div class="plan-grid" id="planGrid">
                 @foreach($plans as $plan)
                 @php
-                $userActiveParticipations = App\Models\Investment::where('user_id', auth()->id())
-                ->where('plan_id', $plan->id)
-                ->where('type', 'copy_trading')
-                ->where('status', 'active')
-                ->count();
+                    $userActiveParticipations = App\Models\Investment::where('user_id', auth()->id())
+                        ->where('plan_id', $plan->id)
+                        ->where('type', 'copy_trading')
+                        ->where('status', 'active')
+                        ->count();
 
-                $userPendingParticipations = App\Models\CopyTradingRequest::where('user_id', auth()->id())
-                ->where('plan_id', $plan->id)
-                ->where('status', 'pending')
-                ->count();
+                    $userPendingParticipations = App\Models\CopyTradingRequest::where('user_id', auth()->id())
+                        ->where('plan_id', $plan->id)
+                        ->where('status', 'pending')
+                        ->count();
 
-                $planLimit = $plan->max_participations ?? 3;
-                $totalParticipations = $userActiveParticipations + $userPendingParticipations;
-                $isLimitReached = $totalParticipations >= $planLimit;
+                    $planLimit = $plan->max_participations ?? 3;
+                    $totalParticipations = $userActiveParticipations + $userPendingParticipations;
+                    $isLimitReached = $totalParticipations >= $planLimit;
                 @endphp
 
                 <div class="plan-card {{ $isLimitReached ? 'limit-reached' : '' }}"
@@ -856,18 +583,29 @@
                     data-max-participations="{{ $planLimit }}"
                     data-limit-reached="{{ $isLimitReached ? 'true' : 'false' }}">
 
+                    {{--
+                        FIX: Shield div sits above all card content on limit-reached cards.
+                        pointer-events:none on the card blocks children too, so the shield
+                        re-enables events only for the "not allowed" cursor experience.
+                        The shield does NOT forward clicks — it swallows them silently.
+                    --}}
+                    @if($isLimitReached)
+                    <div class="limit-shield" aria-hidden="true"></div>
+                    @endif
+
                     @if($isLimitReached)
                     <div class="absolute top-0 left-2 z-10"
                         style="background: linear-gradient(135deg, #ff4444, #cc0000);
-                color: #fff !important;
-                font-size: 0.65rem;
-                font-weight: 700;
-                padding: 3px 10px;
-                border-radius: 20px;
-                box-shadow: 0 2px 8px rgba(220, 0, 0, 0.4);
-                letter-spacing: 0.03em;
-                border: 1px solid rgba(255,255,255,0.2);">
-                        🚫 Limit Reached ({{ $totalParticipations }}/{{ $planLimit }})
+                               color: #fff !important;
+                               font-size: 0.65rem;
+                               font-weight: 700;
+                               padding: 3px 10px;
+                               border-radius: 20px;
+                               box-shadow: 0 2px 8px rgba(220,0,0,0.4);
+                               letter-spacing: 0.03em;
+                               border: 1px solid rgba(255,255,255,0.2);
+                               pointer-events: none;">
+                        Limit Reached ({{ $totalParticipations }}/{{ $planLimit }})
                     </div>
                     @endif
 
@@ -896,13 +634,14 @@
                         </span>
                         @endif
                     </div>
-                    <!-- Recommended For -->
+
                     @if($plan->recommended_for)
                     <p class="text-xs text-gray-500 mt-2">
                         <iconify-icon icon="ph:user-star-fill" class="mr-1 text-yellow-500"></iconify-icon>
                         Recommended for: <span class="font-semibold">{{ $plan->recommended_for }}</span>
                     </p>
                     @endif
+
                     <!-- Returns -->
                     <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 mb-4">
                         <div class="flex justify-between items-center mb-2">
@@ -993,9 +732,6 @@
                         @endforeach
                     </div>
                     @endif
-
-
-
 
                 </div>
                 @endforeach
@@ -1108,350 +844,322 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
 
-        /* ─── ELEMENTS ─────────────────────────────────────────── */
-        const planCards = document.querySelectorAll('.plan-card');
-        const planIdInput = document.getElementById('plan_id_input');
-        const amountInput = document.getElementById('amount_input');
-        const submitBtn = document.getElementById('submitRequestBtn');
-        const selectedPlanInfo = document.getElementById('selectedPlanInfo');
-        const selectedPlanName = document.getElementById('selectedPlanName');
-        const selectedMin = document.getElementById('selectedMin');
-        const selectedMax = document.getElementById('selectedMax');
-        const selectedRate = document.getElementById('selectedRate');
-        const selectedDuration = document.getElementById('selectedDuration');
-        const selectedDurationUnit = document.getElementById('selectedDurationUnit');
-        const planDuration = document.getElementById('planDuration');
-        const planDurationUnit = document.getElementById('planDurationUnit');
-        const quickAmountsContainer = document.getElementById('quickAmountsContainer');
-        const balanceWarning = document.getElementById('balanceWarning');
-        const expectedReturnSection = document.getElementById('expectedReturnSection');
-        const expectedReturn = document.getElementById('expectedReturn');
-        const totalReturn = document.getElementById('totalReturn');
-        const requestFormCard = document.getElementById('requestFormCard');
-        const planLimitWarning = document.getElementById('planLimitWarning');
-        const planLimitMessage = document.getElementById('planLimitMessage');
-        const changeBtn = document.getElementById('changeAdminBtn');
-        const changeSelect = document.getElementById('changeAdminSelect');
+    /* ─── ELEMENTS ─────────────────────────────────────────── */
+    const planCards             = document.querySelectorAll('.plan-card:not(.limit-reached)'); // FIX: only attach listeners to non-limited cards
+    const planIdInput           = document.getElementById('plan_id_input');
+    const amountInput           = document.getElementById('amount_input');
+    const submitBtn             = document.getElementById('submitRequestBtn');
+    const selectedPlanInfo      = document.getElementById('selectedPlanInfo');
+    const selectedPlanName      = document.getElementById('selectedPlanName');
+    const selectedMin           = document.getElementById('selectedMin');
+    const selectedMax           = document.getElementById('selectedMax');
+    const selectedRate          = document.getElementById('selectedRate');
+    const selectedDuration      = document.getElementById('selectedDuration');
+    const selectedDurationUnit  = document.getElementById('selectedDurationUnit');
+    const planDuration          = document.getElementById('planDuration');
+    const planDurationUnit      = document.getElementById('planDurationUnit');
+    const quickAmountsContainer = document.getElementById('quickAmountsContainer');
+    const balanceWarning        = document.getElementById('balanceWarning');
+    const expectedReturnSection = document.getElementById('expectedReturnSection');
+    const expectedReturn        = document.getElementById('expectedReturn');
+    const totalReturn           = document.getElementById('totalReturn');
+    const requestFormCard       = document.getElementById('requestFormCard');
+    const planLimitWarning      = document.getElementById('planLimitWarning');
+    const planLimitMessage      = document.getElementById('planLimitMessage');
+    const changeBtn             = document.getElementById('changeAdminBtn');
+    const changeSelect          = document.getElementById('changeAdminSelect');
 
-        const userBalance = {
-            {
-                $user - > available_balance
-            }
-        };
-        const csrfToken = '{{ csrf_token() }}';
+    const userBalance = {{ $user->available_balance }};
+    const csrfToken   = '{{ csrf_token() }}';
 
-        let selectedPlan = null;
-        let isChangingAdmin = false;
+    let selectedPlan     = null;
+    let isChangingAdmin  = false;
+    let isCheckingLimit  = false; // FIX: guard against double-clicks during async check
 
-        /* ─── HELPERS ───────────────────────────────────────────── */
-        function getDurationUnitText(unit) {
-            return unit === 'minutes' ? 'minutes' : unit === 'hours' ? 'hours' : 'days';
-        }
+    /* ─── HELPERS ───────────────────────────────────────────── */
+    function getDurationUnitText(unit) {
+        return unit === 'minutes' ? 'minutes' : unit === 'hours' ? 'hours' : 'days';
+    }
 
-        function formatMoney(num) {
-            return '$' + Number(num).toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
+    function formatMoney(num) {
+        return '$' + Number(num).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function showLimitWarning(message) {
+        planLimitWarning.classList.remove('hidden');
+        planLimitMessage.textContent = message;
+        amountInput.disabled = true;
+        amountInput.value = '';
+        submitBtn.disabled = true;
+        document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+        expectedReturnSection.classList.add('hidden');
+        balanceWarning.classList.add('hidden');
+        quickAmountsContainer.style.display = 'none';
+    }
+
+    function hideLimitWarning() {
+        planLimitWarning.classList.add('hidden');
+        planLimitMessage.textContent = '';
+    }
+
+    /* ─── VALIDATE FORM ─────────────────────────────────────── */
+    function validateForm() {
+        const amount      = parseFloat(amountInput.value) || 0;
+        const limitActive = !planLimitWarning.classList.contains('hidden');
+
+        const isValid =
+            selectedPlan &&
+            amount >= selectedPlan.min &&
+            amount <= selectedPlan.max &&
+            amount <= userBalance &&
+            !limitActive;
+
+        submitBtn.disabled = !isValid;
+    }
+
+    /* ─── CHECK PLAN LIMIT (async) ──────────────────────────── */
+    async function checkPlanLimit(planId) {
+        try {
+            const response = await fetch(`/copy-trading/check-plan-limit/${planId}`, {
+                method: 'GET',
+                headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken }
             });
-        }
 
-        function showLimitWarning(message) {
-            planLimitWarning.classList.remove('hidden');
-            planLimitMessage.textContent = message;
-            amountInput.disabled = true;
-            amountInput.value = '';
-            submitBtn.disabled = true;
-            document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+            if (!response.ok) throw new Error('Request failed');
+
+            const data = await response.json();
+
+            if (data.has_reached_limit) {
+                showLimitWarning(
+                    `Maximum ${data.plan_limit} participation${data.plan_limit > 1 ? 's' : ''} reached. ` +
+                    `You currently have ${data.current_participations} (active + pending).`
+                );
+                return true;  // limit reached
+            } else {
+                hideLimitWarning();
+                amountInput.disabled = false;
+                return false; // ok
+            }
+
+        } catch (err) {
+            console.error('checkPlanLimit error:', err);
+            hideLimitWarning();
+            amountInput.disabled = false;
+            return false;
+        }
+    }
+
+    /* ─── PLAN CARD CLICK ───────────────────────────────────── */
+    // FIX: listeners are only attached to cards that are NOT .limit-reached
+    // (the selector above already filters them out)
+    planCards.forEach(card => {
+        card.addEventListener('click', async function (e) {
+            e.preventDefault();
+
+            // FIX: hard guard — should never be true here, but kept as safety net
+            if (this.dataset.limitReached === 'true') return;
+
+            // FIX: prevent double-click while an async check is already running
+            if (isCheckingLimit) return;
+
+            isCheckingLimit = true;
+
+            // Deselect all eligible cards, select this one
+            planCards.forEach(c => c.classList.remove('selected'));
+            this.classList.add('selected');
+
+            selectedPlan = {
+                id:               this.dataset.planId,
+                min:              parseFloat(this.dataset.min),
+                max:              parseFloat(this.dataset.max),
+                rate:             parseFloat(this.dataset.rate),
+                duration:         parseInt(this.dataset.duration),
+                durationUnit:     this.dataset.durationUnit,
+                name:             this.dataset.name,
+                maxParticipations: parseInt(this.dataset.maxParticipations || 3),
+            };
+
+            planIdInput.value = selectedPlan.id;
+
+            // Update plan info display
+            selectedPlanName.textContent     = selectedPlan.name;
+            selectedMin.textContent          = selectedPlan.min.toLocaleString();
+            selectedMax.textContent          = selectedPlan.max.toLocaleString();
+            selectedRate.textContent         = selectedPlan.rate + '%';
+            selectedDuration.textContent     = selectedPlan.duration;
+            selectedDurationUnit.textContent = getDurationUnitText(selectedPlan.durationUnit);
+            planDuration.textContent         = selectedPlan.duration;
+            planDurationUnit.textContent     = getDurationUnitText(selectedPlan.durationUnit);
+
+            selectedPlanInfo.classList.remove('hidden');
+            selectedPlanInfo.classList.add('animate-slide-up');
+
+            // Lock form while checking
+            amountInput.disabled  = true;
+            submitBtn.disabled    = true;
+            submitBtn.textContent = 'Checking…';
+
+            const limited = await checkPlanLimit(selectedPlan.id);
+
+            submitBtn.textContent = 'Submit Request';
+            isCheckingLimit = false;
+
+            if (!limited) {
+                generateQuickAmounts(selectedPlan.min, selectedPlan.max);
+                quickAmountsContainer.style.display = 'block';
+                validateForm();
+            }
+
+            setTimeout(() => {
+                requestFormCard?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                if (!amountInput.disabled) amountInput.focus();
+            }, 300);
+        });
+    });
+
+    /* ─── QUICK AMOUNTS ─────────────────────────────────────── */
+    function generateQuickAmounts(min, max) {
+        const container = document.getElementById('quickAmountButtons');
+        if (!container) return;
+        container.innerHTML = '';
+
+        const amounts = [min, Math.min(min * 2, max), Math.min(min * 3, max), max];
+
+        amounts.forEach(amount => {
+            const btn = document.createElement('button');
+            btn.type      = 'button';
+            btn.className = 'preset-btn';
+            btn.textContent = '$' + amount.toLocaleString();
+
+            btn.onclick = () => {
+                amountInput.value = amount;
+                document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                calculateExpectedReturn();
+                validateForm();
+            };
+
+            container.appendChild(btn);
+        });
+    }
+
+    /* ─── AMOUNT INPUT ──────────────────────────────────────── */
+    amountInput?.addEventListener('input', function () {
+        document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+        calculateExpectedReturn();
+        validateForm();
+    });
+
+    function calculateExpectedReturn() {
+        const amount = parseFloat(amountInput.value) || 0;
+
+        if (amount > 0 && selectedPlan) {
+            const profit = (amount * selectedPlan.rate) / 100;
+            const total  = amount + profit;
+
+            expectedReturn.textContent = formatMoney(profit);
+            totalReturn.textContent    = formatMoney(total);
+            expectedReturnSection.classList.remove('hidden');
+
+            balanceWarning.classList.toggle('hidden', amount <= userBalance);
+        } else {
             expectedReturnSection.classList.add('hidden');
             balanceWarning.classList.add('hidden');
         }
+    }
 
-        function hideLimitWarning() {
-            planLimitWarning.classList.add('hidden');
-            planLimitMessage.textContent = '';
+    /* ─── FORM SUBMIT ───────────────────────────────────────── */
+    document.getElementById('copyTradingForm')?.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        if (submitBtn.disabled || submitBtn.classList.contains('submitting')) return;
+
+        const amount = parseFloat(amountInput.value);
+
+        if (amount > userBalance) {
+            showToast('Insufficient balance', 'error');
+            return;
         }
 
-        /* ─── VALIDATE FORM ─────────────────────────────────────── */
-        function validateForm() {
-            const amount = parseFloat(amountInput.value) || 0;
-            const limitReached = !planLimitWarning.classList.contains('hidden');
+        submitBtn.disabled = true;
+        submitBtn.classList.add('submitting');
+        submitBtn.innerHTML = '<div class="loading-spinner"></div> Processing…';
 
-            const isValid = selectedPlan &&
-                amount >= selectedPlan.min &&
-                amount <= selectedPlan.max &&
-                amount <= userBalance &&
-                !limitReached;
-
-            submitBtn.disabled = !isValid;
-        }
-
-        /* ─── CHECK PLAN LIMIT (async, returns bool) ────────────── */
-        async function checkPlanLimit(planId) {
-            try {
-                const response = await fetch(`/copy-trading/check-plan-limit/${planId}`, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken
-                    }
-                });
-
-                if (!response.ok) throw new Error('Request failed');
-
-                const data = await response.json();
-
-                if (data.has_reached_limit) {
-                    showLimitWarning(
-                        `Maximum ${data.plan_limit} participations reached. ` +
-                        `You currently have ${data.current_participations} (active + pending).`
-                    );
-                } else {
-                    hideLimitWarning();
-                    amountInput.disabled = false;
-                }
-
-            } catch (err) {
-                console.error('checkPlanLimit error:', err);
-                // Don't block the user if the check fails — let server-side validate
-                hideLimitWarning();
-                amountInput.disabled = false;
-            }
-        }
-
-        /* ─── MARK LIMIT-REACHED CARDS ON LOAD ─────────────────── */
-        async function initPlanCards() {
-            for (const card of planCards) {
-                // Cards already flagged server-side via data attribute — no extra fetch needed
-                if (card.dataset.limitReached === 'true') {
-                    card.classList.add('limit-reached');
-                }
-            }
-        }
-
-        initPlanCards();
-
-        /* ─── PLAN CARD CLICK ───────────────────────────────────── */
-        planCards.forEach(card => {
-            card.addEventListener('click', async function(e) {
-                e.preventDefault();
-
-                // If server already flagged this plan as limit-reached, block immediately
-                if (this.dataset.limitReached === 'true') {
-                    showLimitWarning('You have reached the maximum limit for this plan.');
-                    return;
-                }
-
-                // Deselect all, select clicked
-                planCards.forEach(c => c.classList.remove('selected'));
-                this.classList.add('selected');
-
-                selectedPlan = {
-                    id: this.dataset.planId,
-                    min: parseFloat(this.dataset.min),
-                    max: parseFloat(this.dataset.max),
-                    rate: parseFloat(this.dataset.rate),
-                    duration: parseInt(this.dataset.duration),
-                    durationUnit: this.dataset.durationUnit,
-                    name: this.dataset.name,
-                    maxParticipations: parseInt(this.dataset.maxParticipations || 3),
-                };
-
-                planIdInput.value = selectedPlan.id;
-
-                // Update selected plan display
-                selectedPlanName.textContent = selectedPlan.name;
-                selectedMin.textContent = selectedPlan.min.toLocaleString();
-                selectedMax.textContent = selectedPlan.max.toLocaleString();
-                selectedRate.textContent = selectedPlan.rate + '%';
-                selectedDuration.textContent = selectedPlan.duration;
-                selectedDurationUnit.textContent = getDurationUnitText(selectedPlan.durationUnit);
-                planDuration.textContent = selectedPlan.duration;
-                planDurationUnit.textContent = getDurationUnitText(selectedPlan.durationUnit);
-
-                selectedPlanInfo.classList.remove('hidden');
-                selectedPlanInfo.classList.add('animate-slide-up');
-
-                // Disable inputs while we check limit
-                amountInput.disabled = true;
-                submitBtn.disabled = true;
-                submitBtn.textContent = 'Checking...';
-
-                // ✅ AWAIT the limit check before enabling anything
-                await checkPlanLimit(selectedPlan.id);
-
-                submitBtn.textContent = 'Submit Request';
-
-                // Only generate quick amounts and validate if limit not reached
-                if (planLimitWarning.classList.contains('hidden')) {
-                    generateQuickAmounts(selectedPlan.min, selectedPlan.max);
-                    quickAmountsContainer.style.display = 'block';
-                }
-
-                validateForm();
-
-                setTimeout(() => {
-                    requestFormCard?.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'center'
-                    });
-                    if (!amountInput.disabled) amountInput.focus();
-                }, 300);
-            });
-        });
-
-        /* ─── QUICK AMOUNTS ─────────────────────────────────────── */
-        function generateQuickAmounts(min, max) {
-            const container = document.getElementById('quickAmountButtons');
-            if (!container) return;
-            container.innerHTML = '';
-
-            const amounts = [min, Math.min(min * 2, max), Math.min(min * 3, max), max];
-
-            amounts.forEach(amount => {
-                const btn = document.createElement('button');
-                btn.type = 'button';
-                btn.className = 'preset-btn';
-                btn.textContent = '$' + amount.toLocaleString();
-
-                btn.onclick = () => {
-                    amountInput.value = amount;
-                    document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    calculateExpectedReturn();
-                    validateForm();
-                };
-
-                container.appendChild(btn);
-            });
-        }
-
-        /* ─── AMOUNT INPUT ──────────────────────────────────────── */
-        amountInput?.addEventListener('input', function() {
-            document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
-            calculateExpectedReturn();
-            validateForm();
-        });
-
-        function calculateExpectedReturn() {
-            const amount = parseFloat(amountInput.value) || 0;
-
-            if (amount > 0 && selectedPlan) {
-                const profit = (amount * selectedPlan.rate) / 100;
-                const total = amount + profit;
-
-                expectedReturn.textContent = formatMoney(profit);
-                totalReturn.textContent = formatMoney(total);
-                expectedReturnSection.classList.remove('hidden');
-
-                balanceWarning.classList.toggle('hidden', amount <= userBalance);
+        fetch('{{ route("copy-trading.store") }}', {
+            method: 'POST',
+            headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken },
+            body: new FormData(this),
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                showToast(data.message, 'success');
+                setTimeout(() => window.location.href = '{{ route("copy-trading.history") }}', 1500);
             } else {
-                expectedReturnSection.classList.add('hidden');
-                balanceWarning.classList.add('hidden');
+                throw new Error(data.message);
             }
-        }
+        })
+        .catch(err => {
+            showToast(err.message || 'An error occurred', 'error');
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('submitting');
+            submitBtn.innerHTML = 'Submit Request';
+        });
+    });
 
-        /* ─── FORM SUBMIT ───────────────────────────────────────── */
-        document.getElementById('copyTradingForm')?.addEventListener('submit', function(e) {
-            e.preventDefault();
+    /* ─── CHANGE ADMIN ──────────────────────────────────────── */
+    if (changeBtn && changeSelect) {
+        changeBtn.addEventListener('click', function () {
+            if (isChangingAdmin) return;
 
-            if (submitBtn.disabled || submitBtn.classList.contains('submitting')) return;
+            const adminId = changeSelect.value;
 
-            const amount = parseFloat(amountInput.value);
-
-            if (amount > userBalance) {
-                showToast('Insufficient balance', 'error');
+            if (!adminId) {
+                showToast('Please select an admin first', 'error');
                 return;
             }
 
-            submitBtn.disabled = true;
-            submitBtn.classList.add('submitting');
-            submitBtn.innerHTML = '<div class="loading-spinner"></div> Processing...';
+            isChangingAdmin = true;
 
-            fetch('{{ route("copy-trading.store") }}', {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken,
-                    },
-                    body: new FormData(this),
-                })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
-                        showToast(data.message, 'success');
-                        setTimeout(() => window.location.href = '{{ route("copy-trading.history") }}', 1500);
-                    } else {
-                        throw new Error(data.message);
-                    }
-                })
-                .catch(err => {
-                    showToast(err.message || 'An error occurred', 'error');
-                    submitBtn.disabled = false;
-                    submitBtn.classList.remove('submitting');
-                    submitBtn.innerHTML = 'Submit Request';
-                });
-        });
+            const originalHTML = changeBtn.innerHTML;
+            changeBtn.disabled = true;
+            changeBtn.innerHTML = '<div class="loading-spinner"></div> Changing…';
 
-        /* ─── CHANGE ADMIN ──────────────────────────────────────── */
-        if (changeBtn && changeSelect) {
-            changeBtn.addEventListener('click', function() {
-                if (isChangingAdmin) return;
-
-                const adminId = changeSelect.value;
-
-                if (!adminId) {
-                    showToast('Please select an admin first', 'error');
-                    return;
+            fetch('{{ route("copy-trading.change-admin") }}', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json' },
+                body: JSON.stringify({ admin_id: adminId }),
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('Trader switched successfully', 'success');
+                    setTimeout(() => location.reload(), 1200);
+                } else {
+                    throw new Error(data.message);
                 }
-
-                isChangingAdmin = true;
-
-                const originalHTML = changeBtn.innerHTML;
-                changeBtn.disabled = true;
-                changeBtn.innerHTML = '<div class="loading-spinner"></div> Changing...';
-
-                fetch('{{ route("copy-trading.change-admin") }}', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': csrfToken,
-                            'Accept': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            admin_id: adminId
-                        }),
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.success) {
-                            showToast('Trader switched successfully', 'success');
-                            setTimeout(() => location.reload(), 1200);
-                        } else {
-                            throw new Error(data.message);
-                        }
-                    })
-                    .catch(() => {
-                        showToast('Failed to change trader', 'error');
-                        changeBtn.disabled = false;
-                        changeBtn.innerHTML = originalHTML;
-                        isChangingAdmin = false;
-                    });
+            })
+            .catch(() => {
+                showToast('Failed to change trader', 'error');
+                changeBtn.disabled = false;
+                changeBtn.innerHTML = originalHTML;
+                isChangingAdmin = false;
             });
-        }
+        });
+    }
 
-        /* ─── TOAST ─────────────────────────────────────────────── */
-        function showToast(message, type = 'success') {
-            const toast = document.createElement('div');
-            toast.className = `toast-message ${type}`;
-            toast.textContent = message;
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
-        }
+    /* ─── TOAST ─────────────────────────────────────────────── */
+    function showToast(message, type = 'success') {
+        const toast = document.createElement('div');
+        toast.className   = `toast-message ${type}`;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
 
-        window.showMessage = showToast;
-
-    });
+    window.showMessage = showToast;
+});
 </script>
 @endsection
