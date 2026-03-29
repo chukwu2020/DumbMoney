@@ -3,12 +3,13 @@
         <iconify-icon icon="radix-icons:cross-2"></iconify-icon>
     </button>
     <div class="lg:hidden mobile-logo">
-        <img 
-            src="{{ asset('assets/images/mymarketmindmainlogo.png') }}" 
-            alt="Market Mind Logo" 
+       <img src="/assets/images/chartmasterbrandname1.png"  
+         alt="ChartMasters Circle" 
             class="brand-logo logo-img" style="width:180px; height:170px; justify-content:center;"
         >
     </div>
+
+    
 
     <div class="sidebar-menu-area">
         <ul class="sidebar-menu" id="sidebar-menu">

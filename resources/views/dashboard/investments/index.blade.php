@@ -13,6 +13,7 @@
         --completed-border: #3b82f6;
     }
 
+    /* Improved Tab Container - Better spacing for all screen sizes */
     .invest-tab-container {
         display: flex;
         gap: 0.5rem;
@@ -20,11 +21,30 @@
         padding: 0.5rem;
         border-radius: 12px;
         margin-bottom: 2rem;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+    }
+
+    /* Hide scrollbar for cleaner look on desktop */
+    .invest-tab-container::-webkit-scrollbar {
+        height: 3px;
+    }
+
+    .invest-tab-container::-webkit-scrollbar-track {
+        background: #e5e7eb;
+        border-radius: 10px;
+    }
+
+    .invest-tab-container::-webkit-scrollbar-thumb {
+        background: var(--primary-green);
+        border-radius: 10px;
     }
 
     .invest-tab-btn {
-        flex: 1;
-        padding: 0.75rem 1.5rem;
+        flex: 0 0 auto;
+        padding: 0.75rem 1.25rem;
         border: none;
         border-radius: 10px;
         font-weight: 600;
@@ -37,6 +57,59 @@
         align-items: center;
         justify-content: center;
         gap: 0.5rem;
+        white-space: nowrap;
+    }
+
+    /* Tablet adjustments */
+    @media (max-width: 768px) {
+        .invest-tab-btn {
+            padding: 0.65rem 1rem;
+            font-size: 0.8rem;
+            gap: 0.4rem;
+        }
+        
+        .invest-tab-btn span {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.4rem;
+        }
+    }
+
+    /* Mobile adjustments - Make tabs smaller to fit */
+    @media (max-width: 480px) {
+        .invest-tab-container {
+            gap: 0.35rem;
+            padding: 0.4rem;
+        }
+        
+        .invest-tab-btn {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.7rem;
+            gap: 0.3rem;
+        }
+        
+        .invest-tab-btn iconify-icon {
+            font-size: 0.9rem;
+        }
+        
+        .invest-tab-btn span {
+            font-size: 0.6rem;
+            padding: 0.15rem 0.35rem;
+        }
+    }
+
+    /* Very small screens - Show icons only? Alternative approach */
+    @media (max-width: 380px) {
+        .invest-tab-btn .tab-text {
+            display: none;
+        }
+        
+        .invest-tab-btn {
+            padding: 0.5rem;
+        }
+        
+        .invest-tab-btn iconify-icon {
+            font-size: 1.1rem;
+        }
     }
 
     .invest-tab-btn:hover {
@@ -266,18 +339,18 @@
         </div>
         @endif
 
-        <!-- Tabs -->
+        <!-- Tabs - Now properly sized to fit all three tabs -->
         <div class="invest-tab-container">
             <button class="invest-tab-btn active" onclick="switchInvestTab('active')">
                 <iconify-icon icon="ph:play-fill"></iconify-icon>
-                Active
+                <span class="tab-text">Active</span>
                 <span class="text-white text-xs px-2 py-0.5 rounded-full" style="background: var(--primary-green) !important; color: var(--dark-green) !important;">
                     {{ $activeInvestments->count() }}
                 </span>
             </button>
             <button class="invest-tab-btn" onclick="switchInvestTab('completed')">
                 <iconify-icon icon="ph:check-circle-fill" style="color:#9EDD05 !important;"></iconify-icon>
-                Completed
+                <span class="tab-text">Completed</span>
                 @if($completedInvestments->count() > 0)
                 <span class="text-white text-xs px-2 py-0.5 rounded-full" style="background: var(--primary-green) !important; color: var(--dark-green) !important;">
                     {{ $completedInvestments->count() }}
@@ -287,7 +360,7 @@
 
             <button class="invest-tab-btn" onclick="window.location.href='{{ route('user.withdrawn.investments') }}'">
                 <iconify-icon icon="ph:arrow-right-fill"></iconify-icon>
-                Withdrawn
+                <span class="tab-text">Withdrawn</span>
             </button>
         </div>
 
