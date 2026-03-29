@@ -25,23 +25,25 @@
 
     .card-header {
         background: linear-gradient(135deg, #0C3A30, #1a5c47);
-        padding: 1rem;
+        padding: 1.5rem;
         position: relative;
+        text-align: center;
     }
 
     .user-avatar {
-        width: 70px;
-        height: 70px;
+        width: 80px;
+        height: 80px;
         border-radius: 50%;
         border: 3px solid var(--brand-green);
         background: white;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: -35px auto 0;
+        margin: -60px auto 0;
         position: relative;
         z-index: 2;
         background: white;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
 
     .user-avatar img {
@@ -52,38 +54,66 @@
     }
 
     .user-avatar .initials {
-        font-size: 1.5rem;
+        font-size: 1.8rem;
         font-weight: bold;
         color: var(--brand-dark);
     }
 
     .user-name {
         text-align: center;
-        margin-top: 0.75rem;
+        margin-top: 1rem;
         margin-bottom: 0.5rem;
+        padding: 0 1rem;
     }
 
     .user-name h4 {
-        font-size: 1rem;
+        font-size: 1.1rem;
         font-weight: 700;
         color: #111827;
         margin: 0;
     }
 
     .user-name p {
-        font-size: 0.7rem;
+        font-size: 0.75rem;
         color: #6b7280;
         margin-top: 0.25rem;
+    }
+
+    .badge-active {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.65rem;
+        font-weight: 600;
+        background: #dcfce7;
+        color: #15803d;
+    }
+
+    .badge-inactive {
+        background: #fee2e2;
+        color: #dc2626;
+    }
+
+    .info-section {
+        padding: 1rem;
+    }
+
+    .info-title {
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #6b7280;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.75rem;
+        border-bottom: 1px solid #e5e7eb;
+        padding-bottom: 0.5rem;
     }
 
     .info-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 0.75rem;
-        padding: 1rem;
-        background: #f9fafb;
-        border-radius: 12px;
-        margin: 0.75rem;
+        margin-bottom: 1rem;
     }
 
     .info-item {
@@ -117,50 +147,67 @@
         font-weight: 700;
     }
 
-    .badge-active {
+    .tags-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+    }
+
+    .tag {
         display: inline-block;
-        padding: 0.25rem 0.75rem;
-        border-radius: 20px;
-        font-size: 0.65rem;
-        font-weight: 600;
-        background: #dcfce7;
-        color: #15803d;
+        padding: 0.2rem 0.5rem;
+        background: #f3f4f6;
+        border-radius: 4px;
+        font-size: 0.6rem;
+        color: #374151;
     }
 
-    .badge-inactive {
-        background: #fee2e2;
-        color: #dc2626;
-    }
-
-    .membership-badge {
+    .membership-section {
         background: linear-gradient(135deg, #f0fdf4, #dcfce7);
         border: 1px solid #86efac;
         border-radius: 10px;
-        padding: 0.5rem;
-        text-align: center;
-        margin: 0.75rem;
+        padding: 0.75rem;
+        margin: 0 1rem 1rem 1rem;
     }
 
     .membership-code {
         font-family: monospace;
-        font-size: 0.75rem;
+        font-size: 0.8rem;
         font-weight: 700;
         color: #111827;
-        margin: 0.25rem 0;
+        text-align: center;
+        margin: 0.5rem 0;
+    }
+
+    .copy-btn {
+        background: var(--brand-green);
+        color: var(--brand-dark);
+        border: none;
+        border-radius: 6px;
+        padding: 0.25rem 0.75rem;
+        font-size: 0.65rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .copy-btn:hover {
+        background: #7bb502;
     }
 
     .action-buttons {
         display: flex;
         justify-content: center;
-        gap: 0.5rem;
-        padding: 0.75rem;
+        gap: 0.75rem;
+        padding: 1rem;
         border-top: 1px solid #e5e7eb;
         background: white;
     }
 
     .action-btn {
-        width: 32px;
-        height: 32px;
+        width: 36px;
+        height: 36px;
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -185,10 +232,6 @@
         color: #dc2626;
     }
 
-    .action-btn:hover {
-        transform: scale(1.1);
-    }
-
     .action-btn.lock {
         background: #f3f4f6;
         color: #6b7280;
@@ -199,49 +242,11 @@
         color: #ca8a04;
     }
 
-    .copy-btn {
-        background: var(--brand-green);
-        color: var(--brand-dark);
-        border: none;
-        border-radius: 6px;
-        padding: 0.25rem 0.5rem;
-        font-size: 0.6rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.2s;
-    }
-
-    .copy-btn:hover {
-        background: #7bb502;
-        transform: scale(1.02);
-    }
-
-    .trading-tag {
-        display: inline-block;
-        padding: 0.2rem 0.5rem;
-        background: #f3f4f6;
-        border-radius: 4px;
-        font-size: 0.6rem;
-        color: #374151;
-        margin: 0.1rem;
-    }
-
-    .scroll-hint {
-        display: none;
-        text-align: center;
-        padding: 0.5rem;
-        background: #f0fde4;
-        border-radius: 8px;
-        margin-bottom: 1rem;
-        font-size: 0.7rem;
-        color: #0C3A30;
+    .action-btn:hover {
+        transform: scale(1.1);
     }
 
     @media (max-width: 768px) {
-        .scroll-hint {
-            display: block;
-        }
-        
         .info-grid {
             grid-template-columns: 1fr;
         }
@@ -296,11 +301,19 @@
             $profilePic = $user->profile->profile_pic ?? null;
             $initials = collect(explode(' ',$user->name))->map(fn($w)=>strtoupper(substr($w,0,1)))->take(2)->join('') ?: 'U';
             $tradingInfo = $user->tradingInfo;
+            
+            // Decode JSON fields
+            $investmentGoals = $tradingInfo && $tradingInfo->investment_goals ? (is_array($tradingInfo->investment_goals) ? $tradingInfo->investment_goals : json_decode($tradingInfo->investment_goals, true)) : [];
+            $assetClasses = $tradingInfo && $tradingInfo->asset_classes ? (is_array($tradingInfo->asset_classes) ? $tradingInfo->asset_classes : json_decode($tradingInfo->asset_classes, true)) : [];
         @endphp
 
         <div class="user-card">
             <!-- Header with gradient -->
-            <div class="card-header"></div>
+            <div class="card-header">
+                <div style="color:white; font-size:0.7rem; opacity:0.8;">
+                    <iconify-icon icon="ph:user-fill" class="text-lg"></iconify-icon> User Profile
+                </div>
+            </div>
             
             <!-- Avatar -->
             <div class="user-avatar">
@@ -315,6 +328,7 @@
             <div class="user-name">
                 <h4>{{ $user->name }}</h4>
                 <p>{{ $user->email }}</p>
+                <p style="font-size:0.7rem;">@{{ $user->username }}</p>
             </div>
             
             <!-- Status Badge -->
@@ -326,73 +340,151 @@
                 @endif
             </div>
             
-            <!-- Key Information Grid -->
-            <div class="info-grid">
-                <div class="info-item">
-                    <span class="info-label">📞 Phone</span>
-                    <span class="info-value">{{ $user->phone ?? 'N/A' }}</span>
+            <!-- Contact & Basic Info Section -->
+            <div class="info-section">
+                <div class="info-title">📋 Contact & Basic Info</div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">📞 Phone</span>
+                        <span class="info-value">{{ $user->phone ?? 'N/A' }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">🌍 Country</span>
+                        <span class="info-value">{{ $user->country ?? 'N/A' }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">📅 Joined</span>
+                        <span class="info-value">{{ $user->created_at->format('d M Y') }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">🎯 Join Source</span>
+                        <span class="info-value">{{ $user->join_source ? ucfirst(str_replace('_',' ',$user->join_source)) : 'N/A' }}</span>
+                    </div>
                 </div>
-                <div class="info-item">
-                    <span class="info-label">🌍 Country</span>
-                    <span class="info-value">{{ $user->country ?? 'N/A' }}</span>
+            </div>
+            
+            <!-- Financial Info Section -->
+            <div class="info-section">
+                <div class="info-title">💰 Financial Info</div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">Balance</span>
+                        <span class="info-value balance">${{ number_format($user->available_balance ?? 0,2) }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Total Invested</span>
+                        <span class="info-value invested">${{ number_format($user->amount_invested,2) }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Active Trades</span>
+                        <span class="info-value">{{ $activeTrades }}</span>
+                    </div>
+                    @if($tradingInfo && $tradingInfo->investment_amount)
+                    <div class="info-item">
+                        <span class="info-label">Investment Amount</span>
+                        <span class="info-value">${{ number_format($tradingInfo->investment_amount,2) }}</span>
+                    </div>
+                    @endif
+                    @if($tradingInfo && $tradingInfo->annual_income)
+                    <div class="info-item">
+                        <span class="info-label">Annual Income</span>
+                        <span class="info-value">{{ $tradingInfo->annual_income }}</span>
+                    </div>
+                    @endif
                 </div>
-                <div class="info-item">
-                    <span class="info-label">📅 Joined</span>
-                    <span class="info-value">{{ $user->created_at->format('d M Y') }}</span>
+            </div>
+            
+            <!-- Trading Info Section -->
+            @if($tradingInfo)
+            <div class="info-section">
+                <div class="info-title">📊 Trading Profile</div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">Experience</span>
+                        <span class="info-value">{{ $tradingInfo->stock_experience == 'yes' ? 'Experienced' : ($tradingInfo->stock_experience == 'no' ? 'Learning' : 'Novice') }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Trading Frequency</span>
+                        <span class="info-value">{{ $tradingInfo->trading_frequency ?? 'N/A' }} times</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Transaction Volume</span>
+                        <span class="info-value">{{ $tradingInfo->transaction_volume ? str_replace('_',' ',str_replace('k',',000',$tradingInfo->transaction_volume)) : 'N/A' }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Account Type</span>
+                        <span class="info-value">{{ $tradingInfo->account_type ? ucfirst($tradingInfo->account_type) : 'N/A' }}</span>
+                    </div>
                 </div>
-                <div class="info-item">
-                    <span class="info-label">🎯 Join Source</span>
-                    <span class="info-value">{{ $user->join_source ? ucfirst(str_replace('_',' ',$user->join_source)) : 'N/A' }}</span>
+                
+                @if($investmentGoals && count($investmentGoals) > 0)
+                <div class="info-title mt-2">🎯 Investment Goals</div>
+                <div class="tags-container">
+                    @foreach($investmentGoals as $goal)
+                    <span class="tag">{{ ucfirst(str_replace('_',' ',$goal)) }}</span>
+                    @endforeach
                 </div>
-                <div class="info-item">
-                    <span class="info-label">💰 Balance</span>
-                    <span class="info-value balance">${{ number_format($user->available_balance ?? 0,2) }}</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">📊 Invested</span>
-                    <span class="info-value invested">${{ number_format($user->amount_invested,2) }}</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">🔄 Active Trades</span>
-                    <span class="info-value">{{ $activeTrades }}</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">📋 Copy Pref</span>
-                    <span class="info-value">{{ $user->copy_preference == 'platform_admin' ? 'Platform Admin' : ($user->copy_preference == 'specific_admin' ? 'Specific Admin' : 'N/A') }}</span>
-                </div>
-                @if($user->copy_preference == 'specific_admin' && $user->copy_admin_name)
-                <div class="info-item">
-                    <span class="info-label">👨‍💼 Copy Admin</span>
-                    <span class="info-value">{{ $user->copy_admin_name }}</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">🖥️ Server</span>
-                    <span class="info-value">{{ $user->copy_server_name ?? 'N/A' }}</span>
+                @endif
+                
+                @if($assetClasses && count($assetClasses) > 0)
+                <div class="info-title mt-2">📈 Asset Classes</div>
+                <div class="tags-container">
+                    @foreach($assetClasses as $asset)
+                    <span class="tag">{{ ucfirst($asset) }}</span>
+                    @endforeach
                 </div>
                 @endif
             </div>
+            @endif
             
-            <!-- Trading Info (if exists) -->
-            @if($tradingInfo)
-            <div class="px-3 pb-2">
-                <div class="flex flex-wrap gap-1">
-                    @if($tradingInfo->stock_experience)
-                    <span class="trading-tag">📈 {{ $tradingInfo->stock_experience == 'yes' ? 'Experienced' : ($tradingInfo->stock_experience == 'no' ? 'Learning' : 'Novice') }}</span>
+            <!-- Copy Trading Info -->
+            <div class="info-section">
+                <div class="info-title">🔄 Copy Trading</div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">Copy Preference</span>
+                        <span class="info-value">{{ $user->copy_preference == 'platform_admin' ? 'Platform Admin' : ($user->copy_preference == 'specific_admin' ? 'Specific Admin' : 'Not Set') }}</span>
+                    </div>
+                    @if($user->copy_preference == 'specific_admin' && $user->copy_admin_name)
+                    <div class="info-item">
+                        <span class="info-label">Copy Admin</span>
+                        <span class="info-value">{{ $user->copy_admin_name }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Server</span>
+                        <span class="info-value">{{ $user->copy_server_name ?? 'N/A' }}</span>
+                    </div>
                     @endif
-                    @if($tradingInfo->trading_frequency)
-                    <span class="trading-tag">🔄 {{ $tradingInfo->trading_frequency }}x</span>
-                    @endif
-                    @if($tradingInfo->account_type)
-                    <span class="trading-tag">💼 {{ ucfirst($tradingInfo->account_type) }}</span>
+                </div>
+            </div>
+            
+            <!-- Deposit Sources -->
+            @if($tradingInfo && ($tradingInfo->deposit_source || $tradingInfo->ongoing_deposit_source))
+            <div class="info-section">
+                <div class="info-title">💵 Deposit Sources</div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">Initial Source</span>
+                        <span class="info-value">{{ $tradingInfo->deposit_source ? ucfirst(str_replace('_',' ',$tradingInfo->deposit_source)) : 'N/A' }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Ongoing Source</span>
+                        <span class="info-value">{{ $tradingInfo->ongoing_deposit_source ? ucfirst(str_replace('_',' ',$tradingInfo->ongoing_deposit_source)) : 'N/A' }}</span>
+                    </div>
+                    @if($tradingInfo && $tradingInfo->financial_alternative)
+                    <div class="info-item">
+                        <span class="info-label">Financial Alternative</span>
+                        <span class="info-value">{{ $tradingInfo->financial_alternative }}</span>
+                    </div>
                     @endif
                 </div>
             </div>
             @endif
             
-            <!-- Membership Code Section -->
-            <div class="membership-badge">
+            <!-- Membership Section -->
+            <div class="membership-section">
                 @if($user->membership_code)
-                <div style="font-size:0.6rem; font-weight:700; color:#15803d;">MEMBERSHIP CODE</div>
+                <div style="font-size:0.65rem; font-weight:700; color:#15803d; text-align:center;">MEMBERSHIP CODE</div>
                 <div id="membershipCode-{{ $user->id }}" class="membership-code">{{ $user->membership_code }}</div>
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.5rem;">
                     <span style="font-size:0.6rem; color:{{ $user->has_membership ? '#16a34a' : '#ca8a04' }};">
@@ -400,24 +492,22 @@
                     </span>
                     <button id="copyBtn-{{ $user->id }}" onclick="copyMembershipCode({{ $user->id }})" class="copy-btn">Copy Code</button>
                 </div>
+                
+                <!-- Lock/Unlock Control -->
+                <div class="text-center mt-2">
+                    <form method="POST" action="{{ route('admin.membership.lock',$user->id) }}" style="display:inline;">
+                        @csrf @method('PATCH')
+                        <button type="submit" class="action-btn lock {{ $user->membership_locked ? 'active' : '' }}" style="width:28px;height:28px;" title="{{ $user->membership_locked ? 'Unlock' : 'Lock' }}">
+                            <iconify-icon icon="{{ $user->membership_locked ? 'mdi:lock-open' : 'mdi:lock' }}"></iconify-icon>
+                        </button>
+                    </form>
+                </div>
                 @else
                 <button onclick="generateMembershipCode({{ $user->id }})" style="background:linear-gradient(135deg,#8AC304,#6ea003); color:#0C3A30; border:none; border-radius:8px; padding:0.5rem 1rem; font-size:0.75rem; font-weight:600; cursor:pointer; width:100%;">
                     Generate Membership Code
                 </button>
                 @endif
             </div>
-            
-            <!-- Lock/Unlock Control -->
-            @if($user->membership_code)
-            <div class="text-center pb-2">
-                <form method="POST" action="{{ route('admin.membership.lock',$user->id) }}" style="display:inline;">
-                    @csrf @method('PATCH')
-                    <button type="submit" class="action-btn lock {{ $user->membership_locked ? 'active' : '' }}" title="{{ $user->membership_locked ? 'Unlock' : 'Lock' }}">
-                        <iconify-icon icon="{{ $user->membership_locked ? 'mdi:lock-open' : 'mdi:lock' }}"></iconify-icon>
-                    </button>
-                </form>
-            </div>
-            @endif
             
             <!-- Action Buttons -->
             <div class="action-buttons">
