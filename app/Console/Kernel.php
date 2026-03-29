@@ -10,14 +10,22 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      */
+   
+
     protected function schedule(Schedule $schedule)
-    {
-        // Update investment values every minute (for real-time simulation)
-        $schedule->command('investments:update-values')->everyMinute();
-        
-        // Check for expired investments every minute
-        $schedule->command('investments:check-expired')->everyMinute();
-    }
+{
+    // Updates profit daily at midnight
+    $schedule->command('app:update-investment-profit')->dailyAt('00:00');
+
+    // Checks expired investments every 5 minutes
+    $schedule->command('investments:check-expired')->everyFiveMinutes();
+
+    // Updates current values every hour
+    $schedule->command('investments:update-values')->hourly();
+
+    // Generate sitemap weekly
+    $schedule->command('app:generate-sitemap')->weekly();
+}
 
     /**
      * Register the commands for the application.
