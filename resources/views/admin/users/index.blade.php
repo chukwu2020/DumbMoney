@@ -23,7 +23,7 @@
         border-radius: 16px;
         border: 1px solid #e5e7eb;
         overflow: hidden;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     }
 
     .table-scroll {
@@ -51,7 +51,7 @@
         position: sticky;
         top: 0;
         z-index: 10;
-        border-right: 1px solid rgba(255,255,255,0.08);
+        border-right: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     thead th:first-child {
@@ -83,7 +83,7 @@
         left: 0;
         background: white;
         z-index: 5;
-        box-shadow: 2px 0 6px rgba(0,0,0,0.06);
+        box-shadow: 2px 0 6px rgba(0, 0, 0, 0.06);
     }
 
     tbody tr:hover td:first-child {
@@ -94,7 +94,8 @@
         display: flex;
         align-items: center;
         gap: 0.6rem;
-        min-width: 180px;
+        min-width: 100px;
+        overflow: hidden;
     }
 
     .avatar {
@@ -120,16 +121,29 @@
         border-radius: 50%;
     }
 
-    .user-meta strong {
-        display: block;
-        font-weight: 700;
-        color: #111827;
-        font-size: 0.78rem;
+    .user-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
     }
 
-    .user-meta span {
+    
+
+    .user-meta strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+    max-width: 110px;
+}
+
+    .user-meta .user-email {
         font-size: 0.65rem;
         color: #6b7280;
+        word-break: break-all;
+        white-space: normal;
+        line-height: 1.3;
+        max-width: 180px;
     }
 
     .badge {
@@ -143,12 +157,35 @@
         white-space: nowrap;
     }
 
-    .badge-active   { background: #dcfce7; color: #15803d; }
-    .badge-inactive { background: #fee2e2; color: #dc2626; }
-    .badge-pending  { background: #fef9c3; color: #854d0e; }
-    .badge-blue     { background: #dbeafe; color: #1e40af; }
-    .badge-gray     { background: #f3f4f6; color: #374151; }
-    .badge-purple   { background: #f3e8ff; color: #6b21a8; }
+    .badge-active {
+        background: #dcfce7;
+        color: #15803d;
+    }
+
+    .badge-inactive {
+        background: #fee2e2;
+        color: #dc2626;
+    }
+
+    .badge-pending {
+        background: #fef9c3;
+        color: #854d0e;
+    }
+
+    .badge-blue {
+        background: #dbeafe;
+        color: #1e40af;
+    }
+
+    .badge-gray {
+        background: #f3f4f6;
+        color: #374151;
+    }
+
+    .badge-purple {
+        background: #f3e8ff;
+        color: #6b21a8;
+    }
 
     .money {
         font-weight: 700;
@@ -156,9 +193,17 @@
         font-size: 0.8rem;
     }
 
-    .money.green  { color: #16a34a; }
-    .money.blue   { color: #2563eb; }
-    .money.orange { color: #ea580c; }
+    .money.green {
+        color: #16a34a;
+    }
+
+    .money.blue {
+        color: #2563eb;
+    }
+
+    .money.orange {
+        color: #ea580c;
+    }
 
     .tag-list {
         display: flex;
@@ -215,21 +260,80 @@
         text-decoration: none;
     }
 
-    .act-btn:hover { transform: scale(1.12); }
-    .act-btn.view   { background: #dbeafe; color: #2563eb; }
-    .act-btn.edit   { background: #dcfce7; color: #16a34a; }
-    .act-btn.delete { background: #fee2e2; color: #dc2626; }
-    .act-btn.lock   { background: #f3f4f6; color: #6b7280; }
-    .act-btn.locked { background: #fef9c3; color: #ca8a04; }
-    .act-btn.gen    { background: #ede9fe; color: #6b21a8; }
+    .act-btn:hover {
+        transform: scale(1.12);
+    }
+
+    .act-btn.view {
+        background: #dbeafe;
+        color: #2563eb;
+    }
+
+    .act-btn.edit {
+        background: #dcfce7;
+        color: #16a34a;
+    }
+
+    .act-btn.delete {
+        background: #fee2e2;
+        color: #dc2626;
+    }
+
+    .act-btn.lock {
+        background: #f3f4f6;
+        color: #6b7280;
+    }
+
+    .act-btn.locked {
+        background: #fef9c3;
+        color: #ca8a04;
+    }
+
+    .act-btn.gen {
+        background: #ede9fe;
+        color: #6b21a8;
+    }
 
     /* Search bar styling */
-    .search-bar {
+    .search-bar-container {
         background: white;
         border-radius: 12px;
         border: 1px solid #e5e7eb;
-        padding: 1.25rem 1.5rem;
+        padding: 1rem 1.5rem;
         margin-bottom: 1.5rem;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .search-input-wrapper {
+        position: relative;
+        width: 260px;
+    }
+
+    .search-input-wrapper input {
+        width: 100%;
+        padding: 0.5rem 2rem 0.5rem 1rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        font-size: 0.875rem;
+        background: white;
+        transition: all 0.2s;
+    }
+
+    .search-input-wrapper input:focus {
+        outline: none;
+        border-color: var(--brand-green);
+        box-shadow: 0 0 0 2px rgba(158, 221, 5, 0.2);
+    }
+
+    .search-input-wrapper iconify-icon {
+        position: absolute;
+        right: 0.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #9ca3af;
+        pointer-events: none;
+        font-size: 1rem;
     }
 
     /* Card header styling */
@@ -243,104 +347,53 @@
         gap: 1rem;
         background: white;
     }
-
-    /* Navbar search */
-    .navbar-search {
-        position: relative;
-        display: inline-flex;
-        align-items: center;
-    }
-
-    .navbar-search input {
-        padding: 0.5rem 2rem 0.5rem 1rem;
-        border: 1px solid #e5e7eb;
-        border-radius: 0.5rem;
-        font-size: 0.875rem;
-        width: 250px;
-    }
-
-    .navbar-search iconify-icon {
-        position: absolute;
-        right: 0.75rem;
-        color: #9ca3af;
-        pointer-events: none;
-    }
-
-    /* Form select */
-    .form-select {
-        padding: 0.5rem 2rem 0.5rem 0.75rem;
-        border: 1px solid #e5e7eb;
-        border-radius: 0.5rem;
-        font-size: 0.875rem;
-        background: white;
-        cursor: pointer;
-    }
 </style>
- <!-- Sticky Header - Won't scroll with table -->
-    <div class="sticky-header " >
-        <div class="flex  items-center justify-between gap-2 mb-4">
-            <h6 class="font-semibold mb-0" style="color:#0C3A30;">Users List</h6>
-            <ul class="flex items-center gap-[6px] text-sm">
-                <li>
-                    <a href="{{ route('admin_dashboard') }}" class="flex items-center gap-2 hover:text-[#9EDD05]" style="color:#0C3A30;">
-                        <iconify-icon icon="solar:home-smile-angle-outline" class="text-lg"></iconify-icon> Dashboard
-                    </a>
-                </li>
-                <li>-</li>
-                <li>
-                    <a href="{{ route('hidden.user') }}" class="flex items-center gap-2 hover:text-[#9EDD05]" style="color:#0C3A30;">
-                        <iconify-icon icon="solar:users-group-rounded" class="text-lg"></iconify-icon> List
-                    </a>
-                </li>
-            </ul>
-        </div>
+
+<!-- Sticky Header - Won't scroll with table -->
+<div class="sticky-header">
+    <div class="flex items-center justify-between gap-2 mb-4">
+        <h6 class="font-semibold mb-0" style="color:#0C3A30;">Users List</h6>
+        <ul class="flex items-center gap-[6px] text-sm">
+            <li>
+                <a href="{{ route('admin_dashboard') }}" class="flex items-center gap-2 hover:text-[#9EDD05]" style="color:#0C3A30;">
+                    <iconify-icon icon="solar:home-smile-angle-outline" class="text-lg"></iconify-icon> Dashboard
+                </a>
+            </li>
+            <li>-</li>
+            <li>
+                <a href="{{ route('hidden.user') }}" class="flex items-center gap-2 hover:text-[#9EDD05]" style="color:#0C3A30;">
+                    <iconify-icon icon="solar:users-group-rounded" class="text-lg"></iconify-icon> List
+                </a>
+            </li>
+        </ul>
     </div>
+</div>
 
 <div class="dashboard-main-body">
+    <!-- Search Bar -->
+    <div class="p-3 border-b border-gray-100 flex justify-end">
+    <input 
+        type="text" 
+        id="userSearch"
+        placeholder="Search name or email..."
+        class="border border-gray-300 rounded-lg px-3 py-1 text-xs w-64 focus:outline-none focus:ring-2 focus:ring-green-400"
+        onkeyup="filterUsers()"
+    >
+</div>
 
-   
     <!-- Main Card with Header -->
     <div class="grid grid-cols-12">
         <div class="col-span-12">
             <div class="card h-full p-0 rounded-xl border-0 overflow-hidden">
-                
-                <!-- Card Header with Search and Filters -->
-                <div class="card-header-custom">
-                    <div class="flex items-center flex-wrap gap-3">
-                        <span class="text-sm font-medium text-gray-600">Show</span>
-                        <select class="form-select w-auto">
-                            <option>10</option>
-                            <option>25</option>
-                            <option>50</option>
-                            <option>100</option>
-                        </select>
-                        
-                        <form action="{{ route('hidden.user') }}" method="GET" class="navbar-search">
-                            <input type="text" name="name" value="{{ request('name') }}" placeholder="Search by name or email...">
-                            <iconify-icon icon="ion:search-outline"></iconify-icon>
-                        </form>
-                        
-                        <select class="form-select w-auto" name="status" onchange="this.form.submit()">
-                            <option value="">All Status</option>
-                            <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Active</option>
-                            <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
-                        </select>
-                    </div>
-                    
-                    <a href="{{ route('user.index') }}" class="btn btn-primary text-sm btn-sm px-3 py-3 rounded-lg flex items-center gap-2" style="background: linear-gradient(135deg, #0C3A30, #1a5c47); color: white;">
-                        <iconify-icon icon="ic:baseline-plus" class="icon text-xl line-height-1"></iconify-icon>
-                        Add New User
-                    </a>
-                </div>
-
                 <!-- Table Body -->
                 <div class="card-body p-0">
                     <div class="table-scroll">
-                        <table>
+                        <table id="usersTable">
                             <thead>
                                 <tr>
                                     <!-- Identity -->
                                     <th>User</th>
+                                    <th>email</th>
                                     <th>Username</th>
                                     <th>Status</th>
                                     <th>Joined</th>
@@ -387,40 +440,47 @@
                             <tbody>
                                 @forelse($users as $user)
                                 @php
-                                    $activeTrades   = $user->investments->where('status','active')->count();
-                                    $profilePic     = $user->profile->profile_pic ?? null;
-                                    $initials       = collect(explode(' ', $user->name))
-                                                        ->map(fn($w) => strtoupper(substr($w,0,1)))
-                                                        ->take(2)->join('') ?: 'U';
-                                    $tradingInfo    = $user->tradingInfo;
+                                $activeTrades = $user->investments->where('status','active')->count();
+                                $profilePic = $user->profile->profile_pic ?? null;
+                                $initials = collect(explode(' ', $user->name))
+                                ->map(fn($w) => strtoupper(substr($w,0,1)))
+                                ->take(2)->join('') ?: 'U';
+                                $tradingInfo = $user->tradingInfo;
 
-                                    $investmentGoals = [];
-                                    $assetClasses    = [];
-                                    if ($tradingInfo) {
-                                        $investmentGoals = is_array($tradingInfo->investment_goals)
-                                            ? $tradingInfo->investment_goals
-                                            : json_decode($tradingInfo->investment_goals ?? '[]', true) ?? [];
-                                        $assetClasses = is_array($tradingInfo->asset_classes)
-                                            ? $tradingInfo->asset_classes
-                                            : json_decode($tradingInfo->asset_classes ?? '[]', true) ?? [];
-                                    }
+                                $investmentGoals = [];
+                                $assetClasses = [];
+                                if ($tradingInfo) {
+                                $investmentGoals = is_array($tradingInfo->investment_goals)
+                                ? $tradingInfo->investment_goals
+                                : json_decode($tradingInfo->investment_goals ?? '[]', true) ?? [];
+                                $assetClasses = is_array($tradingInfo->asset_classes)
+                                ? $tradingInfo->asset_classes
+                                : json_decode($tradingInfo->asset_classes ?? '[]', true) ?? [];
+                                }
                                 @endphp
-                                <tr>
-
+                               
+                                    <tr class="user-row" 
+    data-name="{{ strtolower($user->name) }}" 
+    data-email="{{ strtolower($user->email) }}">
                                     {{-- User (sticky) --}}
                                     <td>
                                         <div class="user-cell">
                                             <div class="avatar">
                                                 @if($profilePic)
-                                                    <img src="{{ asset('storage/profile_pics/'.$profilePic) }}" alt="{{ $user->name }}">
+                                                <img src="{{ asset('storage/profile_pics/'.$profilePic) }}" alt="{{ $user->name }}">
                                                 @else
-                                                    {{ $initials }}
+                                                {{ $initials }}
                                                 @endif
                                             </div>
                                             <div class="user-meta">
                                                 <strong>{{ $user->name }}</strong>
-                                                <span>{{ $user->email }}</span>
                                             </div>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div class="text-xs text-gray-500 mt-1 truncate" style="max-width: 180px;">
+                                            {{ $user->email }}
                                         </div>
                                     </td>
 
@@ -428,9 +488,9 @@
                                     <td><span class="badge badge-gray">{{ $user->username ?? '—' }}</span></td>
                                     <td>
                                         @if($user->active)
-                                            <span class="badge badge-active">✓ Active</span>
+                                        <span class="badge badge-active">✓ Active</span>
                                         @else
-                                            <span class="badge badge-inactive">✗ Inactive</span>
+                                        <span class="badge badge-inactive">✗ Inactive</span>
                                         @endif
                                     </td>
                                     <td>{{ $user->created_at->format('d M Y') }}</td>
@@ -450,9 +510,9 @@
                                     </td>
                                     <td>
                                         @if($tradingInfo && $tradingInfo->investment_amount)
-                                            <span class="money orange">${{ number_format($tradingInfo->investment_amount, 2) }}</span>
+                                        <span class="money orange">${{ number_format($tradingInfo->investment_amount, 2) }}</span>
                                         @else
-                                            <span class="text-gray-400">—</span>
+                                        <span class="text-gray-400">—</span>
                                         @endif
                                     </td>
                                     <td>{{ $tradingInfo->annual_income ?? '—' }}</td>
@@ -460,14 +520,14 @@
                                     {{-- Trading Profile --}}
                                     <td>
                                         @if($tradingInfo)
-                                            @php
-                                                $exp = $tradingInfo->stock_experience;
-                                                $expLabel = $exp === 'yes' ? 'Experienced' : ($exp === 'no' ? 'Learning' : 'Novice');
-                                                $expClass  = $exp === 'yes' ? 'badge-active' : ($exp === 'no' ? 'badge-pending' : 'badge-gray');
-                                            @endphp
-                                            <span class="badge {{ $expClass }}">{{ $expLabel }}</span>
+                                        @php
+                                        $exp = $tradingInfo->stock_experience;
+                                        $expLabel = $exp === 'yes' ? 'Experienced' : ($exp === 'no' ? 'Learning' : 'Novice');
+                                        $expClass = $exp === 'yes' ? 'badge-active' : ($exp === 'no' ? 'badge-pending' : 'badge-gray');
+                                        @endphp
+                                        <span class="badge {{ $expClass }}">{{ $expLabel }}</span>
                                         @else
-                                            <span class="text-gray-400">—</span>
+                                        <span class="text-gray-400">—</span>
                                         @endif
                                     </td>
                                     <td>{{ $tradingInfo->trading_frequency ?? '—' }}</td>
@@ -478,41 +538,41 @@
                                     </td>
                                     <td>
                                         @if($tradingInfo && $tradingInfo->account_type)
-                                            <span class="badge badge-blue">{{ ucfirst($tradingInfo->account_type) }}</span>
+                                        <span class="badge badge-blue">{{ ucfirst($tradingInfo->account_type) }}</span>
                                         @else
-                                            <span class="text-gray-400">—</span>
+                                        <span class="text-gray-400">—</span>
                                         @endif
                                     </td>
                                     <td>
                                         @if(count($investmentGoals))
-                                            <div class="tag-list">
-                                                @foreach($investmentGoals as $g)
-                                                    <span class="mini-tag">{{ ucfirst(str_replace('_',' ',$g)) }}</span>
-                                                @endforeach
-                                            </div>
+                                        <div class="tag-list">
+                                            @foreach($investmentGoals as $g)
+                                            <span class="mini-tag">{{ ucfirst(str_replace('_',' ',$g)) }}</span>
+                                            @endforeach
+                                        </div>
                                         @else
-                                            <span class="text-gray-400">—</span>
+                                        <span class="text-gray-400">—</span>
                                         @endif
                                     </td>
                                     <td>
                                         @if(count($assetClasses))
-                                            <div class="tag-list">
-                                                @foreach($assetClasses as $a)
-                                                    <span class="mini-tag">{{ ucfirst($a) }}</span>
-                                                @endforeach
-                                            </div>
+                                        <div class="tag-list">
+                                            @foreach($assetClasses as $a)
+                                            <span class="mini-tag">{{ ucfirst($a) }}</span>
+                                            @endforeach
+                                        </div>
                                         @else
-                                            <span class="text-gray-400">—</span>
+                                        <span class="text-gray-400">—</span>
                                         @endif
                                     </td>
 
                                     {{-- Copy Trading --}}
                                     <td>
                                         @php
-                                            $pref = $user->copy_preference;
-                                            $prefLabel = $pref === 'platform_admin' ? 'Platform Admin'
-                                                       : ($pref === 'specific_admin' ? 'Specific Admin' : 'Not Set');
-                                            $prefClass = $pref ? 'badge-purple' : 'badge-gray';
+                                        $pref = $user->copy_preference;
+                                        $prefLabel = $pref === 'platform_admin' ? 'Platform Admin'
+                                        : ($pref === 'specific_admin' ? 'Specific Admin' : 'Not Set');
+                                        $prefClass = $pref ? 'badge-purple' : 'badge-gray';
                                         @endphp
                                         <span class="badge {{ $prefClass }}">{{ $prefLabel }}</span>
                                     </td>
@@ -527,40 +587,40 @@
                                     {{-- Membership --}}
                                     <td>
                                         @if($user->membership_code)
-                                            <span class="code-cell" onclick="copyCode(this, '{{ $user->membership_code }}')"
-                                                title="Click to copy">
-                                                {{ $user->membership_code }}
-                                            </span>
+                                        <span class="code-cell" onclick="copyCode(this, '{{ $user->membership_code }}')"
+                                            title="Click to copy">
+                                            {{ $user->membership_code }}
+                                        </span>
                                         @else
-                                            <button onclick="generateMembershipCode({{ $user->id }}, this)"
-                                                class="act-btn gen" style="width:auto; border-radius:8px; padding:0 10px; font-size:0.65rem; font-weight:700; gap:4px; display:inline-flex; height:26px;">
-                                                <iconify-icon icon="ph:plus-bold"></iconify-icon> Generate
+                                        <button onclick="generateMembershipCode({{ $user->id }}, this)"
+                                            class="act-btn gen" style="width:auto; border-radius:8px; padding:0 10px; font-size:0.65rem; font-weight:700; gap:4px; display:inline-flex; height:26px;">
+                                            <iconify-icon icon="ph:plus-bold"></iconify-icon> Generate
+                                        </button>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($user->membership_code)
+                                        @if($user->has_membership)
+                                        <span class="badge badge-active">✓ Active</span>
+                                        @else
+                                        <span class="badge badge-pending">⏳ Pending</span>
+                                        @endif
+                                        @else
+                                        <span class="text-gray-400">—</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($user->membership_code)
+                                        <form method="POST" action="{{ route('admin.membership.lock', $user->id) }}" style="display:inline;">
+                                            @csrf @method('PATCH')
+                                            <button type="submit"
+                                                class="act-btn {{ $user->membership_locked ? 'locked' : 'lock' }}"
+                                                title="{{ $user->membership_locked ? 'Unlock membership' : 'Lock membership' }}">
+                                                <iconify-icon icon="{{ $user->membership_locked ? 'mdi:lock-open' : 'mdi:lock' }}"></iconify-icon>
                                             </button>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if($user->membership_code)
-                                            @if($user->has_membership)
-                                                <span class="badge badge-active">✓ Active</span>
-                                            @else
-                                                <span class="badge badge-pending">⏳ Pending</span>
-                                            @endif
+                                        </form>
                                         @else
-                                            <span class="text-gray-400">—</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if($user->membership_code)
-                                            <form method="POST" action="{{ route('admin.membership.lock', $user->id) }}" style="display:inline;">
-                                                @csrf @method('PATCH')
-                                                <button type="submit"
-                                                    class="act-btn {{ $user->membership_locked ? 'locked' : 'lock' }}"
-                                                    title="{{ $user->membership_locked ? 'Unlock membership' : 'Lock membership' }}">
-                                                    <iconify-icon icon="{{ $user->membership_locked ? 'mdi:lock-open' : 'mdi:lock' }}"></iconify-icon>
-                                                </button>
-                                            </form>
-                                        @else
-                                            <span class="text-gray-400">—</span>
+                                        <span class="text-gray-400">—</span>
                                         @endif
                                     </td>
 
@@ -583,7 +643,6 @@
                                             </form>
                                         </div>
                                     </td>
-
                                 </tr>
                                 @empty
                                 <tr>
@@ -608,53 +667,69 @@
             </div>
         </div>
     </div>
-
 </div>
 
 <script>
-function copyCode(el, code) {
-    navigator.clipboard.writeText(code).then(() => {
-        const orig = el.textContent;
-        el.textContent = 'Copied!';
-        el.style.background = '#dcfce7';
-        el.style.borderColor = '#16a34a';
-        el.style.color = '#15803d';
-        setTimeout(() => {
-            el.textContent = orig;
-            el.style.background = '';
-            el.style.borderColor = '';
-            el.style.color = '';
-        }, 2000);
-    });
-}
+    function copyCode(el, code) {
+        navigator.clipboard.writeText(code).then(() => {
+            const orig = el.textContent;
+            el.textContent = 'Copied!';
+            el.style.background = '#dcfce7';
+            el.style.borderColor = '#16a34a';
+            el.style.color = '#15803d';
+            setTimeout(() => {
+                el.textContent = orig;
+                el.style.background = '';
+                el.style.borderColor = '';
+                el.style.color = '';
+            }, 2000);
+        });
+    }
 
-function generateMembershipCode(userId, btn) {
-    const orig = btn.innerHTML;
-    btn.disabled = true;
-    btn.innerHTML = '…';
+    function generateMembershipCode(userId, btn) {
+        const orig = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '…';
 
-    fetch("{{ route('admin.generate.membership.code') }}", {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-        },
-        body: JSON.stringify({ user_id: userId })
-    })
-    .then(r => r.json())
-    .then(data => {
-        if (data.success) {
-            location.reload();
+        fetch("{{ route('admin.generate.membership.code') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    user_id: userId
+                })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    btn.disabled = false;
+                    btn.innerHTML = orig;
+                    alert(data.message || 'Failed to generate code.');
+                }
+            })
+            .catch(() => {
+                btn.disabled = false;
+                btn.innerHTML = orig;
+                alert('Something went wrong.');
+            });
+    }
+function filterUsers() {
+    const input = document.getElementById("userSearch").value.toLowerCase();
+    const rows = document.querySelectorAll(".user-row");
+
+    rows.forEach(row => {
+        const name = row.dataset.name;
+        const email = row.dataset.email;
+
+        if (name.includes(input) || email.includes(input)) {
+            row.style.display = "";
         } else {
-            btn.disabled = false;
-            btn.innerHTML = orig;
-            alert(data.message || 'Failed to generate code.');
+            row.style.display = "none";
         }
-    })
-    .catch(() => {
-        btn.disabled = false;
-        btn.innerHTML = orig;
-        alert('Something went wrong.');
     });
 }
 </script>

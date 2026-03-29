@@ -327,6 +327,7 @@
                                 <tr>
                                     <th>User</th>
                                     <th>Status</th>
+                                    <th>Country</th>
                                     <th>Submitted</th>
                                     <th>ID Document</th>
                                     <th>Selfie/Utility</th>
@@ -371,7 +372,7 @@
                                             {{ ucfirst($kyc->status) }}
                                         </span>
                                     </td>
-
+   
                                     {{-- Submitted Date --}}
                                     <td>
                                         <div style="font-size:0.8rem; color:#374151;">{{ $kyc->created_at->format('d M, Y') }}</div>
