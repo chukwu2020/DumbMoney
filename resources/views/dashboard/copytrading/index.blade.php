@@ -919,37 +919,45 @@ document.addEventListener('DOMContentLoaded', function () {
         submitBtn.disabled = !isValid;
     }
 
-    /* ─── CHECK PLAN LIMIT (async) ──────────────────────────── */
-    async function checkPlanLimit(planId) {
-        try {
-            const response = await fetch(`/copy-trading/check-plan-limit/${planId}`, {
-                method: 'GET',
-                headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken }
-            });
+  // Update the checkPlanLimit function to also check if this card is already selected
+async function checkPlanLimit(planId) {
+    try {
+        const response = await fetch(`/copy-trading/check-plan-limit/${planId}`, {
+            method: 'GET',
+            headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken }
+        });
 
-            if (!response.ok) throw new Error('Request failed');
+        if (!response.ok) throw new Error('Request failed');
 
-            const data = await response.json();
+        const data = await response.json();
 
-            if (data.has_reached_limit) {
-                showLimitWarning(
-                    `Maximum ${data.plan_limit} participation${data.plan_limit > 1 ? 's' : ''} reached. ` +
-                    `You currently have ${data.current_participations} (active + pending).`
-                );
-                return true;  // limit reached
-            } else {
-                hideLimitWarning();
-                amountInput.disabled = false;
-                return false; // ok
+        if (data.has_reached_limit) {
+            showLimitWarning(
+                `Maximum ${data.plan_limit} participation${data.plan_limit > 1 ? 's' : ''} reached. ` +
+                `You currently have ${data.current_participations} (active + pending).`
+            );
+            
+            // ✅ Mark the plan card as limit reached immediately
+            const planCard = document.querySelector(`.plan-card[data-plan-id="${planId}"]`);
+            if (planCard && !planCard.classList.contains('limit-reached')) {
+                planCard.classList.add('limit-reached');
+                planCard.dataset.limitReached = 'true';
             }
-
-        } catch (err) {
-            console.error('checkPlanLimit error:', err);
+            
+            return true;
+        } else {
             hideLimitWarning();
             amountInput.disabled = false;
             return false;
         }
+
+    } catch (err) {
+        console.error('checkPlanLimit error:', err);
+        hideLimitWarning();
+        amountInput.disabled = false;
+        return false;
     }
+}
 
     /* ─── PLAN CARD CLICK ───────────────────────────────────── */
     // FIX: listeners are only attached to cards that are NOT .limit-reached
@@ -1071,43 +1079,59 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     /* ─── FORM SUBMIT ───────────────────────────────────────── */
-    document.getElementById('copyTradingForm')?.addEventListener('submit', function (e) {
-        e.preventDefault();
+   // Update the form submit section
+document.getElementById('copyTradingForm')?.addEventListener('submit', function (e) {
+    e.preventDefault();
 
-        if (submitBtn.disabled || submitBtn.classList.contains('submitting')) return;
+    if (submitBtn.disabled || submitBtn.classList.contains('submitting')) return;
 
-        const amount = parseFloat(amountInput.value);
+    const amount = parseFloat(amountInput.value);
 
-        if (amount > userBalance) {
-            showToast('Insufficient balance', 'error');
-            return;
-        }
+    if (amount > userBalance) {
+        showToast('Insufficient balance', 'error');
+        return;
+    }
 
-        submitBtn.disabled = true;
-        submitBtn.classList.add('submitting');
-        submitBtn.innerHTML = '<div class="loading-spinner"></div> Processing…';
+    submitBtn.disabled = true;
+    submitBtn.classList.add('submitting');
+    submitBtn.innerHTML = '<div class="loading-spinner"></div> Processing…';
 
-        fetch('{{ route("copy-trading.store") }}', {
-            method: 'POST',
-            headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken },
-            body: new FormData(this),
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                showToast(data.message, 'success');
-                setTimeout(() => window.location.href = '{{ route("copy-trading.history") }}', 1500);
-            } else {
-                throw new Error(data.message);
+    fetch('{{ route("copy-trading.store") }}', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken },
+        body: new FormData(this),
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            showToast(data.message, 'success');
+            
+            // ✅ CRITICAL: Immediately refresh the plan card status
+            // This updates the UI to show limit reached without page refresh
+            if (selectedPlan) {
+                // Force refresh the plan limit check
+                checkPlanLimit(selectedPlan.id).then(() => {
+                    // Also mark the card as limit reached if needed
+                    const planCard = document.querySelector(`.plan-card[data-plan-id="${selectedPlan.id}"]`);
+                    if (planCard && planLimitWarning.classList.contains('hidden') === false) {
+                        planCard.classList.add('limit-reached');
+                        planCard.dataset.limitReached = 'true';
+                    }
+                });
             }
-        })
-        .catch(err => {
-            showToast(err.message || 'An error occurred', 'error');
-            submitBtn.disabled = false;
-            submitBtn.classList.remove('submitting');
-            submitBtn.innerHTML = 'Submit Request';
-        });
+            
+            setTimeout(() => window.location.href = '{{ route("copy-trading.history") }}', 1500);
+        } else {
+            throw new Error(data.message);
+        }
+    })
+    .catch(err => {
+        showToast(err.message || 'An error occurred', 'error');
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('submitting');
+        submitBtn.innerHTML = 'Submit Request';
     });
+});
 
     /* ─── CHANGE ADMIN ──────────────────────────────────────── */
     if (changeBtn && changeSelect) {
