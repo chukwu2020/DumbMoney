@@ -97,6 +97,7 @@
             opacity: 0;
             transform: translateY(-10px);
         }
+
         to {
             opacity: 1;
             transform: translateY(0);
@@ -329,7 +330,7 @@
                         <div class="row g-3">
                             <!-- Discord Option -->
                             <div class="col-md-4">
-                                <div class="join-option-card {{ old('join_source') == 'discord' ? 'selected' : '' }}" onclick="selectJoinSource('discord')">
+                                <div class="join-option-card {{ old('join_source') == 'discord' ? 'selected' : '' }}" onclick="selectJoinSource(event, 'discord')">
                                     <div class="selected-badge">✓</div>
                                     <i class="ri-discord-line" style="color:blue"></i>
                                     <h5>Discord</h5>
@@ -339,7 +340,7 @@
 
                             <!-- Telegram Option -->
                             <div class="col-md-4">
-                                <div class="join-option-card {{ old('join_source') == 'telegram' ? 'selected' : '' }}" onclick="selectJoinSource('telegram')">
+                                <div class="join-option-card {{ old('join_source') == 'telegram' ? 'selected' : '' }}" onclick="selectJoinSource(event, 'telegram')">
                                     <div class="selected-badge">✓</div>
                                     <i class="ri-telegram-line" style="color: aqua;"></i>
                                     <h5>Telegram</h5>
@@ -349,7 +350,7 @@
 
                             <!-- Other Option -->
                             <div class="col-md-4">
-                                <div class="join-option-card {{ old('join_source') == 'other' ? 'selected' : '' }}" onclick="selectJoinSource('other')">
+                                <div class="join-option-card {{ old('join_source') == 'other' ? 'selected' : '' }}" onclick="selectJoinSource(event, 'other')">
                                     <div class="selected-badge">✓</div>
                                     <i class="ri-global-line"></i>
                                     <h5>Other</h5>
@@ -386,12 +387,12 @@
                     </button>
 
                     <p class="text-center mt-3 w-100">
-    Already Have An Account?
-    <a href="{{ route('login') }}" style="background-color: #8bc905;"
-       class="inline-block ml-2 px-4 py-2 bg-[#8bc905] text-white rounded">
-        Login
-    </a>
-</p>
+                        Already Have An Account?
+                        <a href="{{ route('login') }}" style="background-color: #8bc905;"
+                            class="inline-block ml-2 px-4 py-2 bg-[#8bc905] text-white rounded">
+                            Login
+                        </a>
+                    </p>
                 </form>
             </div>
         </div>
@@ -400,85 +401,125 @@
 <!-- End My Account Page -->
 
 <script>
-    // Password toggle functions
-    function toggleRegPassword() {
-        const passwordInput = document.getElementById('regPassword');
-        const toggleIcon = document.getElementById('regToggleIcon');
+// Password toggle
+function toggleRegPassword() {
+    const input = document.getElementById('regPassword');
+    const icon = document.getElementById('regToggleIcon');
 
-        if (passwordInput.type === 'text') {
-            passwordInput.type = 'password';
-            toggleIcon.classList.remove('ri-eye-line');
-            toggleIcon.classList.add('ri-eye-off-line');
-        } else {
-            passwordInput.type = 'text';
-            toggleIcon.classList.remove('ri-eye-off-line');
-            toggleIcon.classList.add('ri-eye-line');
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.replace('ri-eye-line', 'ri-eye-off-line');
+    } else {
+        input.type = 'password';
+        icon.classList.replace('ri-eye-off-line', 'ri-eye-line');
+    }
+}
+
+function toggleRegConfirmPassword() {
+    const input = document.getElementById('regConfirmPassword');
+    const icon = document.getElementById('regConfirmToggleIcon');
+
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.replace('ri-eye-line', 'ri-eye-off-line');
+    } else {
+        input.type = 'password';
+        icon.classList.replace('ri-eye-off-line', 'ri-eye-line');
+    }
+}
+
+// Select join source (FIXED)
+function selectJoinSource(event, source) {
+    document.getElementById('join_source').value = source;
+
+    document.querySelectorAll('.join-option-card').forEach(card => {
+        card.classList.remove('selected');
+    });
+
+    event.currentTarget.classList.add('selected');
+
+    const otherInput = document.getElementById('otherSourceInput');
+
+    if (source === 'other') {
+        otherInput.classList.remove('hidden');
+    } else {
+        otherInput.classList.add('hidden');
+        document.getElementById('join_source_other').value = '';
+    }
+
+    validateForm();
+}
+
+// Validation
+function validateForm() {
+    const requiredFields = [
+        document.querySelector('input[name="name"]'),
+        document.querySelector('input[name="username"]'),
+        document.querySelector('input[name="email"]'),
+        document.querySelector('input[name="phone"]'),
+        document.getElementById('regPassword'),
+        document.getElementById('regConfirmPassword'),
+        document.getElementById('country'),
+    ];
+
+    const joinSource = document.getElementById('join_source').value;
+    let isValid = true;
+
+    requiredFields.forEach(field => {
+        if (!field || !field.value.trim()) {
+            isValid = false;
+        }
+    });
+
+    if (!joinSource) {
+        isValid = false;
+    }
+
+    if (joinSource === 'other') {
+        const other = document.getElementById('join_source_other').value;
+        if (!other.trim()) {
+            isValid = false;
         }
     }
 
-    function toggleRegConfirmPassword() {
-        const passwordInput = document.getElementById('regConfirmPassword');
-        const toggleIcon = document.getElementById('regConfirmToggleIcon');
+    document.getElementById('registerBtn').disabled = !isValid;
+}
 
-        if (passwordInput.type === 'text') {
-            passwordInput.type = 'password';
-            toggleIcon.classList.remove('ri-eye-line');
-            toggleIcon.classList.add('ri-eye-off-line');
-        } else {
-            passwordInput.type = 'text';
-            toggleIcon.classList.remove('ri-eye-off-line');
-            toggleIcon.classList.add('ri-eye-line');
-        }
-    }
+// Loader
+document.getElementById('registerForm').addEventListener('submit', function() {
+    const btn = document.getElementById('registerBtn');
+    const text = btn.querySelector('.btn-text');
+    const loader = btn.querySelector('.btn-loader');
 
-    // Join Source Selection
-    function selectJoinSource(source) {
-        document.getElementById('join_source').value = source;
+    btn.disabled = true;
+    text.style.display = 'none';
+    loader.classList.remove('hidden');
+});
 
+// Init
+document.addEventListener('DOMContentLoaded', function () {
+    const joinSource = document.getElementById('join_source').value;
+
+    if (joinSource) {
         document.querySelectorAll('.join-option-card').forEach(card => {
-            card.classList.remove('selected');
+            if (card.getAttribute('onclick')?.includes(joinSource)) {
+                card.classList.add('selected');
+            }
         });
 
-        event.currentTarget.classList.add('selected');
-
-        const otherInput = document.getElementById('otherSourceInput');
-        if (source === 'other') {
-            otherInput.classList.remove('hidden');
-        } else {
-            otherInput.classList.add('hidden');
-            document.getElementById('join_source_other').value = '';
+        if (joinSource === 'other') {
+            document.getElementById('otherSourceInput')?.classList.remove('hidden');
         }
     }
 
-    // Form submission loader
-    document.getElementById('registerForm').addEventListener('submit', function() {
-        const btn = document.getElementById('registerBtn');
-        const btnText = btn.querySelector('.btn-text');
-        const btnLoader = btn.querySelector('.btn-loader');
-
-        btn.disabled = true;
-        btnText.style.display = 'none';
-        btnLoader.classList.remove('hidden');
+    // Attach listeners
+    document.querySelectorAll('input, select').forEach(el => {
+        el.addEventListener('input', validateForm);
     });
 
-    // Initialize
-    document.addEventListener('DOMContentLoaded', function() {
-        // Preselect join source
-        const joinSource = document.getElementById('join_source').value;
-        if (joinSource) {
-            document.querySelectorAll('.join-option-card').forEach(card => {
-                if (card.getAttribute('onclick')?.includes(joinSource)) {
-                    card.classList.add('selected');
-                }
-            });
-            
-            if (joinSource === 'other') {
-                document.getElementById('otherSourceInput')?.classList.remove('hidden');
-            }
-        }
-    });
+    validateForm();
+});
 </script>
-
 <style>
     .bg-color-fffaeb {
         background-color: #fffaf0;
@@ -486,24 +527,24 @@
         border-radius: 30px;
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
     }
-    
+
     .login-form h3 {
         color: #0C3A30;
         font-weight: 700;
         margin-bottom: 10px;
     }
-    
+
     .form-label {
         font-weight: 500;
         color: #333;
     }
-    
+
     .form-control {
         border: 1px solid #e0e0e0;
         border-radius: 8px;
         padding: 12px 15px;
     }
-    
+
     .form-control:focus {
         border-color: #8bc905;
         box-shadow: 0 0 0 0.2rem rgba(139, 201, 5, 0.25);

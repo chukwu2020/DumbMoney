@@ -102,8 +102,10 @@ class UserController extends Controller
 
             'referral_id' => 'nullable',
 
-            'join_source' => 'nullable|string',
-            'join_source_other' => 'nullable|string|required_if:join_source,other',
+           
+
+            'join_source' => 'required|string|in:discord,telegram,other',
+'join_source_other' => 'required_if:join_source,other|nullable|string|max:255',
 
             'copy_preference' => 'nullable|string',
             'copy_admin_id' => 'nullable|integer|required_if:copy_preference,specific_admin',

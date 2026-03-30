@@ -16,7 +16,7 @@
     <div class="max-w-7xl mx-auto px-4 md:px-6 py-10 relative z-10">
         
         <!-- Header -->
-        <div class="flex flex-wrap items-center justify-between gap-2 mb-6">
+        <div class="flex items-center justify-between gap-2 mb-6">
             <h5 class="font-semibold text-lg md:text-xl" style="color: #0C3A30;">Rules & Guidelines</h5>
             <ul class="flex items-center gap-[6px]">
                 <li class="font-medium">

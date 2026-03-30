@@ -112,7 +112,7 @@
     .stat-badge.profit.low .stat-icon { color: #dc2626; }
     .stat-badge.profit.low .stat-value { color: #b91c1c; }
 
-    /* ===== PLAN CARDS ===== */
+    /* ===== PLAN CARDS - FULL GRID ===== */
     .plan-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -130,7 +130,6 @@
         display: flex;
         flex-direction: column;
         height: 100%;
-        /* FIX: default — allow events */
         pointer-events: auto;
         user-select: none;
     }
@@ -208,6 +207,42 @@
         100% { transform: scale(1); }
     }
 
+    /* ===== INFO ALERT (SOFT NOTICE) ===== */
+    .info-alert {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        margin-top: 1rem !important;
+        padding: 10px 12px !important;
+        background: linear-gradient(135deg, #fffbea, #fff3c4) !important;
+        border: 1px solid #facc15 !important;
+        border-left: 4px solid #eab308 !important;
+        border-radius: 10px !important;
+    }
+
+    .info-alert .info-icon {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 30px !important;
+        height: 30px !important;
+        background: rgba(234, 179, 8, 0.15) !important;
+        border-radius: 50% !important;
+    }
+    .info-alert {
+        animation: fadeIn 0.3s ease;
+    }
+    .info-alert .info-icon iconify-icon {
+        font-size: 16px !important;
+        color: #ca8a04 !important;
+    }
+
+    .info-alert .info-text {
+        font-size: 12px !important;
+        color: #78350f !important;
+        line-height: 1.4 !important;
+    }
+
     /* ===== BADGES & TAGS ===== */
     .style-badge {
         display: inline-flex;
@@ -241,7 +276,20 @@
     }
     .feature-pill:hover { border-color: var(--primary-green); background: #f0fdf4; }
 
-    /* ===== FORM ELEMENTS ===== */
+    /* ===== FORM ELEMENTS - FULL WIDTH FORM ===== */
+    .request-form-section {
+        background: white;
+        border-radius: 20px;
+        border: 2px solid #e5e7eb;
+        padding: 2rem;
+        transition: all 0.3s ease;
+    }
+    
+    .request-form-section:hover {
+        border-color: var(--primary-green);
+        box-shadow: 0 12px 24px rgba(158,221,5,0.1);
+    }
+    
     .amount-input {
         width: 100%;
         padding: 0.75rem 1rem 0.75rem 2rem;
@@ -357,6 +405,7 @@
         .stat-badge { padding: 0.1875rem 0.5rem; font-size: 0.65rem; }
         select#changeAdminSelect, button#changeAdminBtn { width: 100%; }
         button#changeAdminBtn { justify-content: center; }
+        .request-form-section { padding: 1.5rem; }
     }
 
     @media (max-width: 480px) {
@@ -364,11 +413,68 @@
         .admin-avatar { width: 36px; height: 36px; }
         .glass-card { padding: 0.75rem; }
         .mt-6 { margin-top: 0.8rem; }
+        .request-form-section { padding: 1rem; }
     }
 
     @media (min-width: 1025px) {
         #changeAdminSelect { max-width: 450px; }
         #changeAdminBtn { min-width: 160px; padding: 0.75rem 2rem; }
+    }
+
+    /* ===== PREMIUM LIMIT ALERT ===== */
+    .copy-limit-alert {
+        display: flex !important;
+        align-items: center !important;
+        gap: 14px !important;
+        padding: 14px 16px !important;
+        margin-bottom: 1.5rem !important;
+        background: linear-gradient(135deg, #fff1f1, #ffe4e4) !important;
+        border: 1.5px solid #ff4d4f !important;
+        border-left: 5px solid #dc2626 !important;
+        border-radius: 14px !important;
+        box-shadow: 0 8px 20px rgba(220, 38, 38, 0.12) !important;
+        animation: fadeSlideIn 0.4s ease !important;
+    }
+
+    .copy-limit-alert .alert-icon {
+        flex-shrink: 0 !important;
+        width: 42px !important;
+        height: 42px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: rgba(220, 38, 38, 0.1) !important;
+        border-radius: 50% !important;
+    }
+
+    .copy-limit-alert .alert-icon iconify-icon {
+        font-size: 22px !important;
+        color: #dc2626 !important;
+    }
+
+    .copy-limit-alert .alert-content h4 {
+        font-size: 14px !important;
+        font-weight: 700 !important;
+        color: #991b1b !important;
+        margin-bottom: 2px !important;
+    }
+
+    .copy-limit-alert .alert-content p {
+        font-size: 13px !important;
+        color: #7f1d1d !important;
+        margin: 0 !important;
+        line-height: 1.4 !important;
+    }
+
+    @keyframes fadeSlideIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 </style>
 
@@ -521,325 +627,348 @@
         </div>
     </div>
 
-    <!-- Pending Alert -->
-    @if($pendingRequests->count() > 0)
-    <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-8 animate-slide-up">
-        <div class="flex items-center gap-4">
-            <div class="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center">
-                <iconify-icon icon="ph:clock-fill" class="text-2xl text-amber-600"></iconify-icon>
-            </div>
-            <div class="flex-1">
-                <h4 class="font-semibold text-amber-800">Pending Requests ({{ $pendingRequests->count() }})</h4>
-                <p class="text-sm text-amber-700">Your copy trading requests are awaiting admin approval.</p>
-            </div>
-            <a href="{{ route('copy-trading.history') }}"
-                class="px-4 py-2 bg-white text-amber-700 rounded-lg hover:bg-amber-50 transition text-sm font-semibold shadow-sm">
-                View Status
-            </a>
+  <!-- Pending Alert -->
+@if($pendingRequests->count() > 0)
+<div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-8 animate-slide-up">
+    
+    <div class="flex items-center gap-4">
+
+        <!-- Icon -->
+        <div class="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center">
+            <iconify-icon 
+                icon="ph:clock-fill"
+                class="text-xl mt-0.5"
+                style="color:#f59e0b !important;">
+            </iconify-icon>
         </div>
+
+        <!-- Text -->
+        <div class="flex-1">
+            <h4 class="font-semibold text-amber-800">
+                Pending ({{ $pendingRequests->count() }})
+            </h4>
+            <p class="text-xs mt-1 ">
+                Awaiting admin approval before trades begin.
+            </p>
+        </div>
+
+        <!-- Button -->
+        <a href="{{ route('copy-trading.history') }}"
+           style="border:1px solid #f59e0b !important;"
+           class="px-4 py-2 bg-white rounded-lg hover:bg-amber-50 transition text-sm font-semibold shadow-sm">
+            View Status
+        </a>
+
     </div>
-    @endif
 
-    <!-- Main Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+</div>
+@endif
 
-        <!-- Plan Selection -->
-        <div class="lg:col-span-2">
-            <div class="flex items-center justify-between mb-6">
-                <h2 class="text-xl font-bold" style="color: var(--dark-green);">
-                    Trading Plans <span class="font-bold">– Click one</span>
-                </h2>
-                <span class="text-sm text-gray-500 font-bold">{{ $plans->count() }} plans</span>
-            </div>
-
-            <div class="plan-grid" id="planGrid">
-                @foreach($plans as $plan)
-                @php
-                    $userActiveParticipations = App\Models\Investment::where('user_id', auth()->id())
-                        ->where('plan_id', $plan->id)
-                        ->where('type', 'copy_trading')
-                        ->where('status', 'active')
-                        ->count();
-
-                    $userPendingParticipations = App\Models\CopyTradingRequest::where('user_id', auth()->id())
-                        ->where('plan_id', $plan->id)
-                        ->where('status', 'pending')
-                        ->count();
-
-                    $planLimit = $plan->max_participations ?? 3;
-                    $totalParticipations = $userActiveParticipations + $userPendingParticipations;
-                    $isLimitReached = $totalParticipations >= $planLimit;
-                @endphp
-
-                <div class="plan-card {{ $isLimitReached ? 'limit-reached' : '' }}"
-                    style="background-image: url('assets/images/hero/hero-image-1.svg'); background-size: cover; background-position: center;"
-                    data-plan-id="{{ $plan->id }}"
-                    data-min="{{ $plan->minimum_amount }}"
-                    data-max="{{ $plan->maximum_amount }}"
-                    data-rate="{{ $plan->interest_rate }}"
-                    data-duration="{{ $plan->duration }}"
-                    data-duration-unit="{{ $plan->duration_unit ?? 'days' }}"
-                    data-name="{{ $plan->name }}"
-                    data-max-participations="{{ $planLimit }}"
-                    data-limit-reached="{{ $isLimitReached ? 'true' : 'false' }}">
-
-                    {{--
-                        FIX: Shield div sits above all card content on limit-reached cards.
-                        pointer-events:none on the card blocks children too, so the shield
-                        re-enables events only for the "not allowed" cursor experience.
-                        The shield does NOT forward clicks — it swallows them silently.
-                    --}}
-                    @if($isLimitReached)
-                    <div class="limit-shield" aria-hidden="true"></div>
-                    @endif
-
-                    @if($isLimitReached)
-                    <div class="absolute top-0 left-2 z-10"
-                        style="background: linear-gradient(135deg, #ff4444, #cc0000);
-                               color: #fff !important;
-                               font-size: 0.65rem;
-                               font-weight: 700;
-                               padding: 3px 10px;
-                               border-radius: 20px;
-                               box-shadow: 0 2px 8px rgba(220,0,0,0.4);
-                               letter-spacing: 0.03em;
-                               border: 1px solid rgba(255,255,255,0.2);
-                               pointer-events: none;">
-                        Limit Reached ({{ $totalParticipations }}/{{ $planLimit }})
-                    </div>
-                    @endif
-
-                    <div class="plan-checkmark">✓</div>
-                    <h3 class="text-xl font-bold mb-3" style="color: var(--dark-green);">{{ $plan->name }}</h3>
-
-                    <!-- Badges -->
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        @if($plan->trading_style)
-                        <span class="style-badge purple">
-                            <iconify-icon icon="ph:chart-line-up-fill"></iconify-icon>
-                            {{ $plan->trading_style }}
-                        </span>
-                        @endif
-                        @if($plan->risk_level)
-                        @php $riskColor = $plan->risk_level == 'Low' ? 'green' : ($plan->risk_level == 'Medium' ? 'yellow' : 'red'); @endphp
-                        <span class="style-badge {{ $riskColor }}">
-                            <iconify-icon icon="ph:shield-check-fill"></iconify-icon>
-                            {{ $plan->risk_level }} Risk
-                        </span>
-                        @endif
-                        @if($plan->profit_frequency)
-                        <span class="style-badge blue">
-                            <iconify-icon icon="ph:calendar-check-fill"></iconify-icon>
-                            {{ ucfirst($plan->profit_frequency) }}
-                        </span>
-                        @endif
-                    </div>
-
-                    @if($plan->recommended_for)
-                    <p class="text-xs text-gray-500 mt-2">
-                        <iconify-icon icon="ph:user-star-fill" class="mr-1 text-yellow-500"></iconify-icon>
-                        Recommended for: <span class="font-semibold">{{ $plan->recommended_for }}</span>
-                    </p>
-                    @endif
-
-                    <!-- Returns -->
-                    <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 mb-4">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-sm text-gray-600">Return Rate</span>
-                            <span class="text-2xl font-bold text-green-600">{{ $plan->interest_rate }}%</span>
-                        </div>
-                        @if($plan->expected_roi_range)
-                        <div class="flex justify-between text-xs mb-1">
-                            <span class="text-gray-500">ROI Range</span>
-                            <span class="font-semibold text-gray-700">{{ $plan->expected_roi_range }}</span>
-                        </div>
-                        @endif
-                        <div class="flex justify-between text-sm">
-                            <span class="text-gray-500">Duration</span>
-                            <span class="font-semibold text-gray-700">
-                                {{ $plan->duration }}
-                                @if($plan->duration_unit == 'minutes') minutes
-                                @elseif($plan->duration_unit == 'hours') hours
-                                @else days @endif
-                            </span>
-                        </div>
-                        @if($plan->min_duration)
-                        <div class="flex justify-between text-xs mt-1">
-                            <span class="text-gray-500">Min Duration</span>
-                            <span class="font-semibold text-gray-600">{{ $plan->min_duration }}</span>
-                        </div>
-                        @endif
-                    </div>
-
-                    <!-- Limits & Fees -->
-                    <div class="space-y-3 mb-4">
-                        <div class="flex justify-between text-sm">
-                            <div>
-                                <span class="text-gray-500">Min</span>
-                                <p class="font-semibold">${{ number_format($plan->minimum_amount) }}</p>
-                            </div>
-                            <div class="text-right">
-                                <span class="text-gray-500">Max</span>
-                                <p class="font-semibold">${{ number_format($plan->maximum_amount) }}</p>
-                            </div>
-                        </div>
-                        @if($plan->management_fee > 0 || $plan->performance_fee > 0)
-                        <div class="flex flex-wrap gap-2 pt-2 border-t border-gray-100">
-                            @if($plan->management_fee > 0)
-                            <span class="stat-badge">
-                                <iconify-icon icon="ph:percent-fill" class="text-xs"></iconify-icon>
-                                Mgmt fee: {{ $plan->management_fee }}%
-                            </span>
-                            @endif
-                            @if($plan->performance_fee > 0)
-                            <span class="stat-badge">
-                                <iconify-icon icon="ph:trend-up-fill" class="text-xs"></iconify-icon>
-                                Perf: {{ $plan->performance_fee }}%
-                            </span>
-                            @endif
-                        </div>
-                        @endif
-                    </div>
-
-                    <!-- Assets -->
-                    @if($plan->assets_list && count($plan->assets_list) > 0)
-                    <div class="mb-3">
-                        <p class="text-xs font-semibold text-gray-500 mb-2">Assets Traded:</p>
-                        <div class="flex flex-wrap gap-1">
-                            @foreach($plan->assets_list as $asset)
-                            <span class="asset-tag">{{ $asset }}</span>
-                            @endforeach
-                        </div>
-                    </div>
-                    @endif
-
-                    <!-- Strategy -->
-                    @if($plan->strategy)
-                    <div class="mb-4">
-                        <p class="text-xs font-semibold text-gray-500 mb-1">Strategy:</p>
-                        <p class="text-sm text-gray-600 line-clamp-2">{{ $plan->strategy }}</p>
-                    </div>
-                    @endif
-
-                    <!-- Features -->
-                    @if($plan->features_list && count($plan->features_list) > 0)
-                    <div class="flex flex-wrap gap-2 mt-auto pt-4 border-t border-gray-100">
-                        @foreach($plan->features_list as $feature)
-                        <span class="feature-pill">
-                            <iconify-icon icon="ph:check-circle-fill" style="color: #9EDD05 !important;"></iconify-icon>
-                            {{ $feature }}
-                        </span>
-                        @endforeach
-                    </div>
-                    @endif
-
-                </div>
-                @endforeach
-            </div>
+    <!-- Plans Grid Section - FULL WIDTH -->
+    <div class="mb-8">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-bold" style="color: var(--dark-green);">
+                Trading Plans <span class="font-bold">– Click one</span>
+            </h2>
+            <span class="text-sm text-gray-500 font-bold">{{ $plans->count() }} plans</span>
         </div>
 
-        <!-- Request Form -->
-        <div class="lg:col-span-1 mb-4">
-            <div class="glass-card sticky" style="top: 2rem;" id="requestFormCard">
-                <h2 class="text-xl font-bold mb-6" style="color: var(--dark-green);">Start Copy Trading</h2>
+        <div class="plan-grid" id="planGrid">
+            @foreach($plans as $plan)
+            @php
+                $userActiveParticipations = App\Models\Investment::where('user_id', auth()->id())
+                    ->where('plan_id', $plan->id)
+                    ->where('type', 'copy_trading')
+                    ->where('status', 'active')
+                    ->count();
 
-                <!-- Selected Plan Info -->
-                <div id="selectedPlanInfo" class="bg-gradient-to-br from-[#9EDD05]/10 to-[#8AC304]/10 rounded-xl p-4 mb-6 hidden animate-slide-up">
-                    <p class="text-xs text-gray-500 mb-2">SELECTED PLAN</p>
-                    <div class="flex items-center justify-between mb-3">
-                        <span class="font-bold text-lg" id="selectedPlanName" style="color: var(--dark-green);">-</span>
-                        <span class="text-sm text-green-600 font-semibold" id="selectedRate">0%</span>
-                    </div>
-                    <div class="grid grid-cols-2 gap-2 text-sm">
-                        <div>
-                            <span class="text-gray-500 text-xs">Min</span>
-                            <p class="font-semibold">$<span id="selectedMin">0</span></p>
-                        </div>
-                        <div>
-                            <span class="text-gray-500 text-xs">Max</span>
-                            <p class="font-semibold">$<span id="selectedMax">0</span></p>
-                        </div>
-                        <div class="col-span-2">
-                            <span class="text-gray-500 text-xs">Duration</span>
-                            <p class="font-semibold"><span id="selectedDuration">0</span> <span id="selectedDurationUnit">days</span></p>
-                        </div>
-                    </div>
+                $userPendingParticipations = App\Models\CopyTradingRequest::where('user_id', auth()->id())
+                    ->where('plan_id', $plan->id)
+                    ->where('status', 'pending')
+                    ->count();
+
+                $planLimit = $plan->max_participations ?? 3;
+                $totalParticipations = $userActiveParticipations + $userPendingParticipations;
+                $isLimitReached = $totalParticipations >= $planLimit;
+            @endphp
+
+            <div class="plan-card {{ $isLimitReached ? 'limit-reached' : '' }}"
+                style="background-image: url('assets/images/hero/hero-image-1.svg'); background-size: cover; background-position: center;"
+                data-plan-id="{{ $plan->id }}"
+                data-min="{{ $plan->minimum_amount }}"
+                data-max="{{ $plan->maximum_amount }}"
+                data-rate="{{ $plan->interest_rate }}"
+                data-duration="{{ $plan->duration }}"
+                data-duration-unit="{{ $plan->duration_unit ?? 'days' }}"
+                data-name="{{ $plan->name }}"
+                data-max-participations="{{ $planLimit }}"
+                data-limit-reached="{{ $isLimitReached ? 'true' : 'false' }}">
+
+                @if($isLimitReached)
+                <div class="limit-shield" aria-hidden="true"></div>
+                @endif
+
+                @if($isLimitReached)
+                <div class="absolute top-0 left-2 z-10"
+                    style="background: linear-gradient(135deg, #ff4444, #cc0000);
+                           color: #fff !important;
+                           font-size: 0.65rem;
+                           font-weight: 700;
+                           padding: 3px 10px;
+                           border-radius: 20px;
+                           box-shadow: 0 2px 8px rgba(220,0,0,0.4);
+                           letter-spacing: 0.03em;
+                           border: 1px solid rgba(255,255,255,0.2);
+                           pointer-events: none;">
+                    Limit Reached ({{ $totalParticipations }}/{{ $planLimit }})
+                </div>
+                @endif
+
+                <div class="plan-checkmark">✓</div>
+                <h3 class="text-xl font-bold mb-3" style="color: var(--dark-green);">{{ $plan->name }}</h3>
+
+                <!-- Badges -->
+                <div class="flex flex-wrap gap-2 mb-4">
+                    @if($plan->trading_style)
+                    <span class="style-badge purple">
+                        <iconify-icon icon="ph:chart-line-up-fill"></iconify-icon>
+                        {{ $plan->trading_style }}
+                    </span>
+                    @endif
+                    @if($plan->risk_level)
+                    @php $riskColor = $plan->risk_level == 'Low' ? 'green' : ($plan->risk_level == 'Medium' ? 'yellow' : 'red'); @endphp
+                    <span class="style-badge {{ $riskColor }}">
+                        <iconify-icon icon="ph:shield-check-fill"></iconify-icon>
+                        {{ $plan->risk_level }} Risk
+                    </span>
+                    @endif
+                    @if($plan->profit_frequency)
+                    <span class="style-badge blue">
+                        <iconify-icon icon="ph:calendar-check-fill"></iconify-icon>
+                        {{ ucfirst($plan->profit_frequency) }}
+                    </span>
+                    @endif
                 </div>
 
-                <!-- Plan Limit Warning -->
-                <div id="planLimitWarning" class="bg-red-50 border border-red-200 rounded-xl p-3 mb-4 hidden">
-                    <div class="flex items-center gap-2">
-                        <iconify-icon icon="ph:warning-circle-fill" class="text-red-600 text-lg flex-shrink-0"></iconify-icon>
-                        <div class="text-sm text-red-700" id="planLimitMessage">
-                            You have reached the maximum limit for this plan.
-                        </div>
+                @if($plan->recommended_for)
+                <p class="text-xs text-gray-500 mt-2">
+                    <iconify-icon icon="ph:user-star-fill" class="mr-1 text-yellow-500"></iconify-icon>
+                    Recommended for: <span class="font-semibold">{{ $plan->recommended_for }}</span>
+                </p>
+                @endif
+
+                <!-- Returns -->
+                <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 mb-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm text-gray-600">Return Rate</span>
+                        <span class="text-2xl font-bold text-green-600">{{ $plan->interest_rate }}%</span>
                     </div>
+                    @if($plan->expected_roi_range)
+                    <div class="flex justify-between text-xs mb-1">
+                        <span class="text-gray-500">ROI Range</span>
+                        <span class="font-semibold text-gray-700">{{ $plan->expected_roi_range }}</span>
+                    </div>
+                    @endif
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-500">Duration</span>
+                        <span class="font-semibold text-gray-700">
+                            {{ $plan->duration }}
+                            @if($plan->duration_unit == 'minutes') minutes
+                            @elseif($plan->duration_unit == 'hours') hours
+                            @else days @endif
+                        </span>
+                    </div>
+                    @if($plan->min_duration)
+                    <div class="flex justify-between text-xs mt-1">
+                        <span class="text-gray-500">Min Duration</span>
+                        <span class="font-semibold text-gray-600">{{ $plan->min_duration }}</span>
+                    </div>
+                    @endif
                 </div>
 
-                <!-- Global Limit Warning -->
-                @if($hasReachedLimit)
-                <div class="bg-red-50 border border-red-200 rounded-xl p-3 mb-4">
-                    <div class="flex items-center gap-2">
-                        <iconify-icon icon="ph:warning-circle-fill" class="text-red-600 text-lg flex-shrink-0"></iconify-icon>
-                        <div class="text-sm text-red-700">
-                            You have reached the maximum of 3 active copy trades.
-                            Please wait for existing trades to complete before starting new ones.
+                <!-- Limits & Fees -->
+                <div class="space-y-3 mb-4">
+                    <div class="flex justify-between text-sm mt-4">
+                        <div>
+                            <span class="text-gray-500">Max Participations</span>
+                            <p class="font-semibold">
+                                {{ isset($plan) && $plan->max_participations == 0 
+                                    ? 'Unlimited' 
+                                    : ($plan->max_participations ?? 3) 
+                                }}
+                            </p>
                         </div>
+                        <div class="text-right">
+                            <span class="text-gray-500">Status</span>
+                            <p class="font-semibold">
+                                {{ isset($plan) && $plan->max_participations == 0 
+                                    ? 'No Limit' 
+                                    : 'Limited' 
+                                }}
+                            </p>
+                        </div>
+                    </div>
+        
+                    @if($plan->management_fee > 0 || $plan->performance_fee > 0)
+                    <div class="flex flex-wrap gap-2 pt-2 border-t border-gray-100">
+                        @if($plan->management_fee > 0)
+                        <span class="stat-badge">
+                            <iconify-icon icon="ph:percent-fill" class="text-xs"></iconify-icon>
+                            Mgmt fee: {{ $plan->management_fee }}%
+                        </span>
+                        @endif
+                        @if($plan->performance_fee > 0)
+                        <span class="stat-badge">
+                            <iconify-icon icon="ph:trend-up-fill" class="text-xs"></iconify-icon>
+                            Perf: {{ $plan->performance_fee }}%
+                        </span>
+                        @endif
+                    </div>
+                    @endif
+                </div>
+
+                <!-- Assets -->
+                @if($plan->assets_list && count($plan->assets_list) > 0)
+                <div class="mb-3">
+                    <p class="text-xs font-semibold text-gray-500 mb-2">Assets Traded:</p>
+                    <div class="flex flex-wrap gap-1">
+                        @foreach($plan->assets_list as $asset)
+                        <span class="asset-tag">{{ $asset }}</span>
+                        @endforeach
                     </div>
                 </div>
                 @endif
 
-                <form id="copyTradingForm">
-                    @csrf
-                    <input type="hidden" name="plan_id" id="plan_id_input">
+                <!-- Strategy -->
+                @if($plan->strategy)
+                <div class="mb-4">
+                    <p class="text-xs font-semibold text-gray-500 mb-1">Strategy:</p>
+                    <p class="text-sm text-gray-600 line-clamp-2">{{ $plan->strategy }}</p>
+                </div>
+                @endif
 
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Amount to Copy</label>
-                        <div class="relative">
-                            <span class="absolute left-3 top-3 text-gray-500 font-medium">$</span>
-                            <input type="number" name="amount" id="amount_input" step="0.01" min="0"
-                                class="amount-input" placeholder="0.00" required disabled>
-                        </div>
-                    </div>
+                <!-- Features -->
+                @if($plan->features_list && count($plan->features_list) > 0)
+                <div class="flex flex-wrap gap-2 mt-auto pt-4 border-t border-gray-100">
+                    @foreach($plan->features_list as $feature)
+                    <span class="feature-pill">
+                        <iconify-icon icon="ph:check-circle-fill" style="color: #9EDD05 !important;"></iconify-icon>
+                        {{ $feature }}
+                    </span>
+                    @endforeach
+                </div>
+                @endif
 
-                    <div class="mb-4" id="quickAmountsContainer" style="display: none;">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Quick Select</label>
-                        <div class="flex flex-wrap gap-2" id="quickAmountButtons"></div>
-                    </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
 
-                    <div id="balanceWarning" class="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-4 hidden">
-                        <div class="flex items-center gap-2">
-                            <iconify-icon icon="ph:warning-circle-fill" class="text-amber-600 text-lg flex-shrink-0"></iconify-icon>
-                            <div class="text-sm text-amber-700">
-                                Insufficient balance.
-                                <a href="{{ route('user.deposit') }}" class="font-bold underline">Deposit funds</a>
-                            </div>
-                        </div>
-                    </div>
+    <!-- Request Form Section - AT THE END (full width) -->
+    <div class="request-form-section" id="requestFormSection">
+        <h2 class="text-xl font-bold mb-6" style="color: var(--dark-green);">Start Copy Trading</h2>
 
-                    <div id="expectedReturnSection" class="bg-gradient-to-br from-gray-50 to-white rounded-xl p-4 mb-4 hidden">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-sm text-gray-600">Expected Return</span>
-                            <span class="text-lg font-bold text-green-600" id="expectedReturn">$0.00</span>
-                        </div>
-                        <div class="flex justify-between items-center text-sm">
-                            <span class="text-gray-500">After <span id="planDuration">0</span> <span id="planDurationUnit">days</span></span>
-                            <span class="font-semibold" style="color: var(--dark-green);" id="totalReturn">$0.00</span>
-                        </div>
-                    </div>
-
-                    <button type="submit" id="submitRequestBtn" class="submit-btn" disabled>
-                        Submit Request
-                    </button>
-
-                    <div class="flex items-center gap-2 mt-4 text-xs text-gray-500">
-                        <iconify-icon icon="ph:info-fill" class="text-lg"></iconify-icon>
-                        <span>Request will be pending for admin approval before joining the trade</span>
-                    </div>
-                </form>
+        <!-- Selected Plan Info -->
+        <div id="selectedPlanInfo" class="bg-gradient-to-br from-[#9EDD05]/10 to-[#8AC304]/10 rounded-xl p-4 mb-6 hidden animate-slide-up">
+            <p class="text-xs text-gray-500 mb-2">SELECTED PLAN</p>
+            <div class="flex items-center justify-between mb-3">
+                <span class="font-bold text-lg" id="selectedPlanName" style="color: var(--dark-green);">-</span>
+                <span class="text-sm text-green-600 font-semibold" id="selectedRate">0%</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2 text-sm">
+                <div>
+                    <span class="text-gray-500 text-xs">Min</span>
+                    <p class="font-semibold">$<span id="selectedMin">0</span></p>
+                </div>
+                <div>
+                    <span class="text-gray-500 text-xs">Max</span>
+                    <p class="font-semibold">$<span id="selectedMax">0</span></p>
+                </div>
+                <div class="col-span-2">
+                    <span class="text-gray-500 text-xs">Duration</span>
+                    <p class="font-semibold"><span id="selectedDuration">0</span> <span id="selectedDurationUnit">days</span></p>
+                </div>
             </div>
         </div>
 
+        <!-- Plan Limit Warning -->
+        <div id="planLimitWarning" class="bg-red-50 border border-red-200 rounded-xl p-3 mb-4 hidden">
+            <div class="flex items-center gap-2">
+                <iconify-icon icon="ph:warning-circle-fill" class="text-red-600 text-lg flex-shrink-0"></iconify-icon>
+                <div class="text-sm text-red-700" id="planLimitMessage">
+                    You have reached the maximum limit for this plan.
+                </div>
+            </div>
+        </div>
+
+        <!-- Global Limit Warning -->
+        @if($hasReachedLimit)
+        <div class="copy-limit-alert">
+            <div class="alert-icon">
+                <iconify-icon icon="ph:warning-circle-fill"></iconify-icon>
+            </div>
+            <div class="alert-content">
+                <h4>Limit Reached</h4>
+                <p>
+                    You have reached the maximum of <strong>3 active copy trades</strong>.
+                    Please wait for existing trades to complete before starting new ones.
+                </p>
+            </div>
+        </div>
+        @endif
+
+        <form id="copyTradingForm">
+            @csrf
+            <input type="hidden" name="plan_id" id="plan_id_input">
+
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Amount to Copy</label>
+                <div class="relative">
+                    <span class="absolute left-3 top-3 text-gray-500 font-medium">$</span>
+                    <input type="number" name="amount" id="amount_input" step="0.01" min="0"
+                        class="amount-input" placeholder="0.00" required disabled>
+                </div>
+            </div>
+
+            <div class="mb-4" id="quickAmountsContainer" style="display: none;">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Quick Select</label>
+                <div class="flex flex-wrap gap-2" id="quickAmountButtons"></div>
+            </div>
+
+            <div id="balanceWarning" class="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-4 hidden">
+                <div class="flex items-center gap-2">
+                    <iconify-icon icon="ph:warning-circle-fill" class="text-amber-600 text-lg flex-shrink-0"></iconify-icon>
+                    <div class="text-sm text-amber-700">
+                        Insufficient balance.
+                        <a href="{{ route('user.deposit') }}" class="font-bold underline">Deposit funds</a>
+                    </div>
+                </div>
+            </div>
+
+            <div id="expectedReturnSection" class="bg-gradient-to-br from-gray-50 to-white rounded-xl p-4 mb-4 hidden">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-sm text-gray-600">Expected Return</span>
+                    <span class="text-lg font-bold text-green-600" id="expectedReturn">$0.00</span>
+                </div>
+                <div class="flex justify-between items-center text-sm">
+                    <span class="text-gray-500">After <span id="planDuration">0</span> <span id="planDurationUnit">days</span></span>
+                    <span class="font-semibold" style="color: var(--dark-green);" id="totalReturn">$0.00</span>
+                </div>
+            </div>
+
+            <button type="submit" id="submitRequestBtn" class="submit-btn" disabled>
+                Submit Request
+            </button>
+
+            <div class="mt-4 flex items-start gap-3 p-3 rounded-xl border border-yellow-200 bg-yellow-50" style="color:#f59e0b !important;">
+                <iconify-icon 
+                    icon="ph:warning-circle-fill" 
+                    class="text-xl mt-0.5"
+                    style="color:#f59e0b !important;">
+                </iconify-icon>
+                <p>Request will be pending for admin approval before joining the trade</p>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -847,7 +976,7 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     /* ─── ELEMENTS ─────────────────────────────────────────── */
-    const planCards             = document.querySelectorAll('.plan-card:not(.limit-reached)'); // FIX: only attach listeners to non-limited cards
+    const planCards             = document.querySelectorAll('.plan-card:not(.limit-reached)');
     const planIdInput           = document.getElementById('plan_id_input');
     const amountInput           = document.getElementById('amount_input');
     const submitBtn             = document.getElementById('submitRequestBtn');
@@ -865,7 +994,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const expectedReturnSection = document.getElementById('expectedReturnSection');
     const expectedReturn        = document.getElementById('expectedReturn');
     const totalReturn           = document.getElementById('totalReturn');
-    const requestFormCard       = document.getElementById('requestFormCard');
+    const requestFormSection    = document.getElementById('requestFormSection');
     const planLimitWarning      = document.getElementById('planLimitWarning');
     const planLimitMessage      = document.getElementById('planLimitMessage');
     const changeBtn             = document.getElementById('changeAdminBtn');
@@ -876,7 +1005,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let selectedPlan     = null;
     let isChangingAdmin  = false;
-    let isCheckingLimit  = false; // FIX: guard against double-clicks during async check
+    let isCheckingLimit  = false;
 
     /* ─── HELPERS ───────────────────────────────────────────── */
     function getDurationUnitText(unit) {
@@ -919,62 +1048,54 @@ document.addEventListener('DOMContentLoaded', function () {
         submitBtn.disabled = !isValid;
     }
 
-  // Update the checkPlanLimit function to also check if this card is already selected
-async function checkPlanLimit(planId) {
-    try {
-        const response = await fetch(`/copy-trading/check-plan-limit/${planId}`, {
-            method: 'GET',
-            headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken }
-        });
+    async function checkPlanLimit(planId) {
+        try {
+            const response = await fetch(`/copy-trading/check-plan-limit/${planId}`, {
+                method: 'GET',
+                headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken }
+            });
 
-        if (!response.ok) throw new Error('Request failed');
+            if (!response.ok) throw new Error('Request failed');
 
-        const data = await response.json();
+            const data = await response.json();
 
-        if (data.has_reached_limit) {
-            showLimitWarning(
-                `Maximum ${data.plan_limit} participation${data.plan_limit > 1 ? 's' : ''} reached. ` +
-                `You currently have ${data.current_participations} (active + pending).`
-            );
-            
-            // ✅ Mark the plan card as limit reached immediately
-            const planCard = document.querySelector(`.plan-card[data-plan-id="${planId}"]`);
-            if (planCard && !planCard.classList.contains('limit-reached')) {
-                planCard.classList.add('limit-reached');
-                planCard.dataset.limitReached = 'true';
+            if (data.has_reached_limit) {
+                showLimitWarning(
+                    `Maximum ${data.plan_limit} participation${data.plan_limit > 1 ? 's' : ''} reached. ` +
+                    `You currently have ${data.current_participations} (active + pending).`
+                );
+                
+                const planCard = document.querySelector(`.plan-card[data-plan-id="${planId}"]`);
+                if (planCard && !planCard.classList.contains('limit-reached')) {
+                    planCard.classList.add('limit-reached');
+                    planCard.dataset.limitReached = 'true';
+                }
+                
+                return true;
+            } else {
+                hideLimitWarning();
+                amountInput.disabled = false;
+                return false;
             }
-            
-            return true;
-        } else {
+
+        } catch (err) {
+            console.error('checkPlanLimit error:', err);
             hideLimitWarning();
             amountInput.disabled = false;
             return false;
         }
-
-    } catch (err) {
-        console.error('checkPlanLimit error:', err);
-        hideLimitWarning();
-        amountInput.disabled = false;
-        return false;
     }
-}
 
     /* ─── PLAN CARD CLICK ───────────────────────────────────── */
-    // FIX: listeners are only attached to cards that are NOT .limit-reached
-    // (the selector above already filters them out)
     planCards.forEach(card => {
         card.addEventListener('click', async function (e) {
             e.preventDefault();
 
-            // FIX: hard guard — should never be true here, but kept as safety net
             if (this.dataset.limitReached === 'true') return;
-
-            // FIX: prevent double-click while an async check is already running
             if (isCheckingLimit) return;
 
             isCheckingLimit = true;
 
-            // Deselect all eligible cards, select this one
             planCards.forEach(c => c.classList.remove('selected'));
             this.classList.add('selected');
 
@@ -991,7 +1112,6 @@ async function checkPlanLimit(planId) {
 
             planIdInput.value = selectedPlan.id;
 
-            // Update plan info display
             selectedPlanName.textContent     = selectedPlan.name;
             selectedMin.textContent          = selectedPlan.min.toLocaleString();
             selectedMax.textContent          = selectedPlan.max.toLocaleString();
@@ -1004,7 +1124,6 @@ async function checkPlanLimit(planId) {
             selectedPlanInfo.classList.remove('hidden');
             selectedPlanInfo.classList.add('animate-slide-up');
 
-            // Lock form while checking
             amountInput.disabled  = true;
             submitBtn.disabled    = true;
             submitBtn.textContent = 'Checking…';
@@ -1021,7 +1140,7 @@ async function checkPlanLimit(planId) {
             }
 
             setTimeout(() => {
-                requestFormCard?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                requestFormSection?.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 if (!amountInput.disabled) amountInput.focus();
             }, 300);
         });
@@ -1079,50 +1198,48 @@ async function checkPlanLimit(planId) {
     }
 
     /* ─── FORM SUBMIT ───────────────────────────────────────── */
-   // Update the form submit section
-document.getElementById('copyTradingForm')?.addEventListener('submit', function (e) {
-    e.preventDefault();
+    document.getElementById('copyTradingForm')?.addEventListener('submit', function (e) {
+        e.preventDefault();
 
-    // Prevent double-submit
-    if (this.dataset.submitting === 'true') return;
-    this.dataset.submitting = 'true';
+        if (this.dataset.submitting === 'true') return;
+        this.dataset.submitting = 'true';
 
-    if (submitBtn.disabled || submitBtn.classList.contains('submitting')) return;
+        if (submitBtn.disabled || submitBtn.classList.contains('submitting')) return;
 
-    const amount = parseFloat(amountInput.value);
+        const amount = parseFloat(amountInput.value);
 
-    if (amount > userBalance) {
-        showToast('Insufficient balance', 'error');
-        this.dataset.submitting = 'false';
-        return;
-    }
-
-    submitBtn.disabled = true;
-    submitBtn.classList.add('submitting');
-    submitBtn.innerHTML = '<div class="loading-spinner"></div> Processing…';
-
-    fetch('{{ route("copy-trading.store") }}', {
-        method: 'POST',
-        headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken },
-        body: new FormData(this),
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            showToast(data.message, 'success');
-            setTimeout(() => window.location.href = '{{ route("copy-trading.history") }}', 1500);
-        } else {
-            throw new Error(data.message);
+        if (amount > userBalance) {
+            showToast('Insufficient balance', 'error');
+            this.dataset.submitting = 'false';
+            return;
         }
-    })
-    .catch(err => {
-        showToast(err.message || 'An error occurred', 'error');
-        submitBtn.disabled = false;
-        submitBtn.classList.remove('submitting');
-        submitBtn.innerHTML = 'Submit Request';
-        this.dataset.submitting = 'false'; // re-enable on failure
+
+        submitBtn.disabled = true;
+        submitBtn.classList.add('submitting');
+        submitBtn.innerHTML = '<div class="loading-spinner"></div> Processing…';
+
+        fetch('{{ route("copy-trading.store") }}', {
+            method: 'POST',
+            headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken },
+            body: new FormData(this),
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                showToast(data.message, 'success');
+                setTimeout(() => window.location.href = '{{ route("copy-trading.history") }}', 1500);
+            } else {
+                throw new Error(data.message);
+            }
+        })
+        .catch(err => {
+            showToast(err.message || 'An error occurred', 'error');
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('submitting');
+            submitBtn.innerHTML = 'Submit Request';
+            this.dataset.submitting = 'false';
+        });
     });
-});
 
     /* ─── CHANGE ADMIN ──────────────────────────────────────── */
     if (changeBtn && changeSelect) {

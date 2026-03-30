@@ -372,7 +372,7 @@
                                             {{ ucfirst($kyc->status) }}
                                         </span>
                                     </td>
-   
+   <td>{{ $kyc->user->country ?? '—' }}</td>
                                     {{-- Submitted Date --}}
                                     <td>
                                         <div style="font-size:0.8rem; color:#374151;">{{ $kyc->created_at->format('d M, Y') }}</div>

@@ -476,7 +476,7 @@
                     <p>
                         Don't have an account? 
                         <a href="{{ route('signup') }}" style="background-color: #8bc905;"
-       class="inline-block ml-2 px-4 py-2 bg-[#8bc905] text-white rounded">Create one now</a>
+       class="inline-block ml-2 px-4 py-2 bg-[#8bc905] text-white rounded">Create one </a>
                     </p>
 
                     

@@ -24,7 +24,31 @@ class CopyTradingController extends Controller
             $copyAdmin = ServerFeed::find($user->copy_admin_id);
         }
 
-        $plans = Plan::where('status', 'active')->get();
+       $plans = Plan::where('status', 'active')->get()->map(function ($plan) use ($user) {
+
+    $active = Investment::where('user_id', $user->id)
+        ->where('plan_id', $plan->id)
+        ->where('type', 'copy_trading')
+        ->where('status', 'active')
+        ->count();
+
+    $pending = CopyTradingRequest::where('user_id', $user->id)
+        ->where('plan_id', $plan->id)
+        ->where('status', 'pending')
+        ->count();
+
+    $plan->active_participations = $active;
+    $plan->pending_participations = $pending;
+    $plan->total_participations = $active + $pending;
+
+    $plan->plan_limit = $plan->max_participations ?? 3;
+
+    $plan->has_reached_limit =
+        $plan->plan_limit != 0 &&
+        $plan->total_participations >= $plan->plan_limit;
+
+    return $plan;
+});
 
         $pendingRequests = CopyTradingRequest::where('user_id', $user->id)
             ->where('status', 'pending')

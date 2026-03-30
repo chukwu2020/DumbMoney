@@ -1,11 +1,11 @@
-<aside class="sidebar">
+<aside class="sidebar" style="z-index: 60;">
     <button type="button" class="sidebar-close-btn">
         <iconify-icon icon="radix-icons:cross-2"></iconify-icon>
     </button>
     <div class="lg:hidden mobile-logo">
        <img src="/assets/images/chartmasterbrandname1.png"  
          alt="ChartMasters Circle" 
-            class="brand-logo logo-img" style="width:1400px; height:auto; justify-content:center;"
+            class="brand-logo logo-img" style="width:140px; height:auto; justify-content:center;"
         >
     </div>
 
