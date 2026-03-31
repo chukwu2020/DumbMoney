@@ -303,7 +303,7 @@
                                 </div>
                                 <div class="d-flex align-items-center">
                                     <div class="me-3">
-                                        <div class="fs-1 fw-bold text-primary " style="color:white !important;">0.02s</div>
+                                        <div class="fs-1 fw-bold text-primary " style="color:white !important;">100 ms</div>
                                         <div class="text-white-80 small" style="color: white !important;">Execution Speed</div>
                                     </div>
                                     <div class="vr"></div>
@@ -2117,7 +2117,7 @@
                                     <!-- Stats row -->
                                     <div class="d-flex gap-3 mb-3">
                                         <div>
-                                            <span class="fw-bold fs-4" style="color: #0C3A30;">127%</span>
+                                            <span class="fw-bold fs-4" style="color: #0C3A30;">5 - 20%</span>
                                             <span class="d-block small text-secondary">Avg. APY</span>
                                         </div>
                                         <div style="width: 1px; height: 30px; background: rgba(0,0,0,0.1);"></div>
