@@ -188,12 +188,12 @@
 
 
 
-        <footer class="d-footer mt-4" style="background-image: url('/assets/images/hero/hero-image-1.svg'); background-position:center; background-size:cover;">
+        <footer class="d-footer mt-8" style="background-image: url('/assets/images/hero/hero-image-1.svg'); background-position:center; background-size:cover; bottom:0; left:0; right:0;">
 
             <div class="flex items-center justify-between gap-3">
 
                 <p class="mb-0">
-                    © {{ date('Y') }} <span class="font-semibold text-[#8bc905]"> ChartMasters Circle</span>. All rights reserved.
+                    © {{ date('Y') }} <span class="font-semibold text-sm text-[#8bc905]"> ChartMasters Circle</span>. All rights reserved.
                     <span class="mx-2 text-gray-400">|</span>
                     <a href="{{route('termsprivacy')}}" class="hover:text-[#9EDD05] transition-colors duration-200">Privacy Policy</a>
                     <span class="mx-2 text-gray-400">|</span>

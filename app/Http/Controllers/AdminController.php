@@ -1142,70 +1142,66 @@ public function copyapprove($id)
         $userParticipations = Investment::where('user_id', $copyRequest->user_id)
             ->where('plan_id', $copyRequest->plan_id)
             ->where('type', 'copy_trading')
-            ->count();
+            ->count(); // ✅ all-time count, not just active
 
         $planLimit = $copyRequest->plan->max_participations ?? 3;
 
-        if ($userParticipations >= $planLimit) {
+        if ($planLimit > 0 && $userParticipations >= $planLimit) {
             return response()->json([
                 'success' => false,
                 'message' => "User has reached the maximum of {$planLimit} participations for this plan."
             ], 422);
         }
 
-        // Update request
         $copyRequest->update([
-            'status' => 'approved',
-            'approved_at' => now(),
+            'status'       => 'approved',
+            'approved_at'  => now(),
             'processed_by' => auth()->id(),
         ]);
 
-        // Get plan details
-        $durationUnit = $copyRequest->plan->duration_unit ?? 'days';
+        // ✅ Read duration_unit directly from plan — no fallback to 'days'
+        $durationUnit  = $copyRequest->plan->duration_unit; // minutes, hours, or days
         $durationValue = $copyRequest->plan->duration;
-        $interestRate = $copyRequest->plan->interest_rate;
+        $interestRate  = $copyRequest->plan->interest_rate;
 
-        // Calculate end date
+        // ✅ Correctly calculate end date based on actual unit
         $endDate = match ($durationUnit) {
             'minutes' => now()->addMinutes($durationValue),
-            'hours' => now()->addHours($durationValue),
-            default => now()->addDays($durationValue),
+            'hours'   => now()->addHours($durationValue),
+            'days'    => now()->addDays($durationValue),
+            default   => now()->addDays($durationValue), // safe fallback
         };
 
-        // Calculate expected profit
         $expectedProfit = round(($copyRequest->amount * $interestRate) / 100, 2);
 
-        // Create investment
         $investment = Investment::create([
-            'user_id' => $copyRequest->user_id,
-            'plan_id' => $copyRequest->plan_id,
-            'type' => 'copy_trading',
-            'amount_invested' => $copyRequest->amount,
-            'expected_profit' => $expectedProfit,
-            'total_profit' => 0,
-            'current_value' => $copyRequest->amount,
-            'profit_loss' => 0,
-            'status' => 'active',
-            'start_date' => now(),
-            'end_date' => $endDate,
-            'copy_admin_id' => $copyRequest->copy_admin_id,
-            'copy_admin_name' => $copyRequest->copy_admin_name,
-            'copy_server_name' => $copyRequest->copy_server_name,
-            // Snapshots
-            'snapshot_duration_unit' => $durationUnit,
+            'user_id'                => $copyRequest->user_id,
+            'plan_id'                => $copyRequest->plan_id,
+            'type'                   => 'copy_trading',
+            'amount_invested'        => $copyRequest->amount,
+            'expected_profit'        => $expectedProfit,
+            'total_profit'           => 0,
+            'current_value'          => $copyRequest->amount,
+            'profit_loss'            => 0,
+            'status'                 => 'active',
+            'start_date'             => now(),
+            'end_date'               => $endDate,
+            'copy_admin_id'          => $copyRequest->copy_admin_id,
+            'copy_admin_name'        => $copyRequest->copy_admin_name,
+            'copy_server_name'       => $copyRequest->copy_server_name,
+            // ✅ Snapshots use the real unit from the plan
+            'snapshot_duration_unit'  => $durationUnit,
             'snapshot_duration_value' => $durationValue,
-            'snapshot_interest_rate' => $interestRate,
-            'snapshot_plan_name' => $copyRequest->plan->name,
-            'snapshot_min_amount' => $copyRequest->plan->minimum_amount,
-            'snapshot_max_amount' => $copyRequest->plan->maximum_amount,
-            'snapshot_features' => $copyRequest->plan->features,
-            'snapshot_assets_traded' => $copyRequest->plan->assets_traded,
+            'snapshot_interest_rate'  => $interestRate,
+            'snapshot_plan_name'      => $copyRequest->plan->name,
+            'snapshot_min_amount'     => $copyRequest->plan->minimum_amount,
+            'snapshot_max_amount'     => $copyRequest->plan->maximum_amount,
+            'snapshot_features'       => $copyRequest->plan->features,
+            'snapshot_assets_traded'  => $copyRequest->plan->assets_traded,
         ]);
 
-        // Initialize value
         $investment->updateValue();
 
-        // Send notification
         try {
             $copyRequest->user->notify(new TransactionNotification(
                 'Copy Trading Approved',

@@ -70,12 +70,12 @@
     }
 
     .card-logo {
-        height: 50px;
+        height: 40px;
         width: auto;
         max-width: 120px;
         object-fit: contain;
         transition: transform 0.3s ease;
-        margin-top: 4rem;
+        margin-top: 4.2rem;
     }
 
     .card-logo:hover {
@@ -314,7 +314,7 @@
                                 <div class="card-logo-wrapper">
                                     
                                          <img src="/assets/images/chartmasterlogo1.png"   alt="ChartMasters Circle"   
-                                        class="card-logo" style="width: 60px; height:auto;" 
+                                        class="card-logo " style="width: 35px; height:auto;   margin-top: 4.2rem;" 
         >
                                 </div>
                             </div>

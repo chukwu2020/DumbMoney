@@ -244,7 +244,7 @@
                                 <iconify-icon icon="ph:check-circle-fill" style="font-size:14px;"></iconify-icon>
                                 You receive
                             </span>
-                            <span class="font-bold text-white text-base font-mono" style="color:#61ff17;">${{ number_format($netAmount, 2) }}</span>
+                            <span class="font-bold text-white text-base font-mono" style="color:#61ff17 !important;">${{ number_format($netAmount, 2) }}</span>
                         </div>
 
                         @else
