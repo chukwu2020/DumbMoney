@@ -50,7 +50,7 @@ class AdminMessageNotification extends Notification
 
         // Prepare full message including greeting and intro
         $fullMessage = "Hello {$notifiable->name},\n\n"
-                     . "This is an official update from the MarketMind trading desk regarding your account activity:\n\n"
+                     . "This is an official update from the Chartmasterscircle trading desk regarding your account activity:\n\n"
                      . $this->message;
 
         return (new MailMessage)
@@ -65,7 +65,7 @@ class AdminMessageNotification extends Notification
                 'country' => $this->country,
                 'actionUrl' => $actionUrl,
                 'actionText' => 'View Dashboard',
-                'previewText' => 'You have a new message from MarketMind'
+                'previewText' => 'You have a new message from Chartmasterscircle'
             ]);
     }
 }

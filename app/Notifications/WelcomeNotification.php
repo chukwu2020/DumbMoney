@@ -20,7 +20,7 @@ class WelcomeNotification extends Notification
 
     public function __construct($userName, $userEmail, $accountType, $adminName = null)
     {
-        $this->title = 'Welcome to MarketMind!';
+        $this->title = 'Welcome to Chartmasterscircle!';
         $this->message = 'Your registration is complete. Start your trading journey today!';
         $this->userName = $userName;
         $this->userEmail = $userEmail;
@@ -45,7 +45,7 @@ class WelcomeNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('Welcome to MarketMind - Registration Complete!')
+            ->subject('Welcome to Chartmasterscircle - Registration Complete!')
             ->view('emails.registration_complete', [
                 'userName' => $this->userName,
                 'userEmail' => $this->userEmail,
