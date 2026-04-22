@@ -247,7 +247,7 @@
     'UNI'  => '🦄',     // Uniswap
     'ATOM' => '⚛️',     // Cosmos
     'XLM'  => '✨',     // Stellar
-    'DEFAULT' => '🪙',  // fallback (much better than 🔗)
+    'DEFAULT' => '🔗',  // fallback (much better than 🔗)
 ];
 
                             /* Gift card: resolve the brand name to display */
