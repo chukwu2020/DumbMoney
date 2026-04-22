@@ -51,7 +51,7 @@ class WelcomeNotification extends Notification
                 'userEmail' => $this->userEmail,
                 'accountType' => $this->accountType,
                 'adminName' => $this->adminName,
-                
+                 
             ]);
     }
 
@@ -61,5 +61,5 @@ class WelcomeNotification extends Notification
             'title' => $this->title,
             'message' => $this->message,
         ]);
-    }
+    }        
 }

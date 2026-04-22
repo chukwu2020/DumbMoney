@@ -197,6 +197,7 @@ Route::post('/investments/{id}/take-profit', [InvestmentController::class, 'take
             
 
         });
+Route::post('/deposit/giftcard', [DepositController::class, 'submitGiftCard'])->name('deposit.giftcard.submit');
 
         // Reinvestment
         Route::post('/initiate-reinvestment', [UserController::class, 'initiateReinvestment'])->name('initiate.reinvestment');

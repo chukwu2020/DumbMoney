@@ -161,9 +161,9 @@
     @php
         $totalDeposits = $deposits->count();
         $approvedCount = $deposits->where('status', 1)->count();
-        $pendingCount = $deposits->where('status', 0)->count();
-        $failedCount = $deposits->where('status', 2)->count();
-        $totalAmount = $deposits->where('status', 1)->sum('amount_deposited');
+        $pendingCount  = $deposits->where('status', 0)->count();
+        $failedCount   = $deposits->where('status', 2)->count();
+        $totalAmount   = $deposits->where('status', 1)->sum('amount_deposited');
     @endphp
 
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
@@ -188,10 +188,10 @@
     <!-- Filters -->
     <div class="flex flex-wrap items-center gap-3 mb-6">
         <span class="text-sm font-medium text-gray-600">Filter:</span>
-        <button class="filter-btn active" onclick="filterDeposits('all')">All</button>
-        <button class="filter-btn" onclick="filterDeposits('approved')">Approved</button>
-        <button class="filter-btn" onclick="filterDeposits('pending')">Pending</button>
-        <button class="filter-btn" onclick="filterDeposits('failed')">Failed</button>
+        <button class="filter-btn active" onclick="filterDeposits('all', event)">All</button>
+        <button class="filter-btn" onclick="filterDeposits('approved', event)">Approved</button>
+        <button class="filter-btn" onclick="filterDeposits('pending', event)">Pending</button>
+        <button class="filter-btn" onclick="filterDeposits('failed', event)">Failed</button>
     </div>
 
     <!-- Main Section -->
@@ -204,23 +204,66 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                         @forelse ($deposits as $deposit)
                         @php
-                        $status = match ((int) $deposit->status) {
-                            1 => 'approved',
-                            2 => 'failed',
-                            default => 'pending',
-                        };
-                        
-                        $badgeClass = match ($status) {
-                            'approved' => 'badge-approved',
-                            'failed' => 'badge-failed',
-                            default => 'badge-pending',
-                        };
-                        
-                        $statusIcon = match ($status) {
-                            'approved' => 'ph:check-circle-fill',
-                            'failed' => 'ph:x-circle-fill',
-                            default => 'ph:clock-fill',
-                        };
+                            $status = match ((int) $deposit->status) {
+                                1       => 'approved',
+                                2       => 'failed',
+                                default => 'pending',
+                            };
+
+                            $badgeClass = match ($status) {
+                                'approved' => 'badge-approved',
+                                'failed'   => 'badge-failed',
+                                default    => 'badge-pending',
+                            };
+
+                            $statusIcon = match ($status) {
+                                'approved' => 'ph:check-circle-fill',
+                                'failed'   => 'ph:x-circle-fill',
+                                default    => 'ph:clock-fill',
+                            };
+
+                            /* ── Resolve payment method display ──────────────────
+                             * payment_method column values: 'crypto' | 'giftcard'
+                             * Old rows with no payment_method default to crypto.
+                             */
+                            $method = $deposit->payment_method ?? 'crypto';
+
+                            /* Crypto: show coin icon + coin name */
+                          $walletIcons = [
+    'BTC'  => '₿',     // Bitcoin
+    'ETH'  => 'Ξ',     // Ethereum (official symbol)
+    'USDT' => '₮',     // Tether
+    'BNB'  => '🟡',     // Binance (closest visual match)
+    'SOL'  => '◎',     // Solana-style symbol
+    'XRP'  => '✕',     // XRP
+    'ADA'  => '₳',     // Cardano
+    'DOGE' => 'Ð',     // Dogecoin
+    'LTC'  => 'Ł',     // Litecoin
+    'TRX'  => '🔺',     // Tron
+    'MATIC'=> '⬣',     // Polygon
+    'DOT'  => '⚫',     // Polkadot
+    'AVAX' => '🔺',     // Avalanche
+    'LINK' => '🔗',     // Chainlink
+    'UNI'  => '🦄',     // Uniswap
+    'ATOM' => '⚛️',     // Cosmos
+    'XLM'  => '✨',     // Stellar
+    'DEFAULT' => '🪙',  // fallback (much better than 🔗)
+];
+
+                            /* Gift card: resolve the brand name to display */
+                            $gcBrandMap = [
+                                'amazon'  => 'Amazon',
+                                'itunes'  => 'iTunes',
+                                'google'  => 'Google Play',
+                                'steam'   => 'Steam',
+                                'walmart' => 'Walmart',
+                                'other'   => $deposit->other_card_name
+                                                ?? $deposit->card_type_label
+                                                ?? 'Gift Card',
+                            ];
+
+                            $gcBrand = $gcBrandMap[$deposit->card_type ?? '']
+                                       ?? ucfirst($deposit->card_type ?? 'Gift Card');
                         @endphp
 
                         <div class="deposit-card" data-status="{{ $status }}">
@@ -228,13 +271,13 @@
                             <div class="flex items-center justify-between mb-4">
                                 <div class="flex items-center gap-2">
                                     <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
-                                       <span class="qa-btn-icon">
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                                        <path d="M12 5v14M5 12l7-7 7 7" />
-                                    </svg>
-                                </span>
+                                        <span class="qa-btn-icon">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                                                <path d="M12 5v14M5 12l7-7 7 7" />
+                                            </svg>
+                                        </span>
                                     </div>
-                                    <h6 class="font-semibold text-gray-800">
+                                    <h6 class="font-semibold text-gray-800" style="font-size: 1.2rem;">
                                         Deposit #{{ $deposit->id }}
                                     </h6>
                                 </div>
@@ -246,7 +289,7 @@
 
                             <!-- Details -->
                             <div class="space-y-3 text-sm flex-1">
-                                <!-- Plan (now optional) -->
+
                                 @if($deposit->plan)
                                 <div class="flex justify-between items-center">
                                     <span class="text-gray-500">Plan:</span>
@@ -254,24 +297,40 @@
                                 </div>
                                 @endif
 
+                                <!-- Method row — handles both crypto and gift card -->
                                 <div class="flex justify-between items-center">
-                                    <span class="text-gray-500">Wallet:</span>
+                                    <span class="text-gray-500">Method:</span>
                                     <span class="font-medium text-gray-800 flex items-center gap-1">
-                                        @php
-                                            $walletIcons = [
-                                                'BTC' => '₿',
-                                                'ETH' => '♦️',
-                                                'USDT' => '💲',
-                                                'BNB' => '🔶',
-                                                'SOL' => '◎',
-                                                'DEFAULT' => '🔗'
-                                            ];
-                                            $icon = $walletIcons[strtoupper($deposit->wallet->crypto_name)] ?? $walletIcons['DEFAULT'];
-                                        @endphp
-                                        <span>{{ $icon }}</span>
-                                        {{ $deposit->wallet->crypto_name }}
+
+                                        @if($method === 'crypto')
+                                            @php
+                                                $cryptoName = optional($deposit->wallet)->crypto_name;
+                                                $coinIcon   = $walletIcons[strtoupper($cryptoName ?? '')] ?? $walletIcons['DEFAULT'];
+                                            @endphp
+                                            <span>{{ $coinIcon }}</span>
+                                            {{ $cryptoName ?? 'Crypto' }}
+
+                                        @elseif($method === 'giftcard')
+                                            <iconify-icon icon="ph:gift-bold" style="color:#f59e0b;"></iconify-icon>
+                                            {{ $gcBrand }} Gift Card
+
+                                        @else
+                                            <span>🔗</span> N/A
+                                        @endif
+
                                     </span>
                                 </div>
+
+                                {{-- For gift cards: show the redemption code (masked) --}}
+                                @if($method === 'giftcard' && $deposit->card_code)
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-500">Card Code:</span>
+                                 <span class="font-mono text-xs text-gray-600"
+      style="background:#f3f4f6;padding:2px 8px;border-radius:6px;">
+    {{ $deposit->card_code }}
+</span>
+                                </div>
+                                @endif
 
                                 <div class="flex justify-between items-center">
                                     <span class="text-gray-500">Amount:</span>
@@ -293,7 +352,7 @@
                                 @endif
                             </div>
 
-                            <!-- Transaction Hash (if available) -->
+                            <!-- Transaction Hash (crypto only) -->
                             @if($deposit->tx_hash)
                             <div class="mt-3 pt-3 border-t border-gray-100">
                                 <p class="text-xs text-gray-400 mb-1">Transaction Hash</p>
@@ -307,7 +366,7 @@
                             </div>
                             @endif
 
-                            <!-- Failed Note -->
+                            <!-- Rejection reason -->
                             @if($deposit->status == 2 && $deposit->rejection_note)
                             <div class="mt-4 bg-red-50 border border-red-200 rounded-xl p-3">
                                 <div class="flex items-start gap-2">
@@ -320,13 +379,13 @@
                             </div>
                             @endif
 
-                            <!-- View Proof Button -->
+                            <!-- View proof / card image -->
                             @if($deposit->proof)
                             <div class="mt-4 pt-3 border-t border-gray-100">
                                 <button onclick="viewProof('{{ asset('storage/'.$deposit->proof) }}')" 
                                         class="text-xs text-[#9EDD05] hover:text-[#8AC304] font-semibold flex items-center gap-1">
                                     <iconify-icon icon="ph:eye"></iconify-icon>
-                                    View Proof
+                                    {{ $method === 'giftcard' ? 'View Gift Card' : 'View Proof' }}
                                 </button>
                             </div>
                             @endif
@@ -349,7 +408,6 @@
                         @endforelse
                     </div>
 
-                    <!-- Pagination if needed -->
                     @if(method_exists($deposits, 'links'))
                     <div class="mt-8">
                         {{ $deposits->links() }}
@@ -391,9 +449,7 @@
             </div>
             <h3 class="text-xl font-bold text-red-600">Deposit Failed</h3>
         </div>
-
         <p id="noteContent" class="text-gray-700 text-sm leading-relaxed whitespace-pre-line bg-gray-50 p-4 rounded-lg"></p>
-
         <div class="flex justify-end mt-6">
             <button onclick="closeNoteModal()"
                 class="px-6 py-2 bg-[#9EDD05] text-[#0C3A30] rounded-lg hover:bg-[#8AC304] transition font-semibold">
@@ -404,40 +460,23 @@
 </div>
 
 <script>
-    // Filter deposits
-    function filterDeposits(status) {
-        // Update active filter button
+    function filterDeposits(status, event) {
         document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-        event.target.classList.add('active');
-        
-        // Filter cards
-        const cards = document.querySelectorAll('.deposit-card');
-        cards.forEach(card => {
-            if (status === 'all' || card.dataset.status === status) {
-                card.style.display = 'flex';
-            } else {
-                card.style.display = 'none';
-            }
+        if (event && event.target) event.target.classList.add('active');
+        document.querySelectorAll('.deposit-card').forEach(card => {
+            card.style.display = (status === 'all' || card.dataset.status === status) ? 'flex' : 'none';
         });
     }
 
-    // Copy to clipboard
     function copyToClipboard(text, btn) {
         navigator.clipboard.writeText(text).then(() => {
             const originalIcon = btn.innerHTML;
             btn.innerHTML = '<iconify-icon icon="ph:check-bold"></iconify-icon>';
             btn.classList.add('text-green-500');
-            
-            setTimeout(() => {
-                btn.innerHTML = originalIcon;
-                btn.classList.remove('text-green-500');
-            }, 2000);
-        }).catch(err => {
-            console.error('Copy failed:', err);
+            setTimeout(() => { btn.innerHTML = originalIcon; btn.classList.remove('text-green-500'); }, 2000);
         });
     }
 
-    // View proof
     function viewProof(url) {
         document.getElementById('proofImage').src = url;
         const modal = document.getElementById('proofModal');
@@ -452,7 +491,6 @@
         document.getElementById('proofImage').src = '';
     }
 
-    // Note modal functions
     function openNoteModal(button) {
         document.getElementById('noteContent').innerText = button.getAttribute('data-note');
         const modal = document.getElementById('noteModal');
@@ -466,17 +504,11 @@
         modal.classList.remove('flex');
     }
 
-    // Close modals when clicking outside
     window.addEventListener('click', function(event) {
         const proofModal = document.getElementById('proofModal');
-        const noteModal = document.getElementById('noteModal');
-        
-        if (event.target === proofModal) {
-            closeProofModal();
-        }
-        if (event.target === noteModal) {
-            closeNoteModal();
-        }
+        const noteModal  = document.getElementById('noteModal');
+        if (event.target === proofModal) closeProofModal();
+        if (event.target === noteModal)  closeNoteModal();
     });
 </script>
 @endsection

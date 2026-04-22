@@ -12,14 +12,14 @@
         background: white;
         border-radius: 12px;
         padding: 1.25rem;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         border-left: 4px solid var(--primary-green);
         transition: all 0.3s ease;
     }
 
     .stats-card:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
     }
 
     .table th {
@@ -117,6 +117,53 @@
     .modal-footer {
         padding: 1rem 1.5rem;
     }
+
+    /* ── Gift card detail — only new style added ── */
+    .gc-info {
+        font-size: 0.82rem;
+    }
+
+    .gc-info .gc-brand {
+        font-weight: 700;
+        color: #92400e;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-bottom: 2px;
+    }
+
+    .gc-info .gc-code {
+        font-family: monospace;
+        font-size: 0.72rem;
+        background: #fef9c3;
+        border: 1px solid #fde047;
+        border-radius: 4px;
+        padding: 1px 6px;
+        display: inline-block;
+        color: #374151;
+    }
+
+    .method-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 2px 10px;
+        border-radius: 20px;
+        font-size: 0.72rem;
+        font-weight: 600;
+    }
+
+    .pill-crypto {
+        background: #f0f7ed;
+        color: #15803d;
+        border: 1px solid #86efac;
+    }
+
+    .pill-giftcard {
+        background: #fef9c3;
+        color: #854d0e;
+        border: 1px solid #fde047;
+    }
 </style>
 
 <div class="dashboard-main-body">
@@ -126,7 +173,7 @@
         <ul class="flex items-center gap-[6px]">
             <li class="font-medium">
                 <a href="{{ route('admin_dashboard') }}" class="flex items-center gap-2 hover:text-[#9EDD05]"
-                   style="color: #0C3A30;">
+                    style="color: #0C3A30;">
                     <iconify-icon icon="solar:home-smile-angle-outline" class="icon text-lg"></iconify-icon>
                     Dashboard
                 </a>
@@ -180,124 +227,190 @@
                 {{-- CARD BODY --}}
                 <div class="card-body p-6">
                     @if($deposits->count())
-                        <div class="overflow-x-auto">
-                            <table class="min-w-[1200px] w-full table">
-                                <thead>
-                                    <tr>
-                                        <th class="p-3 text-left">#</th>
-                                        <th class="p-3 text-left">User</th>
-                                        <th class="p-3 text-left">Email</th>
-                                        <th class="p-3 text-left">Plan</th>
-                                        <th class="p-3 text-left">Proof</th>
-                                        <th class="p-3 text-left">Country</th>
-                                        <th class="p-3 text-left">Amount</th>
-                                        <th class="p-3 text-left">Wallet</th>
-                                        <th class="p-3 text-left">Membership</th>
-                                        <th class="p-3 text-left">Date</th>
-                                        <th class="p-3 text-left">Actions</th>
-                                    </tr>
-                                </thead>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-[1400px] w-full table">
+                            <thead>
+                                <tr>
+                                    <th class="p-3 text-left">#</th>
+                                    <th class="p-3 text-left">User</th>
+                                    <th class="p-3 text-left">Email</th>
+                                    <th class="p-3 text-left">Plan</th>
+                                    <th class="p-3 text-left">Method</th>
+                                    <th class="p-3 text-left">Payment Details</th>
+                                    <th class="p-3 text-left">Proof / Card</th>
+                                    <th class="p-3 text-left">Country</th>
+                                    <th class="p-3 text-left">Amount</th>
+                                    <th class="p-3 text-left">Membership</th>
+                                    <th class="p-3 text-left">Date</th>
+                                    <th class="p-3 text-left">Actions</th>
+                                </tr>
+                            </thead>
 
-                                <tbody>
-                                    @foreach($deposits as $deposit)
-                                        <tr class="border-t border-gray-100 hover:bg-gray-50 transition">
-                                            <td class="p-3">{{ $loop->iteration }}</td>
+                            <tbody>
+                                @foreach($deposits as $deposit)
+                                @php
+                                $isCrypto = ($deposit->payment_method ?? 'crypto') === 'crypto';
+                                $isGiftCard = ($deposit->payment_method ?? '') === 'giftcard';
 
-                                            <td class="p-3 font-medium">{{ $deposit->user->name ?? 'N/A' }}</td>
+                                $gcBrandMap = [
+                                'amazon' => 'Amazon',
+                                'itunes' => 'iTunes',
+                                'google' => 'Google Play',
+                                'steam' => 'Steam',
+                                'walmart' => 'Walmart',
+                                'other' => $deposit->other_card_name
+                                ?? $deposit->card_type_label
+                                ?? 'Other',
+                                ];
+                                $gcBrand = $isGiftCard
+                                ? ($gcBrandMap[$deposit->card_type ?? ''] ?? ucfirst($deposit->card_type ?? 'Gift Card'))
+                                : null;
+                                @endphp
+                                <tr class="border-t border-gray-100 hover:bg-gray-50 transition">
+                                    <td class="p-3">{{ $loop->iteration }}</td>
 
-                                            <td class="p-3">{{ $deposit->user->email ?? 'N/A' }}</td>
+                                    <td class="p-3 font-medium">{{ $deposit->user->name ?? 'N/A' }}</td>
 
-                                            {{-- Plan (now optional) --}}
-                                            <td class="p-3">
-                                                @if($deposit->plan)
-                                                    <span class="font-medium">{{ $deposit->plan->name }}</span>
-                                                @else
-                                                    <span class="text-gray-400 text-sm">No plan selected</span>
-                                                @endif
-                                            </td>
+                                    <td class="p-3">{{ $deposit->user->email ?? 'N/A' }}</td>
 
-                                            {{-- Proof --}}
-                                            <td class="p-3">
-                                                @if($deposit->proof)
-                                                    <img src="{{ Storage::url($deposit->proof) }}"
-                                                         alt="Proof"
-                                                         class="proof-thumbnail"
-                                                         onclick="openModal('{{ Storage::url($deposit->proof) }}')">
-                                                @else
-                                                    <span class="text-gray-400 text-sm">No proof</span>
-                                                @endif
-                                            </td>
+                                    <td class="p-3">
+                                        @if($deposit->plan)
+                                        <span class="font-medium">{{ $deposit->plan->name }}</span>
+                                        @else
+                                        <span class="text-gray-400 text-sm">No plan selected</span>
+                                        @endif
+                                    </td>
 
-                                            <td class="p-3">{{ $deposit->user->country ?? 'N/A' }}</td>
+                                    {{-- Method pill --}}
+                                    <td class="p-3">
+                                        @if($isCrypto)
+                                        <span class="method-pill pill-crypto">
+                                            <iconify-icon icon="ph:currency-btc-bold"></iconify-icon> Crypto
+                                        </span>
+                                        @else
+                                        <span class="method-pill pill-giftcard">
+                                            <iconify-icon icon="ph:gift-bold"></iconify-icon> Gift Card
+                                        </span>
+                                        @endif
+                                    </td>
 
-                                            <td class="p-3">
-                                                <strong class="text-green-600">
-                                                    ${{ number_format($deposit->amount_deposited, 2) }}
-                                                </strong>
-                                            </td>
+                                    {{-- Payment details —
+                                                 Crypto  → wallet name + truncated address
+                                                 GiftCard → brand name + redemption code --}}
+                                    <td class="p-3">
+                                        @if($isCrypto)
+                                        <div class="wallet-info">
+                                            <strong>{{ $deposit->wallet->crypto_name ?? 'N/A' }}</strong>
+                                            @if($deposit->wallet)
+                                            <div class="wallet-address text-gray-500 text-xs flex items-center gap-2">
+                                                <span title="{{ $deposit->wallet->wallet_address }}">
+                                                    {{ substr($deposit->wallet->wallet_address, 0, 15) }}...
+                                                </span>
 
-                                            <td class="p-3">
-                                                <div class="wallet-info">
-                                                    <strong>{{ $deposit->wallet->crypto_name ?? 'N/A' }}</strong>
-                                                    @if($deposit->wallet)
-                                                    <div class="wallet-address text-gray-500 text-xs" 
-                                                         title="{{ $deposit->wallet->wallet_address }}">
-                                                        {{ substr($deposit->wallet->wallet_address, 0, 15) }}...
-                                                    </div>
-                                                    @endif
-                                                </div>
-                                            </td>
+                                                <button onclick="copyText('{{ $deposit->wallet->wallet_address }}')"
+                                                    class="text-xs px-2 py-1 bg-gray-100 rounded hover:bg-gray-200">
+                                                    Copy
+                                                </button>
+                                            </div>
+                                            @endif
+                                        </div>
+                                        @else
+                                        <div class="gc-info">
+                                            <div class="gc-brand">
+                                                <iconify-icon icon="ph:gift-bold" style="color:#f59e0b;"></iconify-icon>
+                                                {{ $gcBrand }} Gift Card
+                                            </div>
+                                          @if($deposit->card_code)
+   Code: 
+   <span class="gc-code">
+       {{ $deposit->card_code }}
+   </span>
 
-                                            <td class="p-3">
-                                                @if($deposit->user->membership_code)
-                                                    <span class="font-mono text-xs bg-gray-100 px-2 py-1 rounded">
-                                                        {{ $deposit->user->membership_code }}
-                                                    </span>
-                                                @else
-                                                    <button
-                                                        onclick="generateMembershipCode({{ $deposit->user->id }})"
-                                                        class="action-btn approve text-xs">
-                                                        Generate
-                                                    </button>
-                                                @endif
-                                            </td>
+   <button
+       type="button"
+       onclick="copyGiftCardCode('{{ $deposit->card_code }}')"
+       class="ml-2 text-xs text-gray-500 hover:text-green-600"
+       title="Copy code">
+       <iconify-icon icon="ph:copy-bold"></iconify-icon>
+   </button>
+@endif
+                                            @if($deposit->notes)
+                                            <div class="text-gray-400 text-xs mt-1">{{ Str::limit($deposit->notes, 40) }}</div>
+                                            @endif
+                                        </div>
+                                        @endif
+                                    </td>
 
-                                            <td class="p-3 text-sm text-gray-500">
-                                                {{ $deposit->created_at->format('d M, Y') }}
-                                            </td>
+                                    {{-- Proof image (works for both: tx screenshot and card photo) --}}
+                                    <td class="p-3">
+                                        @if($deposit->proof)
+                                        <img src="{{ Storage::url($deposit->proof) }}"
+                                            alt="{{ $isGiftCard ? 'Gift Card' : 'Proof' }}"
+                                            class="proof-thumbnail"
+                                            onclick="openModal('{{ Storage::url($deposit->proof) }}')"
+                                            title="{{ $isGiftCard ? 'Click to view gift card image' : 'Click to view proof' }}">
+                                        @else
+                                        <span class="text-gray-400 text-sm">No image</span>
+                                        @endif
+                                    </td>
 
-                                            <td class="p-3">
-                                                <div class="flex gap-2">
-                                                    <form method="POST"
-                                                          action="{{ route('admin.approve.deposit', $deposit->id) }}">
-                                                        @csrf
-                                                        <button class="action-btn approve" type="submit">
-                                                            <iconify-icon icon="ph:check-bold" class="mr-1"></iconify-icon>
-                                                            Approve
-                                                        </button>
-                                                    </form>
+                                    <td class="p-3">{{ $deposit->user->country ?? 'N/A' }}</td>
 
-                                                    <button
-                                                        onclick="openRejectModal('{{ route('admin.reject.deposit', $deposit->id) }}')"
-                                                        class="action-btn reject">
-                                                        <iconify-icon icon="ph:x-bold" class="mr-1"></iconify-icon>
-                                                        Reject
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
+                                    <td class="p-3">
+                                        <strong class="text-green-600">
+                                            ${{ number_format($deposit->amount_deposited, 2) }}
+                                        </strong>
+                                    </td>
+
+                                    <td class="p-3">
+                                        @if($deposit->user->membership_code)
+                                        <span class="font-mono text-xs bg-gray-100 px-2 py-1 rounded">
+                                            {{ $deposit->user->membership_code }}
+                                        </span>
+                                        @else
+                                        <button onclick="generateMembershipCode({{ $deposit->user->id }})"
+                                            class="action-btn approve text-xs">
+                                            Generate
+                                        </button>
+                                        @endif
+                                    </td>
+
+                                    <td class="p-3 text-sm text-gray-500">
+                                        {{ $deposit->created_at->format('d M, Y') }}
+                                    </td>
+
+                                    <td class="p-3">
+                                        <div class="flex gap-2">
+                                            <form method="POST"
+                                                action="{{ route('admin.approve.deposit', $deposit->id) }}"
+                                                onsubmit="return lockBtn(this)">
+                                                @csrf
+                                                <button class="action-btn approve" type="submit">
+                                                    <iconify-icon icon="ph:check-bold" class="mr-1"></iconify-icon>
+                                                    Approve
+                                                </button>
+                                            </form>
+
+                                            <button onclick="openRejectModal('{{ route('admin.reject.deposit', $deposit->id) }}')"
+                                                class="action-btn reject">
+                                                <iconify-icon icon="ph:x-bold" class="mr-1"></iconify-icon>
+                                                Reject
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                     @else
-                        <div class="text-center py-12">
-                            <div class="w-20 h-20 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
-                                <iconify-icon icon="ph:clock-fill" class="text-4xl text-gray-400"></iconify-icon>
-                            </div>
-                            <p class="text-gray-500 text-lg mb-2">No Pending Deposits</p>
-                            <p class="text-gray-400 text-sm">All deposits have been processed</p>
+                    <div class="text-center py-12">
+                        <div class="w-20 h-20 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+                            <iconify-icon icon="ph:clock-fill" class="text-4xl text-gray-400"></iconify-icon>
                         </div>
+                        <p class="text-gray-500 text-lg mb-2">No Pending Deposits</p>
+                        <p class="text-gray-400 text-sm">All deposits have been processed</p>
+                    </div>
                     @endif
                 </div>
             </div>
@@ -307,22 +420,22 @@
 
 {{-- IMAGE MODAL --}}
 <div id="imageModal"
-     class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden items-center justify-center p-4"
-     onclick="closeModal()">
+    class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden items-center justify-center p-4"
+    onclick="closeModal()">
     <div class="relative max-w-4xl w-full">
-        <button onclick="closeModal()" 
-                class="absolute -top-10 right-0 text-white hover:text-gray-300">
+        <button onclick="closeModal()"
+            class="absolute -top-10 right-0 text-white hover:text-gray-300">
             <iconify-icon icon="ph:x-bold" class="text-2xl"></iconify-icon>
         </button>
         <img id="modalImage"
-             class="w-full rounded-lg shadow-2xl object-contain max-h-[80vh]"
-             onclick="event.stopPropagation();">
+            class="w-full rounded-lg shadow-2xl object-contain max-h-[80vh]"
+            onclick="event.stopPropagation();">
     </div>
 </div>
 
 {{-- REJECT MODAL --}}
 <div id="rejectModal"
-     class="fixed inset-0 bg-black bg-opacity-70 z-50 hidden items-center justify-center p-4">
+    class="fixed inset-0 bg-black bg-opacity-70 z-50 hidden items-center justify-center p-4">
     <div class="bg-white rounded-xl w-full max-w-md modal-content">
         <div class="modal-header">
             <h4 class="font-bold text-lg flex items-center gap-2">
@@ -330,26 +443,22 @@
                 Reject Deposit
             </h4>
         </div>
-
         <form method="POST" id="rejectForm">
             @csrf
             @method('DELETE')
-
             <div class="p-6">
                 <label class="block text-sm font-medium text-gray-700 mb-2">
                     Reason for Rejection
                 </label>
                 <textarea name="rejection_note"
-                          class="w-full p-3 border border-gray-300 rounded-lg focus:border-[#9EDD05] focus:outline-none"
-                          rows="4"
-                          required
-                          placeholder="Please provide a reason for rejection..."></textarea>
+                    class="w-full p-3 border border-gray-300 rounded-lg focus:border-[#9EDD05] focus:outline-none"
+                    rows="4"
+                    required
+                    placeholder="Please provide a reason for rejection..."></textarea>
             </div>
-
             <div class="modal-footer bg-gray-50 flex justify-end gap-3">
-                <button type="button"
-                        onclick="closeRejectModal()"
-                        class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition">
+                <button type="button" onclick="closeRejectModal()"
+                    class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition">
                     Cancel
                 </button>
                 <button class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition flex items-center gap-2">
@@ -361,35 +470,88 @@
     </div>
 </div>
 
-{{-- SCRIPTS --}}
 <script>
-function openRejectModal(action) {
-    document.getElementById('rejectForm').action = action;
-    document.getElementById('rejectModal').classList.remove('hidden');
-    document.getElementById('rejectModal').classList.add('flex');
-}
-
-function closeRejectModal() {
-    document.getElementById('rejectModal').classList.add('hidden');
-    document.getElementById('rejectModal').classList.remove('flex');
-}
-
-function openModal(src) {
-    document.getElementById('modalImage').src = src;
-    document.getElementById('imageModal').classList.remove('hidden');
-    document.getElementById('imageModal').classList.add('flex');
-}
-
-function closeModal() {
-    document.getElementById('imageModal').classList.add('hidden');
-    document.getElementById('imageModal').classList.remove('flex');
-}
-
-function generateMembershipCode(userId) {
-    if(confirm('Generate membership code for this user?')) {
-        // Add your membership code generation logic here
-        alert('Membership code generation - implement your logic');
+    function openRejectModal(action) {
+        document.getElementById('rejectForm').action = action;
+        document.getElementById('rejectModal').classList.remove('hidden');
+        document.getElementById('rejectModal').classList.add('flex');
     }
-}
+
+    function closeRejectModal() {
+        document.getElementById('rejectModal').classList.add('hidden');
+        document.getElementById('rejectModal').classList.remove('flex');
+    }
+
+    function openModal(src) {
+        document.getElementById('modalImage').src = src;
+        document.getElementById('imageModal').classList.remove('hidden');
+        document.getElementById('imageModal').classList.add('flex');
+    }
+
+    function closeModal() {
+        document.getElementById('imageModal').classList.add('hidden');
+        document.getElementById('imageModal').classList.remove('flex');
+    }
+    /* Prevent double-approve */
+    function lockBtn(form) {
+        const btn = form.querySelector('button[type="submit"]');
+        if (btn.dataset.locked === 'true') return false;
+        btn.dataset.locked = 'true';
+        btn.disabled = true;
+        btn.style.opacity = '0.6';
+        btn.innerHTML = '...';
+        return true;
+    }
+
+    function generateMembershipCode(userId) {
+        if (!confirm('Generate membership code for this user?')) return;
+        fetch("{{ route('admin.generate.membership.code') }}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({
+                user_id: userId
+            })
+        }).then(r => r.json()).then(data => {
+            if (data.success) location.reload();
+            else alert(data.message || 'Failed to generate code');
+        }).catch(() => alert('Something went wrong'));
+    }
+
+
+
+    function copyGiftCardCode(code) {
+        navigator.clipboard.writeText(code)
+            .then(() => {
+                showCopyToast('Gift card code copied!');
+            })
+            .catch(() => {
+                alert('Copy failed');
+            });
+    }
+
+    function showCopyToast(message) {
+        let toast = document.createElement('div');
+        toast.innerText = message;
+
+        toast.style.position = 'fixed';
+        toast.style.bottom = '20px';
+        toast.style.right = '20px';
+        toast.style.background = '#0C3A30';
+        toast.style.color = 'white';
+        toast.style.padding = '10px 14px';
+        toast.style.borderRadius = '8px';
+        toast.style.fontSize = '13px';
+        toast.style.zIndex = '9999';
+        toast.style.boxShadow = '0 4px 12px rgba(0,0,0,0.2)';
+
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+            toast.remove();
+        }, 2000);
+    }
 </script>
 @endsection
