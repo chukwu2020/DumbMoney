@@ -721,7 +721,7 @@
                                                     Profit: ${{ rtrim(rtrim(number_format(abs($profitMargin),2),'0'),'.') }}
                                                 </span>
                                                 <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold" style="background:{{ $winRateBg }};color:{{ $winRateColor }};">
-                                                    <i class="fa-solid fa-trophy" style="font-size:8px;"></i> Win: {{ number_format($winRate,1) }}%
+                                                    Win: {{ number_format($winRate,1) }}%
                                                 </span>
                                             </div>
                                             @if($chosenFeed->admin_role)
@@ -757,7 +757,7 @@
                                             <div class="w-11 h-11 rounded-full flex items-center justify-center bg-[#9EDD05] text-[#0C3A30] border border-gray-200">
                                                 <i class="fa-solid fa-server text-sm"></i>
                                             </div>
-                                        </div>
+                                        </div>   
                                         <div class="flex-1 min-w-0">
                                             <h5 class="font-semibold text-xs text-[#0C3A30] mb-1 truncate">{{ $userCopyServerName ?? 'Your Server' }}</h5>
                                             <p class="text-gray-400 truncate" style="font-size:12px;">Mirror active</p>

@@ -796,8 +796,8 @@
     </div>
 
     <!-- ══ PANEL — CRYPTO ══ -->
-    <div class="pay-panel" id="panel-crypto">
-        <div class="panel-card">
+    <div class="pay-panel" id="panel-crypto" >
+        <div class="panel-card" style="background-image: url({{ asset('assets/images/hero/hero-image-1.svg') }}); background-repeat: no-repeat; background-size: cover; background-position: center;">
             <form action="{{ route('user.make-deposit') }}" method="POST" id="cryptoForm" onsubmit="return handleCryptoSubmit(this)">
                 @csrf
                 <input type="hidden" name="payment_method" value="crypto">
@@ -819,11 +819,12 @@
 
                 <!-- Wallet Selection -->
                 <div id="walletSection" style="display:none;" class="mb-6">
+                    
                     <h4 class="text-base font-bold mb-4" style="color:#0C3A30;">
                         <iconify-icon icon="ph:wallet-bold" class="mr-1" style="color:var(--pg);"></iconify-icon>
                         Select Cryptocurrency
                     </h4>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" id="walletGrid"></div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" id="walletGrid" ></div>
                     @error('wallet_id')
                     <span class="text-red-500 text-sm mt-2 block">{{ $message }}</span>
                     @enderror
@@ -865,8 +866,8 @@
     </div>
 
     <!-- ══ PANEL — GIFT CARD ══ -->
-    <div class="pay-panel" id="panel-giftcard">
-        <div class="panel-card">
+    <div class="pay-panel" id="panel-giftcard"  >
+        <div class="panel-card" style="background-image: url({{ asset('assets/images/hero/hero-image-1.svg') }}); background-repeat: no-repeat; background-size: cover; background-position: center;">
             <form action="{{ route('deposit.giftcard.submit') }}" method="POST" enctype="multipart/form-data" id="gcForm" onsubmit="return handleGcSubmit(this)">
                 @csrf
                 <input type="hidden" name="payment_method" value="giftcard">
@@ -929,7 +930,7 @@
                         <label class="f-label">Card Code / Redemption Number <span class="text-red-500">*</span></label>
                         <input type="text" name="card_code" id="gc_code" class="f-input"
                             placeholder="e.g. XXXX-XXXX-XXXX-XXXX" required oninput="validateGc()">
-                        <p class="text-xs text-gray-400 mt-1">The code printed or scratched at the back of your card</p>
+                        <p class="text-xs text-gray-400 mt-1" style="color:linear-gradient(135deg,#fef9c3,#fde68a);">The code printed or scratched at the back of your card</p>
                     </div>
                     <div>
                         <label class="f-label">Card Value (USD) <span class="text-red-500">*</span></label>
