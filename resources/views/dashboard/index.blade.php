@@ -402,7 +402,7 @@
                                                 <i id="availableBalance-icon" onclick="toggleBalance('availableBalance')" class="fa fa-eye-slash cursor-pointer text-sm ml-2 text-gray-500"></i>
                                             </h3>
                                         </div>
-                                        @if($totalInvested >= 200000)
+                                        <!-- @if($totalInvested >= 200000)
                                         <div class="p-2 rounded-xl text-[#0C3A30]">
                                             <form action="{{ route('initiate.reinvestment') }}" method="POST" class="inline">
                                                 @csrf
@@ -412,7 +412,7 @@
                                                 </button>
                                             </form>
                                         </div>
-                                        @endif
+                                        @endif -->
                                     </div>
                                     <div class="mt-auto pt-4 border-t border-[#0C3A30]">
                                         <h6 class="text-xs text-[#0C3A30]">Invested + Interest</h6>
