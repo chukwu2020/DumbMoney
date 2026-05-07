@@ -7,8 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Title -->
 <title>DUMB MONEY</title>
-
-<!-- Favicons for different devices -->
+Confvicons for different devices -->
 <link rel="icon" type="image/png" href="{{ asset('assets/images/dumbmoneylogo.png') }}" sizes="64x64">
 <link rel="icon" type="image/png" href="{{ asset('assets/images/dumbmoneylogo.png') }}" sizes="192x192">
 <link rel="icon" type="image/png" href="{{ asset('assets/images/dumbmoneylogo.png') }}" sizes="512x512">

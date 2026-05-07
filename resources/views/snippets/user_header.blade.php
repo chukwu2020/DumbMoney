@@ -87,11 +87,7 @@ body {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-        120deg,
-        rgba(255,255,255,0.4),
-        transparent
-    );
+   
     opacity: 0;
     transition: opacity 0.3s ease;
 }
@@ -103,7 +99,7 @@ body {
 .mobile-hamburger:hover {
     transform: translateY(-2px) scale(1.03);
 
-    background: linear-gradient(135deg, #9EDD05 0%, #84cc16 100%);
+   
 
    
 }
@@ -141,13 +137,12 @@ body {
     justify-content: center;
 
     background: #5865F2;
-    color: white;
+    color: white !important;
     text-decoration: none;
 
     transition: all 0.25s ease;
 
-    box-shadow:
-        0 8px 18px rgba(88, 101, 242, 0.25);
+   
 }
 
 .discord-btn:hover {
@@ -157,6 +152,7 @@ body {
 
 .discord-btn iconify-icon {
     font-size: 22px;
+    color: white !important;
 }
 
 /* =========================

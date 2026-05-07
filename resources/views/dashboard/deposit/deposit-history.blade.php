@@ -382,7 +382,7 @@
                             <!-- View proof / card image -->
                             @if($deposit->proof)
                             <div class="mt-4 pt-3 border-t border-gray-100">
-                                <button onclick="viewProof('{{ asset('storage/'.$deposit->proof) }}')" 
+                                <button onclick="onclick=viewProof('{{ asset('storage/'.$deposit->proof) }}')" 
                                         class="text-xs text-[#9EDD05] hover:text-[#8AC304] font-semibold flex items-center gap-1">
                                     <iconify-icon icon="ph:eye"></iconify-icon>
                                     {{ $method === 'giftcard' ? 'View Gift Card' : 'View Proof' }}
