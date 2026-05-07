@@ -8,11 +8,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>CHARTMASTERS CIRCLE</title>
+    <title>DUMB MONEY</title>
 
     <!-- Favicons -->
-    <link rel="icon" type="image/png" href="{{ asset('assets/images/chartmasterlogo1.png') }}" sizes="32x32">
-    <link rel="apple-touch-icon" href="{{ asset('assets/images/chartmasterlogo1.png') }}" sizes="180x180">
+    <link rel="icon" type="image/png" href="{{ asset('assets/images/dumbmoneylogo.png') }}" sizes="64x64">
+    <link rel="apple-touch-icon" href="{{ asset('assets/images/dumbmoneylogo.png') }}" sizes="180x180">
 
     <!-- Styles -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">

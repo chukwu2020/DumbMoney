@@ -6,15 +6,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Title -->
-<title>CHARTMASTERS CIRCLE</title>
+<title>DUMB MONEY</title>
 
 <!-- Favicons for different devices -->
-<link rel="icon" type="image/png" href="{{ asset('assets/images/chartmasterlogo1.png') }}" sizes="32x32">
-<link rel="icon" type="image/png" href="{{ asset('assets/images/chartmasterlogo1.png') }}" sizes="192x192">
-<link rel="icon" type="image/png" href="{{ asset('assets/images/chartmasterlogo1.png') }}" sizes="512x512">
+<link rel="icon" type="image/png" href="{{ asset('assets/images/dumbmoneylogo.png') }}" sizes="64x64">
+<link rel="icon" type="image/png" href="{{ asset('assets/images/dumbmoneylogo.png') }}" sizes="192x192">
+<link rel="icon" type="image/png" href="{{ asset('assets/images/dumbmoneylogo.png') }}" sizes="512x512">
 
 <!-- Apple Touch Icon -->
-<link rel="apple-touch-icon" href="{{ asset('assets/images/chartmasterlogo1.png') }}" sizes="180x180">
+<link rel="apple-touch-icon" href="{{ asset('assets/images/dumbmoneylogo.png') }}" sizes="180x180">
 
     <!-- google fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&amp;display=swap" rel="stylesheet">

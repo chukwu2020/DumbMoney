@@ -1,20 +1,26 @@
 @php
 use App\Models\WithdrawalCard;
+
 $user = auth()->user();
-$cardExists = auth()->check() ? WithdrawalCard::where('user_id', auth()->id())->exists() : false;
+
+$cardExists = auth()->check()
+    ? WithdrawalCard::where('user_id', auth()->id())->exists()
+    : false;
 @endphp
 
 <header class="main-header">
-   <style>
-    .main-header {
+
+    <style>
+        .main-header {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    background-color: #fffaeb;
-    z-index: 1100;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     height: 80px;
+    background: #fffaeb;
+    z-index: 1100;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
 }
 
 body {
@@ -22,261 +28,480 @@ body {
 }
 
 .header-content {
+    height: 100%;
+    padding: 0 1.2rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 1.5rem;
-    height: 100%;
     position: relative;
 }
 
-/* Logo (simple + controlled) */
-.brand-logo {
-    height: 30px;
-    width: auto;
-    object-fit: contain;
-    margin-bottom: 3rem !important;
+/* =========================
+   LEFT CONTROLS
+========================== */
+
+.left-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-/* Center ONLY on mobile */
-.mobile-logo {
+/* =========================
+   RIGHT CONTROLS
+========================== */
+
+.right-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* =========================
+   MOBILE HAMBURGER
+========================== */
+
+.mobile-hamburger {
+    width: 58px !important;
+    height: 58px !important;
+    border: none;
+    outline: none;
+    border-radius: 20px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* SAME COLOR ALWAYS */
+    color: linear-gradient(135deg, #9EDD05 0%, #84cc16 100%) !important;
+
+  
+
+    transition: all 0.3s ease;
+}
+
+/* SHINE EFFECT */
+.mobile-hamburger::before {
+    content: "";
     position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 10;
-    
+    inset: 0;
+    background: linear-gradient(
+        120deg,
+        rgba(255,255,255,0.4),
+        transparent
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
-/* Hide mobile logo on desktop */
+.mobile-hamburger:hover::before {
+    opacity: 1;
+}
+
+.mobile-hamburger:hover {
+    transform: translateY(-2px) scale(1.03);
+
+    background: linear-gradient(135deg, #9EDD05 0%, #84cc16 100%);
+
+   
+}
+
+/* ACTIVE STATE */
+.mobile-hamburger.active {
+    background: linear-gradient(135deg, #9EDD05 0%, #84cc16 100%);
+}
+
+/* ICON */
+.mobile-hamburger iconify-icon {
+    font-size: 50px !important;
+    color: #9EDD05 !important;
+    transition: all 0.35s ease;
+    z-index: 2;
+}
+
+/* ACTIVE ICON */
+.mobile-hamburger.active iconify-icon {
+    color: #0C3A30 !important;
+    transform: rotate(180deg) scale(1.08);
+}
+
+/* =========================
+   DISCORD BUTTON
+========================== */
+
+.discord-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #5865F2;
+    color: white;
+    text-decoration: none;
+
+    transition: all 0.25s ease;
+
+    box-shadow:
+        0 8px 18px rgba(88, 101, 242, 0.25);
+}
+
+.discord-btn:hover {
+    background: #4752c4;
+    transform: translateY(-2px) scale(1.03);
+}
+
+.discord-btn iconify-icon {
+    font-size: 22px;
+}
+
+/* =========================
+   PROFILE AVATAR
+========================== */
+
+.profile-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+
+    border: 2px solid #9EDD05;
+
+    transition: all 0.25s ease;
+
+    box-shadow:
+        0 6px 16px rgba(158, 221, 5, 0.20);
+}
+
+.profile-avatar:hover {
+    transform: scale(1.05);
+}
+
+.profile-initials {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #9EDD05;
+    color: #0C3A30;
+
+    font-weight: 700;
+    font-size: 15px;
+
+    border: 2px solid #9EDD05;
+
+    transition: all 0.25s ease;
+
+    box-shadow:
+        0 6px 16px rgba(158, 221, 5, 0.20);
+}
+
+.profile-initials:hover {
+    transform: scale(1.05);
+}
+
+/* =========================
+   DROPDOWN
+========================== */
+
+.dropdown-menu-custom {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 12px);
+
+    width: 190px;
+
+    background: white;
+
+    border-radius: 18px;
+
+    padding: 10px;
+
+    border: 1px solid #ececec;
+
+    box-shadow:
+        0 18px 35px rgba(0, 0, 0, 0.10);
+
+    z-index: 999;
+}
+
+.dropdown-header {
+    font-size: 13px;
+    font-weight: 700;
+    color: #0C3A30;
+
+    text-align: center;
+
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+
+    border-bottom: 1px solid #eee;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 12px;
+
+    border-radius: 12px;
+
+    text-decoration: none;
+
+    color: #374151;
+
+    transition: all 0.2s ease;
+
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.dropdown-item:hover {
+    background: #9EDD05;
+    color: #0C3A30;
+}
+
+.dropdown-divider {
+    height: 1px;
+    background: #eee;
+    margin: 8px 0;
+}
+
+.logout-item {
+    background: #f05b65;
+    color: #dc2626;
+}
+
+.logout-item:hover {
+    background: #dc2626;
+    color: white;
+}
+
+/* =========================
+   HIDE HAMBURGER ON DESKTOP
+========================== */
+
 @media (min-width: 1024px) {
-    .mobile-logo {
-        display: none;
-        margin-bottom: 3rem !important;
-           height: 45px;
+    .mobile-hamburger {
+        display: none !important;
     }
 }
-   </style>
 
+/* =========================
+   MOBILE RESPONSIVE
+========================== */
 
+@media (max-width: 768px) {
+
+    .header-content {
+        padding: 0 0.9rem;
+    }
+
+    .mobile-hamburger {
+        width: 54px !important;
+        height: 54px !important;
+        border-radius: 18px;
+    }
+
+    .mobile-hamburger iconify-icon {
+        font-size: 40px !important;
+    }
+
+    .discord-btn,
+    .profile-avatar,
+    .profile-initials {
+        width: 42px;
+        height: 42px;
+    }
+
+    .discord-btn iconify-icon {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .right-controls {
+        gap: 8px;
+    }
+
+    .dropdown-menu-custom {
+        width: 175px;
+        right: -5px;
+    }
+}
+    </style>
 
     <div class="header-content">
-        <!-- Mobile Hamburger -->
-        <button class="lg:hidden sidebar-mobile-toggle" style="padding-right:1rem; border: none;">
-            <iconify-icon icon="heroicons:bars-3-solid" style="font-size: 40px; color: #8bc905 !important;"></iconify-icon>
-        </button>
 
-        <!-- Mobile Logo -->
-        <div class="lg:hidden mobile-logo">
-            <a href="{{ route('user_dashboard') }}">
+        <!-- LEFT -->
+        <div class="left-controls">
 
-                <img src="/assets/images/chartmasterbrandname1.png" alt="ChartMasters Circle"
-                    class="brand-logo">
-            </a>
+            <button class="sidebar-mobile-toggle mobile-hamburger">
+
+                <iconify-icon
+                    icon="heroicons:bars-3-solid">
+                </iconify-icon>
+
+            </button>
 
         </div>
 
-        <!-- Desktop Hamburger  -->
-        <button class="hidden lg:block sidebar-toggle text-[#0c3a30]">
-            <iconify-icon icon="heroicons:bars-3-solid" class="text-2xl"></iconify-icon>
-        </button>
+        <!-- RIGHT -->
+        <div class="right-controls">
 
-        <!-- Right Side Controls -->
-        <div class="flex items-center gap-3">
-            {{-- Profile Dropdown --}}
+            <!-- DISCORD -->
+            <a href="https://discord.gg/dumbmoney"
+               target="_blank"
+               class="discord-btn"
+               rel="noopener noreferrer">
+
+                <iconify-icon
+                    icon="ic:baseline-discord">
+                </iconify-icon>
+
+            </a>
+
+            <!-- PROFILE -->
             <div x-data="{ open: false }" class="relative">
-                <button @click="open = !open" class="focus:outline-none rounded-full overflow-hidden">
-                    <div class="text-center border-b border-neutral-200 dark:border-neutral-600">
-                        @php
 
+                <button
+                    @click="open = !open"
+                    class="focus:outline-none rounded-full overflow-hidden cursor-pointer">
+
+                    @php
                         $profilePic = $user->profile->profile_pic ?? null;
 
                         $initials = collect(explode(' ', $user->name))
-                        ->map(fn($word) => strtoupper(substr($word, 0, 1)))
-                        ->take(2)
-                        ->join('') ?: 'U';
-                        @endphp
+                            ->map(fn($word) => strtoupper(substr($word, 0, 1)))
+                            ->take(2)
+                            ->join('') ?: 'U';
+                    @endphp
 
-                  @if ($profilePic)
-                          <img src="{{ asset('storage/profile_pics/' . $profilePic) }}"  alt="{{ $user->name }}" class="mx-auto rounded-full object-cover w-11 h-11"  onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"/>
-                 
-                        @else
+                    @if ($profilePic)
+
+                        <img
+                            src="{{ asset('storage/profile_pics/' . $profilePic) }}"
+                            alt="{{ $user->name }}"
+                            class="profile-avatar"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                        />
+
                         <div
-                            class="mx-auto w-11 h-11 rounded-full flex items-center justify-center font-semibold text-base select-none"
-                            style="background-color: #9EDD05; color: #0C3A30;">
+                            class="profile-initials"
+                            style="display:none;">
                             {{ $initials }}
                         </div>
-                        @endif
-                    </div>
+
+                    @else
+
+                        <div class="profile-initials">
+                            {{ $initials }}
+                        </div>
+
+                    @endif
 
                 </button>
 
-                <div x-show="open" @click.away="open = false" x-transition
-                    class="absolute right-0 mt-2 shadow-lg bg-white rounded-lg p-4 z-50 border"
-                    style="width: 9rem !important; height: 11rem;">
+                <!-- DROPDOWN -->
+                <div
+                    x-show="open"
+                    @click.away="open = false"
+                    x-transition
+                    class="dropdown-menu-custom">
 
-                    <div style="border-bottom: 1px solid #def1ee; padding-bottom: 0.5rem; margin-bottom: 0.5rem; text-align:center;">
-                        <span style="display: block; font-size: 0.875rem; font-weight: 600; color: #0c3a30;">My Account</span>
+                    <div class="dropdown-header">
+                        My Account
                     </div>
 
+                    <a
+                        href="{{ route('profile.show') }}"
+                        class="dropdown-item">
 
-                    <ul style="font-size: 0.875rem; display: flex; flex-direction: column; gap: 0.5rem;">
-                        <li>
-                            <a href="{{ route('profile.show') }}"
-                                style="display: flex; align-items: center; gap: 0.5rem; color:black; width: 100%; height: 3rem; border-radius: 6px; padding-left: 0.5rem; text-decoration: none;"
-                                onmouseover="this.style.backgroundColor='#9EDD05';"
-                                onmouseout="this.style.backgroundColor='none';">
-                                <iconify-icon icon="solar:user-linear" style="font-size: 1.25rem;"></iconify-icon> Profile
-                            </a>
-                        </li>
+                        <iconify-icon
+                            icon="solar:user-linear"
+                            style="font-size: 1.2rem;">
+                        </iconify-icon>
 
-                        <li>
-                            <a href="{{ route('signout') }}"
-                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                                style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; background-color: #ef4444; color: black; width: 100%; height: 2.5rem; border-radius: 6px; text-decoration: none;"
-                                onmouseover="this.style.backgroundColor='#b91c1c'; this.style.color='black';"
-                                onmouseout="this.style.backgroundColor='transparent'; this.style.color='red';">
-                                <iconify-icon icon="lucide:power" style="font-size: 1.25rem;"></iconify-icon> Logout
-                            </a>
-                            <form id="logout-form" method="POST" action="{{ route('signout') }}" style="display: none;">
-                                @csrf
-                            </form>
-                        </li>
-                    </ul>
+                        Profile Settings
+
+                    </a>
+
+                    <div class="dropdown-divider"></div>
+
+                    <a
+                        href="{{ route('signout') }}"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                        class="dropdown-item logout-item">
+
+                        <iconify-icon
+                            icon="lucide:power"
+                            style="font-size: 1.2rem;">
+                        </iconify-icon>
+
+                        Logout
+
+                    </a>
+
+                    <form
+                        id="logout-form"
+                        method="POST"
+                        action="{{ route('signout') }}"
+                        style="display:none;">
+
+                        @csrf
+
+                    </form>
+
                 </div>
+
             </div>
+
         </div>
+
     </div>
+
 </header>
 
 <script>
-    // Mobile sidebar toggle
-    document.querySelector('.sidebar-mobile-toggle').addEventListener('click', function() {
-        document.querySelector('.sidebar').classList.toggle('open');
-    });
+    const sidebarBtn = document.querySelector('.sidebar-mobile-toggle');
 
-    // Desktop sidebar toggle
-    document.querySelector('.sidebar-toggle')?.addEventListener('click', function() {
-        document.querySelector('.sidebar').classList.toggle('open');
+    const sidebar = document.querySelector('.sidebar');
+
+    const menuIcon = sidebarBtn?.querySelector('iconify-icon');
+
+    sidebarBtn?.addEventListener('click', function () {
+
+        sidebar?.classList.toggle('open');
+
+        const isOpen = sidebar?.classList.contains('open');
+
+        sidebarBtn.classList.toggle('active', isOpen);
+
+        if (isOpen) {
+
+            menuIcon.setAttribute(
+                'icon',
+                'heroicons:x-mark-solid'
+            );
+
+        } else {
+
+            menuIcon.setAttribute(
+                'icon',
+                'heroicons:bars-3-solid'
+            );
+
+        }
+
     });
 </script>
-
-<script>
-    (function() {
-        const translateTrigger = document.getElementById('translateTrigger');
-        const translateElement = document.getElementById('google_translate_element');
-        const dropdownIcon = translateTrigger.querySelector('.dropdown-icon');
-
-        // Toggle dropdown visibility
-        function toggleDropdown() {
-            const isVisible = translateElement.style.display === 'block';
-            if (isVisible) {
-                translateElement.style.display = 'none';
-                translateTrigger.setAttribute('aria-expanded', 'false');
-                dropdownIcon.classList.remove('rotate-180');
-            } else {
-                translateElement.style.display = 'block';
-                translateTrigger.setAttribute('aria-expanded', 'true');
-                dropdownIcon.classList.add('rotate-180');
-
-                if (!window.googleTranslateLoaded) {
-                    const script = document.createElement('script');
-                    script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-                    document.body.appendChild(script);
-                    window.googleTranslateLoaded = true;
-
-                    translateElement.innerHTML = '<div style="color:#333; padding: 8px;">Loading languages...</div>';
-                }
-            }
-        }
-
-        // Click on language selector toggles dropdown
-        translateTrigger.addEventListener('click', function(e) {
-            e.stopPropagation();
-            toggleDropdown();
-        });
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(e) {
-            if (!translateTrigger.contains(e.target) && !translateElement.contains(e.target)) {
-                translateElement.style.display = 'none';
-                translateTrigger.setAttribute('aria-expanded', 'false');
-                dropdownIcon.classList.remove('rotate-180');
-            }
-        });
-
-        // Accessibility: toggle on Enter/Space
-        translateTrigger.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                toggleDropdown();
-            }
-        });
-    })();
-
-    // Google Translate Initialization function
-    function googleTranslateElementInit() {
-        new google.translate.TranslateElement({
-            pageLanguage: 'en',
-            layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-            includedLanguages: 'en,es,fr,de,it,pt,ru,zh-CN,ja,ar,hi',
-            autoDisplay: false
-        }, 'google_translate_element');
-
-        // Additional style fixes for Google Translate iframe inside dropdown
-        const style = document.createElement('style');
-        style.textContent = `
-        #google_translate_element {
-            font-family: Arial, sans-serif;
-        }
-        .goog-te-menu-frame {
-            max-width: 100% !important;
-            width: 100% !important;
-            box-sizing: border-box;
-        }
-        .goog-te-menu2 {
-            max-width: 100% !important;
-            width: 100% !important;
-            overflow: auto !important;
-        }
-    `;
-        document.head.appendChild(style);
-    }
-</script>
-
-<style>
-    /* Improved Language Selector Styles */
-    .language-selector {
-        position: relative;
-        cursor: pointer;
-        z-index: 1100;
-        /* above navbar */
-    }
-
-    .translate-trigger {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-
-        padding: 5px 10px;
-        border-radius: 4px;
-        transition: all 0.2s;
-    }
-
-    .translate-trigger:hover {
-        background: rgba(255, 255, 255, 0.1);
-    }
-
-    .dropdown-icon {
-        transition: transform 0.3s ease;
-    }
-
-    .dropdown-icon.rotate-180 {
-        transform: rotate(180deg);
-    }
-
-    .top-header-area {
-        position: relative;
-        z-index: 1000;
-    }
-</style>

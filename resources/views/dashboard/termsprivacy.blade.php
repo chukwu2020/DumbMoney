@@ -18,7 +18,7 @@
         </h1>
         
         <p class="text-gray-600 max-w-2xl mx-auto">
-            Your trust matters to us. Read our policies to understand how we protect your data and what you can expect from ChartMasters Circle.
+            Your trust matters to us. Read our policies to understand how we protect your data and what you can expect from Dumb Money.
         </p>
         
         <div class="flex items-center justify-center gap-2 mt-4 text-sm text-gray-500">
@@ -56,7 +56,7 @@
                 </div>
                 
                 <p class="text-gray-600 mb-6 leading-relaxed">
-                    ChartMasters Circle Investment ("we", "our", or "us") is committed to protecting your privacy and ensuring the security of your personal information. This policy outlines our practices regarding data collection, use, and protection in compliance with global standards including GDPR and international data protection laws.
+                    Dumb Money ("we", "our", or "us") is committed to protecting your privacy and ensuring the security of your personal information. This policy outlines our practices regarding data collection, use, and protection in compliance with global standards including GDPR and international data protection laws.
                 </p>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -65,14 +65,14 @@
                         ['icon' => 'ph:target', 'title' => 'Purpose of Data Collection', 'desc' => 'Account management, trade execution, communication, regulatory compliance, and platform improvement.'],
                         ['icon' => 'ph:database', 'title' => 'Data Protection', 'desc' => 'Documents are securely stored with bank-grade encryption and used solely for verification and compliance purposes.'],
                         ['icon' => 'ph:handshake', 'title' => 'Information Sharing', 'desc' => 'Shared only with licensed brokers, liquidity providers, or legal authorities as required by law. Never sold to third parties.'],
-                        ['icon' => 'ph:warning-circle', 'title' => 'Trading Risk Disclaimer', 'desc' => 'ChartMasters Circle operates as a copy-trading platform. All trades executed carry financial risk. Past performance does not guarantee future results.'],
+                        ['icon' => 'ph:warning-circle', 'title' => 'Trading Risk Disclaimer', 'desc' => 'Dumb Money operates as a copy-trading platform. All trades executed carry financial risk. Past performance does not guarantee future results.'],
                         ['icon' => 'ph:lock-key', 'title' => 'Data Security', 'desc' => 'Bank-grade encryption, multi-factor authentication, and strict access controls protect your information.'],
                         ['icon' => 'ph:clock', 'title' => 'Data Retention', 'desc' => 'Data retained for 5-7 years as required by financial regulations, or as needed for legal and operational purposes.'],
                         ['icon' => 'ph:user-list', 'title' => 'Your Rights', 'desc' => 'Access, correction, deletion, restriction, and withdrawal of consent. Contact our Data Protection Officer to exercise your rights.'],
                         ['icon' => 'ph:crown', 'title' => 'Age Requirement', 'desc' => 'Users must be 18+ and legally allowed to trade in their jurisdiction. Proof of age may be required.'],
                         ['icon' => 'ph:globe', 'title' => 'International Use', 'desc' => 'Trading services operate globally. Data may be transferred internationally with appropriate safeguards in place.'],
                         ['icon' => 'ph:note-pencil', 'title' => 'Policy Updates', 'desc' => 'Material changes are communicated with 30 days notice via email and website notification.'],
-                        ['icon' => 'ph:envelope', 'title' => 'Contact Us', 'desc' => 'tradesupport@chartmasterscircle.com | Data Protection Officer available 24/7 for privacy concerns.']
+                        ['icon' => 'ph:envelope', 'title' => 'Contact Us', 'desc' => 'support@dumbmoney.chartmasterscircle.com | Data Protection Officer available 24/7 for privacy concerns.']
                     ] as $item)
                     <div class="group p-5 rounded-xl border border-gray-100 hover:border-[#9EDD05] hover:shadow-md transition-all duration-300">
                         <div class="flex items-start gap-3">
@@ -92,7 +92,7 @@
                             <h4 class="font-semibold" style="color: #0C3A30;">Have privacy questions?</h4>
                             <p class="text-sm text-gray-500">Our Data Protection Officer is here to help</p>
                         </div>
-                        <a href="mailto:tradesupport@chartmasterscircle.com" class="px-5 py-2 rounded-lg text-sm font-semibold transition-all" style="background: #9EDD05; color: #0C3A30; hover:background: #8AC304;">
+                        <a href="support@dumbmoney.chartmasterscircle.com" class="px-5 py-2 rounded-lg text-sm font-semibold transition-all" style="background: #9EDD05; color: #0C3A30; hover:background: #8AC304;">
                             Contact DPO
                         </a>
                     </div>
@@ -113,12 +113,12 @@
                 </div>
                 
                 <p class="text-gray-600 mb-6 leading-relaxed">
-                    By accessing or using ChartMasters Circle's platform, you agree to be bound by these Terms & Conditions. Please read them carefully before using our services.
+                    By accessing or using Dumb Money's platform, you agree to be bound by these Terms & Conditions. Please read them carefully before using our services.
                 </p>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                     @foreach ([
-                        ['icon' => 'ph:copy', 'title' => 'Nature of Platform', 'desc' => 'ChartMasters Circle is a copy-trading platform where users can mirror trades from verified professional traders and administrators.'],
+                        ['icon' => 'ph:copy', 'title' => 'Nature of Platform', 'desc' => 'Dumb Money is a copy-trading platform where users can mirror trades from verified professional traders and administrators.'],
                         ['icon' => 'ph:check-circle', 'title' => 'Eligibility', 'desc' => 'Users must be 18+ years old and legally permitted to trade in their jurisdiction. We reserve the right to verify identity.'],
                         ['icon' => 'ph:user-plus', 'title' => 'Account Registration', 'desc' => 'Accurate personal information required. Multiple accounts are prohibited without explicit written permission.'],
                         ['icon' => 'ph:warning-triangle', 'title' => 'Risk Acknowledgment', 'desc' => 'Trading involves substantial financial risk. You may lose more than your initial investment. Past performance does not guarantee future results.'],
@@ -126,7 +126,7 @@
                         ['icon' => 'ph:user-check', 'title' => 'User Responsibilities', 'desc' => 'You are solely responsible for your account security, trading decisions, and compliance with applicable laws.'],
                         ['icon' => 'ph:prohibit', 'title' => 'Prohibited Conduct', 'desc' => 'No fraud, misrepresentation, market manipulation, unauthorized access, or any illegal activity is permitted.'],
                         ['icon' => 'ph:clock-countdown', 'title' => 'Platform Availability', 'desc' => 'We strive for 99.9% uptime but may experience downtime for maintenance, updates, or unforeseen circumstances.'],
-                        ['icon' => 'ph:gavel', 'title' => 'Limitation of Liability', 'desc' => 'ChartMasters Circle is not liable for trading losses, platform interruptions, or decisions made by users.'],
+                        ['icon' => 'ph:gavel', 'title' => 'Limitation of Liability', 'desc' => 'Dumb Money is not liable for trading losses, platform interruptions, or decisions made by users.'],
                         ['icon' => 'ph:copyright', 'title' => 'Intellectual Property', 'desc' => 'All platform content, tools, branding, and materials are protected by intellectual property laws.'],
                         ['icon' => 'ph:ban', 'title' => 'Suspension & Termination', 'desc' => 'Accounts may be suspended or terminated for policy violations, fraud, or illegal activity without prior notice.'],
                         ['icon' => 'ph:arrows-clockwise', 'title' => 'Changes to Terms', 'desc' => 'Terms may be updated with 30 days notice. Continued use constitutes acceptance of updated terms.']
@@ -256,11 +256,11 @@
     <div class="mt-12 text-center border-t border-gray-100 pt-8">
         <p class="text-sm text-gray-500">For any questions regarding these policies, please contact us:</p>
         <div class="flex justify-center gap-4 mt-3">
-            <a href="mailto:tradesupport@chartmasterscircle.com" class="text-sm" style="color: #9EDD05;">tradesupport@chartmasterscircle.com</a>
+            <a href="mailto:support@dumbmoney.chartmasterscircle.com" class="text-sm" style="color: #9EDD05;">support@dumbmoney.chartmasterscircle.com</a>
             <span>•</span>
-            <a href="mailto:tradesupport@chartmasterscircle.com" class="text-sm" style="color: #9EDD05;">tradesupport@chartmasterscircle.com</a> 
+            <a href="mailto:support@dumbmoney.chartmasterscircle.com" class="text-sm" style="color: #9EDD05;">support@dumbmoney.chartmasterscircle.com</a> 
         </div>
-        <p class="text-xs text-gray-400 mt-4">© 2025 ChartMasters Circle Investment. All rights reserved.</p>
+        <p class="text-xs text-gray-400 mt-4">© 2025 Dumb Money. All rights reserved.</p>
     </div>
 </div>
 

@@ -313,7 +313,7 @@
 
                 <div class="privacy-item">
                     <h3>8. By Providing Content, We Do Not Allow You to Use Our Trademarks</h3>
-                    <p>The trademarks, service marks and logos of chartmasters circle used and displayed on our Web site are our registered and unregistered trademarks. Nothing on this Web site should be construed as granting, by implication, estoppel, or otherwise, any license or right to use any of our trademarks without our written permission. Requests to use trademarks owned by other companies which may be mentioned on this Web site should be directed to such other companies. We aggressively enforce our intellectual property rights. The name of chartmasters circle or our logo may not be used in any way, including in advertising or publicity pertaining to distribution of materials on our Web site, without prior written permission. You are not authorized to use our logo as a hyperlink to our Web site unless you obtain our written permission in advance.</p>
+                    <p>The trademarks, service marks and logos of Dumb Money used and displayed on our Web site are our registered and unregistered trademarks. Nothing on this Web site should be construed as granting, by implication, estoppel, or otherwise, any license or right to use any of our trademarks without our written permission. Requests to use trademarks owned by other companies which may be mentioned on this Web site should be directed to such other companies. We aggressively enforce our intellectual property rights. The name of Dumb Money or our logo may not be used in any way, including in advertising or publicity pertaining to distribution of materials on our Web site, without prior written permission. You are not authorized to use our logo as a hyperlink to our Web site unless you obtain our written permission in advance.</p>
                 </div>
 
                 <div class="privacy-item">
@@ -328,17 +328,17 @@
 
                 <div class="privacy-item">
                     <h3>11. You are Bound by Changes in this Agreement's Terms and Conditions</h3>
-                    <p>We may at any time revise these terms and conditions by updating this posting. By using our Web site, you agree to be bound by any such revisions and should therefore periodically visit this page to determine the then current chartmasters circle Web Site User Agreement and Disclaimers to which you are bound. Certain provisions of these terms and conditions may be superseded by other legal notices or terms located on parts of our Web site. In the event of a conflict between the terms and conditions of this Agreement and the terms and conditions of any other written agreement between chartmasters circle and its customers or vendors, the express terms and conditions of the latter agreement shall prevail.</p>
+                    <p>We may at any time revise these terms and conditions by updating this posting. By using our Web site, you agree to be bound by any such revisions and should therefore periodically visit this page to determine the then current Dumb Money Web Site User Agreement and Disclaimers to which you are bound. Certain provisions of these terms and conditions may be superseded by other legal notices or terms located on parts of our Web site. In the event of a conflict between the terms and conditions of this Agreement and the terms and conditions of any other written agreement between Dumb Money and its customers or vendors, the express terms and conditions of the latter agreement shall prevail.</p>
                 </div>
 
                 <div class="privacy-item">
                     <h3>12. You Agree to Indemnify Us for Using Our Web Site</h3>
-                    <p>You agree to indemnify, defend and hold harmless DayTraders, its officers, directors, employees, agents, licensors, suppliers and any third party information providers to us from and against all losses, expenses, damages and costs, including reasonable attorneys' fees, resulting from any violation of this Agreement by you.</p>
+                    <p>You agree to indemnify, defend and hold harmless Dumb Money, its officers, directors, employees, agents, licensors, suppliers and any third party information providers to us from and against all losses, expenses, damages and costs, including reasonable attorneys' fees, resulting from any violation of this Agreement by you.</p>
                 </div>
 
                 <div class="privacy-item">
                     <h3>13. Third Parties May Have Rights Under This Agreement</h3>
-                    <p>Some of the provisions of this Agreement are for the benefit of chartmasters circle and its officers, directors, employees, agents, licensors, and suppliers. Each of these individuals or entities shall have the right to assert and enforce those provisions directly against you on its own behalf.</p>
+                    <p>Some of the provisions of this Agreement are for the benefit of Dumb Money and its officers, directors, employees, agents, licensors, and suppliers. Each of these individuals or entities shall have the right to assert and enforce those provisions directly against you on its own behalf.</p>
                 </div>
 
                 <div class="privacy-item">
@@ -356,7 +356,7 @@
                     <h2>Terms Of Use</h2>
                     
                     <h3>Website Privacy Notice</h3>
-                    <p>chartmasters circle and its affiliates (collectively referred to as "DayTraders", "we", "us") takes its data protection and privacy responsibilities seriously. This privacy notice explains how we collect, use and share your personal information as a result of your use of our web sites, including:</p>
+                    <p>Dumb Money and its affiliates (collectively referred to as "DayTraders", "we", "us") takes its data protection and privacy responsibilities seriously. This privacy notice explains how we collect, use and share your personal information as a result of your use of our web sites, including:</p>
                     <ul>
                         <li>What personal information we collect and when and why we use it.</li>
                         <li>Sharing your personal information</li>
@@ -372,7 +372,7 @@
                     </ul>
 
                     <h4>Intranet Disclosure</h4>
-                    <p>Some of chartmasters circle websites, that provide employees and retirees access to personnel and benefits information from the Internet, may provide more detailed privacy or disclaimer notices or policies, in which case they take priority over this notice. To make this Privacy Notice easy to find, we make it available in the footer of every web page where it applies. Employees, Applicants and others with access to the chartmasters circle internal Intranet should note that this privacy notice will apply if linked directly from there; otherwise, our internal privacy policies will apply as defined.</p>
+                    <p>Some of Dumb Money websites, that provide employees and retirees access to personnel and benefits information from the Internet, may provide more detailed privacy or disclaimer notices or policies, in which case they take priority over this notice. To make this Privacy Notice easy to find, we make it available in the footer of every web page where it applies. Employees, Applicants and others with access to the Dumb Money internal Intranet should note that this privacy notice will apply if linked directly from there; otherwise, our internal privacy policies will apply as defined.</p>
 
                     <h4>Links to other websites</h4>
                     <p>You might find external links to third-party websites on our website. This privacy notice only applies to personal data collected on this website and does not apply to your use of a third-party site. We have no influence or control over linked third-party websites and your use of other sites is at your own risk and is subject to their privacy statements and policies.</p>
@@ -421,7 +421,7 @@
                 <div id="eu-data" class="privacy-item">
                     <h2>EU and UK Data Protection Notice</h2>
                     <p>(EU-US DPF Privacy Notice)</p>
-                    <p>chartmasters circle takes its data protection and privacy responsibilities seriously.</p>
+                    <p>Dumb Money takes its data protection and privacy responsibilities seriously.</p>
 
                     <div class="highlight-box">
                         <p>We may amend this notice from time to time to keep it up to date with legal requirements and the way we operate our business. Please regularly check these pages for the latest version of this notice. If we make significant changes to this privacy notice, we will seek to inform you by notice on our website or email.</p>

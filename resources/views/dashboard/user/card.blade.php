@@ -310,10 +310,10 @@
                     <div class="card-front">
                         <div class="atm-card">
                             <div class="card-header" style="margin-top: -3.8rem;">
-                                <div class="card-brand" style="color:#fff !important;">CHARTMASTERS</div>
+                                <div class="card-brand" style="color:#fff !important;">DUMB MONEY</div>
                                 <div class="card-logo-wrapper">
                                     
-                                         <img src="/assets/images/chartmasterlogo1.png"   alt="ChartMasters Circle"   
+                                         <img src="/assets/images/dumbmoneylogo.png"   alt="Dumb Money"   
                                         class="card-logo " style="width: 35px; height:auto;   margin-top: 4.2rem;" 
         >
                                 </div>

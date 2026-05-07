@@ -20,7 +20,7 @@
           <tr>
             <td style="background: #8bc905; padding: 40px 20px; text-align: center;">
               <div style="display: inline-block; background-color: #ffffff; border-radius: 16px; padding: 14px 24px; margin-bottom: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
-                <img src="https://res.cloudinary.com/dswwq3xks/image/upload/v1774272450/chartmasterlogo1_z25kgc.png" alt="MarketMind" style="height: 80px; width: auto; display: block; margin: 0 auto;">
+                <img src="https://res.cloudinary.com/dswwq3xks/image/upload/v1777936379/dumbmoneylogo_ivtjer.png" alt="Dumb Money" style="height: 80px; width: auto; display: block; margin: 0 auto;">
               </div>
               <p style="margin: 8px 0 0; font-size: 16px; color: #ffffff; font-weight: 500;">Secure Account Verification</p>
             </td>

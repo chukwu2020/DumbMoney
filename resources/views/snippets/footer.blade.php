@@ -173,16 +173,16 @@ function showError(input, errorElement, message) {
             <div class="copyright-border">
                 <div class="row g-2 align-items-center">
                     <div class="col-lg-4 col-md-6">
-                        <p style="color:#0C3A30;">© <span>CHARTMASTERS CIRCLE</span>  Is Proudly Owned By US <a href="/" target="_blank">View More</a></p>
+                        <p style="color:#0C3A30;">© <span>DumbMoney</span>  Is Proudly Owned By US <a href="/" target="_blank">View More</a></p>
                         
                     </div>
                     <div class="col-lg-4 col-md-6">
                         <div class="copy-image" data-cues="zoomIn" data-duration="700">
                            <a href="/">
                 
-                     <img src="/assets/images/chartmasterbrandname1.png"  
-         alt="ChartMasters Circle" 
-         class="z-100 logo-img">
+                     <img src="/assets/images/dumbmoneylogo.png"  
+         alt="DumbMoney Logo" 
+         class="z-100 logo-img" style="max-width: 300px; height: auto;">
             </a>
                         </div>
                     </div>

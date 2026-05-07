@@ -50,7 +50,7 @@
             <div class="row align-items-center" style="margin-top: 4rem;">
                 <div class="col-xl-5 col-lg-12 mb-4" data-cues="slideInRight" data-duration="800">
                     <div class="main-banner-content text-white">
-                        <span class="sub-t text-white">WELCOME TO CHARTMASTERS CIRCLE</span>
+                        <span class="sub-t text-white">歡迎來到 DUMB MONEY</span>
                         <h1 class="mt-2" style="color:white;">
                             Transform
                             <span style="color: #8BC905; font-size:2rem;">
@@ -59,7 +59,7 @@
                             Trading with Intelligent Strategies
                         </h1>
                         <a href="{{ route('signup') }}" class="btn btn-primary btn-lg px-3 py-2 rounded-pill shadow-lg glow-effect mt-3" style="background-color: #8BC905; border:none;">
-                            <i class="fas fa-rocket me-2"></i> Start Trading
+                            <i class="fas fa-rocket me-2"></i> Start Copy Trading
                         </a>
                     </div>
                 </div>
@@ -67,19 +67,32 @@
                 <div class="col-xl-7 col-lg-12" data-cues="slideInLeft" data-duration="800">
                     <div class="info text-white">
                         <p class="mb-3">
-                            Learn smart trading techniques, track real-time market trends, and grow your knowledge with our educational platform.
+                           開始進行跟單交易，自動跟隨我的交易，學習進階交易策略，追蹤即時市場趨勢，並透過我們的教育平台提升你的知識。
                         </p>
 
                         <div class="row align-items-center g-3 g-md-3">
                             <div class="col-lg-5 col-md-5">
 
-                                <ul class="user bg-color-ffffff radius" style="padding: 6px 10px; font-size: 0.85rem; transform: scale(0.85); display: inline-flex;">
+                              <ul class="user bg-color-ffffff radius" style="padding: 6px 10px; font-size: 0.85rem; transform: scale(0.85); display: inline-flex; align-items: center; gap: 6px;">
 
-                                    <li><img class="rounded-circle" src="{{ asset('assets/images/user/user-image-2.jpg') }}" alt="user"></li>
-                                    <li><img class="rounded-circle" src="{{ asset('assets/images/user/user-image-3.jpg') }}" alt="user"></li>
-                                    <li><img class="rounded-circle" src="{{ asset('assets/images/user/user-image-1.jpg') }}" alt="user"></li>
-                                    <li>87k+</li>
-                                </ul>
+    <li><img class="rounded-circle" src="{{ asset('assets/images/user/user-image-2.jpg') }}" alt="user"></li>
+
+    <li><img class="rounded-circle" src="{{ asset('assets/images/user/user-image-3.jpg') }}" alt="user"></li>
+
+    <li><img class="rounded-circle" src="{{ asset('assets/images/user/user-image-1.jpg') }}" alt="user"></li>
+
+    <!-- Discord icon -->
+    <li>
+        <a href="https://discord.gg/dumbmoney" target="_blank">
+            <div style="width: 60px; height: 60px; border-radius: 50%; background: #5865F2; display: flex; align-items: center; justify-content: center;">
+                <i class="fab fa-discord" style="color: white; font-size: 16px;"></i>
+            </div>
+        </a>
+    </li>
+
+    <li>87k+</li>
+
+</ul>
                             </div>
                             <div class="col-lg-6 col-md-6">
                                 <div class="star-review">
@@ -280,7 +293,7 @@
                                 LIVE MARKET DATA STREAMING
                             </span>
                             <h1 class="display-4 fw-bold text-white mb-4">
-                                <span class="text-primary" style="color: #8BC905 !important;">ChartMasters Circle</span> Next-Gen <span class="text-highlight">Trading Support</span> Platform
+                                <span class="text-primary" style="color: #8BC905 !important;">Dumb Money</span> Next-Gen <span class="text-highlight">Trading Support</span> Platform
                             </h1>
                             <p class="lead text-white-80 mb-4" style="color: white !important;">
                                 Next-gen algorithmic trading across crypto, forex assets, and real estate markets with deep learning execution.
@@ -1636,7 +1649,7 @@
                             </span>
                         </div>
                         <h2 class="display-5 fw-bold mb-0" style="color: #0C3A30;">
-                            <span class="fw-light">We are</span> <span style="color: #8BC905;">ChartMasters Circle</span>
+                            <span class="fw-light">We are</span> <span style="color: #8BC905;">DumbMoney</span>
                         </h2>
                     </div>
 
@@ -2062,7 +2075,7 @@
                             <span class="badge px-4 py-2 rounded-pill fw-semibold d-inline-flex align-items-center gap-2"
                                 style="background: linear-gradient(145deg, #0C3A30, #0A2A23); color: white; border: 1px solid rgba(139,201,5,0.4); letter-spacing: 0.5px; box-shadow: 0 10px 20px -8px rgba(10,42,35,0.2);">
                                 <span style="display: inline-block; width: 8px; height: 8px; background: #8BC905; border-radius: 50%; box-shadow: 0 0 8px #8BC905; animation: pulse 2s infinite;"></span>
-                                POWERED BY CHARTMASTERS CIRCLE AI
+                                POWERED BY Dumb Money
                             </span>
                         </div>
 
@@ -2182,7 +2195,7 @@
                                                 <img src="assets/images/svg/corporation.svg" alt="image" style="width: 30px; height: 30px;" class="filter-white">
                                             </div>
                                             <div>
-                                                <span class="text-uppercase small fw-bold" style="color: #9EDD05; letter-spacing: 1.5px;">ChartMasters Circle</span>
+                                                <span class="text-uppercase small fw-bold" style="color: #9EDD05; letter-spacing: 1.5px;">Dumb Money</span>
                                                 <h4 class="fw-bold mb-0 text-white" style="font-size: 1.25rem;">Global Banking</h4>
                                             </div>
                                         </div>
@@ -2622,11 +2635,11 @@
     <div class="container">
         <div class="section-header text-center mb-5">
             <div class="dt-logo mb-3">
-                <img src="assets/images/logo/onyx-logo.png" alt="ChartMasters Circle AI logo" style="max-height: 60px;">
+                <img src="assets/images/logo/onyx-logo.png" alt="Dumb Money AI logo" style="max-height: 60px;">
             </div>
             <h2 class="mb-0" style="color: #0C3A30; font-size: 2.5rem;">
                 <span class="fw-light">We're Proud to Introduce</span><br>
-                <span style="color: #8BC905; font-weight: 700;">CHARTMASTERS CIRCLE AI</span>
+                <span style="color: #8BC905; font-weight: 700;">DUMB MONEY AI</span>
             </h2>
         </div>
         
@@ -2635,7 +2648,7 @@
                 <div class="col-lg-6">
                     <div class="platform__thumb">
                        
-                        <img src="{{ asset('assets/images/platform1.png') }}" alt="ChartMasters Circle AI Platform" class="img-fluid" style="border-radius: 12px;">
+                        <img src="{{ asset('assets/images/platform1.png') }}" alt="Dumb Money AI Platform" class="img-fluid" style="border-radius: 12px;">
                     </div>
                 </div>
                 
@@ -3376,7 +3389,7 @@
                                 <!-- Main Image -->
                                 <img class="radius-30 w-100 hover-zoom"
                                     src="assets/images/about/about-image-2.jpg"
-                                    alt="Why Choose ChartMasters Circle AI"
+                                    alt="Why Choose DumbMoney"
                                     style="display: block; transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); aspect-ratio: 4/3; object-fit: cover;">
 
                                 <!-- Premium Gradient Overlay -->
@@ -5226,7 +5239,7 @@
                                             <span class="d-flex align-items-center gap-3">
                                                 <span class="d-flex align-items-center justify-content-center rounded-circle"
                                                     style="width: 32px; height: 32px; background: rgba(139,201,5,0.1); color: #8BC905; font-weight: 700;">01</span>
-                                                Why should I trade with ChartMasters Circle AI?
+                                                Why should I trade with Dumb Money AI?
                                             </span>
                                             <span class="accordion-icon rounded-circle d-flex align-items-center justify-content-center"
                                                 style="width: 32px; height: 32px; background: rgba(139,201,5,0.1); color: #8BC905; transition: all 0.3s ease;">

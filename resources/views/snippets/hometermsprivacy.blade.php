@@ -26,7 +26,7 @@
         <div class="space-y-8 text-sm leading-relaxed">
 
             <p>
-                Chartmasters Circle (“we”, “our”, or “us”) is committed to protecting your privacy...
+                Dumb Money (“we”, “our”, or “us”) is committed to protecting your privacy...
             </p>
 
             <div>
@@ -97,7 +97,7 @@
 
             <div>
                 <h3 class="font-semibold mb-2">13. Contact</h3>
-                <p>Email: support@chartmasterscirclegmail.com</p>
+                <p>Email: support@dumbmoney.chartmasterscircle.com</p>
             </div>
 
         </div>
@@ -173,7 +173,7 @@
 
             <div>
                 <h3 class="font-semibold mb-2">13. Contact</h3>
-                <p>support@chartmasterscirclegmail.com</p>
+                <p>support@dumbmoney.chartmasterscircle.com</p>
             </div>
 
         </div>

@@ -20,7 +20,7 @@ class IDVerificationSubmitted extends Notification implements ShouldQueue
     public function __construct(IdVerification $verification)
     {
         $this->verification = $verification;
-        $this->title = 'ID Verification Submitted - Chartmasterscircle';
+        $this->title = 'ID Verification Submitted - Dumb Money';
         $this->message = 'Your ID verification has been successfully submitted and is under review. You will be notified once it has been reviewed.';
     }
 
@@ -54,7 +54,7 @@ class IDVerificationSubmitted extends Notification implements ShouldQueue
             ->greeting('Hello ' . $notifiable->name . ',')
             ->line($this->message)
             ->action('View Verification Status', url('/dashboard/id_verification'))
-            ->line('Thank you for using Chartmasterscircle!')
+            ->line('Thank you for using Dumb Money!')
             ->line('If you did not initiate this request, please contact our support team immediately.');
     }
 

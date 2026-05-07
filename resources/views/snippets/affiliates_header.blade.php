@@ -740,7 +740,7 @@
                 <div class="hero__content">
                     <h1 class="hero__title">Earn 20% Lifetime Commissions Referring Traders</h1>
                     <p class="hero__description">
-                        Partner with Chartmasters Circle and earn recurring income by referring traders to a structured futures prop firm built for serious growth.
+                        Partner with Dumb Money and earn recurring income by referring traders to a structured futures prop firm built for serious growth.
                     </p>
                     <a href="#" class="trk-btn trk-btn--primary btn-premium"><span>Apply Now <i class="fa-solid fa-arrow-right ms-1"></i></span></a>
                     <div class="hero__highlights mt-4">
@@ -826,7 +826,7 @@
     <!-- ===============>> Services Section Start <<================= -->
     <section class="service padding-top padding-bottom" id="services">
         <div class="section-header section-header--max65 text-center mb-5">
-            <h2 class="mb-10 mt-minus-5"><span>Why Partner With </span>Chartmasters Circle?</h2>
+            <h2 class="mb-10 mt-minus-5"><span>Why Partner With </span>Dumb Money?</h2>
         </div>
         <div class="container">
             <div class="service__wrapper">
@@ -1010,7 +1010,7 @@
     <!-- ===============>> Comparison Table Section Start <<================= -->
     <section class="aff-comparison padding-top padding-bottom">
         <div class="section-header section-header--max65 text-center mb-5">
-            <h2 class="mb-10 mt-minus-5">Why <br> <span>Chartmasters Circle Pays Better?</span> </h2>
+            <h2 class="mb-10 mt-minus-5">Why <br> <span>Dumb Money Pays Better?</span> </h2>
         </div>
         <div class="container">
             <div class="aff-comparison__table">
@@ -1019,7 +1019,7 @@
                 <div class="aff-comparison__row aff-comparison__row--head">
                     <div class="aff-comparison__cell"></div>
                     <div class="aff-comparison__cell aff-comparison__cell--highlight">
-                        Chartmasters Circle
+                        Dumb Money
                     </div>
                     <div class="aff-comparison__cell">
                         Industry Standard

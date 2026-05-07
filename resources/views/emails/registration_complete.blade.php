@@ -16,7 +16,7 @@
           <!-- Header with Brand Color -->
           <tr>
             <td style="background-color: #8BC905; padding: 30px 20px; text-align: center;">
-              <img src="https://res.cloudinary.com/dswwq3xks/image/upload/v1774272450/chartmasterlogo1_z25kgc.png" alt="{{ config('app.name') }}" style="height: 80px; width: auto; display: block; margin: 0 auto;">
+              <img src="https://res.cloudinary.com/dswwq3xks/image/upload/v1777936379/dumbmoneylogo_ivtjer.png" alt="{{ config('app.name') }}" style="height: 80px; width: auto; display: block; margin: 0 auto;">
             </td>
           </tr>
 
@@ -26,7 +26,7 @@
               
              
 
-              <h1 style="text-align: center; color: #0C3A30; margin-bottom: 20px; font-size: 28px;">Welcome to ChartMasters Circle, {{ $userName }}!</h1>
+              <h1 style="text-align: center; color: #0C3A30; margin-bottom: 20px; font-size: 28px;">Welcome to Dumb Money, {{ $userName }}!</h1>
 
               <p style="margin-top: 0;">Dear {{ $userName }},</p>
 
@@ -87,7 +87,7 @@
 
               <p style="margin-top: 40px; font-size: 16px;">
                 Happy Trading!<br>
-                <strong>The ChartMasters Circle Team</strong>
+                <strong>The Dumb Money Team</strong>
               </p>
             </td>
           </tr>
@@ -99,7 +99,7 @@
                 <a href="{{ route('terms.privacy') }}" style="color: #8BC905; text-decoration: none; margin: 0 10px;">Privacy Policy</a> |
                 <a href="{{ route('contact.us') }}" style="color: #8BC905; text-decoration: none; margin: 0 10px;">Contact Support</a>
               </p>
-              <p style="margin: 0;">© {{ date('Y') }} ChartMasters Circle. All rights reserved.</p>
+              <p style="margin: 0;">© {{ date('Y') }} Dumb Money. All rights reserved.</p>
             </td>
           </tr>
 

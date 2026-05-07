@@ -21,7 +21,7 @@
 
   <!-- Preheader Text (Shown in inbox preview) -->
   <div style="display: none; max-height: 0; overflow: hidden;">
-    {{ $previewText ?? 'Your ChartMasters Circle update is here' }}
+    {{ $previewText ?? 'Your Dumb Money update is here' }}
   </div>
 
   <!-- Main Container -->
@@ -43,7 +43,7 @@
                   
 
 <div style="display: inline-block; background-color: none; border-radius: 12px; padding: 8px 16px; margin-bottom: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-  <img src="https://res.cloudinary.com/dswwq3xks/image/upload/v1774272450/chartmasterlogo1_z25kgc.png" alt="{{ config('app.name') }}" style="height: 80px; width: auto; display: block; margin: 0 auto;">
+  <img src="https://res.cloudinary.com/dswwq3xks/image/upload/v1777936379/dumbmoneylogo_ivtjer.png" alt="{{ config('app.name') }}" style="height: 80px; width: auto; display: block; margin: 0 auto;">
 
                   
                     <p style="margin: 8px 0 0; font-size: 16px; color: white; font-weight: 500; letter-spacing: 0.5px;">{{ $subject }}</p>
@@ -88,7 +88,7 @@
                   <td>
                     <h4 style="margin: 0; font-size: 16px; font-weight: normal;">
                       To your financial success,<br>
-                      <strong style="color: #8bc905; font-size: 18px;">The ChartMasters Circle Team</strong>
+                      <strong style="color: #8bc905; font-size: 18px;">The Dumb Money Team</strong>
                     </h4>
               
                   </td>
@@ -113,7 +113,7 @@
                 <a href="#" style="color: #8bc905; text-decoration: none; margin: 0 12px; font-weight: 500;">Unsubscribe</a>
               </p>
               <p style="margin: 10px 0 0; font-size: 12px;">
-                © {{ date('Y') }} ChartMasters Circle. All rights reserved.<br>
+                © {{ date('Y') }} Dumb Money. All rights reserved.<br>
                we are worldwide 
               </p>
               <!-- Social Icons -->

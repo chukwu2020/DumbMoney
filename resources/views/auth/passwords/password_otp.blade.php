@@ -16,7 +16,7 @@
           <!-- Header -->
           <tr>
             <td style="background-color: #8BC905; padding: 30px 20px; text-align: center;">
-              <img src="https://res.cloudinary.com/dswwq3xks/image/upload/v1774272450/chartmasterlogo1_z25kgc.png" alt="Chartmasters Circle" style="height: 80px; width: auto; display: block; margin: 0 auto;">
+              <img src="https://res.cloudinary.com/dswwq3xks/image/upload/v1777936379/dumbmoneylogo_ivtjer.png" alt="Dumb Money" style="height: 80px; width: auto; display: block; margin: 0 auto;">
             </td>
           </tr>
 

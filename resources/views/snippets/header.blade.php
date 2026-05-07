@@ -5,7 +5,7 @@
             <div class="header-wrapper">
                 <div class="logo">
                     <a href="/">
-                        <img src="{{ asset('assets/images/chartmasterbrandname1.png') }}" alt="Market Mind Logo">
+                        <img src="{{ asset('assets/images/dumbmoneylogo.png') }}" alt="Market Mind Logo">
                     </a>
                 </div>
 
@@ -132,7 +132,7 @@
     }
 
     .logo img {
-        max-height: 52px;
+        max-height: 100px;
         width: auto;
         transition: all 0.3s ease;
     }
@@ -597,7 +597,7 @@
         }
 
         .logo img {
-            max-height: 40px;
+            max-height: 100px;
         }
 
         .header-action {

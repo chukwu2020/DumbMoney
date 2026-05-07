@@ -12,17 +12,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Title -->
     <!-- Title -->
-    <title>CHARTMASTERS CIRCLE</title>
+    <title>DUMB MONEY</title>
     <!-- 5star color -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <!-- Favicons for different devices -->
-    <link rel="icon" type="image/png" href="{{ asset('assets/images/chartmasterlogo1.png') }}" sizes="32x32">
-    <link rel="icon" type="image/png" href="{{ asset('assets/images/chartmasterlogo1.png') }}" sizes="192x192">
-    <link rel="icon" type="image/png" href="{{ asset('assets/images/chartmasterlogo1.png') }}" sizes="512x512">
+    <link rel="icon" type="image/png" href="{{ asset('assets/images/dumbmoneylogo.png') }}" sizes="64x64">
+    <link rel="icon" type="image/png" href="{{ asset('assets/images/dumbmoneylogo.png') }}" sizes="192x192">
+    <link rel="icon" type="image/png" href="{{ asset('assets/images/dumbmoneylogo.png') }}" sizes="512x512">
 
     <!-- Apple Touch Icon -->
-    <link rel="apple-touch-icon" href="{{ asset('assets/images/chartmasterlogo1.png') }}" sizes="180x180">
+    <link rel="apple-touch-icon" href="{{ asset('assets/images/dumbmoneylogo.png') }}" sizes="180x180">
 
 
     <!-- Add this to your main Blade layout file -->
@@ -193,7 +193,7 @@
             <div class="flex items-center justify-between gap-3">
 
                 <p class="mb-0">
-                    © {{ date('Y') }} <span class="font-semibold text-sm text-[#8bc905]"> ChartMasters Circle</span>. All rights reserved.
+                    © {{ date('Y') }} <span class="font-semibold text-sm text-[#8bc905]">Dumb Money</span>. All rights reserved.
                     <span class="mx-2 text-gray-400">|</span>
                     <a href="{{route('termsprivacy')}}" class="hover:text-[#9EDD05] transition-colors duration-200">Privacy Policy</a>
                     <span class="mx-2 text-gray-400">|</span>
