@@ -370,54 +370,52 @@ $cardExists = auth()->check()
             <!-- PROFILE -->
             <div x-data="{ open: false }" class="relative">
 
-                ```blade id="u7k2pd"
-<button
-    @click="open = !open"
-    class="focus:outline-none rounded-full overflow-hidden cursor-pointer">
+                <button
+                    @click="open = !open"
+                    class="focus:outline-none rounded-full overflow-hidden cursor-pointer">
 
-    @php
-        $profilePic = $user->profile->profile_pic ?? null;
+                    @php
+                    $profilePic = $user->profile->profile_pic ?? null;
 
-        $initials = collect(explode(' ', $user->name))
-            ->map(fn($word) => strtoupper(substr($word, 0, 1)))
-            ->take(2)
-            ->join('') ?: 'U';
+                    $initials = collect(explode(' ', $user->name))
+                    ->map(fn($word) => strtoupper(substr($word, 0, 1)))
+                    ->take(2)
+                    ->join('') ?: 'U';
 
-        $profileUrl = null;
+                    $profileUrl = null;
 
-        if ($profilePic && file_exists(public_path('uploads/profile_pics/' . $profilePic))) {
-            $profileUrl = asset('uploads/profile_pics/' . $profilePic) . '?v=' . time();
-        }
-    @endphp
+                    if ($profilePic && file_exists(public_path('uploads/profile_pics/' . $profilePic))) {
+                    $profileUrl = asset('uploads/profile_pics/' . $profilePic) . '?v=' . time();
+                    }
+                    @endphp
 
-    @if($profileUrl)
+                    @if($profileUrl)
 
-        <img
-            src="{{ $profileUrl }}"
-            alt="{{ $user->name }}"
-            class="profile-avatar"
-            onerror="
+                    <img
+                        src="{{ $profileUrl }}"
+                        alt="{{ $user->name }}"
+                        class="profile-avatar"
+                        onerror="
                 this.style.display='none';
                 document.getElementById('headerProfileFallback').style.display='flex';
-            "
-        />
+            " />
 
-        <div
-            id="headerProfileFallback"
-            class="profile-initials"
-            style="display:none;">
-            {{ $initials }}
-        </div>
+                    <div
+                        id="headerProfileFallback"
+                        class="profile-initials"
+                        style="display:none;">
+                        {{ $initials }}
+                    </div>
 
-    @else
+                    @else
 
-        <div class="profile-initials">
-            {{ $initials }}
-        </div>
+                    <div class="profile-initials">
+                        {{ $initials }}
+                    </div>
 
-    @endif
+                    @endif
 
-</button>
+                </button>
 
 
 
