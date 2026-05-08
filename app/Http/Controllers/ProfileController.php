@@ -70,8 +70,7 @@ class ProfileController extends Controller
             'bank_address' => $request->bank_address,
         ];
 
-        // Handle profile picture
-  
+     
         // Handle profile picture
 if ($request->hasFile('profile_pic')) {
 

@@ -716,7 +716,7 @@
                                             @if($chosenFeed->server_profile_image)
                                             <div class="w-11 h-11 rounded-full overflow-hidden border-2 border-[#8bc905] flex items-center justify-center">
                                                <img src="{{ asset('uploads/servers/' . $chosenFeed->server_profile_image) }}"
-     class="min-w-full min-h-full object-cover object-center"
+     class="min-w-full min-h-full object-cover object-center" style="object-fit: contain;"
      alt="{{ $chosenFeed->server_name }}">
                                             </div>
                                             @else

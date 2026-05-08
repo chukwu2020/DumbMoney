@@ -371,42 +371,42 @@ body {
             <div x-data="{ open: false }" class="relative">
 
                 <button
-                    @click="open = !open"
-                    class="focus:outline-none rounded-full overflow-hidden cursor-pointer">
+    @click="open = !open"
+    class="focus:outline-none rounded-full overflow-hidden cursor-pointer">
 
-                    @php
-                        $profilePic = $user->profile->profile_pic ?? null;
+    @php
+        $profilePic = $user->profile->profile_pic ?? null;
 
-                        $initials = collect(explode(' ', $user->name))
-                            ->map(fn($word) => strtoupper(substr($word, 0, 1)))
-                            ->take(2)
-                            ->join('') ?: 'U';
-                    @endphp
+        $initials = collect(explode(' ', $user->name))
+            ->map(fn($word) => strtoupper(substr($word, 0, 1)))
+            ->take(2)
+            ->join('') ?: 'U';
+    @endphp
 
-                    @if ($profilePic)
+    @if ($profilePic)
 
-                        <img
-                            src="{{ asset('storage/profile_pics/' . $profilePic) }}"
-                            alt="{{ $user->name }}"
-                            class="profile-avatar"
-                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                        />
+        <img
+            src="{{ asset('uploads/profile_pics/' . $profilePic) }}"
+            alt="{{ $user->name }}"
+            class="profile-avatar"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        />
 
-                        <div
-                            class="profile-initials"
-                            style="display:none;">
-                            {{ $initials }}
-                        </div>
+        <div
+            class="profile-initials"
+            style="display:none;">
+            {{ $initials }}
+        </div>
 
-                    @else
+    @else
 
-                        <div class="profile-initials">
-                            {{ $initials }}
-                        </div>
+        <div class="profile-initials">
+            {{ $initials }}
+        </div>
 
-                    @endif
+    @endif
 
-                </button>
+</button>
 
                 <!-- DROPDOWN -->
                 <div
