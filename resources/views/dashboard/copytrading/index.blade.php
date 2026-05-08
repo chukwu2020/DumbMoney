@@ -323,132 +323,150 @@
     </div>
 
     {{-- ── Trader Info Card ── --}}
-    <div class="glass-card mb-8" style="background-image:url('assets/images/hero/hero-image-1.svg');background-size:cover;background-position:center;">
-        <h6 class="text-gray-500 mb-3 text-xs">You will be copying your admin's trades</h6>
-        <div class="flex flex-col lg:flex-row items-start justify-between gap-6">
-            <div class="admin-grid w-full lg:w-auto">
+<div class="glass-card mb-8" style="background-image:url('{{ asset('assets/images/hero/hero-image-1.svg') }}');background-size:cover;background-position:center;">
+    <h6 class="text-gray-500 mb-3 text-xs">You will be copying your admin's trades</h6>
 
-                {{-- Server Card --}}
-                <div class="admin-card">
-                    <div class="flex items-start gap-3">
-                        <div class="admin-avatar flex-shrink-0">
-                            @if(isset($copyAdmin) && $copyAdmin->server_profile_image)
-                                <img src="{{ asset('storage/servers/'.$copyAdmin->server_profile_image) }}" alt="Server">
-                            @else
-                                <div class="fallback-icon">
-                                    <iconify-icon icon="ph:server-fill" class="text-xl" style="color:#8bc905;"></iconify-icon>
-                                </div>
-                            @endif
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <h5 class="font-semibold text-sm text-[#0C3A30] mb-1 truncate">
-                                {{ $copyAdmin->server_name ?? $user->copy_server_name ?? 'Official Server' }}
-                            </h5>
-                            @if($copyAdmin)
-                            <p class="text-gray-500 font-semibold text-xs mb-0.5">
-                                <i class="fa-solid fa-users mr-1"></i>
-                                {{ number_format($copyAdmin->active_members) }} active
-                            </p>
-                            <p class="text-gray-400 font-semibold text-xs truncate">
-                                <i class="fa-solid fa-copy mr-1"></i>
-                                {{ $copyAdmin->copying_trades ?? 0 }} copying
-                            </p>
-                            @endif
-                        </div>
-                    </div>
-                </div>
+    <div class="flex flex-col lg:flex-row items-start justify-between gap-6">
+        <div class="admin-grid w-full lg:w-auto">
 
-                {{-- Admin Card --}}
-                <div class="admin-card">
-                    <div class="flex items-start gap-3">
-                        <div class="admin-avatar flex-shrink-0">
-                            @if(isset($copyAdmin) && $copyAdmin->admin_profile_image)
-                                <img src="{{ asset('storage/admins/'.$copyAdmin->admin_profile_image) }}" alt="Admin">
-                            @else
-                                <div class="fallback-icon">
-                                    <iconify-icon icon="ph:user-circle-fill" class="text-xl" style="color:#8bc905;"></iconify-icon>
-                                </div>
-                            @endif
-                        </div>
-                        <div class="admin-info flex-1">
-                            <h5 class="text-[10px] font-semibold text-gray-400 mb-0.5">ADMIN</h5>
-                            <p class="font-bold text-gray-700 text-sm mb-2 truncate">
-                                {{ $copyAdmin->admin_name ?? $user->copy_admin_name ?? 'Platform Admin' }}
-                            </p>
-                            @if($copyAdmin)
-                            @php
-                                $profitClass  = $copyAdmin->profit_margin >= 0 ? 'high' : 'low';
-                                $winRateClass = 'low';
-                                if ($copyAdmin->win_rate >= 70) $winRateClass = 'high';
-                                elseif ($copyAdmin->win_rate >= 50) $winRateClass = 'medium';
-                            @endphp
-                            <div class="admin-stats">
-                                <div class="stat-badge profit {{ $profitClass }}">
-                                    <iconify-icon icon="ph:chart-line-up-fill" class="stat-icon"></iconify-icon>
-                                    <span class="stat-label">Profit</span>
-                                    <span class="stat-value">${{ number_format(abs($copyAdmin->profit_margin ?? 0), 2) }}</span>
-                                </div>
-                                <div class="stat-badge win-rate {{ $winRateClass }}">
-                                    <iconify-icon icon="ph:trophy-fill" class="stat-icon"></iconify-icon>
-                                    <span class="stat-label">Win Rate</span>
-                                    <span class="stat-value">{{ number_format($copyAdmin->win_rate ?? 0, 1) }}%</span>
-                                </div>
+            {{-- Server Card --}}
+            <div class="admin-card">
+                <div class="flex items-start gap-3">
+                    <div class="admin-avatar flex-shrink-0">
+                        @if(isset($copyAdmin) && $copyAdmin->server_profile_image)
+                            <img src="{{ asset('uploads/servers/' . $copyAdmin->server_profile_image) }}" alt="Server">
+                        @else
+                            <div class="fallback-icon">
+                                <iconify-icon icon="ph:server-fill" class="text-xl" style="color:#8bc905;"></iconify-icon>
                             </div>
-                            @endif
-                        </div>
+                        @endif
+                    </div>
+
+                    <div class="flex-1 min-w-0">
+                        <h5 class="font-semibold text-sm text-[#0C3A30] mb-1 truncate">
+                            {{ $copyAdmin->server_name ?? $user->copy_server_name ?? 'Official Server' }}
+                        </h5>
+
+                        @if($copyAdmin)
+                        <p class="text-gray-500 font-semibold text-xs mb-0.5">
+                            <i class="fa-solid fa-users mr-1"></i>
+                            {{ number_format($copyAdmin->active_members) }} active
+                        </p>
+
+                        <p class="text-gray-400 font-semibold text-xs truncate">
+                            <i class="fa-solid fa-copy mr-1"></i>
+                            {{ $copyAdmin->copying_trades ?? 0 }} copying
+                        </p>
+                        @endif
                     </div>
                 </div>
-
             </div>
 
-            {{-- Balance --}}
-            <div class="w-full lg:w-auto mt-2 lg:mt-0">
-                <div class="flex items-center justify-between lg:justify-end gap-3">
-                    <div>
-                        <p class="text-[10px] text-gray-500 mb-0">Available Balance</p>
-                        <div class="text-base md:text-sm font-semibold text-[#0C3A30]">
-                            ${{ number_format($user->available_balance, 2) }}
-                        </div>
+            {{-- Admin Card --}}
+            <div class="admin-card">
+                <div class="flex items-start gap-3">
+                    <div class="admin-avatar flex-shrink-0">
+                        @if(isset($copyAdmin) && $copyAdmin->admin_profile_image)
+                            <img src="{{ asset('uploads/admins/' . $copyAdmin->admin_profile_image) }}" alt="Admin">
+                        @else
+                            <div class="fallback-icon">
+                                <iconify-icon icon="ph:user-circle-fill" class="text-xl" style="color:#8bc905;"></iconify-icon>
+                            </div>
+                        @endif
                     </div>
-                    <a href="{{ route('user.deposit') }}"
-                        style="background-color:#7AB503;color:#0C3A30 !important;white-space:nowrap;"
-                        class="inline-flex items-center gap-1 text-[10px] px-2 py-1 rounded font-semibold hover:bg-[#8AC304] transition">
-                        <iconify-icon icon="ph:plus-bold" class="text-xs"></iconify-icon>
-                        Add Funds
-                    </a>
+
+                    <div class="admin-info flex-1">
+                        <h5 class="text-[10px] font-semibold text-gray-400 mb-0.5">ADMIN</h5>
+
+                        <p class="font-bold text-gray-700 text-sm mb-2 truncate">
+                            {{ $copyAdmin->admin_name ?? $user->copy_admin_name ?? 'Platform Admin' }}
+                        </p>
+
+                        @if($copyAdmin)
+                        @php
+                            $profitClass  = $copyAdmin->profit_margin >= 0 ? 'high' : 'low';
+
+                            $winRateClass = 'low';
+                            if ($copyAdmin->win_rate >= 70) $winRateClass = 'high';
+                            elseif ($copyAdmin->win_rate >= 50) $winRateClass = 'medium';
+                        @endphp
+
+                        <div class="admin-stats">
+                            <div class="stat-badge profit {{ $profitClass }}">
+                                <iconify-icon icon="ph:chart-line-up-fill" class="stat-icon"></iconify-icon>
+                                <span class="stat-label">Profit</span>
+                                <span class="stat-value">${{ number_format(abs($copyAdmin->profit_margin ?? 0), 2) }}</span>
+                            </div>
+
+                            <div class="stat-badge win-rate {{ $winRateClass }}">
+                                <iconify-icon icon="ph:trophy-fill" class="stat-icon"></iconify-icon>
+                                <span class="stat-label">Win Rate</span>
+                                <span class="stat-value">{{ number_format($copyAdmin->win_rate ?? 0, 1) }}%</span>
+                            </div>
+                        </div>
+                        @endif
+                    </div>
                 </div>
             </div>
+
         </div>
 
-        {{-- Change Admin --}}
-        <div class="mt-6 pt-4 border-t border-gray-200">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 items-end">
-                <div class="lg:col-span-2">
-                    <label class="text-xs font-semibold text-gray-600 mb-2 block">
-                        <iconify-icon icon="ph:user-switch-fill" class="inline mr-1 text-sm"></iconify-icon>
-                        Switch to Another Admin
-                    </label>
-                    <select id="changeAdminSelect"
-                        class="w-full border-2 border-gray-200 rounded-xl p-3 text-sm focus:border-[#9EDD05] focus:outline-none transition bg-white shadow-sm">
-                        <option value="">-- Select an Admin to Copy --</option>
-                        @foreach(\App\Models\ServerFeed::where('copy_trading_enabled', true)->get() as $server)
-                        <option value="{{ $server->id }}" {{ ($user->copy_admin_id == $server->id) ? 'selected' : '' }}>
-                            {{ $server->admin_name }} ({{ $server->server_name }})
-                            @if($server->win_rate) - Win Rate: {{ $server->win_rate }}% @endif
-                        </option>
-                        @endforeach
-                    </select>
+        {{-- Balance --}}
+        <div class="w-full lg:w-auto mt-2 lg:mt-0">
+            <div class="flex items-center justify-between lg:justify-end gap-3">
+                <div>
+                    <p class="text-[10px] text-gray-500 mb-0">Available Balance</p>
+                    <div class="text-base md:text-sm font-semibold text-[#0C3A30]">
+                        ${{ number_format($user->available_balance, 2) }}
+                    </div>
                 </div>
-                <div class="lg:col-span-1 flex justify-start lg:justify-end">
-                    <button id="changeAdminBtn"
-                        class="change-trader-btn inline-flex items-center gap-2 px-6 py-3 font-bold rounded-xl text-sm">
-                        <iconify-icon icon="ph:arrows-clockwise-fill" class="text-lg"></iconify-icon>
-                        <span>Change Trader</span>
-                    </button>
-                </div>
+
+                <a href="{{ route('user.deposit') }}"
+                   style="background-color:#7AB503;color:#0C3A30 !important;white-space:nowrap;"
+                   class="inline-flex items-center gap-1 text-[10px] px-2 py-1 rounded font-semibold hover:bg-[#8AC304] transition">
+                    <iconify-icon icon="ph:plus-bold" class="text-xs"></iconify-icon>
+                    Add Funds
+                </a>
             </div>
         </div>
     </div>
+
+    {{-- Change Admin --}}
+    <div class="mt-6 pt-4 border-t border-gray-200">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 items-end">
+
+            <div class="lg:col-span-2">
+                <label class="text-xs font-semibold text-gray-600 mb-2 block">
+                    <iconify-icon icon="ph:user-switch-fill" class="inline mr-1 text-sm"></iconify-icon>
+                    Switch to Another Admin
+                </label>
+
+                <select id="changeAdminSelect"
+                        class="w-full border-2 border-gray-200 rounded-xl p-3 text-sm focus:border-[#9EDD05] focus:outline-none transition bg-white shadow-sm">
+
+                    <option value="">-- Select an Admin to Copy --</option>
+
+                    @foreach(\App\Models\ServerFeed::where('copy_trading_enabled', true)->get() as $server)
+                        <option value="{{ $server->id }}"
+                            {{ ($user->copy_admin_id == $server->id) ? 'selected' : '' }}>
+                            {{ $server->admin_name }} ({{ $server->server_name }})
+                            @if($server->win_rate) - Win Rate: {{ $server->win_rate }}% @endif
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="lg:col-span-1 flex justify-start lg:justify-end">
+                <button id="changeAdminBtn"
+                        class="change-trader-btn inline-flex items-center gap-2 px-6 py-3 font-bold rounded-xl text-sm">
+                    <iconify-icon icon="ph:arrows-clockwise-fill" class="text-lg"></iconify-icon>
+                    <span>Change Trader</span>
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
 
     {{-- ── Pending Alert ── --}}
     @if($pendingRequests->count() > 0)

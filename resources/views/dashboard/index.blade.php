@@ -232,37 +232,69 @@
     <div class="dashboard-main-body space-y-6">
 
         {{-- HEADER --}}
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
-            <div class="flex items-center gap-4 bg-[#f0fdf4] px-2 py-3 rounded-lg shadow-sm w-full sm:w-auto">
-                <div class="relative">
-                    @php
-                        $profilePic = $user->profile->profile_pic ?? null;
-                        $initials   = collect(explode(' ', $user->name))->map(fn($w) => strtoupper(substr($w,0,1)))->take(2)->join('') ?: 'U';
-                    @endphp
-                   @if ($profilePic)
-                       <img src="{{ asset('storage/profile_pics/' . $profilePic) }}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" alt="{{ $user->name }}" class="rounded-full object-cover" style="width:80px;height:80px;border:2px solid #8bc905;" />
-                    @else
-                        <div class="flex items-center justify-center font-bold text-2xl text-[#0C3A30] select-none" style="background-color:#8bc905;width:80px;height:80px;border-radius:50%;">{{ $initials }}</div>
-                    @endif
+     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+    <div class="flex items-center gap-4 bg-[#f0fdf4] px-2 py-3 rounded-lg shadow-sm w-full sm:w-auto">
+        <div class="relative">
+            @php
+                $profilePic = $user->profile->profile_pic ?? null;
+
+                $initials = collect(explode(' ', $user->name))
+                    ->map(fn($w) => strtoupper(substr($w, 0, 1)))
+                    ->take(2)
+                    ->join('') ?: 'U';
+
+                $profileUrl = $profilePic ? asset('uploads/profile_pics/' . $profilePic) : null;
+            @endphp
+
+            @if ($profileUrl)
+                <img src="{{ $profileUrl }}"
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                     alt="{{ $user->name }}"
+                     class="rounded-full object-cover"
+                     style="width:80px;height:80px;border:2px solid #8bc905;" />
+
+                {{-- fallback initials --}}
+                <div class="hidden items-center justify-center font-bold text-2xl text-[#0C3A30] select-none"
+                     style="background-color:#8bc905;width:80px;height:80px;border-radius:50%;">
+                    {{ $initials }}
                 </div>
-                <div>
-                    @php $idVerification = auth()->user()->userKyc; @endphp
-                    <div class="flex items-center gap-2 flex-wrap">
-                        <h1 class="text-lg font-semibold" style="color:#0C3A30;">Hi, {{ auth()->user()->name ?? 'Guest' }}</h1>
-                        @if($idVerification && $idVerification->status === 'approved')
-                        <div class="verified-icon" title="Identity Verified">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#8bc905" style="width:24px;height:24px;">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.707a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                            </svg>
-                        </div>
-                        @endif
-                    </div>
-                    <h2 class="text-sm" style="color:#0C3A30;">Here is a summary of your account.</h2>
-                    <h2 class="text-sm" style="color:#0C3A30;">Have fun!</h2>
+            @else
+                <div class="flex items-center justify-center font-bold text-2xl text-[#0C3A30] select-none"
+                     style="background-color:#8bc905;width:80px;height:80px;border-radius:50%;">
+                    {{ $initials }}
                 </div>
-            </div>
+            @endif
         </div>
 
+        <div>
+            @php $idVerification = auth()->user()->userKyc; @endphp
+
+            <div class="flex items-center gap-2 flex-wrap">
+                <h1 class="text-lg font-semibold" style="color:#0C3A30;">
+                    Hi, {{ auth()->user()->name ?? 'Guest' }}
+                </h1>
+
+                @if($idVerification && $idVerification->status === 'approved')
+                    <div class="verified-icon" title="Identity Verified">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="#8bc905"
+                             style="width:24px;height:24px;">
+                            <path fill-rule="evenodd"
+                                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.707a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                  clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                @endif
+            </div>
+
+            <h2 class="text-sm" style="color:#0C3A30;">
+                Here is a summary of your account.
+            </h2>
+            <h2 class="text-sm" style="color:#0C3A30;">
+                Have fun!
+            </h2>
+        </div>
+    </div>
+</div>
         <style>
             .verified-icon{display:inline-flex;align-items:center;margin-left:-3px}
             .qa-btn{display:flex;align-items:center;gap:.5rem;padding:.5rem .875rem;border-radius:10px;font-size:.8125rem;font-weight:700;text-decoration:none;transition:all .2s ease;border:1px solid transparent;white-space:nowrap}

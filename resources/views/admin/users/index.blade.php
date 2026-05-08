@@ -467,7 +467,7 @@
                                         <div class="user-cell">
                                             <div class="avatar">
                                                 @if($profilePic)
-                                                <img src="{{ asset('storage/profile_pics/'.$profilePic) }}" alt="{{ $user->name }}">
+                                                <img src="{{ asset('uploads/profile_pics/' . $profilePic) }}" alt="{{ $user->name }}">
                                                 @else
                                                 {{ $initials }}
                                                 @endif
