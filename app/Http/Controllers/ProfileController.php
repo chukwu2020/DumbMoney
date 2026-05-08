@@ -71,12 +71,25 @@ class ProfileController extends Controller
         ];
 
         // Handle profile picture
-        if ($request->hasFile('profile_pic')) {
-            $image = $request->file('profile_pic');
-            $path = $image->store('profile_pics', 'public');
-            $profileData['profile_pic'] = basename($path);
-        }
+  
+        // Handle profile picture
+if ($request->hasFile('profile_pic')) {
 
+    $image = $request->file('profile_pic');
+
+    $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+
+    $destinationPath = public_path('uploads/profile_pics');
+
+    // Create folder if missing
+    if (!file_exists($destinationPath)) {
+        mkdir($destinationPath, 0775, true);
+    }
+
+    $image->move($destinationPath, $filename);
+
+    $profileData['profile_pic'] = $filename;
+}
         // Update or create Profile
         $user->profile()->updateOrCreate([], $profileData);
 

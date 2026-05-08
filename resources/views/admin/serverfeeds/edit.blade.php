@@ -125,7 +125,8 @@
                         <label class="admin-label">Server Profile Image</label>
                         @if($feed->server_profile_image)
                             <div class="mb-2">
-                                <img src="{{ asset('storage/servers/'.$feed->server_profile_image) }}"
+                               
+                                <img src="{{ asset('uploads/servers/' . $feed->server_profile_image) }}"
                                      class="w-14 h-14 rounded-full object-cover border-2 border-gray-200"
                                      onerror="this.style.display='none'">
                             </div>

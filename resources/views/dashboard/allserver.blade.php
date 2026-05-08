@@ -143,7 +143,7 @@
                                 <!-- Server Image - Profile Style (small circular) -->
                                 <div class="admin-avatar">
                                     @if($feed->server_profile_image)
-                                    <img src="{{ asset('storage/servers/'.$feed->server_profile_image) }}"
+                                   <img src="{{ asset('uploads/servers/'.$feed->server_profile_image) }}"
                                          alt="{{ $feed->server_name }}"
                                          class="w-full h-full object-cover">
                                     @else
@@ -169,7 +169,7 @@
                                 <!-- Admin Image - Profile Style (small circular) -->
                                 <div class="admin-avatar">
                                     @if($feed->admin_profile_image)
-                                    <img src="{{ asset('storage/admins/'.$feed->admin_profile_image) }}"
+                                    <img src="{{ asset('uploads/admins/'.$feed->admin_profile_image) }}"
                                          alt="{{ $feed->admin_name }}"
                                          class="w-full h-full object-cover">
                                     @else
@@ -184,7 +184,7 @@
                                         {{ $feed->admin_name }}
                                     </h5>
                                     <p class="text-xs text-gray-500 mb-2">
-                                        <i class="fa-solid fa-shield-haltered mr-1"></i>
+                                        <i class="fa-solid fa-shield-halved mr-1"></i>
                                         Server Administrator
                                     </p>
                                     

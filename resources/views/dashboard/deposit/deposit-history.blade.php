@@ -247,7 +247,7 @@
     'UNI'  => '🦄',     // Uniswap
     'ATOM' => '⚛️',     // Cosmos
     'XLM'  => '✨',     // Stellar
-    'DEFAULT' => '🔗',  // fallback (much better than 🔗)
+    'DEFAULT' => '🪙',  // fallback (much better than 🔗)
 ];
 
                             /* Gift card: resolve the brand name to display */
@@ -382,7 +382,8 @@
                             <!-- View proof / card image -->
                             @if($deposit->proof)
                             <div class="mt-4 pt-3 border-t border-gray-100">
-                                <button onclick="onclick=viewProof('{{ asset('storage/'.$deposit->proof) }}')" 
+                                <button onclick="viewProof('{{ asset('uploads/'.$deposit->proof) }}')"
+                                 
                                         class="text-xs text-[#9EDD05] hover:text-[#8AC304] font-semibold flex items-center gap-1">
                                     <iconify-icon icon="ph:eye"></iconify-icon>
                                     {{ $method === 'giftcard' ? 'View Gift Card' : 'View Proof' }}

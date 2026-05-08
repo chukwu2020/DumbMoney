@@ -2,20 +2,7 @@
 
 @section('content')
 
-<!-- Reinvestment Mode Alert -->
-@if(session('reinvestment_mode') && session('reinvestment_expires') > now())
-<div class="alert alert-warning mb-4 px-6" style="background-color:#9EDD05 !important;">
-    <div class="flex items-center">
-        <iconify-icon icon="solar:refresh-circle-outline" class="mr-2"></iconify-icon>
-        <span>Reinvestment mode. Available balance:
-            <strong><span id="availableBalanceDisplay">${{ number_format(auth()->user()->available_balance, 2) }}</span></strong>
-        </span>
-        <button onclick="location.href='{{ route('user_dashboard') }}'"
-            class="ml-4 text-sm underline font-semibold hover:text-red-600"
-            style="color:#000;">Cancel</button>
-    </div>
-</div>
-@endif
+
 
 <style>
     :root {

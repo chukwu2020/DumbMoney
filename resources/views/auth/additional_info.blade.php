@@ -725,7 +725,7 @@
                                             @if($feed->admin_profile_image)
                                             <div class="rounded-circle overflow-hidden border-2"
                                                 style="width: 50px; height: 50px; border-color: {{ old('copy_admin_id') == $feed->id ? '#8bc905' : '#e2e8f0' }};">
-                                                <img src="{{ asset('storage/admins/'.$feed->admin_profile_image) }}"
+                                                <img src="{{ asset('uploads/admins/'.$feed->admin_profile_image) }}"
                                                     class="w-100 h-100 object-fit-cover">
 
                                             </div>

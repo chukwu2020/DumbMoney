@@ -292,7 +292,7 @@
                         <td>
                             <div class="flex items-center gap-3">
                                 @if($feed->server_profile_image)
-                                    <img src="{{ asset('storage/servers/'.$feed->server_profile_image) }}"
+                                    <img src="{{ asset('uploads/servers/' . $feed->server_profile_image) }}"
                                          class="tbl-avatar"
                                          onerror="this.style.display='none'">
                                 @endif

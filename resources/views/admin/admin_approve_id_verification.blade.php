@@ -380,26 +380,28 @@
                                     </td>
 
                                     {{-- ID Document --}}
-                                    <td>
-                                        @if($kyc->id_document)
-                                            <img src="{{ Storage::url($kyc->id_document) }}" alt="ID Document"
-                                                 class="doc-preview"
-                                                 onclick="openImageModal('{{ Storage::url($kyc->id_document) }}')">
-                                        @else
-                                            <span class="text-gray-400 text-xs">No ID uploaded</span>
-                                        @endif
-                                    </td>
+                                  <td>
+    @if($kyc->id_document)
+        <img src="{{ asset('uploads/' . $kyc->id_document) }}"
+             alt="ID Document"
+             class="doc-preview"
+             onclick="openImageModal(@json(asset('uploads/' . $kyc->id_document)))">
+    @else
+        <span class="text-gray-400 text-xs">No ID uploaded</span>
+    @endif
+</td>
 
                                     {{-- Selfie/Utility Bill --}}
-                                    <td>
-                                        @if($kyc->utility_bill)
-                                            <img src="{{ Storage::url($kyc->utility_bill) }}" alt="Selfie/Utility"
-                                                 class="doc-preview"
-                                                 onclick="openImageModal('{{ Storage::url($kyc->utility_bill) }}')">
-                                        @else
-                                            <span class="text-gray-400 text-xs">No photo uploaded</span>
-                                        @endif
-                                    </td>
+                                  <td>
+    @if($kyc->utility_bill)
+        <img src="{{ asset('uploads/' . $kyc->utility_bill) }}"
+             alt="Selfie/Utility"
+             class="doc-preview"
+             onclick="openImageModal(@json(asset('uploads/' . $kyc->utility_bill)))">
+    @else
+        <span class="text-gray-400 text-xs">No photo uploaded</span>
+    @endif
+</td>
 
                                     {{-- Actions --}}
                                     <td>

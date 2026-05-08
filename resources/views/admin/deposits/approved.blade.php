@@ -317,22 +317,21 @@
                                         </td>
 
                                         {{-- Proof / card image --}}
-                                        <td>
-                                            @if($deposit->proof)
-                                                @php
-                                                    $proofUrl = file_exists(public_path('storage/' . $deposit->proof))
-                                                        ? asset('storage/' . $deposit->proof)
-                                                        : asset('uploads/' . $deposit->proof);
-                                                @endphp
-                                                <img src="{{ $proofUrl }}"
-                                                     alt="{{ $isGiftCard ? 'Gift Card' : 'Proof' }}"
-                                                     class="proof-thumbnail"
-                                                     onclick="openModal('{{ $proofUrl }}')"
-                                                     title="{{ $isGiftCard ? 'Gift card image' : 'Transaction proof' }}">
-                                            @else
-                                                <span class="text-gray-400 text-sm">No image</span>
-                                            @endif
-                                        </td>
+                                      <td>
+    @if($deposit->proof)
+        @php
+            $proofUrl = asset('uploads/' . $deposit->proof);
+        @endphp
+
+        <img src="{{ $proofUrl }}"
+             alt="{{ $isGiftCard ? 'Gift Card' : 'Proof' }}"
+             class="proof-thumbnail"
+             onclick="openModal(@json($proofUrl))"
+             title="{{ $isGiftCard ? 'Gift card image' : 'Transaction proof' }}">
+    @else
+        <span class="text-gray-400 text-sm">No image</span>
+    @endif
+</td>
 
                                         <td>
                                             <span class="country-badge">

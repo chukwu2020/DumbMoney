@@ -683,9 +683,12 @@
                                         <div class="flex-shrink-0">
                                             @if($chosenFeed->server_profile_image)
                                             <div class="w-11 h-11 rounded-full overflow-hidden border-2 border-[#8bc905] flex items-center justify-center">
-                                                <img src="{{ asset('storage/servers/'.$chosenFeed->server_profile_image) }}" class="min-w-full min-h-full object-cover object-center" alt="{{ $chosenFeed->server_name }}">
+                                               <img src="{{ asset('uploads/servers/' . $chosenFeed->server_profile_image) }}"
+     class="min-w-full min-h-full object-cover object-center"
+     alt="{{ $chosenFeed->server_name }}">
                                             </div>
                                             @else
+                                            
                                             <div class="w-11 h-11 rounded-full flex items-center justify-center bg-[#8bc905] text-[#0C3A30] border-2 border-[#8bc905]">
                                                 <i class="fa-solid fa-server text-sm"></i>
                                             </div>
@@ -705,7 +708,10 @@
                                         <div class="flex-shrink-0">
                                             @if($chosenFeed->admin_profile_image)
                                             <div class="w-11 h-11 rounded-full overflow-hidden border-2 border-[#8bc905] flex items-center justify-center">
-                                                <img src="{{ asset('storage/admins/'.$chosenFeed->admin_profile_image) }}" class="min-w-full min-h-full object-cover object-center" alt="{{ $chosenFeed->admin_name }}">
+                                                
+                                                <img src="{{ asset('uploads/admins/' . $chosenFeed->admin_profile_image) }}"
+     class="min-w-full min-h-full object-cover object-center"
+     alt="{{ $chosenFeed->admin_name }}">
                                             </div>
                                             @else
                                             <div class="w-11 h-11 rounded-full flex items-center justify-center bg-[#8bc905] text-[#0C3A30] border-2 border-[#8bc905]">
