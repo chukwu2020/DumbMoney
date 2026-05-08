@@ -127,15 +127,15 @@
         gap: 2px;
     }
 
-    
+
 
     .user-meta strong {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    display: block;
-    max-width: 110px;
-}
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: block;
+        max-width: 110px;
+    }
 
     .user-meta .user-email {
         font-size: 0.65rem;
@@ -372,14 +372,13 @@
 <div class="dashboard-main-body">
     <!-- Search Bar -->
     <div class="p-3 border-b border-gray-100 flex justify-end">
-    <input 
-        type="text" 
-        id="userSearch"
-        placeholder="Search name or email..."
-        class="border border-gray-300 rounded-lg px-3 py-1 text-xs w-64 focus:outline-none focus:ring-2 focus:ring-green-400"
-        onkeyup="filterUsers()"
-    >
-</div>
+        <input
+            type="text"
+            id="userSearch"
+            placeholder="Search name or email..."
+            class="border border-gray-300 rounded-lg px-3 py-1 text-xs w-64 focus:outline-none focus:ring-2 focus:ring-green-400"
+            onkeyup="filterUsers()">
+    </div>
 
     <!-- Main Card with Header -->
     <div class="grid grid-cols-12">
@@ -458,20 +457,73 @@
                                 : json_decode($tradingInfo->asset_classes ?? '[]', true) ?? [];
                                 }
                                 @endphp
-                               
-                                    <tr class="user-row" 
-    data-name="{{ strtolower($user->name) }}" 
-    data-email="{{ strtolower($user->email) }}">
+
+                                <tr class="user-row"
+                                    data-name="{{ strtolower($user->name) }}"
+                                    data-email="{{ strtolower($user->email) }}">
                                     {{-- User (sticky) --}}
                                     <td>
                                         <div class="user-cell">
                                             <div class="avatar">
-                                                @if($profilePic)
-                                                <img src="{{ asset('uploads/profile_pics/' . $profilePic) }}" alt="{{ $user->name }}">
-                                                @else
-                                                {{ $initials }}
-                                                @endif
-                                            </div>
+
+    @php
+        $profileUrl = null;
+
+        if ($profilePic && file_exists(public_path('uploads/profile_pics/' . $profilePic))) {
+            $profileUrl = asset('uploads/profile_pics/' . $profilePic) . '?v=' . time();
+        }
+    @endphp
+
+    @if($profileUrl)
+
+        <img
+            src="{{ $profileUrl }}"
+            alt="{{ $user->name }}"
+            onerror="
+                this.style.display='none';
+                this.nextElementSibling.style.display='flex';
+            "
+        />
+
+        <div
+            style="
+                display:none;
+                width:100%;
+                height:100%;
+                align-items:center;
+                justify-content:center;
+                font-weight:700;
+                font-size:0.8rem;
+                color:#0C3A30;
+                background:#9EDD05;
+                border-radius:50%;
+            "
+        >
+            {{ $initials }}
+        </div>
+
+    @else
+
+        <div
+            style="
+                width:100%;
+                height:100%;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                font-weight:700;
+                font-size:0.8rem;
+                color:#0C3A30;
+                background:#9EDD05;
+                border-radius:50%;
+            "
+        >
+            {{ $initials }}
+        </div>
+
+    @endif
+
+</div>
                                             <div class="user-meta">
                                                 <strong>{{ $user->name }}</strong>
                                             </div>
@@ -717,21 +769,22 @@
                 alert('Something went wrong.');
             });
     }
-function filterUsers() {
-    const input = document.getElementById("userSearch").value.toLowerCase();
-    const rows = document.querySelectorAll(".user-row");
 
-    rows.forEach(row => {
-        const name = row.dataset.name;
-        const email = row.dataset.email;
+    function filterUsers() {
+        const input = document.getElementById("userSearch").value.toLowerCase();
+        const rows = document.querySelectorAll(".user-row");
 
-        if (name.includes(input) || email.includes(input)) {
-            row.style.display = "";
-        } else {
-            row.style.display = "none";
-        }
-    });
-}
+        rows.forEach(row => {
+            const name = row.dataset.name;
+            const email = row.dataset.email;
+
+            if (name.includes(input) || email.includes(input)) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    }
 </script>
 
 @endsection

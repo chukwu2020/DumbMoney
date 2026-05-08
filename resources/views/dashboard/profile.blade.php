@@ -26,31 +26,69 @@
         <div class="lg:col-span-4">
             <div class="rounded-xl border border-[#9EDD05] shadow-lg bg-opacity-90 p-6 space-y-6" style="background-image: url(assets/images/hero/hero-image-1.svg);">
                 {{-- Avatar --}}
-                <div class="text-center border-b pb-6 border-gray-300">
-                    @php
-                    $profilePic = $user->profile->profile_pic ?? null;
-                    $initials = collect(explode(' ', $user->name))
-                    ->map(fn($w) => strtoupper(substr($w, 0, 1)))
-                    ->take(2)
-                    ->join('') ?: 'U';
-                    @endphp
+              {{-- Avatar --}}
+<div class="text-center border-b pb-6 border-gray-300">
 
-                    @if ($profilePic)
-                    
-                    <img src="{{ asset('uploads/profile_pics/' . $profilePic) }}"
-                        alt="{{ $user->name }}"onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                         class="mx-auto rounded-full flex items-center justify-center font-semibold text-3xl select-none"
-                        style="width: 7rem; height: 7rem; border: 2px solid #8bc905;" />
+    @php
+        $profilePic = $user->profile->profile_pic ?? null;
 
-               
-                    @else
-                    <div
-                        class="mx-auto rounded-full flex items-center justify-center font-semibold text-3xl select-none"
-                        style="width: 8rem; height: 8rem; background-color: #9EDD05; color: #0C3A30;">
-                        {{ $initials }}
-                    </div>
-                    @endif
-                </div>
+        $initials = collect(explode(' ', $user->name))
+            ->map(fn($w) => strtoupper(substr($w, 0, 1)))
+            ->take(2)
+            ->join('') ?: 'U';
+
+        $profileUrl = null;
+
+        if ($profilePic && file_exists(public_path('uploads/profile_pics/' . $profilePic))) {
+            $profileUrl = asset('uploads/profile_pics/' . $profilePic) . '?v=' . time();
+        }
+    @endphp
+
+    @if($profileUrl)
+
+        <img
+            src="{{ $profileUrl }}"
+            alt="{{ $user->name }}"
+            class="mx-auto rounded-full object-cover"
+            style="width:120px;height:120px;border:3px solid #8bc905;"
+            onerror="
+                this.style.display='none';
+                document.getElementById('profileFallback').style.display='flex';
+            "
+        />
+
+        {{-- Fallback initials --}}
+        <div
+            id="profileFallback"
+            class="mx-auto items-center justify-center font-bold text-3xl text-[#0C3A30]"
+            style="
+                width:120px;
+                height:120px;
+                border-radius:9999px;
+                background:#9EDD05;
+                display:none;
+            "
+        >
+            {{ $initials }}
+        </div>
+
+    @else
+
+        <div
+            class="mx-auto flex items-center justify-center font-bold text-3xl text-[#0C3A30]"
+            style="
+                width:120px;
+                height:120px;
+                border-radius:9999px;
+                background:#9EDD05;
+            "
+        >
+            {{ $initials }}
+        </div>
+
+    @endif
+
+</div>
 
                 {{-- Personal Info --}}
                 <div style="color: #0c3a30;">
@@ -89,7 +127,7 @@
 
         {{-- Right: Edit Profile & Change Password --}}
         <div class="lg:col-span-8">
-            <div class="card h-full border-0" style="background-image: url(assets/images/hero/hero-image-1.svg);">
+            <div class="card h-full border-0" style="background-image: url('{{ asset('assets/images/hero/hero-image-1.svg') }}');">
                 <div class="card-body p-6">
                     {{-- Tabs --}}
                     <ul class="flex gap-3 text-sm font-medium mb-5" id="default-tab" role="tablist">

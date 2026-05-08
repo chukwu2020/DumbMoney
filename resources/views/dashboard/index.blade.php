@@ -234,38 +234,68 @@
         {{-- HEADER --}}
      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
     <div class="flex items-center gap-4 bg-[#f0fdf4] px-2 py-3 rounded-lg shadow-sm w-full sm:w-auto">
-        <div class="relative">
-            @php
-                $profilePic = $user->profile->profile_pic ?? null;
+       <div class="relative">
 
-                $initials = collect(explode(' ', $user->name))
-                    ->map(fn($w) => strtoupper(substr($w, 0, 1)))
-                    ->take(2)
-                    ->join('') ?: 'U';
+    @php
+        $profilePic = $user->profile->profile_pic ?? null;
 
-                $profileUrl = $profilePic ? asset('uploads/profile_pics/' . $profilePic) : null;
-            @endphp
+        $initials = collect(explode(' ', $user->name))
+            ->map(fn($w) => strtoupper(substr($w, 0, 1)))
+            ->take(2)
+            ->join('') ?: 'U';
 
-            @if ($profileUrl)
-                <img src="{{ $profileUrl }}"
-                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                     alt="{{ $user->name }}"
-                     class="rounded-full object-cover"
-                     style="width:80px;height:80px;border:2px solid #8bc905;" />
+        $profileUrl = null;
 
-                {{-- fallback initials --}}
-                <div class="hidden items-center justify-center font-bold text-2xl text-[#0C3A30] select-none"
-                     style="background-color:#8bc905;width:80px;height:80px;border-radius:50%;">
-                    {{ $initials }}
-                </div>
-            @else
-                <div class="flex items-center justify-center font-bold text-2xl text-[#0C3A30] select-none"
-                     style="background-color:#8bc905;width:80px;height:80px;border-radius:50%;">
-                    {{ $initials }}
-                </div>
-            @endif
+        if ($profilePic && file_exists(public_path('uploads/profile_pics/' . $profilePic))) {
+            $profileUrl = asset('uploads/profile_pics/' . $profilePic) . '?v=' . time();
+        }
+    @endphp
+
+    @if($profileUrl)
+
+        <img
+            src="{{ $profileUrl }}"
+            alt="{{ $user->name }}"
+            class="rounded-full object-cover"
+            style="width:80px;height:80px;border:2px solid #8bc905;"
+            onerror="
+                this.style.display='none';
+                document.getElementById('navProfileFallback').style.display='flex';
+            "
+        />
+
+        {{-- fallback initials --}}
+        <div
+            id="navProfileFallback"
+            class="items-center justify-center font-bold text-2xl text-[#0C3A30] select-none"
+            style="
+                background-color:#8bc905;
+                width:80px;
+                height:80px;
+                border-radius:50%;
+                display:none;
+            "
+        >
+            {{ $initials }}
         </div>
 
+    @else
+
+        <div
+            class="flex items-center justify-center font-bold text-2xl text-[#0C3A30] select-none"
+            style="
+                background-color:#8bc905;
+                width:80px;
+                height:80px;
+                border-radius:50%;
+            "
+        >
+            {{ $initials }}
+        </div>
+
+    @endif
+
+</div>
         <div>
             @php $idVerification = auth()->user()->userKyc; @endphp
 
