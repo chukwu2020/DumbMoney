@@ -8,7 +8,6 @@
         --brand-dark: #0C3A30;
     }
 
-    /* Sticky header - prevents scrolling with table */
     .sticky-header {
         position: sticky;
         top: 0;
@@ -92,8 +91,6 @@
     tbody tr:hover td:first-child {
         background: #f8fffe;
     }
-
-    
 
     .avatar {
         width: 40px;
@@ -208,44 +205,6 @@
         transform: translateY(-1px);
     }
 
-    .search-bar {
-        background: white;
-        border-radius: 12px;
-        border: 1px solid #e5e7eb;
-        padding: 1.25rem 1.5rem;
-        margin-bottom: 1.5rem;
-    }
-
-    .navbar-search {
-        position: relative;
-        display: inline-flex;
-        align-items: center;
-    }
-
-    .navbar-search input {
-        padding: 0.5rem 2rem 0.5rem 1rem;
-        border: 1px solid #e5e7eb;
-        border-radius: 0.5rem;
-        font-size: 0.875rem;
-        width: 250px;
-    }
-
-    .navbar-search iconify-icon {
-        position: absolute;
-        right: 0.75rem;
-        color: #9ca3af;
-        pointer-events: none;
-    }
-
-    .form-select {
-        padding: 0.5rem 2rem 0.5rem 0.75rem;
-        border: 1px solid #e5e7eb;
-        border-radius: 0.5rem;
-        font-size: 0.875rem;
-        background: white;
-        cursor: pointer;
-    }
-
     /* Image Modal */
     .image-modal {
         position: fixed;
@@ -317,8 +276,6 @@
         <div class="col-span-12">
             <div class="card h-full p-0 rounded-xl border-0 overflow-hidden">
 
-            
-
                 <!-- Table Body -->
                 <div class="card-body p-0">
                     <div class="table-scroll">
@@ -338,11 +295,23 @@
                                 @forelse($kycs as $kyc)
                                 @php
                                     $statusColors = [
-                                        'pending' => 'badge-pending',
+                                        'pending'  => 'badge-pending',
                                         'approved' => 'badge-approved',
                                         'rejected' => 'badge-rejected',
                                     ];
                                     $statusClass = $statusColors[$kyc->status] ?? 'badge-pending';
+
+                                    // ── FIX: KYC document URLs ──────────────────────────────
+                                    // Documents are stored as just the filename.
+                                    // They live in public/uploads/ on the host.
+                                    $idDocUrl = $kyc->id_document
+                                        ? asset('uploads/' . basename($kyc->id_document))
+                                        : null;
+
+                                    $utilityUrl = $kyc->utility_bill
+                                        ? asset('uploads/' . basename($kyc->utility_bill))
+                                        : null;
+                                    // ────────────────────────────────────────────────────────
                                 @endphp
                                 <tr>
 
@@ -354,7 +323,6 @@
                                             </div>
                                             <div class="user-meta">
                                                 <strong>{{ $kyc->user->name }}</strong>
-                                              
                                             </div>
                                         </div>
                                     </td>
@@ -372,7 +340,9 @@
                                             {{ ucfirst($kyc->status) }}
                                         </span>
                                     </td>
-   <td>{{ $kyc->user->country ?? '—' }}</td>
+
+                                    <td>{{ $kyc->user->country ?? '—' }}</td>
+
                                     {{-- Submitted Date --}}
                                     <td>
                                         <div style="font-size:0.8rem; color:#374151;">{{ $kyc->created_at->format('d M, Y') }}</div>
@@ -380,52 +350,28 @@
                                     </td>
 
                                     {{-- ID Document --}}
-                       <td>
-    @if($kyc->id_document)
-        @php
-            $path = str_replace('\\', '/', $kyc->id_document);
-            $path = preg_replace('/^https?:\/\/[^\/]+\//', '', $path);
-            $path = ltrim($path, '/');
-
-            if (!str_starts_with($path, 'uploads/')) {
-                $path = 'uploads/' . basename($path);
-            }
-
-            $url = asset($path);
-        @endphp
-
-        <img src="{{ $url }}"
-             alt="ID Document"
-             class="doc-preview"
-             onclick="openImageModal('{{ $url }}')">
-    @else
-        <span class="text-gray-400 text-xs">No ID uploaded</span>
-    @endif
-</td>
+                                    <td>
+                                        @if($idDocUrl)
+                                            <img src="{{ $idDocUrl }}"
+                                                 alt="ID Document"
+                                                 class="doc-preview"
+                                                 onclick="openImageModal('{{ $idDocUrl }}')">
+                                        @else
+                                            <span class="text-gray-400 text-xs">No ID uploaded</span>
+                                        @endif
+                                    </td>
 
                                     {{-- Selfie/Utility Bill --}}
-                        <td>
-    @if($kyc->utility_bill)
-        @php
-            $path = str_replace('\\', '/', $kyc->utility_bill);
-            $path = preg_replace('/^https?:\/\/[^\/]+\//', '', $path);
-            $path = ltrim($path, '/');
-
-            if (!str_starts_with($path, 'uploads/')) {
-                $path = 'uploads/' . basename($path);
-            }
-
-            $url = asset($path);
-        @endphp
-
-        <img src="{{ $url }}"
-             alt="Selfie/Utility"
-             class="doc-preview"
-             onclick="openImageModal('{{ $url }}')">
-    @else
-        <span class="text-gray-400 text-xs">No photo uploaded</span>
-    @endif
-</td>
+                                    <td>
+                                        @if($utilityUrl)
+                                            <img src="{{ $utilityUrl }}"
+                                                 alt="Selfie/Utility"
+                                                 class="doc-preview"
+                                                 onclick="openImageModal('{{ $utilityUrl }}')">
+                                        @else
+                                            <span class="text-gray-400 text-xs">No photo uploaded</span>
+                                        @endif
+                                    </td>
 
                                     {{-- Actions --}}
                                     <td>
@@ -452,7 +398,7 @@
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="6" style="text-align:center; padding:3rem; color:#9ca3af;">
+                                    <td colspan="7" style="text-align:center; padding:3rem; color:#9ca3af;">
                                         <iconify-icon icon="mdi:file-document-outline" style="font-size:2.5rem; display:block; margin:0 auto 0.75rem;"></iconify-icon>
                                         No KYC submissions found.
                                     </td>
@@ -463,7 +409,6 @@
                     </div>
                 </div>
 
-            
             </div>
         </div>
     </div>
@@ -482,7 +427,7 @@
 <script>
     function openImageModal(url) {
         const modal = document.getElementById('imageModal');
-        const img = document.getElementById('modalImage');
+        const img   = document.getElementById('modalImage');
         img.src = url;
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
@@ -494,18 +439,8 @@
         document.body.style.overflow = '';
     }
 
-    // Close modal with Escape key
     document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            closeImageModal();
-        }
-    });
-
-    // Per page select functionality
-    document.getElementById('perPageSelect')?.addEventListener('change', function() {
-        const url = new URL(window.location.href);
-        url.searchParams.set('per_page', this.value);
-        window.location.href = url.toString();
+        if (e.key === 'Escape') closeImageModal();
     });
 </script>
 

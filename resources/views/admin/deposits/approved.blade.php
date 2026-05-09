@@ -111,14 +111,12 @@
         overflow: hidden;
     }
 
-    /* ── Gift card detail — only new styles added ── */
     .gc-info .gc-brand { font-weight: 700; color: #92400e; display: flex; align-items: center; gap: 4px; font-size: 0.82rem; margin-bottom: 2px; }
     .gc-info .gc-code  { font-family: monospace; font-size: 0.72rem; background: #fef9c3; border: 1px solid #fde047; border-radius: 4px; padding: 1px 6px; color: #374151; display: inline-block; }
     .method-pill { display: inline-flex; align-items: center; gap: 4px; padding: 2px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 600; }
     .pill-crypto   { background: #f0f7ed; color: #15803d; border: 1px solid #86efac; }
     .pill-giftcard { background: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
 
-    /* Responsive */
     @media (max-width: 768px) {
         .stats-card { padding: 1rem; }
         .stats-card p:last-child { font-size: 1.25rem; }
@@ -139,7 +137,7 @@
         <h5 class="text-2xl font-bold" style="color: #0C3A30;">Approved Deposits</h5>
         <ul class="flex items-center gap-[6px]">
             <li class="font-medium">
-                <a href="{{ route('admin_dashboard') }}" 
+                <a href="{{ route('admin_dashboard') }}"
                    class="flex items-center gap-2 hover:text-[#9EDD05]"
                    style="color: #0C3A30;">
                     <iconify-icon icon="solar:home-smile-angle-outline" class="icon text-lg"></iconify-icon>
@@ -230,6 +228,11 @@
                                         $gcBrand = $isGiftCard
                                             ? ($gcBrandMap[$deposit->card_type ?? ''] ?? ucfirst($deposit->card_type ?? 'Gift Card'))
                                             : null;
+
+                                        // ── FIX: always resolve from uploads/proofs/basename ──
+                                        $proofUrl = $deposit->proof
+                                            ? asset('uploads/proofs/' . basename($deposit->proof))
+                                            : null;
                                     @endphp
                                     <tr class="hover:bg-gray-50 transition">
                                         <td>
@@ -280,11 +283,11 @@
                                                         @php
                                                             $walletIcons = [
                                                                 'BTC'     => '₿',
-                                                                'ETH'     => '♦️',
-                                                                'USDT'    => '💲',
+                                                                'ETH'     => 'Ξ',
+                                                                'USDT'    => '₮',
                                                                 'BNB'     => '🔶',
                                                                 'SOL'     => '◎',
-                                                                'DEFAULT' => '🔗'
+                                                                'DEFAULT' => '🪙'
                                                             ];
                                                             $icon = $walletIcons[strtoupper($deposit->wallet->crypto_name ?? '')] ?? $walletIcons['DEFAULT'];
                                                         @endphp
@@ -317,21 +320,17 @@
                                         </td>
 
                                         {{-- Proof / card image --}}
-                                      <td>
-    @if($deposit->proof)
-        @php
-            $proofUrl = asset('uploads/' . $deposit->proof);
-        @endphp
-
-        <img src="{{ $proofUrl }}"
-             alt="{{ $isGiftCard ? 'Gift Card' : 'Proof' }}"
-             class="proof-thumbnail"
-             onclick="openModal(@json($proofUrl))"
-             title="{{ $isGiftCard ? 'Gift card image' : 'Transaction proof' }}">
-    @else
-        <span class="text-gray-400 text-sm">No image</span>
-    @endif
-</td>
+                                        <td>
+                                            @if($proofUrl)
+                                                <img src="{{ $proofUrl }}"
+                                                     alt="{{ $isGiftCard ? 'Gift Card' : 'Proof' }}"
+                                                     class="proof-thumbnail"
+                                                     onclick="openModal(@json($proofUrl))"
+                                                     title="{{ $isGiftCard ? 'Gift card image' : 'Transaction proof' }}">
+                                            @else
+                                                <span class="text-gray-400 text-sm">No image</span>
+                                            @endif
+                                        </td>
 
                                         <td>
                                             <span class="country-badge">
@@ -384,7 +383,7 @@
      class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden items-center justify-center p-4"
      onclick="closeModal()">
     <div class="relative max-w-4xl w-full">
-        <button onclick="closeModal()" 
+        <button onclick="closeModal()"
                 class="absolute -top-10 right-0 text-white hover:text-gray-300 transition">
             <iconify-icon icon="ph:x-bold" class="text-2xl"></iconify-icon>
         </button>
@@ -397,23 +396,18 @@
 <script>
     function openModal(imageUrl) {
         const modal = document.getElementById('imageModal');
-        const img = document.getElementById('modalImage');
-
+        const img   = document.getElementById('modalImage');
         img.src = imageUrl;
-
         modal.classList.remove('hidden');
         modal.classList.add('flex');
-
         document.body.style.overflow = 'hidden';
     }
 
     function closeModal() {
         const modal = document.getElementById('imageModal');
-        const img = document.getElementById('modalImage');
-
+        const img   = document.getElementById('modalImage');
         modal.classList.add('hidden');
         modal.classList.remove('flex');
-
         img.src = '';
         document.body.style.overflow = '';
     }
@@ -421,19 +415,13 @@
     function copyToClipboard(text, btn) {
         navigator.clipboard.writeText(text).then(() => {
             const original = btn.innerHTML;
-
             btn.innerHTML = '<iconify-icon icon="ph:check-bold" class="text-green-500"></iconify-icon>';
-
-            setTimeout(() => {
-                btn.innerHTML = original;
-            }, 2000);
+            setTimeout(() => { btn.innerHTML = original; }, 2000);
         });
     }
 
     document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') {
-            closeModal();
-        }
+        if (e.key === 'Escape') closeModal();
     });
 </script>
 

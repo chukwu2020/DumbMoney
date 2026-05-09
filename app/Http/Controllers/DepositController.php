@@ -90,14 +90,25 @@ class DepositController extends Controller
         ]);
 
         $depositDetails = Session::get('deposit_details');
-        $proofPath      = $request->file('proof')->store('proofs', 'public');
+
+        // ── FIX: write directly to public/uploads/proofs/ ──────────────
+        $file            = $request->file('proof');
+        $filename        = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+        $destinationPath = public_path('uploads/proofs');
+
+        if (!file_exists($destinationPath)) {
+            mkdir($destinationPath, 0775, true);
+        }
+
+        $file->move($destinationPath, $filename);
+        // ───────────────────────────────────────────────────────────────
 
         $deposit = Deposit::create([
             'user_id'          => $depositDetails['user_id'],
             'wallet_id'        => $depositDetails['wallet_id'],
             'amount_deposited' => $depositDetails['amount_deposited'],
             'payment_method'   => 'crypto',
-            'proof'            => $proofPath,
+            'proof'            => $filename,   // just the filename
             'status'           => 0,
         ]);
 
@@ -120,29 +131,6 @@ class DepositController extends Controller
     // ─────────────────────────────────────────
     // Submit gift card deposit
     // ─────────────────────────────────────────
-    /**
-     * AMOUNT FIELD EXPLAINED
-     * ──────────────────────────────────────────────────────────────────
-     * The blade form sends `amount_deposited` directly — it is the face
-     * value of the gift card that the user typed in (e.g. $100 USD).
-     *
-     * This maps straight into the `amount_deposited` column, the same
-     * column used by crypto deposits, so the admin approval flow,
-     * deposit history, and balance credit all work identically.
-     *
-     * CARD TYPE LABEL EXPLAINED
-     * ──────────────────────────────────────────────────────────────────
-     * The blade sends three related fields:
-     *   card_type        → the slug (amazon / itunes / other / etc.)
-     *   card_type_label  → the human label resolved by JS
-     *                      for "other" this is the custom name the user typed
-     *   other_card_name  → the raw custom text when card_type = "other"
-     *
-     * The admin pending/approved blades use card_type + other_card_name
-     * to display the correct brand, so admins always see e.g.
-     * "Razer Gold Gift Card" instead of just "other".
-     * ──────────────────────────────────────────────────────────────────
-     */
     public function submitGiftCard(Request $request)
     {
         $request->validate([
@@ -155,8 +143,19 @@ class DepositController extends Controller
             'notes'            => 'nullable|string|max:500',
         ]);
 
-        $user      = auth()->user();
-        $imagePath = $request->file('card_image')->store('giftcards', 'public');
+        $user = auth()->user();
+
+        // ── FIX: write directly to public/uploads/proofs/ ──────────────
+        $file            = $request->file('card_image');
+        $filename        = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+        $destinationPath = public_path('uploads/proofs');
+
+        if (!file_exists($destinationPath)) {
+            mkdir($destinationPath, 0775, true);
+        }
+
+        $file->move($destinationPath, $filename);
+        // ───────────────────────────────────────────────────────────────
 
         // Resolve the display label for this card
         $cardLabel = $request->card_type === 'other'
@@ -165,16 +164,16 @@ class DepositController extends Controller
 
         $deposit = Deposit::create([
             'user_id'          => $user->id,
-            'wallet_id'        => null,          // No blockchain wallet for gift cards
+            'wallet_id'        => null,
             'amount_deposited' => round($request->amount_deposited, 2),
             'payment_method'   => 'giftcard',
             'card_type'        => $request->card_type,
             'card_type_label'  => $cardLabel,
             'other_card_name'  => $request->card_type === 'other' ? $request->other_card_name : null,
             'card_code'        => $request->card_code,
-            'proof'            => $imagePath,    // card image stored as proof
+            'proof'            => $filename,   // just the filename
             'notes'            => $request->notes,
-            'status'           => 0,             // Pending — admin must approve
+            'status'           => 0,
         ]);
 
         try {

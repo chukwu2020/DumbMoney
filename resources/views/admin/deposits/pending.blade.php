@@ -118,7 +118,6 @@
         padding: 1rem 1.5rem;
     }
 
-    /* ── Gift card detail — only new style added ── */
     .gc-info {
         font-size: 0.82rem;
     }
@@ -249,22 +248,27 @@
                             <tbody>
                                 @foreach($deposits as $deposit)
                                 @php
-                                $isCrypto = ($deposit->payment_method ?? 'crypto') === 'crypto';
-                                $isGiftCard = ($deposit->payment_method ?? '') === 'giftcard';
+                                    $isCrypto   = ($deposit->payment_method ?? 'crypto') === 'crypto';
+                                    $isGiftCard = ($deposit->payment_method ?? '') === 'giftcard';
 
-                                $gcBrandMap = [
-                                'amazon' => 'Amazon',
-                                'itunes' => 'iTunes',
-                                'google' => 'Google Play',
-                                'steam' => 'Steam',
-                                'walmart' => 'Walmart',
-                                'other' => $deposit->other_card_name
-                                ?? $deposit->card_type_label
-                                ?? 'Other',
-                                ];
-                                $gcBrand = $isGiftCard
-                                ? ($gcBrandMap[$deposit->card_type ?? ''] ?? ucfirst($deposit->card_type ?? 'Gift Card'))
-                                : null;
+                                    $gcBrandMap = [
+                                        'amazon'  => 'Amazon',
+                                        'itunes'  => 'iTunes',
+                                        'google'  => 'Google Play',
+                                        'steam'   => 'Steam',
+                                        'walmart' => 'Walmart',
+                                        'other'   => $deposit->other_card_name
+                                                        ?? $deposit->card_type_label
+                                                        ?? 'Other',
+                                    ];
+                                    $gcBrand = $isGiftCard
+                                        ? ($gcBrandMap[$deposit->card_type ?? ''] ?? ucfirst($deposit->card_type ?? 'Gift Card'))
+                                        : null;
+
+                                    // ── FIX: always resolve from uploads/proofs/basename ──
+                                    $proofUrl = $deposit->proof
+                                        ? asset('uploads/proofs/' . basename($deposit->proof))
+                                        : null;
                                 @endphp
                                 <tr class="border-t border-gray-100 hover:bg-gray-50 transition">
                                     <td class="p-3">{{ $loop->iteration }}</td>
@@ -294,9 +298,7 @@
                                         @endif
                                     </td>
 
-                                    {{-- Payment details —
-                                                 Crypto  → wallet name + truncated address
-                                                 GiftCard → brand name + redemption code --}}
+                                    {{-- Payment details --}}
                                     <td class="p-3">
                                         @if($isCrypto)
                                         <div class="wallet-info">
@@ -306,7 +308,6 @@
                                                 <span title="{{ $deposit->wallet->wallet_address }}">
                                                     {{ substr($deposit->wallet->wallet_address, 0, 15) }}...
                                                 </span>
-
                                                 <button onclick="copyText('{{ $deposit->wallet->wallet_address }}')"
                                                     class="text-xs px-2 py-1 bg-gray-100 rounded hover:bg-gray-200">
                                                     Copy
@@ -320,20 +321,17 @@
                                                 <iconify-icon icon="ph:gift-bold" style="color:#f59e0b;"></iconify-icon>
                                                 {{ $gcBrand }} Gift Card
                                             </div>
-                                          @if($deposit->card_code)
-   Code: 
-   <span class="gc-code">
-       {{ $deposit->card_code }}
-   </span>
-
-   <button
-       type="button"
-       onclick="copyGiftCardCode('{{ $deposit->card_code }}')"
-       class="ml-2 text-xs text-gray-500 hover:text-green-600"
-       title="Copy code">
-       <iconify-icon icon="ph:copy-bold"></iconify-icon>
-   </button>
-@endif
+                                            @if($deposit->card_code)
+                                            Code:
+                                            <span class="gc-code">{{ $deposit->card_code }}</span>
+                                            <button
+                                                type="button"
+                                                onclick="copyGiftCardCode('{{ $deposit->card_code }}')"
+                                                class="ml-2 text-xs text-gray-500 hover:text-green-600"
+                                                title="Copy code">
+                                                <iconify-icon icon="ph:copy-bold"></iconify-icon>
+                                            </button>
+                                            @endif
                                             @if($deposit->notes)
                                             <div class="text-gray-400 text-xs mt-1">{{ Str::limit($deposit->notes, 40) }}</div>
                                             @endif
@@ -341,22 +339,18 @@
                                         @endif
                                     </td>
 
-                                    {{-- Proof image (works for both: tx screenshot and card photo) --}}
-                                <td>
-    @if($deposit->proof)
-        @php
-            $proofUrl = asset('uploads/' . $deposit->proof);
-        @endphp
-
-        <img src="{{ $proofUrl }}"
-             alt="{{ $isGiftCard ? 'Gift Card' : 'Proof' }}"
-             class="proof-thumbnail"
-             onclick="openImageZoom('{{ $proofUrl }}')"
-             title="Click to zoom">
-    @else
-        <span class="text-gray-400 text-sm">No image</span>
-    @endif
-</td>
+                                    {{-- Proof image --}}
+                                    <td class="p-3">
+                                        @if($proofUrl)
+                                            <img src="{{ $proofUrl }}"
+                                                 alt="{{ $isGiftCard ? 'Gift Card' : 'Proof' }}"
+                                                 class="proof-thumbnail"
+                                                 onclick="openImageZoom('{{ $proofUrl }}')"
+                                                 title="Click to zoom">
+                                        @else
+                                            <span class="text-gray-400 text-sm">No image</span>
+                                        @endif
+                                    </td>
 
                                     <td class="p-3">{{ $deposit->user->country ?? 'N/A' }}</td>
 
@@ -428,7 +422,6 @@
      onclick="closeModal()">
 
     <div class="relative max-w-5xl w-full flex items-center justify-center">
-        
         <button onclick="closeModal()"
                 class="absolute -top-12 right-0 text-white hover:text-gray-300 text-2xl">
             <iconify-icon icon="ph:x-bold"></iconify-icon>
@@ -439,6 +432,7 @@
              onclick="event.stopPropagation();" />
     </div>
 </div>
+
 {{-- REJECT MODAL --}}
 <div id="rejectModal"
     class="fixed inset-0 bg-black bg-opacity-70 z-50 hidden items-center justify-center p-4">
@@ -479,7 +473,6 @@
 <script>
     function openRejectModal(action) {
         document.getElementById('rejectForm').action = action;
-
         const modal = document.getElementById('rejectModal');
         modal.classList.remove('hidden');
         modal.classList.add('flex');
@@ -491,41 +484,31 @@
         modal.classList.remove('flex');
     }
 
-    /* ✅ Image Zoom (FIXED + CLEAN) */
     function openImageZoom(src) {
         const modal = document.getElementById('imageModal');
-        const img = document.getElementById('modalImage');
-
+        const img   = document.getElementById('modalImage');
         img.src = src;
-
         modal.classList.remove('hidden');
         modal.classList.add('flex');
-
         document.body.style.overflow = 'hidden';
     }
 
     function closeModal() {
         const modal = document.getElementById('imageModal');
-        const img = document.getElementById('modalImage');
-
+        const img   = document.getElementById('modalImage');
         modal.classList.add('hidden');
         modal.classList.remove('flex');
-
         img.src = '';
         document.body.style.overflow = '';
     }
 
-    /* Prevent double-approve */
     function lockBtn(form) {
         const btn = form.querySelector('button[type="submit"]');
-
         if (btn.dataset.locked === 'true') return false;
-
         btn.dataset.locked = 'true';
         btn.disabled = true;
         btn.style.opacity = '0.6';
         btn.innerHTML = '...';
-
         return true;
     }
 
@@ -538,9 +521,7 @@
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
             },
-            body: JSON.stringify({
-                user_id: userId
-            })
+            body: JSON.stringify({ user_id: userId })
         })
         .then(r => r.json())
         .then(data => {
@@ -552,34 +533,26 @@
 
     function copyGiftCardCode(code) {
         navigator.clipboard.writeText(code)
-            .then(() => {
-                showCopyToast('Gift card code copied!');
-            })
-            .catch(() => {
-                alert('Copy failed');
-            });
+            .then(() => showCopyToast('Gift card code copied!'))
+            .catch(() => alert('Copy failed'));
+    }
+
+    function copyText(text) {
+        navigator.clipboard.writeText(text)
+            .then(() => showCopyToast('Copied!'))
+            .catch(() => alert('Copy failed'));
     }
 
     function showCopyToast(message) {
         const toast = document.createElement('div');
         toast.innerText = message;
-
-        toast.style.position = 'fixed';
-        toast.style.bottom = '20px';
-        toast.style.right = '20px';
-        toast.style.background = '#0C3A30';
-        toast.style.color = 'white';
-        toast.style.padding = '10px 14px';
-        toast.style.borderRadius = '8px';
-        toast.style.fontSize = '13px';
-        toast.style.zIndex = '9999';
-        toast.style.boxShadow = '0 4px 12px rgba(0,0,0,0.2)';
-
+        toast.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#0C3A30;color:white;padding:10px 14px;border-radius:8px;font-size:13px;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.2);';
         document.body.appendChild(toast);
-
-        setTimeout(() => {
-            toast.remove();
-        }, 2000);
+        setTimeout(() => toast.remove(), 2000);
     }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeModal();
+    });
 </script>
 @endsection

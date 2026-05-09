@@ -150,7 +150,7 @@
             <h5 class="text-2xl font-bold" style="color: #0C3A30;">Deposit History</h5>
             <p class="text-sm text-gray-500 mt-1">Track all your deposit transactions</p>
         </div>
-        <a href="{{ route('user.deposit') }}" 
+        <a href="{{ route('user.deposit') }}"
            class="px-6 py-3 bg-[#9EDD05] text-[#0C3A30] font-semibold rounded-lg hover:bg-[#8AC304] transition flex items-center gap-2">
             <iconify-icon icon="ph:plus-circle-fill"></iconify-icon>
             New Deposit
@@ -222,35 +222,29 @@
                                 default    => 'ph:clock-fill',
                             };
 
-                            /* ── Resolve payment method display ──────────────────
-                             * payment_method column values: 'crypto' | 'giftcard'
-                             * Old rows with no payment_method default to crypto.
-                             */
                             $method = $deposit->payment_method ?? 'crypto';
 
-                            /* Crypto: show coin icon + coin name */
-                          $walletIcons = [
-    'BTC'  => '₿',     // Bitcoin
-    'ETH'  => 'Ξ',     // Ethereum (official symbol)
-    'USDT' => '₮',     // Tether
-    'BNB'  => '🟡',     // Binance (closest visual match)
-    'SOL'  => '◎',     // Solana-style symbol
-    'XRP'  => '✕',     // XRP
-    'ADA'  => '₳',     // Cardano
-    'DOGE' => 'Ð',     // Dogecoin
-    'LTC'  => 'Ł',     // Litecoin
-    'TRX'  => '🔺',     // Tron
-    'MATIC'=> '⬣',     // Polygon
-    'DOT'  => '⚫',     // Polkadot
-    'AVAX' => '🔺',     // Avalanche
-    'LINK' => '🔗',     // Chainlink
-    'UNI'  => '🦄',     // Uniswap
-    'ATOM' => '⚛️',     // Cosmos
-    'XLM'  => '✨',     // Stellar
-    'DEFAULT' => '🪙',  // fallback (much better than 🔗)
-];
+                            $walletIcons = [
+                                'BTC'     => '₿',
+                                'ETH'     => 'Ξ',
+                                'USDT'    => '₮',
+                                'BNB'     => '🟡',
+                                'SOL'     => '◎',
+                                'XRP'     => '✕',
+                                'ADA'     => '₳',
+                                'DOGE'    => 'Ð',
+                                'LTC'     => 'Ł',
+                                'TRX'     => '🔺',
+                                'MATIC'   => '⬣',
+                                'DOT'     => '⚫',
+                                'AVAX'    => '🔺',
+                                'LINK'    => '🔗',
+                                'UNI'     => '🦄',
+                                'ATOM'    => '⚛️',
+                                'XLM'     => '✨',
+                                'DEFAULT' => '🪙',
+                            ];
 
-                            /* Gift card: resolve the brand name to display */
                             $gcBrandMap = [
                                 'amazon'  => 'Amazon',
                                 'itunes'  => 'iTunes',
@@ -264,6 +258,11 @@
 
                             $gcBrand = $gcBrandMap[$deposit->card_type ?? '']
                                        ?? ucfirst($deposit->card_type ?? 'Gift Card');
+
+                            // ── FIX: proof URL — works for old and new records ──
+                            $proofUrl = $deposit->proof
+                                ? asset('uploads/proofs/' . basename($deposit->proof))
+                                : null;
                         @endphp
 
                         <div class="deposit-card" data-status="{{ $status }}">
@@ -297,7 +296,6 @@
                                 </div>
                                 @endif
 
-                                <!-- Method row — handles both crypto and gift card -->
                                 <div class="flex justify-between items-center">
                                     <span class="text-gray-500">Method:</span>
                                     <span class="font-medium text-gray-800 flex items-center gap-1">
@@ -321,14 +319,13 @@
                                     </span>
                                 </div>
 
-                                {{-- For gift cards: show the redemption code (masked) --}}
                                 @if($method === 'giftcard' && $deposit->card_code)
                                 <div class="flex justify-between items-center">
                                     <span class="text-gray-500">Card Code:</span>
-                                 <span class="font-mono text-xs text-gray-600"
-      style="background:#f3f4f6;padding:2px 8px;border-radius:6px;">
-    {{ $deposit->card_code }}
-</span>
+                                    <span class="font-mono text-xs text-gray-600"
+                                          style="background:#f3f4f6;padding:2px 8px;border-radius:6px;">
+                                        {{ $deposit->card_code }}
+                                    </span>
                                 </div>
                                 @endif
 
@@ -358,7 +355,7 @@
                                 <p class="text-xs text-gray-400 mb-1">Transaction Hash</p>
                                 <div class="flex items-center gap-2">
                                     <span class="text-xs font-mono text-gray-600 truncate">{{ $deposit->tx_hash }}</span>
-                                    <button onclick="copyToClipboard('{{ $deposit->tx_hash }}', this)" 
+                                    <button onclick="copyToClipboard('{{ $deposit->tx_hash }}', this)"
                                             class="text-[#9EDD05] hover:text-[#8AC304]">
                                         <iconify-icon icon="ph:copy-simple"></iconify-icon>
                                     </button>
@@ -379,38 +376,18 @@
                             </div>
                             @endif
 
-                          @if($deposit->proof)
-
-    @php
-        $proofPath = str_replace('\\', '/', $deposit->proof);
-
-        $proofPath = preg_replace('/^https?:\/\/[^\/]+\//', '', $proofPath);
-
-        $proofPath = ltrim($proofPath, '/');
-
-        if (!str_starts_with($proofPath, 'uploads/')) {
-            $proofPath = 'uploads/' . basename($proofPath);
-        }
-
-        $proofUrl = asset($proofPath) . '?v=' . time();
-    @endphp
-
-    <div class="mt-4 pt-3 border-t border-gray-100">
-
-        <button
-            onclick="viewProof('{{ $proofUrl }}')"
-            class="text-xs text-[#9EDD05] hover:text-[#8AC304] font-semibold flex items-center gap-1"
-        >
-
-            <iconify-icon icon="ph:eye"></iconify-icon>
-
-            {{ $method === 'giftcard' ? 'View Gift Card' : 'View Proof' }}
-
-        </button>
-
-    </div>
-
-@endif
+                            <!-- Proof / Gift Card Image -->
+                            @if($proofUrl)
+                            <div class="mt-4 pt-3 border-t border-gray-100">
+                                <button
+                                    onclick="viewProof('{{ $proofUrl }}')"
+                                    class="text-xs text-[#9EDD05] hover:text-[#8AC304] font-semibold flex items-center gap-1"
+                                >
+                                    <iconify-icon icon="ph:eye"></iconify-icon>
+                                    {{ $method === 'giftcard' ? 'View Gift Card' : 'View Proof' }}
+                                </button>
+                            </div>
+                            @endif
                         </div>
                         @empty
                         <div class="col-span-full">
@@ -420,7 +397,7 @@
                                 </div>
                                 <h3 class="text-lg font-semibold text-gray-800 mb-2">No Deposits Yet</h3>
                                 <p class="text-gray-500 mb-6">Start your trading journey by making your first deposit</p>
-                                <a href="{{ route('user.deposit') }}" 
+                                <a href="{{ route('user.deposit') }}"
                                    class="inline-flex items-center gap-2 px-6 py-3 bg-[#9EDD05] text-[#0C3A30] font-semibold rounded-lg hover:bg-[#8AC304] transition">
                                     <iconify-icon icon="ph:plus-circle-fill"></iconify-icon>
                                     Make First Deposit
@@ -454,7 +431,7 @@
             <img id="proofImage" src="" alt="Deposit Proof" class="max-w-full max-h-[60vh] object-contain rounded-lg">
         </div>
         <div class="text-right mt-4">
-            <button onclick="closeProofModal()" 
+            <button onclick="closeProofModal()"
                     class="px-4 py-2 bg-[#9EDD05] text-[#0C3A30] rounded-lg hover:bg-[#8AC304] transition">
                 Close
             </button>

@@ -10,12 +10,8 @@ $cardExists = auth()->check()
 
 /*
 |--------------------------------------------------------------------------
-| PROFILE IMAGE FIX
-|--------------------------------------------------------------------------
-| Handles:
-| image.png
-| uploads/profile_pics/image.png
-| full URLs
+| PROFILE IMAGE — resolves filename stored in DB to a public URL
+| Handles: "image.png", "uploads/profile_pics/image.png", full URLs
 |--------------------------------------------------------------------------
 */
 
@@ -29,26 +25,12 @@ $initials = collect(explode(' ', $user->name))
 $profileUrl = null;
 
 if ($profilePic) {
-
-    // Already full URL
     if (filter_var($profilePic, FILTER_VALIDATE_URL)) {
-
+        // Already a full URL (legacy records)
         $profileUrl = $profilePic;
-
-    }
-
-    // Stored with uploads/profile_pics/
-    elseif (str_contains($profilePic, 'uploads/profile_pics/')) {
-
-        $profileUrl = asset($profilePic);
-
-    }
-
-    // Stored as filename only
-    else {
-
+    } else {
+        // Strip any path prefix — always just serve from uploads/profile_pics/
         $profileUrl = asset('uploads/profile_pics/' . basename($profilePic));
-
     }
 }
 

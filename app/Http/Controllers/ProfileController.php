@@ -32,63 +32,56 @@ class ProfileController extends Controller
         $user = auth()->user();
 
         $request->validate([
-            'name' => 'required|string|max:255',
-            'phone' => 'nullable|string|max:20',
-            'country' => 'nullable|string|max:100',
-            'address' => 'nullable|string|max:255',
+            'name'            => 'required|string|max:255',
+            'phone'           => 'nullable|string|max:20',
+            'country'         => 'nullable|string|max:100',
+            'address'         => 'nullable|string|max:255',
             'bitcoin_address' => 'nullable|string|max:255',
-            'etherium_address' => 'nullable|string|max:255',
-            'usdt_address' => 'nullable|string|max:255',
-            // Bank information fields
-            'recipient_name' => 'nullable|string|max:255',
-            'bank_name' => 'nullable|string|max:255',
-            'account_number' => 'nullable|string|max:255',
-            'iban' => 'nullable|string|max:255',
-            'swift_bic' => 'nullable|string|max:255',
-            'bank_address' => 'nullable|string|max:500',
+            'etherium_address'=> 'nullable|string|max:255',
+            'usdt_address'    => 'nullable|string|max:255',
+            'recipient_name'  => 'nullable|string|max:255',
+            'bank_name'       => 'nullable|string|max:255',
+            'account_number'  => 'nullable|string|max:255',
+            'iban'            => 'nullable|string|max:255',
+            'swift_bic'       => 'nullable|string|max:255',
+            'bank_address'    => 'nullable|string|max:500',
         ]);
 
         // Update User model
         $user->update([
-            'name' => $request->name,
-            'phone' => $request->phone,
+            'name'    => $request->name,
+            'phone'   => $request->phone,
             'country' => $request->country,
         ]);
 
         // Build profile data array
         $profileData = [
-            'address' => $request->address,
-            'bitcoin_address' => $request->bitcoin_address,
+            'address'          => $request->address,
+            'bitcoin_address'  => $request->bitcoin_address,
             'etherium_address' => $request->etherium_address,
-            'usdt_address' => $request->usdt_address,
-            // Bank information
-            'recipient_name' => $request->recipient_name,
-            'bank_name' => $request->bank_name,
-            'account_number' => $request->account_number,
-            'iban' => $request->iban,
-            'swift_bic' => $request->swift_bic,
-            'bank_address' => $request->bank_address,
+            'usdt_address'     => $request->usdt_address,
+            'recipient_name'   => $request->recipient_name,
+            'bank_name'        => $request->bank_name,
+            'account_number'   => $request->account_number,
+            'iban'             => $request->iban,
+            'swift_bic'        => $request->swift_bic,
+            'bank_address'     => $request->bank_address,
         ];
 
-     
-        // Handle profile picture
-if ($request->hasFile('profile_pic')) {
+        // Handle profile picture — write directly to public/uploads/profile_pics/
+        if ($request->hasFile('profile_pic')) {
+            $image           = $request->file('profile_pic');
+            $filename        = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+            $destinationPath = public_path('uploads/profile_pics');
 
-    $image = $request->file('profile_pic');
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0775, true);
+            }
 
-    $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+            $image->move($destinationPath, $filename);
+            $profileData['profile_pic'] = $filename;
+        }
 
-    $destinationPath = public_path('uploads/profile_pics');
-
-    // Create folder if missing
-    if (!file_exists($destinationPath)) {
-        mkdir($destinationPath, 0775, true);
-    }
-
-    $image->move($destinationPath, $filename);
-
-    $profileData['profile_pic'] = $filename;
-}
         // Update or create Profile
         $user->profile()->updateOrCreate([], $profileData);
 
@@ -126,10 +119,3 @@ if ($request->hasFile('profile_pic')) {
         }
     }
 }
-
-
-
-
-
-
-

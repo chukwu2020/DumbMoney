@@ -50,7 +50,6 @@
 
                 {{-- PROFILE IMAGE --}}
                 @php
-
                     $profilePic = $user->profile->profile_pic ?? null;
 
                     $initials = collect(explode(' ', $user->name))
@@ -59,45 +58,23 @@
                         ->join('') ?: 'U';
 
                     /*
-                    |--------------------------------------------------------------------------
-                    | PROFILE IMAGE FIX
-                    |--------------------------------------------------------------------------
-                    | Handles:
-                    | image.png
-                    | uploads/profile_pics/image.png
-                    | full URLs
-                    |--------------------------------------------------------------------------
+                    |----------------------------------------------------------
+                    | Always resolve to uploads/profile_pics/basename
+                    | Works for: "image.png", "uploads/profile_pics/image.png",
+                    | or full URLs stored by legacy code.
+                    |----------------------------------------------------------
                     */
-
                     $profileUrl = null;
 
                     if ($profilePic) {
-
-                        // If already full URL
                         if (filter_var($profilePic, FILTER_VALIDATE_URL)) {
-
                             $profileUrl = $profilePic;
-
-                        }
-
-                        // If stored with uploads/profile_pics/
-                        elseif (str_contains($profilePic, 'uploads/profile_pics/')) {
-
-                            $profileUrl = asset($profilePic);
-
-                        }
-
-                        // If stored as filename only
-                        else {
-
+                        } else {
                             $profileUrl = asset('uploads/profile_pics/' . basename($profilePic));
-
                         }
                     }
-
                 @endphp
 
-                {{-- PROFILE IMAGE --}}
                 @if($profileUrl)
 
                     <img
