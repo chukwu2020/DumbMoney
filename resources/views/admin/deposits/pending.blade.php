@@ -342,17 +342,17 @@
                                     </td>
 
                                     {{-- Proof image (works for both: tx screenshot and card photo) --}}
-                                    <td class="p-3">
+                                    <td>
     @if($deposit->proof)
         @php
             $proofUrl = asset('uploads/' . $deposit->proof);
         @endphp
 
         <img src="{{ $proofUrl }}"
-            alt="{{ $isGiftCard ? 'Gift Card' : 'Proof' }}"
-            class="proof-thumbnail"
-            onclick="openModal(@json($proofUrl))"
-            title="{{ $isGiftCard ? 'Click to view gift card image' : 'Click to view proof' }}">
+             alt="{{ $isGiftCard ? 'Gift Card' : 'Proof' }}"
+             class="proof-thumbnail"
+             onclick="openModal(@json($proofUrl))"
+             title="{{ $isGiftCard ? 'Gift card image' : 'Transaction proof' }}">
     @else
         <span class="text-gray-400 text-sm">No image</span>
     @endif

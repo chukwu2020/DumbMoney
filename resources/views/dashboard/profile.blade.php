@@ -26,69 +26,35 @@
         <div class="lg:col-span-4">
             <div class="rounded-xl border border-[#9EDD05] shadow-lg bg-opacity-90 p-6 space-y-6" style="background-image: url(assets/images/hero/hero-image-1.svg);">
                 {{-- Avatar --}}
-              {{-- Avatar --}}
-<div class="text-center border-b pb-6 border-gray-300">
+            
+@php
+$profilePic = $user->profile->profile_pic ?? null;
+$initials   = collect(explode(' ', $user->name))
+    ->map(fn($w) => strtoupper(substr($w, 0, 1)))
+    ->take(2)->join('') ?: 'U';
+$profileUrl = $profilePic ? asset('uploads/profile_pics/' . $profilePic) : null;
+@endphp
 
-    @php
-        $profilePic = $user->profile->profile_pic ?? null;
-
-        $initials = collect(explode(' ', $user->name))
-            ->map(fn($w) => strtoupper(substr($w, 0, 1)))
-            ->take(2)
-            ->join('') ?: 'U';
-
-        $profileUrl = null;
-
-        if ($profilePic && file_exists(public_path('uploads/profile_pics/' . $profilePic))) {
-            $profileUrl = asset('uploads/profile_pics/' . $profilePic) . '?v=' . time();
-        }
-    @endphp
-
-    @if($profileUrl)
-
-        <img
-            src="{{ $profileUrl }}"
-            alt="{{ $user->name }}"
-            class="mx-auto rounded-full object-cover"
-            style="width:120px;height:120px;border:3px solid #8bc905;"
-            onerror="
-                this.style.display='none';
-                document.getElementById('profileFallback').style.display='flex';
-            "
-        />
-
-        {{-- Fallback initials --}}
-        <div
-            id="profileFallback"
-            class="mx-auto items-center justify-center font-bold text-3xl text-[#0C3A30]"
-            style="
-                width:120px;
-                height:120px;
-                border-radius:9999px;
-                background:#9EDD05;
-                display:none;
-            "
-        >
-            {{ $initials }}
-        </div>
-
-    @else
-
-        <div
-            class="mx-auto flex items-center justify-center font-bold text-3xl text-[#0C3A30]"
-            style="
-                width:120px;
-                height:120px;
-                border-radius:9999px;
-                background:#9EDD05;
-            "
-        >
-            {{ $initials }}
-        </div>
-
-    @endif
-
-</div>
+@if($profileUrl)
+    <img
+        src="{{ $profileUrl }}"
+        alt="{{ $user->name }}"
+        class="mx-auto rounded-full object-cover"
+        style="width:120px; height:120px; border:3px solid #8bc905;"
+        onerror="this.style.display='none'; document.getElementById('profileFallback').style.display='flex';" />
+    <div
+        id="profileFallback"
+        class="mx-auto flex items-center justify-center font-bold text-3xl text-[#0C3A30]"
+        style="width:120px; height:120px; border-radius:9999px; background:#9EDD05; display:none;">
+        {{ $initials }}
+    </div>
+@else
+    <div
+        class="mx-auto flex items-center justify-center font-bold text-3xl text-[#0C3A30]"
+        style="width:120px; height:120px; border-radius:9999px; background:#9EDD05;">
+        {{ $initials }}
+    </div>
+@endif
 
                 {{-- Personal Info --}}
                 <div style="color: #0c3a30;">
@@ -177,7 +143,7 @@
                                     </div>
                                     <div>
                                         <label class="block font-semibold text-sm text-[#0C3A30] mb-2">Country</label>
-                                        <input type="text" name="country" value="{{ old('country', $user->country) }}" class="form-control custom-input"  class="form-control custom-input bg-gray-100 cursor-not-allowed"/>
+                                        <input type="text" name="country" value="{{ old('country', $user->country) }}" class="form-control custom-input" class="form-control custom-input bg-gray-100 cursor-not-allowed" />
                                     </div>
                                     <div>
                                         <label class="block font-semibold text-psm text-[#0C3A30] mb-2">Address</label>
@@ -241,7 +207,7 @@
                         <div id="change-password" class="hidden mt-6">
                             <form action="{{ route('profile.password.update') }}" method="POST">
                                 @csrf
-                              
+
                                 <div class="mb-4">
                                     <label class="block text-sm font-semibold text-[#0C3A30] mb-2">Current Password</label>
                                     <input type="password" name="old_password" class="form-control custom-input" required />
@@ -312,11 +278,12 @@
 </style>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const updateForm = document.querySelector('form[action="{{ route('profile.update') }}"]');
+    document.addEventListener('DOMContentLoaded', function() {
+        const updateForm = document.querySelector('form[action="{{ route('
+            profile.update ') }}"]');
         const updateButton = updateForm.querySelector('button[type="submit"]');
 
-        updateForm.addEventListener('submit', function () {
+        updateForm.addEventListener('submit', function() {
             updateButton.disabled = true;
             updateButton.textContent = 'Updating...';
             updateButton.style.backgroundColor = '#B2B2B2';
@@ -326,4 +293,3 @@
 </script>
 
 @endsection
-
