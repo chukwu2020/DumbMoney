@@ -8,7 +8,6 @@
         --brand-dark: #0C3A30;
     }
 
-    /* Sticky header fix - prevents scrolling with table */
     .sticky-header {
         position: sticky;
         top: 0;
@@ -127,8 +126,6 @@
         gap: 2px;
     }
 
-
-
     .user-meta strong {
         overflow: hidden;
         text-overflow: ellipsis;
@@ -157,35 +154,12 @@
         white-space: nowrap;
     }
 
-    .badge-active {
-        background: #dcfce7;
-        color: #15803d;
-    }
-
-    .badge-inactive {
-        background: #fee2e2;
-        color: #dc2626;
-    }
-
-    .badge-pending {
-        background: #fef9c3;
-        color: #854d0e;
-    }
-
-    .badge-blue {
-        background: #dbeafe;
-        color: #1e40af;
-    }
-
-    .badge-gray {
-        background: #f3f4f6;
-        color: #374151;
-    }
-
-    .badge-purple {
-        background: #f3e8ff;
-        color: #6b21a8;
-    }
+    .badge-active   { background: #dcfce7; color: #15803d; }
+    .badge-inactive { background: #fee2e2; color: #dc2626; }
+    .badge-pending  { background: #fef9c3; color: #854d0e; }
+    .badge-blue     { background: #dbeafe; color: #1e40af; }
+    .badge-gray     { background: #f3f4f6; color: #374151; }
+    .badge-purple   { background: #f3e8ff; color: #6b21a8; }
 
     .money {
         font-weight: 700;
@@ -193,17 +167,9 @@
         font-size: 0.8rem;
     }
 
-    .money.green {
-        color: #16a34a;
-    }
-
-    .money.blue {
-        color: #2563eb;
-    }
-
-    .money.orange {
-        color: #ea580c;
-    }
+    .money.green  { color: #16a34a; }
+    .money.blue   { color: #2563eb; }
+    .money.orange { color: #ea580c; }
 
     .tag-list {
         display: flex;
@@ -236,9 +202,7 @@
         transition: background 0.2s;
     }
 
-    .code-cell:hover {
-        background: #dcfce7;
-    }
+    .code-cell:hover { background: #dcfce7; }
 
     .action-group {
         display: flex;
@@ -260,96 +224,16 @@
         text-decoration: none;
     }
 
-    .act-btn:hover {
-        transform: scale(1.12);
-    }
-
-    .act-btn.view {
-        background: #dbeafe;
-        color: #2563eb;
-    }
-
-    .act-btn.edit {
-        background: #dcfce7;
-        color: #16a34a;
-    }
-
-    .act-btn.delete {
-        background: #fee2e2;
-        color: #dc2626;
-    }
-
-    .act-btn.lock {
-        background: #f3f4f6;
-        color: #6b7280;
-    }
-
-    .act-btn.locked {
-        background: #fef9c3;
-        color: #ca8a04;
-    }
-
-    .act-btn.gen {
-        background: #ede9fe;
-        color: #6b21a8;
-    }
-
-    /* Search bar styling */
-    .search-bar-container {
-        background: white;
-        border-radius: 12px;
-        border: 1px solid #e5e7eb;
-        padding: 1rem 1.5rem;
-        margin-bottom: 1.5rem;
-        display: flex;
-        justify-content: flex-end;
-    }
-
-    .search-input-wrapper {
-        position: relative;
-        width: 260px;
-    }
-
-    .search-input-wrapper input {
-        width: 100%;
-        padding: 0.5rem 2rem 0.5rem 1rem;
-        border: 1px solid #e5e7eb;
-        border-radius: 0.5rem;
-        font-size: 0.875rem;
-        background: white;
-        transition: all 0.2s;
-    }
-
-    .search-input-wrapper input:focus {
-        outline: none;
-        border-color: var(--brand-green);
-        box-shadow: 0 0 0 2px rgba(158, 221, 5, 0.2);
-    }
-
-    .search-input-wrapper iconify-icon {
-        position: absolute;
-        right: 0.75rem;
-        top: 50%;
-        transform: translateY(-50%);
-        color: #9ca3af;
-        pointer-events: none;
-        font-size: 1rem;
-    }
-
-    /* Card header styling */
-    .card-header-custom {
-        border-bottom: 1px solid #e5e7eb;
-        padding: 1rem 1.5rem;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 1rem;
-        background: white;
-    }
+    .act-btn:hover  { transform: scale(1.12); }
+    .act-btn.view   { background: #dbeafe; color: #2563eb; }
+    .act-btn.edit   { background: #dcfce7; color: #16a34a; }
+    .act-btn.delete { background: #fee2e2; color: #dc2626; }
+    .act-btn.lock   { background: #f3f4f6; color: #6b7280; }
+    .act-btn.locked { background: #fef9c3; color: #ca8a04; }
+    .act-btn.gen    { background: #ede9fe; color: #6b21a8; }
 </style>
 
-<!-- Sticky Header - Won't scroll with table -->
+<!-- Sticky Header -->
 <div class="sticky-header">
     <div class="flex items-center justify-between gap-2 mb-4">
         <h6 class="font-semibold mb-0" style="color:#0C3A30;">Users List</h6>
@@ -380,114 +264,96 @@
             onkeyup="filterUsers()">
     </div>
 
-    <!-- Main Card with Header -->
     <div class="grid grid-cols-12">
         <div class="col-span-12">
             <div class="card h-full p-0 rounded-xl border-0 overflow-hidden">
-                <!-- Table Body -->
                 <div class="card-body p-0">
                     <div class="table-scroll">
                         <table id="usersTable">
                             <thead>
                                 <tr>
-                                    <!-- Identity -->
                                     <th>User</th>
-                                    <th>email</th>
+                                    <th>Email</th>
                                     <th>Username</th>
                                     <th>Status</th>
                                     <th>Joined</th>
                                     <th>Join Source</th>
-
-                                    <!-- Contact -->
                                     <th>Phone</th>
                                     <th>Country</th>
-
-                                    <!-- Financial -->
                                     <th>Balance</th>
                                     <th>Total Invested</th>
                                     <th>Active Trades</th>
                                     <th>Invest Amount</th>
                                     <th>Annual Income</th>
-
-                                    <!-- Trading Profile -->
                                     <th>Experience</th>
                                     <th>Trade Frequency</th>
                                     <th>Txn Volume</th>
                                     <th>Account Type</th>
                                     <th>Investment Goals</th>
                                     <th>Asset Classes</th>
-
-                                    <!-- Copy Trading -->
                                     <th>Copy Preference</th>
                                     <th>Copy Admin</th>
                                     <th>Copy Server</th>
-
-                                    <!-- Deposit Sources -->
                                     <th>Initial Deposit Src</th>
                                     <th>Ongoing Deposit Src</th>
                                     <th>Financial Alt.</th>
-
-                                    <!-- Membership -->
                                     <th>Membership Code</th>
                                     <th>Membership Status</th>
                                     <th>Code Lock</th>
-
-                                    <!-- Actions -->
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse($users as $user)
                                 @php
-                                $activeTrades = $user->investments->where('status','active')->count();
-                                $profilePic = $user->profile->profile_pic ?? null;
-                                $initials = collect(explode(' ', $user->name))
-                                ->map(fn($w) => strtoupper(substr($w,0,1)))
-                                ->take(2)->join('') ?: 'U';
-                                $tradingInfo = $user->tradingInfo;
+                                    $activeTrades = $user->investments->where('status', 'active')->count();
+                                    $profilePic   = $user->profile->profile_pic ?? null;
+                                    $initials     = collect(explode(' ', $user->name))
+                                        ->map(fn($w) => strtoupper(substr($w, 0, 1)))
+                                        ->take(2)->join('') ?: 'U';
+                                    $tradingInfo  = $user->tradingInfo;
 
-                                $investmentGoals = [];
-                                $assetClasses = [];
-                                if ($tradingInfo) {
-                                $investmentGoals = is_array($tradingInfo->investment_goals)
-                                ? $tradingInfo->investment_goals
-                                : json_decode($tradingInfo->investment_goals ?? '[]', true) ?? [];
-                                $assetClasses = is_array($tradingInfo->asset_classes)
-                                ? $tradingInfo->asset_classes
-                                : json_decode($tradingInfo->asset_classes ?? '[]', true) ?? [];
-                                }
+                                    $investmentGoals = [];
+                                    $assetClasses    = [];
+                                    if ($tradingInfo) {
+                                        $investmentGoals = is_array($tradingInfo->investment_goals)
+                                            ? $tradingInfo->investment_goals
+                                            : json_decode($tradingInfo->investment_goals ?? '[]', true) ?? [];
+                                        $assetClasses = is_array($tradingInfo->asset_classes)
+                                            ? $tradingInfo->asset_classes
+                                            : json_decode($tradingInfo->asset_classes ?? '[]', true) ?? [];
+                                    }
+
+                                    // ✅ THE FIX: only set URL if file actually exists on disk
+                                    $profileUrl = null;
+                                    if ($profilePic && file_exists(public_path('uploads/profile_pics/' . $profilePic))) {
+                                        $profileUrl = asset('uploads/profile_pics/' . $profilePic);
+                                    }
                                 @endphp
 
                                 <tr class="user-row"
                                     data-name="{{ strtolower($user->name) }}"
                                     data-email="{{ strtolower($user->email) }}">
+
                                     {{-- User (sticky) --}}
                                     <td>
                                         <div class="user-cell">
-
-                                        @php
-$profileUrl = $profilePic ? asset('uploads/profile_pics/' . $profilePic) : null;
-@endphp
-
-<div class="avatar">
-    @if($profileUrl)
-        <img
-            src="{{ $profileUrl }}"
-            alt="{{ $user->name }}"
-            style="width:100%; height:100%; object-fit:cover; border-radius:50%;"
-            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-        <div style="display:none; width:100%; height:100%; align-items:center; justify-content:center; font-weight:700; font-size:0.8rem; color:#0C3A30; background:#9EDD05; border-radius:50%;">
-            {{ $initials }}
-        </div>
-    @else
-        <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.8rem; color:#0C3A30; background:#9EDD05; border-radius:50%;">
-            {{ $initials }}
-        </div>
-    @endif
-</div>
-
-
-
+                                            <div class="avatar">
+                                                @if($profileUrl)
+                                                    <img
+                                                        src="{{ $profileUrl }}"
+                                                        alt="{{ $user->name }}"
+                                                        style="width:100%; height:100%; object-fit:cover; border-radius:50%;"
+                                                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                                                    <div style="display:none; width:100%; height:100%; align-items:center; justify-content:center; font-weight:700; font-size:0.8rem; color:#0C3A30; background:#9EDD05; border-radius:50%;">
+                                                        {{ $initials }}
+                                                    </div>
+                                                @else
+                                                    <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.8rem; color:#0C3A30; background:#9EDD05; border-radius:50%;">
+                                                        {{ $initials }}
+                                                    </div>
+                                                @endif
+                                            </div>
                                             <div class="user-meta">
                                                 <strong>{{ $user->name }}</strong>
                                             </div>
@@ -504,13 +370,13 @@ $profileUrl = $profilePic ? asset('uploads/profile_pics/' . $profilePic) : null;
                                     <td><span class="badge badge-gray">{{ $user->username ?? '—' }}</span></td>
                                     <td>
                                         @if($user->active)
-                                        <span class="badge badge-active">✓ Active</span>
+                                            <span class="badge badge-active">✓ Active</span>
                                         @else
-                                        <span class="badge badge-inactive">✗ Inactive</span>
+                                            <span class="badge badge-inactive">✗ Inactive</span>
                                         @endif
                                     </td>
                                     <td>{{ $user->created_at->format('d M Y') }}</td>
-                                    <td>{{ $user->join_source ? ucfirst(str_replace('_',' ',$user->join_source)) : '—' }}</td>
+                                    <td>{{ $user->join_source ? ucfirst(str_replace('_', ' ', $user->join_source)) : '—' }}</td>
 
                                     {{-- Contact --}}
                                     <td>{{ $user->phone ?? '—' }}</td>
@@ -526,9 +392,9 @@ $profileUrl = $profilePic ? asset('uploads/profile_pics/' . $profilePic) : null;
                                     </td>
                                     <td>
                                         @if($tradingInfo && $tradingInfo->investment_amount)
-                                        <span class="money orange">${{ number_format($tradingInfo->investment_amount, 2) }}</span>
+                                            <span class="money orange">${{ number_format($tradingInfo->investment_amount, 2) }}</span>
                                         @else
-                                        <span class="text-gray-400">—</span>
+                                            <span class="text-gray-400">—</span>
                                         @endif
                                     </td>
                                     <td>{{ $tradingInfo->annual_income ?? '—' }}</td>
@@ -536,59 +402,59 @@ $profileUrl = $profilePic ? asset('uploads/profile_pics/' . $profilePic) : null;
                                     {{-- Trading Profile --}}
                                     <td>
                                         @if($tradingInfo)
-                                        @php
-                                        $exp = $tradingInfo->stock_experience;
-                                        $expLabel = $exp === 'yes' ? 'Experienced' : ($exp === 'no' ? 'Learning' : 'Novice');
-                                        $expClass = $exp === 'yes' ? 'badge-active' : ($exp === 'no' ? 'badge-pending' : 'badge-gray');
-                                        @endphp
-                                        <span class="badge {{ $expClass }}">{{ $expLabel }}</span>
+                                            @php
+                                                $exp      = $tradingInfo->stock_experience;
+                                                $expLabel = $exp === 'yes' ? 'Experienced' : ($exp === 'no' ? 'Learning' : 'Novice');
+                                                $expClass = $exp === 'yes' ? 'badge-active' : ($exp === 'no' ? 'badge-pending' : 'badge-gray');
+                                            @endphp
+                                            <span class="badge {{ $expClass }}">{{ $expLabel }}</span>
                                         @else
-                                        <span class="text-gray-400">—</span>
+                                            <span class="text-gray-400">—</span>
                                         @endif
                                     </td>
                                     <td>{{ $tradingInfo->trading_frequency ?? '—' }}</td>
                                     <td>
                                         {{ $tradingInfo && $tradingInfo->transaction_volume
-                                            ? ucfirst(str_replace(['_','k'],[ ' ',',000'], $tradingInfo->transaction_volume))
+                                            ? ucfirst(str_replace(['_', 'k'], [' ', ',000'], $tradingInfo->transaction_volume))
                                             : '—' }}
                                     </td>
                                     <td>
                                         @if($tradingInfo && $tradingInfo->account_type)
-                                        <span class="badge badge-blue">{{ ucfirst($tradingInfo->account_type) }}</span>
+                                            <span class="badge badge-blue">{{ ucfirst($tradingInfo->account_type) }}</span>
                                         @else
-                                        <span class="text-gray-400">—</span>
+                                            <span class="text-gray-400">—</span>
                                         @endif
                                     </td>
                                     <td>
                                         @if(count($investmentGoals))
-                                        <div class="tag-list">
-                                            @foreach($investmentGoals as $g)
-                                            <span class="mini-tag">{{ ucfirst(str_replace('_',' ',$g)) }}</span>
-                                            @endforeach
-                                        </div>
+                                            <div class="tag-list">
+                                                @foreach($investmentGoals as $g)
+                                                    <span class="mini-tag">{{ ucfirst(str_replace('_', ' ', $g)) }}</span>
+                                                @endforeach
+                                            </div>
                                         @else
-                                        <span class="text-gray-400">—</span>
+                                            <span class="text-gray-400">—</span>
                                         @endif
                                     </td>
                                     <td>
                                         @if(count($assetClasses))
-                                        <div class="tag-list">
-                                            @foreach($assetClasses as $a)
-                                            <span class="mini-tag">{{ ucfirst($a) }}</span>
-                                            @endforeach
-                                        </div>
+                                            <div class="tag-list">
+                                                @foreach($assetClasses as $a)
+                                                    <span class="mini-tag">{{ ucfirst($a) }}</span>
+                                                @endforeach
+                                            </div>
                                         @else
-                                        <span class="text-gray-400">—</span>
+                                            <span class="text-gray-400">—</span>
                                         @endif
                                     </td>
 
                                     {{-- Copy Trading --}}
                                     <td>
                                         @php
-                                        $pref = $user->copy_preference;
-                                        $prefLabel = $pref === 'platform_admin' ? 'Platform Admin'
-                                        : ($pref === 'specific_admin' ? 'Specific Admin' : 'Not Set');
-                                        $prefClass = $pref ? 'badge-purple' : 'badge-gray';
+                                            $pref      = $user->copy_preference;
+                                            $prefLabel = $pref === 'platform_admin' ? 'Platform Admin'
+                                                : ($pref === 'specific_admin' ? 'Specific Admin' : 'Not Set');
+                                            $prefClass = $pref ? 'badge-purple' : 'badge-gray';
                                         @endphp
                                         <span class="badge {{ $prefClass }}">{{ $prefLabel }}</span>
                                     </td>
@@ -596,47 +462,49 @@ $profileUrl = $profilePic ? asset('uploads/profile_pics/' . $profilePic) : null;
                                     <td>{{ $user->copy_server_name ?? '—' }}</td>
 
                                     {{-- Deposit Sources --}}
-                                    <td>{{ $tradingInfo && $tradingInfo->deposit_source ? ucfirst(str_replace('_',' ',$tradingInfo->deposit_source)) : '—' }}</td>
-                                    <td>{{ $tradingInfo && $tradingInfo->ongoing_deposit_source ? ucfirst(str_replace('_',' ',$tradingInfo->ongoing_deposit_source)) : '—' }}</td>
+                                    <td>{{ $tradingInfo && $tradingInfo->deposit_source ? ucfirst(str_replace('_', ' ', $tradingInfo->deposit_source)) : '—' }}</td>
+                                    <td>{{ $tradingInfo && $tradingInfo->ongoing_deposit_source ? ucfirst(str_replace('_', ' ', $tradingInfo->ongoing_deposit_source)) : '—' }}</td>
                                     <td>{{ $tradingInfo->financial_alternative ?? '—' }}</td>
 
                                     {{-- Membership --}}
                                     <td>
                                         @if($user->membership_code)
-                                        <span class="code-cell" onclick="copyCode(this, '{{ $user->membership_code }}')"
-                                            title="Click to copy">
-                                            {{ $user->membership_code }}
-                                        </span>
+                                            <span class="code-cell"
+                                                onclick="copyCode(this, '{{ $user->membership_code }}')"
+                                                title="Click to copy">
+                                                {{ $user->membership_code }}
+                                            </span>
                                         @else
-                                        <button onclick="generateMembershipCode({{ $user->id }}, this)"
-                                            class="act-btn gen" style="width:auto; border-radius:8px; padding:0 10px; font-size:0.65rem; font-weight:700; gap:4px; display:inline-flex; height:26px;">
-                                            <iconify-icon icon="ph:plus-bold"></iconify-icon> Generate
-                                        </button>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if($user->membership_code)
-                                        @if($user->has_membership)
-                                        <span class="badge badge-active">✓ Active</span>
-                                        @else
-                                        <span class="badge badge-pending">⏳ Pending</span>
-                                        @endif
-                                        @else
-                                        <span class="text-gray-400">—</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if($user->membership_code)
-                                        <form method="POST" action="{{ route('admin.membership.lock', $user->id) }}" style="display:inline;">
-                                            @csrf @method('PATCH')
-                                            <button type="submit"
-                                                class="act-btn {{ $user->membership_locked ? 'locked' : 'lock' }}"
-                                                title="{{ $user->membership_locked ? 'Unlock membership' : 'Lock membership' }}">
-                                                <iconify-icon icon="{{ $user->membership_locked ? 'mdi:lock-open' : 'mdi:lock' }}"></iconify-icon>
+                                            <button onclick="generateMembershipCode({{ $user->id }}, this)"
+                                                class="act-btn gen"
+                                                style="width:auto; border-radius:8px; padding:0 10px; font-size:0.65rem; font-weight:700; gap:4px; display:inline-flex; height:26px;">
+                                                <iconify-icon icon="ph:plus-bold"></iconify-icon> Generate
                                             </button>
-                                        </form>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($user->membership_code)
+                                            @if($user->has_membership)
+                                                <span class="badge badge-active">✓ Active</span>
+                                            @else
+                                                <span class="badge badge-pending">⏳ Pending</span>
+                                            @endif
                                         @else
-                                        <span class="text-gray-400">—</span>
+                                            <span class="text-gray-400">—</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($user->membership_code)
+                                            <form method="POST" action="{{ route('admin.membership.lock', $user->id) }}" style="display:inline;">
+                                                @csrf @method('PATCH')
+                                                <button type="submit"
+                                                    class="act-btn {{ $user->membership_locked ? 'locked' : 'lock' }}"
+                                                    title="{{ $user->membership_locked ? 'Unlock membership' : 'Lock membership' }}">
+                                                    <iconify-icon icon="{{ $user->membership_locked ? 'mdi:lock-open' : 'mdi:lock' }}"></iconify-icon>
+                                                </button>
+                                            </form>
+                                        @else
+                                            <span class="text-gray-400">—</span>
                                         @endif
                                     </td>
 
@@ -662,7 +530,7 @@ $profileUrl = $profilePic ? asset('uploads/profile_pics/' . $profilePic) : null;
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="28" style="text-align:center; padding:3rem; color:#9ca3af;">
+                                    <td colspan="29" style="text-align:center; padding:3rem; color:#9ca3af;">
                                         <iconify-icon icon="mdi:users-off" style="font-size:2.5rem; display:block; margin:0 auto 0.75rem;"></iconify-icon>
                                         No users found.
                                     </td>
@@ -675,10 +543,10 @@ $profileUrl = $profilePic ? asset('uploads/profile_pics/' . $profilePic) : null;
 
                 <!-- Pagination -->
                 <div class="flex items-center justify-between flex-wrap gap-2 p-4 border-t border-gray-100">
-                    <span class="text-sm text-gray-600">Showing {{ $users->firstItem() ?? 0 }} to {{ $users->lastItem() ?? 0 }} of {{ $users->total() }} entries</span>
-                    <div>
-                        {{ $users->links('vendor.pagination.tailwind') }}
-                    </div>
+                    <span class="text-sm text-gray-600">
+                        Showing {{ $users->firstItem() ?? 0 }} to {{ $users->lastItem() ?? 0 }} of {{ $users->total() }} entries
+                    </span>
+                    <div>{{ $users->links('vendor.pagination.tailwind') }}</div>
                 </div>
             </div>
         </div>
@@ -708,45 +576,35 @@ $profileUrl = $profilePic ? asset('uploads/profile_pics/' . $profilePic) : null;
         btn.innerHTML = '…';
 
         fetch("{{ route('admin.generate.membership.code') }}", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({
-                    user_id: userId
-                })
-            })
-            .then(r => r.json())
-            .then(data => {
-                if (data.success) {
-                    location.reload();
-                } else {
-                    btn.disabled = false;
-                    btn.innerHTML = orig;
-                    alert(data.message || 'Failed to generate code.');
-                }
-            })
-            .catch(() => {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ user_id: userId })
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
                 btn.disabled = false;
                 btn.innerHTML = orig;
-                alert('Something went wrong.');
-            });
+                alert(data.message || 'Failed to generate code.');
+            }
+        })
+        .catch(() => {
+            btn.disabled = false;
+            btn.innerHTML = orig;
+            alert('Something went wrong.');
+        });
     }
 
     function filterUsers() {
         const input = document.getElementById("userSearch").value.toLowerCase();
-        const rows = document.querySelectorAll(".user-row");
-
-        rows.forEach(row => {
-            const name = row.dataset.name;
-            const email = row.dataset.email;
-
-            if (name.includes(input) || email.includes(input)) {
-                row.style.display = "";
-            } else {
-                row.style.display = "none";
-            }
+        document.querySelectorAll(".user-row").forEach(row => {
+            const match = row.dataset.name.includes(input) || row.dataset.email.includes(input);
+            row.style.display = match ? "" : "none";
         });
     }
 </script>

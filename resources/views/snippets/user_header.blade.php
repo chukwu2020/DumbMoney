@@ -370,7 +370,7 @@ $cardExists = auth()->check()
             <!-- PROFILE -->
             <div x-data="{ open: false }" class="relative">
 
-                <button
+                   <button
                     @click="open = !open"
                     class="focus:outline-none rounded-full overflow-hidden cursor-pointer">
 
@@ -378,46 +378,35 @@ $cardExists = auth()->check()
                     $profilePic = $user->profile->profile_pic ?? null;
 
                     $initials = collect(explode(' ', $user->name))
-                    ->map(fn($word) => strtoupper(substr($word, 0, 1)))
-                    ->take(2)
-                    ->join('') ?: 'U';
+                        ->map(fn($word) => strtoupper(substr($word, 0, 1)))
+                        ->take(2)
+                        ->join('') ?: 'U';
 
                     $profileUrl = null;
-
                     if ($profilePic && file_exists(public_path('uploads/profile_pics/' . $profilePic))) {
-                    $profileUrl = asset('uploads/profile_pics/' . $profilePic) . '?v=' . time();
+                        $profileUrl = asset('uploads/profile_pics/' . $profilePic);
                     }
                     @endphp
 
                     @if($profileUrl)
-
-                    <img
-                        src="{{ $profileUrl }}"
-                        alt="{{ $user->name }}"
-                        class="profile-avatar"
-                        onerror="
-                this.style.display='none';
-                document.getElementById('headerProfileFallback').style.display='flex';
-            " />
-
-                    <div
-                        id="headerProfileFallback"
-                        class="profile-initials"
-                        style="display:none;">
-                        {{ $initials }}
-                    </div>
-
+                        <img
+                            src="{{ $profileUrl }}"
+                            alt="{{ $user->name }}"
+                            class="profile-avatar"
+                            onerror="this.style.display='none'; document.getElementById('headerProfileFallback').style.display='flex';" />
+                        <div
+                            id="headerProfileFallback"
+                            class="profile-initials"
+                            style="display:none;">
+                            {{ $initials }}
+                        </div>
                     @else
-
-                    <div class="profile-initials">
-                        {{ $initials }}
-                    </div>
-
+                        <div class="profile-initials">
+                            {{ $initials }}
+                        </div>
                     @endif
 
                 </button>
-
-
 
                 <!-- DROPDOWN -->
                 <div

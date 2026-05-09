@@ -2,9 +2,10 @@
 
 @section('content')
 <div class="dashboard-main-body min-h-screen bg-cover bg-center">
+
     {{-- Header Breadcrumb --}}
     <div class="flex flex-wrap items-center justify-between gap-2 mb-6">
-        <h6 class="font-semibold mb-0 " style="color: #0c3a30;">My Profile</h6>
+        <h6 class="font-semibold mb-0" style="color: #0c3a30;">My Profile</h6>
         <ul class="flex items-center gap-[6px]">
             <li class="font-medium">
                 <a href="{{ route('user_dashboard') }}"
@@ -22,39 +23,45 @@
 
     {{-- Profile Section --}}
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
         {{-- Left: Personal Info --}}
         <div class="lg:col-span-4">
-            <div class="rounded-xl border border-[#9EDD05] shadow-lg bg-opacity-90 p-6 space-y-6" style="background-image: url(assets/images/hero/hero-image-1.svg);">
-                {{-- Avatar --}}
-            
-@php
-$profilePic = $user->profile->profile_pic ?? null;
-$initials   = collect(explode(' ', $user->name))
-    ->map(fn($w) => strtoupper(substr($w, 0, 1)))
-    ->take(2)->join('') ?: 'U';
-$profileUrl = $profilePic ? asset('uploads/profile_pics/' . $profilePic) : null;
-@endphp
+            <div class="rounded-xl border border-[#9EDD05] shadow-lg bg-opacity-90 p-6 space-y-6"
+                style="background-image: url(assets/images/hero/hero-image-1.svg);">
 
-@if($profileUrl)
-    <img
-        src="{{ $profileUrl }}"
-        alt="{{ $user->name }}"
-        class="mx-auto rounded-full object-cover"
-        style="width:120px; height:120px; border:3px solid #8bc905;"
-        onerror="this.style.display='none'; document.getElementById('profileFallback').style.display='flex';" />
-    <div
-        id="profileFallback"
-        class="mx-auto flex items-center justify-center font-bold text-3xl text-[#0C3A30]"
-        style="width:120px; height:120px; border-radius:9999px; background:#9EDD05; display:none;">
-        {{ $initials }}
-    </div>
-@else
-    <div
-        class="mx-auto flex items-center justify-center font-bold text-3xl text-[#0C3A30]"
-        style="width:120px; height:120px; border-radius:9999px; background:#9EDD05;">
-        {{ $initials }}
-    </div>
-@endif
+                {{-- Avatar --}}
+                @php
+                $profilePic = $user->profile->profile_pic ?? null;
+                $initials   = collect(explode(' ', $user->name))
+                    ->map(fn($word) => strtoupper(substr($word, 0, 1)))
+                    ->take(2)->join('') ?: 'U';
+
+                $profileUrl = null;
+                if ($profilePic && file_exists(public_path('uploads/profile_pics/' . $profilePic))) {
+                    $profileUrl = asset('uploads/profile_pics/' . $profilePic);
+                }
+                @endphp
+
+                @if($profileUrl)
+                    <img
+                        src="{{ $profileUrl }}"
+                        alt="{{ $user->name }}"
+                        class="rounded-full object-cover mx-auto"
+                        style="width:80px; height:80px; border:2px solid #9EDD05;"
+                        onerror="this.style.display='none'; document.getElementById('profilePageFallback').style.display='flex';" />
+                    <div
+                        id="profilePageFallback"
+                        class="flex items-center justify-center font-bold text-2xl text-[#0C3A30] select-none mx-auto"
+                        style="background-color:#9EDD05; width:80px; height:80px; border-radius:50%; display:none;">
+                        {{ $initials }}
+                    </div>
+                @else
+                    <div
+                        class="flex items-center justify-center font-bold text-2xl text-[#0C3A30] select-none mx-auto"
+                        style="background-color:#9EDD05; width:80px; height:80px; border-radius:50%;">
+                        {{ $initials }}
+                    </div>
+                @endif
 
                 {{-- Personal Info --}}
                 <div style="color: #0c3a30;">
@@ -80,9 +87,9 @@ $profileUrl = $profilePic ? asset('uploads/profile_pics/' . $profilePic) : null;
                             <span class="font-semibold text-neutral-700">Card Number</span>
                             <span class="text-right text-[#0C3A30] font-medium">
                                 @if ($card)
-                                <div class="card-number">{{ chunk_split($card->card_number, 4, ' ') }}</div>
+                                    <div class="card-number">{{ chunk_split($card->card_number, 4, ' ') }}</div>
                                 @else
-                                <div class="text-gray-500">No card available</div>
+                                    <div class="text-gray-500">No card available</div>
                                 @endif
                             </span>
                         </li>
@@ -95,6 +102,7 @@ $profileUrl = $profilePic ? asset('uploads/profile_pics/' . $profilePic) : null;
         <div class="lg:col-span-8">
             <div class="card h-full border-0" style="background-image: url('{{ asset('assets/images/hero/hero-image-1.svg') }}');">
                 <div class="card-body p-6">
+
                     {{-- Tabs --}}
                     <ul class="flex gap-3 text-sm font-medium mb-5" id="default-tab" role="tablist">
                         <li>
@@ -115,6 +123,7 @@ $profileUrl = $profilePic ? asset('uploads/profile_pics/' . $profilePic) : null;
 
                     {{-- Content Panels --}}
                     <div id="default-tab-content">
+
                         {{-- Edit Profile --}}
                         <div id="edit-profile">
                             <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
@@ -139,14 +148,14 @@ $profileUrl = $profilePic ? asset('uploads/profile_pics/' . $profilePic) : null;
                                     </div>
                                     <div>
                                         <label class="block font-semibold text-sm text-[#0C3A30] mb-2">Phone</label>
-                                        <input type="text" name="phone" value="{{ old('phone', $user->phone) }}" class="form-control custom-input" readonly class="form-control custom-input bg-gray-100 cursor-not-allowed" />
+                                        <input type="text" name="phone" value="{{ old('phone', $user->phone) }}" readonly class="form-control custom-input bg-gray-100 cursor-not-allowed" />
                                     </div>
                                     <div>
                                         <label class="block font-semibold text-sm text-[#0C3A30] mb-2">Country</label>
-                                        <input type="text" name="country" value="{{ old('country', $user->country) }}" class="form-control custom-input" class="form-control custom-input bg-gray-100 cursor-not-allowed" />
+                                        <input type="text" name="country" value="{{ old('country', $user->country) }}" class="form-control custom-input bg-gray-100 cursor-not-allowed" />
                                     </div>
                                     <div>
-                                        <label class="block font-semibold text-psm text-[#0C3A30] mb-2">Address</label>
+                                        <label class="block font-semibold text-sm text-[#0C3A30] mb-2">Address</label>
                                         <input type="text" name="address" value="{{ old('address', $user->profile->address ?? '') }}" class="form-control custom-input" />
                                     </div>
                                 </div>
@@ -168,7 +177,7 @@ $profileUrl = $profilePic ? asset('uploads/profile_pics/' . $profilePic) : null;
                                     </div>
                                 </div>
 
-                                {{-- Bank Information Section --}}
+                                {{-- Bank Information --}}
                                 <h6 class="text-base mt-6 mb-4 font-semibold text-[#0C3A30]">Bank Information (for Digital Payment)</h6>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
@@ -197,7 +206,7 @@ $profileUrl = $profilePic ? asset('uploads/profile_pics/' . $profilePic) : null;
                                     </div>
                                 </div>
 
-                                <button type="submit" class="mt-6 btn rounded-full px-10 py-3 font-semibold " style="background-color: #9EDD05; color:#0C3A30;">
+                                <button type="submit" class="mt-6 btn rounded-full px-10 py-3 font-semibold" style="background-color: #9EDD05; color:#0C3A30;">
                                     Update Profile
                                 </button>
                             </form>
@@ -220,11 +229,12 @@ $profileUrl = $profilePic ? asset('uploads/profile_pics/' . $profilePic) : null;
                                     <label class="block text-sm font-semibold text-[#0C3A30] mb-2">Confirm New Password</label>
                                     <input type="password" name="new_password_confirmation" class="form-control custom-input" required />
                                 </div>
-                                <button type="submit" class="btn rounded-full px-10 py-3 font-semibold " style="background-color: #9EDD05; color:#0C3A30;">
+                                <button type="submit" class="btn rounded-full px-10 py-3 font-semibold" style="background-color: #9EDD05; color:#0C3A30;">
                                     Update Password
                                 </button>
                             </form>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -234,23 +244,19 @@ $profileUrl = $profilePic ? asset('uploads/profile_pics/' . $profilePic) : null;
 
 {{-- Tab Toggle Script --}}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const tabs = document.querySelectorAll('[data-tabs-target]');
         const contents = document.querySelectorAll('#default-tab-content > div');
 
         function switchTab(button) {
             tabs.forEach(btn => btn.setAttribute('aria-selected', false));
             button.setAttribute('aria-selected', true);
-
             contents.forEach(c => c.classList.add('hidden'));
             const target = document.querySelector(button.getAttribute('data-tabs-target'));
             if (target) target.classList.remove('hidden');
         }
 
-        tabs.forEach(btn => {
-            btn.addEventListener('click', () => switchTab(btn));
-        });
-
+        tabs.forEach(btn => btn.addEventListener('click', () => switchTab(btn)));
         if (tabs.length) switchTab(tabs[0]);
     });
 </script>
@@ -277,18 +283,19 @@ $profileUrl = $profilePic ? asset('uploads/profile_pics/' . $profilePic) : null;
     }
 </style>
 
+{{-- Submit Button Loader --}}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const updateForm = document.querySelector('form[action="{{ route('
-            profile.update ') }}"]');
-        const updateButton = updateForm.querySelector('button[type="submit"]');
-
-        updateForm.addEventListener('submit', function() {
-            updateButton.disabled = true;
-            updateButton.textContent = 'Updating...';
-            updateButton.style.backgroundColor = '#B2B2B2';
-            updateButton.style.color = '#666';
-        });
+    document.addEventListener('DOMContentLoaded', function () {
+        const updateForm = document.querySelector('form[action="{{ route('profile.update') }}"]');
+        if (updateForm) {
+            const updateButton = updateForm.querySelector('button[type="submit"]');
+            updateForm.addEventListener('submit', function () {
+                updateButton.disabled = true;
+                updateButton.textContent = 'Updating...';
+                updateButton.style.backgroundColor = '#B2B2B2';
+                updateButton.style.color = '#666';
+            });
+        }
     });
 </script>
 

@@ -679,14 +679,17 @@
          MAIN DASHBOARD BODY
     ========================================== --}}
     <div class="dashboard-main-body space-y-6">
-
-        {{-- HEADER --}}
-       @php
+{{-- INDEX HEADER --}}
+@php
 $profilePic = $user->profile->profile_pic ?? null;
 $initials   = collect(explode(' ', $user->name))
     ->map(fn($w) => strtoupper(substr($w, 0, 1)))
     ->take(2)->join('') ?: 'U';
-$profileUrl = $profilePic ? asset('uploads/profile_pics/' . $profilePic) : null;
+
+$profileUrl = null;
+if ($profilePic && file_exists(public_path('uploads/profile_pics/' . $profilePic))) {
+    $profileUrl = asset('uploads/profile_pics/' . $profilePic);
+}
 @endphp
 
 @if($profileUrl)

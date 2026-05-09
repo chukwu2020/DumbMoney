@@ -3,10 +3,11 @@
         <iconify-icon icon="radix-icons:cross-2"></iconify-icon>
     </button>
     <div class="lg:hidden mobile-logo">
-       <img src="/assets/images/chartmasterbrandname1.png"  
+       <img src="/assets/images/dumbmoneylogo.png"
          alt="ChartMasters Circle" 
             class="brand-logo logo-img" style="width:140px; height:auto; justify-content:center;"
         >
+        
     </div>
 
     
