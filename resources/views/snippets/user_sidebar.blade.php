@@ -560,9 +560,10 @@ $initials = $user ? collect(explode(' ', $user->name))->map(fn($word) => strtoup
 
     /* Logout Wrapper */
     .logout-wrapper {
-        padding: 16px;
-        margin-top: auto;
+     
+           margin-bottom: 8.5rem;
         border-top: 1px solid rgba(158, 221, 5, 0.15);
+       
     }
 
     .logout-btn {
@@ -573,6 +574,7 @@ $initials = $user ? collect(explode(' ', $user->name))->map(fn($word) => strtoup
         width: 100%;
         padding: 12px;
         border-radius: 8px;
+      
         text-decoration: none;
         color: #dc2626;
         font-size: 0.85rem;

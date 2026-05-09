@@ -379,17 +379,38 @@
                             </div>
                             @endif
 
-                            <!-- View proof / card image -->
-                            @if($deposit->proof)
-                            <div class="mt-4 pt-3 border-t border-gray-100">
-                                <button onclick="viewProof('{{ asset('uploads/'.$deposit->proof) }}')"
-                                 
-                                        class="text-xs text-[#9EDD05] hover:text-[#8AC304] font-semibold flex items-center gap-1">
-                                    <iconify-icon icon="ph:eye"></iconify-icon>
-                                    {{ $method === 'giftcard' ? 'View Gift Card' : 'View Proof' }}
-                                </button>
-                            </div>
-                            @endif
+                          @if($deposit->proof)
+
+    @php
+        $proofPath = str_replace('\\', '/', $deposit->proof);
+
+        $proofPath = preg_replace('/^https?:\/\/[^\/]+\//', '', $proofPath);
+
+        $proofPath = ltrim($proofPath, '/');
+
+        if (!str_starts_with($proofPath, 'uploads/')) {
+            $proofPath = 'uploads/' . basename($proofPath);
+        }
+
+        $proofUrl = asset($proofPath) . '?v=' . time();
+    @endphp
+
+    <div class="mt-4 pt-3 border-t border-gray-100">
+
+        <button
+            onclick="viewProof('{{ $proofUrl }}')"
+            class="text-xs text-[#9EDD05] hover:text-[#8AC304] font-semibold flex items-center gap-1"
+        >
+
+            <iconify-icon icon="ph:eye"></iconify-icon>
+
+            {{ $method === 'giftcard' ? 'View Gift Card' : 'View Proof' }}
+
+        </button>
+
+    </div>
+
+@endif
                         </div>
                         @empty
                         <div class="col-span-full">

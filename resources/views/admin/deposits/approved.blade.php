@@ -397,27 +397,43 @@
 <script>
     function openModal(imageUrl) {
         const modal = document.getElementById('imageModal');
-        document.getElementById('modalImage').src = imageUrl;
+        const img = document.getElementById('modalImage');
+
+        img.src = imageUrl;
+
         modal.classList.remove('hidden');
         modal.classList.add('flex');
+
+        document.body.style.overflow = 'hidden';
     }
 
     function closeModal() {
         const modal = document.getElementById('imageModal');
+        const img = document.getElementById('modalImage');
+
         modal.classList.add('hidden');
         modal.classList.remove('flex');
+
+        img.src = '';
+        document.body.style.overflow = '';
     }
 
     function copyToClipboard(text, btn) {
         navigator.clipboard.writeText(text).then(() => {
-            const originalIcon = btn.innerHTML;
+            const original = btn.innerHTML;
+
             btn.innerHTML = '<iconify-icon icon="ph:check-bold" class="text-green-500"></iconify-icon>';
-            setTimeout(() => { btn.innerHTML = originalIcon; }, 2000);
+
+            setTimeout(() => {
+                btn.innerHTML = original;
+            }, 2000);
         });
     }
 
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') closeModal();
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            closeModal();
+        }
     });
 </script>
 

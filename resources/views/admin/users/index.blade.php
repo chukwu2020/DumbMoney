@@ -338,22 +338,51 @@
                                     {{-- User (sticky) --}}
                                     <td>
                                         <div class="user-cell">
-                                            <div class="avatar">
-                                                @if($profileUrl)
-                                                    <img
-                                                        src="{{ $profileUrl }}"
-                                                        alt="{{ $user->name }}"
-                                                        style="width:100%; height:100%; object-fit:cover; border-radius:50%;"
-                                                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-                                                    <div style="display:none; width:100%; height:100%; align-items:center; justify-content:center; font-weight:700; font-size:0.8rem; color:#0C3A30; background:#9EDD05; border-radius:50%;">
-                                                        {{ $initials }}
-                                                    </div>
-                                                @else
-                                                    <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.8rem; color:#0C3A30; background:#9EDD05; border-radius:50%;">
-                                                        {{ $initials }}
-                                                    </div>
-                                                @endif
-                                            </div>
+                                           <div class="avatar">
+    @if($profileUrl)
+        <img
+            src="{{ $profileUrl }}"
+            alt="{{ $user->name }}"
+            style="width:100%; height:100%; object-fit:cover; border-radius:50%;"
+            onerror="
+                this.style.display='none';
+                this.nextElementSibling.style.display='flex';
+            "
+        />
+
+        <div
+            style="
+                display:none;
+                width:100%;
+                height:100%;
+                align-items:center;
+                justify-content:center;
+                font-weight:700;
+                font-size:0.8rem;
+                color:#0C3A30;
+                background:#9EDD05;
+                border-radius:50%;
+            ">
+            {{ $initials }}
+        </div>
+    @else
+        <div
+            style="
+                width:100%;
+                height:100%;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                font-weight:700;
+                font-size:0.8rem;
+                color:#0C3A30;
+                background:#9EDD05;
+                border-radius:50%;
+            ">
+            {{ $initials }}
+        </div>
+    @endif
+</div>
                                             <div class="user-meta">
                                                 <strong>{{ $user->name }}</strong>
                                             </div>

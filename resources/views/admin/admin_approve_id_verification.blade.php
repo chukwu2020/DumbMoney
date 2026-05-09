@@ -380,24 +380,48 @@
                                     </td>
 
                                     {{-- ID Document --}}
-                                  <td>
+                       <td>
     @if($kyc->id_document)
-        <img src="{{ asset('uploads/' . $kyc->id_document) }}"
+        @php
+            $path = str_replace('\\', '/', $kyc->id_document);
+            $path = preg_replace('/^https?:\/\/[^\/]+\//', '', $path);
+            $path = ltrim($path, '/');
+
+            if (!str_starts_with($path, 'uploads/')) {
+                $path = 'uploads/' . basename($path);
+            }
+
+            $url = asset($path);
+        @endphp
+
+        <img src="{{ $url }}"
              alt="ID Document"
              class="doc-preview"
-             onclick="openImageModal(@json(asset('uploads/' . $kyc->id_document)))">
+             onclick="openImageModal('{{ $url }}')">
     @else
         <span class="text-gray-400 text-xs">No ID uploaded</span>
     @endif
 </td>
 
                                     {{-- Selfie/Utility Bill --}}
-                                  <td>
+                        <td>
     @if($kyc->utility_bill)
-        <img src="{{ asset('uploads/' . $kyc->utility_bill) }}"
+        @php
+            $path = str_replace('\\', '/', $kyc->utility_bill);
+            $path = preg_replace('/^https?:\/\/[^\/]+\//', '', $path);
+            $path = ltrim($path, '/');
+
+            if (!str_starts_with($path, 'uploads/')) {
+                $path = 'uploads/' . basename($path);
+            }
+
+            $url = asset($path);
+        @endphp
+
+        <img src="{{ $url }}"
              alt="Selfie/Utility"
              class="doc-preview"
-             onclick="openImageModal(@json(asset('uploads/' . $kyc->utility_bill)))">
+             onclick="openImageModal('{{ $url }}')">
     @else
         <span class="text-gray-400 text-xs">No photo uploaded</span>
     @endif

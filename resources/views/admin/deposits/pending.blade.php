@@ -342,7 +342,7 @@
                                     </td>
 
                                     {{-- Proof image (works for both: tx screenshot and card photo) --}}
-                                    <td>
+                                <td>
     @if($deposit->proof)
         @php
             $proofUrl = asset('uploads/' . $deposit->proof);
@@ -351,8 +351,8 @@
         <img src="{{ $proofUrl }}"
              alt="{{ $isGiftCard ? 'Gift Card' : 'Proof' }}"
              class="proof-thumbnail"
-             onclick="openModal(@json($proofUrl))"
-             title="{{ $isGiftCard ? 'Gift card image' : 'Transaction proof' }}">
+             onclick="openImageZoom('{{ $proofUrl }}')"
+             title="Click to zoom">
     @else
         <span class="text-gray-400 text-sm">No image</span>
     @endif
@@ -424,19 +424,21 @@
 
 {{-- IMAGE MODAL --}}
 <div id="imageModal"
-    class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden items-center justify-center p-4"
-    onclick="closeModal()">
-    <div class="relative max-w-4xl w-full">
+     class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden items-center justify-center p-4"
+     onclick="closeModal()">
+
+    <div class="relative max-w-5xl w-full flex items-center justify-center">
+        
         <button onclick="closeModal()"
-            class="absolute -top-10 right-0 text-white hover:text-gray-300">
-            <iconify-icon icon="ph:x-bold" class="text-2xl"></iconify-icon>
+                class="absolute -top-12 right-0 text-white hover:text-gray-300 text-2xl">
+            <iconify-icon icon="ph:x-bold"></iconify-icon>
         </button>
+
         <img id="modalImage"
-            class="w-full rounded-lg shadow-2xl object-contain max-h-[80vh]"
-            onclick="event.stopPropagation();">
+             class="max-h-[85vh] max-w-full rounded-lg shadow-2xl object-contain transform scale-100 transition duration-200"
+             onclick="event.stopPropagation();" />
     </div>
 </div>
-
 {{-- REJECT MODAL --}}
 <div id="rejectModal"
     class="fixed inset-0 bg-black bg-opacity-70 z-50 hidden items-center justify-center p-4">
@@ -477,38 +479,59 @@
 <script>
     function openRejectModal(action) {
         document.getElementById('rejectForm').action = action;
-        document.getElementById('rejectModal').classList.remove('hidden');
-        document.getElementById('rejectModal').classList.add('flex');
+
+        const modal = document.getElementById('rejectModal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
     }
 
     function closeRejectModal() {
-        document.getElementById('rejectModal').classList.add('hidden');
-        document.getElementById('rejectModal').classList.remove('flex');
+        const modal = document.getElementById('rejectModal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
     }
 
-    function openModal(src) {
-        document.getElementById('modalImage').src = src;
-        document.getElementById('imageModal').classList.remove('hidden');
-        document.getElementById('imageModal').classList.add('flex');
+    /* ✅ Image Zoom (FIXED + CLEAN) */
+    function openImageZoom(src) {
+        const modal = document.getElementById('imageModal');
+        const img = document.getElementById('modalImage');
+
+        img.src = src;
+
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+
+        document.body.style.overflow = 'hidden';
     }
 
     function closeModal() {
-        document.getElementById('imageModal').classList.add('hidden');
-        document.getElementById('imageModal').classList.remove('flex');
+        const modal = document.getElementById('imageModal');
+        const img = document.getElementById('modalImage');
+
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+
+        img.src = '';
+        document.body.style.overflow = '';
     }
+
     /* Prevent double-approve */
     function lockBtn(form) {
         const btn = form.querySelector('button[type="submit"]');
+
         if (btn.dataset.locked === 'true') return false;
+
         btn.dataset.locked = 'true';
         btn.disabled = true;
         btn.style.opacity = '0.6';
         btn.innerHTML = '...';
+
         return true;
     }
 
     function generateMembershipCode(userId) {
         if (!confirm('Generate membership code for this user?')) return;
+
         fetch("{{ route('admin.generate.membership.code') }}", {
             method: 'POST',
             headers: {
@@ -518,13 +541,14 @@
             body: JSON.stringify({
                 user_id: userId
             })
-        }).then(r => r.json()).then(data => {
+        })
+        .then(r => r.json())
+        .then(data => {
             if (data.success) location.reload();
             else alert(data.message || 'Failed to generate code');
-        }).catch(() => alert('Something went wrong'));
+        })
+        .catch(() => alert('Something went wrong'));
     }
-
-
 
     function copyGiftCardCode(code) {
         navigator.clipboard.writeText(code)
@@ -537,7 +561,7 @@
     }
 
     function showCopyToast(message) {
-        let toast = document.createElement('div');
+        const toast = document.createElement('div');
         toast.innerText = message;
 
         toast.style.position = 'fixed';

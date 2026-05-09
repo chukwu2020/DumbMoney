@@ -1,16 +1,63 @@
 @php
+
 use App\Models\WithdrawalCard;
 
 $user = auth()->user();
 
 $cardExists = auth()->check()
-? WithdrawalCard::where('user_id', auth()->id())->exists()
-: false;
+    ? WithdrawalCard::where('user_id', auth()->id())->exists()
+    : false;
+
+/*
+|--------------------------------------------------------------------------
+| PROFILE IMAGE FIX
+|--------------------------------------------------------------------------
+| Handles:
+| image.png
+| uploads/profile_pics/image.png
+| full URLs
+|--------------------------------------------------------------------------
+*/
+
+$profilePic = $user->profile->profile_pic ?? null;
+
+$initials = collect(explode(' ', $user->name))
+    ->map(fn($word) => strtoupper(substr($word, 0, 1)))
+    ->take(2)
+    ->join('') ?: 'U';
+
+$profileUrl = null;
+
+if ($profilePic) {
+
+    // Already full URL
+    if (filter_var($profilePic, FILTER_VALIDATE_URL)) {
+
+        $profileUrl = $profilePic;
+
+    }
+
+    // Stored with uploads/profile_pics/
+    elseif (str_contains($profilePic, 'uploads/profile_pics/')) {
+
+        $profileUrl = asset($profilePic);
+
+    }
+
+    // Stored as filename only
+    else {
+
+        $profileUrl = asset('uploads/profile_pics/' . basename($profilePic));
+
+    }
+}
+
 @endphp
 
 <header class="main-header">
 
     <style>
+
         .main-header {
             position: fixed;
             top: 0;
@@ -37,8 +84,8 @@ $cardExists = auth()->check()
         }
 
         /* =========================
-   LEFT CONTROLS
-========================== */
+           LEFT CONTROLS
+        ========================== */
 
         .left-controls {
             display: flex;
@@ -47,8 +94,8 @@ $cardExists = auth()->check()
         }
 
         /* =========================
-   RIGHT CONTROLS
-========================== */
+           RIGHT CONTROLS
+        ========================== */
 
         .right-controls {
             display: flex;
@@ -57,8 +104,8 @@ $cardExists = auth()->check()
         }
 
         /* =========================
-   MOBILE HAMBURGER
-========================== */
+           MOBILE HAMBURGER
+        ========================== */
 
         .mobile-hamburger {
             width: 58px !important;
@@ -74,20 +121,15 @@ $cardExists = auth()->check()
             align-items: center;
             justify-content: center;
 
-            /* SAME COLOR ALWAYS */
-            color: linear-gradient(135deg, #9EDD05 0%, #84cc16 100%) !important;
-
-
+            background: transparent;
 
             transition: all 0.3s ease;
         }
 
-        /* SHINE EFFECT */
         .mobile-hamburger::before {
             content: "";
             position: absolute;
             inset: 0;
-
             opacity: 0;
             transition: opacity 0.3s ease;
         }
@@ -98,18 +140,12 @@ $cardExists = auth()->check()
 
         .mobile-hamburger:hover {
             transform: translateY(-2px) scale(1.03);
-
-
-
-
         }
 
-        /* ACTIVE STATE */
         .mobile-hamburger.active {
             background: linear-gradient(135deg, #9EDD05 0%, #84cc16 100%);
         }
 
-        /* ICON */
         .mobile-hamburger iconify-icon {
             font-size: 50px !important;
             color: #9EDD05 !important;
@@ -117,15 +153,14 @@ $cardExists = auth()->check()
             z-index: 2;
         }
 
-        /* ACTIVE ICON */
         .mobile-hamburger.active iconify-icon {
             color: #0C3A30 !important;
             transform: rotate(180deg) scale(1.08);
         }
 
         /* =========================
-   DISCORD BUTTON
-========================== */
+           DISCORD BUTTON
+        ========================== */
 
         .discord-btn {
             width: 48px;
@@ -141,8 +176,6 @@ $cardExists = auth()->check()
             text-decoration: none;
 
             transition: all 0.25s ease;
-
-
         }
 
         .discord-btn:hover {
@@ -156,8 +189,8 @@ $cardExists = auth()->check()
         }
 
         /* =========================
-   PROFILE AVATAR
-========================== */
+           PROFILE AVATAR
+        ========================== */
 
         .profile-avatar {
             width: 48px;
@@ -205,8 +238,8 @@ $cardExists = auth()->check()
         }
 
         /* =========================
-   DROPDOWN
-========================== */
+           DROPDOWN
+        ========================== */
 
         .dropdown-menu-custom {
             position: absolute;
@@ -273,7 +306,7 @@ $cardExists = auth()->check()
         }
 
         .logout-item {
-            background: #f05b65;
+            background: #e97676;
             color: #dc2626;
         }
 
@@ -283,18 +316,19 @@ $cardExists = auth()->check()
         }
 
         /* =========================
-   HIDE HAMBURGER ON DESKTOP
-========================== */
+           HIDE HAMBURGER ON DESKTOP
+        ========================== */
 
         @media (min-width: 1024px) {
+
             .mobile-hamburger {
                 display: none !important;
             }
         }
 
         /* =========================
-   MOBILE RESPONSIVE
-========================== */
+           MOBILE RESPONSIVE
+        ========================== */
 
         @media (max-width: 768px) {
 
@@ -335,11 +369,12 @@ $cardExists = auth()->check()
                 right: -5px;
             }
         }
+
     </style>
 
     <div class="header-content">
 
-        <!-- LEFT -->
+        {{-- LEFT --}}
         <div class="left-controls">
 
             <button class="sidebar-mobile-toggle mobile-hamburger">
@@ -352,10 +387,10 @@ $cardExists = auth()->check()
 
         </div>
 
-        <!-- RIGHT -->
+        {{-- RIGHT --}}
         <div class="right-controls">
 
-            <!-- DISCORD -->
+            {{-- DISCORD --}}
             <a href="https://discord.gg/dumbmoney"
                 target="_blank"
                 class="discord-btn"
@@ -367,48 +402,49 @@ $cardExists = auth()->check()
 
             </a>
 
-            <!-- PROFILE -->
+            {{-- PROFILE --}}
             <div x-data="{ open: false }" class="relative">
 
-                   <button
+                <button
                     @click="open = !open"
                     class="focus:outline-none rounded-full overflow-hidden cursor-pointer">
 
-                    @php
-                    $profilePic = $user->profile->profile_pic ?? null;
-
-                    $initials = collect(explode(' ', $user->name))
-                        ->map(fn($word) => strtoupper(substr($word, 0, 1)))
-                        ->take(2)
-                        ->join('') ?: 'U';
-
-                    $profileUrl = null;
-                    if ($profilePic && file_exists(public_path('uploads/profile_pics/' . $profilePic))) {
-                        $profileUrl = asset('uploads/profile_pics/' . $profilePic);
-                    }
-                    @endphp
-
                     @if($profileUrl)
+
                         <img
                             src="{{ $profileUrl }}"
                             alt="{{ $user->name }}"
                             class="profile-avatar"
-                            onerror="this.style.display='none'; document.getElementById('headerProfileFallback').style.display='flex';" />
+                            loading="lazy"
+
+                            onerror="
+                                this.style.display='none';
+                                document.getElementById('headerProfileFallback').style.display='flex';
+                            "
+                        >
+
                         <div
                             id="headerProfileFallback"
                             class="profile-initials"
                             style="display:none;">
+
                             {{ $initials }}
+
                         </div>
+
                     @else
+
                         <div class="profile-initials">
+
                             {{ $initials }}
+
                         </div>
+
                     @endif
 
                 </button>
 
-                <!-- DROPDOWN -->
+                {{-- DROPDOWN --}}
                 <div
                     x-show="open"
                     @click.away="open = false"
@@ -469,35 +505,37 @@ $cardExists = auth()->check()
 </header>
 
 <script>
-    const sidebarBtn = document.querySelector('.sidebar-mobile-toggle');
 
-    const sidebar = document.querySelector('.sidebar');
+const sidebarBtn = document.querySelector('.sidebar-mobile-toggle');
 
-    const menuIcon = sidebarBtn?.querySelector('iconify-icon');
+const sidebar = document.querySelector('.sidebar');
 
-    sidebarBtn?.addEventListener('click', function() {
+const menuIcon = sidebarBtn?.querySelector('iconify-icon');
 
-        sidebar?.classList.toggle('open');
+sidebarBtn?.addEventListener('click', function() {
 
-        const isOpen = sidebar?.classList.contains('open');
+    sidebar?.classList.toggle('open');
 
-        sidebarBtn.classList.toggle('active', isOpen);
+    const isOpen = sidebar?.classList.contains('open');
 
-        if (isOpen) {
+    sidebarBtn.classList.toggle('active', isOpen);
 
-            menuIcon.setAttribute(
-                'icon',
-                'heroicons:x-mark-solid'
-            );
+    if (isOpen) {
 
-        } else {
+        menuIcon.setAttribute(
+            'icon',
+            'heroicons:x-mark-solid'
+        );
 
-            menuIcon.setAttribute(
-                'icon',
-                'heroicons:bars-3-solid'
-            );
+    } else {
 
-        }
+        menuIcon.setAttribute(
+            'icon',
+            'heroicons:bars-3-solid'
+        );
 
-    });
+    }
+
+});
+
 </script>
