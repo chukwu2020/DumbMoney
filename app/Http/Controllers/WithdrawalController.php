@@ -46,7 +46,7 @@ class WithdrawalController extends Controller
 
         if (!$card) {
             return redirect()->route('withdrawals.generateCard')
-                ->with('error', 'No card found. Please generate one first.');
+                ->with('error', 'No card found. Please generate one first and try again.');
         }
 
         return view('dashboard.user.card', compact('card'));
