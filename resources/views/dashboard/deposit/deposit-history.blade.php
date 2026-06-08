@@ -10,7 +10,7 @@
     }
 
     .deposit-card {
-        border: 2px solid #e5e7eb;
+        border: 2px solid #9EDD05;
         border-radius: 16px;
         padding: 1.5rem;
         transition: all 0.3s ease;

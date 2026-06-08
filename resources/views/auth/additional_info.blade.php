@@ -218,7 +218,8 @@
     }
 
     .goals-grid,
-    .assets-grid {
+    .assets-grid,
+    .learning-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 15px;
@@ -226,7 +227,8 @@
     }
 
     .goal-item,
-    .asset-item {
+    .asset-item,
+    .learning-item {
         background: white;
         border: 1px solid #e2e8f0;
         border-radius: 12px;
@@ -239,19 +241,22 @@
     }
 
     .goal-item:hover,
-    .asset-item:hover {
+    .asset-item:hover,
+    .learning-item:hover {
         border-color: #8bc905;
         background: #f8fafc;
     }
 
     .goal-item.selected,
-    .asset-item.selected {
+    .asset-item.selected,
+    .learning-item.selected {
         border-color: #8bc905;
         background: rgba(139, 201, 5, 0.05);
     }
 
     .goal-item input[type="checkbox"],
-    .asset-item input[type="checkbox"] {
+    .asset-item input[type="checkbox"],
+    .learning-item input[type="radio"] {
         margin-top: 3px;
         flex-shrink: 0;
     }
@@ -390,7 +395,8 @@
         }
 
         .goals-grid,
-        .assets-grid {
+        .assets-grid,
+        .learning-grid {
             grid-template-columns: 1fr;
         }
 
@@ -475,16 +481,12 @@
                     <!-- Trading Experience -->
                     <div class="form-section" data-aos="fade-up">
                         <h3>Your Trading Experience - click to select</h3>
-                        <p class="section-desc">Help us understand your background</p>
+                        <p class="section-desc">Help us understand your background in trading and investing</p>
 
                         <div class="mb-4">
                             <label class="section-title">
-                                What is your experience with Stock & Cryptocurrency Investing?
+                                What is your experience with Stock & Cryptocurrency Trading?
                             </label>
-
-                            <p class="text-muted small mb-3">
-                                No matter your level, our team will guide you step-by-step to help you make confident and informed investment decisions.
-                            </p>
 
                             <div class="row g-3 mt-2">
 
@@ -493,9 +495,9 @@
                                     <div class="option-card {{ old('stock_experience') == 'yes' ? 'selected' : '' }}" onclick="selectExperience('yes')">
                                         <input type="radio" name="stock_experience" id="exp_yes" value="yes" class="form-check-input" {{ old('stock_experience') == 'yes' ? 'checked' : '' }} required>
                                         <div>
-                                            <strong>Experienced Investor</strong>
+                                            <strong>Experienced Trader</strong>
                                             <p class="small text-muted mb-0">
-                                                I have traded Stocks and/or Cryptocurrencies before and understand the market basics.
+                                                I have actively traded Stocks and/or Cryptocurrencies and understand market mechanics.
                                             </p>
                                         </div>
                                     </div>
@@ -506,9 +508,9 @@
                                     <div class="option-card {{ old('stock_experience') == 'no' ? 'selected' : '' }}" onclick="selectExperience('no')">
                                         <input type="radio" name="stock_experience" id="exp_no" value="no" class="form-check-input" {{ old('stock_experience') == 'no' ? 'checked' : '' }}>
                                         <div>
-                                            <strong>Some Experience</strong>
+                                            <strong>Some Trading Experience</strong>
                                             <p class="small text-muted mb-0">
-                                                I have a basic understanding of Stocks or Crypto and have made a few investments.
+                                                I have made several trades and understand basic trading concepts and strategies.
                                             </p>
                                         </div>
                                     </div>
@@ -519,9 +521,9 @@
                                     <div class="option-card {{ old('stock_experience') == 'novice' ? 'selected' : '' }}" onclick="selectExperience('novice')">
                                         <input type="radio" name="stock_experience" id="exp_novice" value="novice" class="form-check-input" {{ old('stock_experience') == 'novice' ? 'checked' : '' }}>
                                         <div>
-                                            <strong>Beginner</strong>
+                                            <strong>New to Trading</strong>
                                             <p class="small text-muted mb-0">
-                                                I’m new to investing, but I’m ready to learn I’ll need guidance to get started.
+                                                I'm just starting my trading journey. I need education and guidance to develop strategies.
                                             </p>
                                         </div>
                                     </div>
@@ -530,7 +532,7 @@
                             </div>
 
                             <small class="text-success d-block mt-2">
-                                ✔ Don’t worry — we provide expert guidance, tools, and support tailored to your experience level.
+                                ✔ We provide expert guidance, trading tools, and educational resources tailored to your experience level.
                             </small>
 
                             @error('stock_experience')
@@ -543,15 +545,15 @@
                                 <label class="form-label fw-semibold">Trading frequency (past 2 years)</label>
                                 <select name="trading_frequency" class="form-control" required>
                                     <option value="">Select frequency</option>
-                                    <option value="0-10" {{ old('trading_frequency') == '0-10' ? 'selected' : '' }}>0-10 times</option>
-                                    <option value="11-40" {{ old('trading_frequency') == '11-40' ? 'selected' : '' }}>11-40 times</option>
-                                    <option value="40+" {{ old('trading_frequency') == '40+' ? 'selected' : '' }}>More than 40 times</option>
+                                    <option value="0-10" {{ old('trading_frequency') == '0-10' ? 'selected' : '' }}>0-10 trades</option>
+                                    <option value="11-40" {{ old('trading_frequency') == '11-40' ? 'selected' : '' }}>11-40 trades</option>
+                                    <option value="40+" {{ old('trading_frequency') == '40+' ? 'selected' : '' }}>More than 40 trades</option>
                                 </select>
                                 @error('trading_frequency') <span class="text-danger small">{{ $message }}</span> @enderror
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold">Transaction volume (past 2 years)</label>
+                                <label class="form-label fw-semibold">Total trading volume (past 2 years)</label>
                                 <select name="transaction_volume" class="form-control" required>
                                     <option value="">Select volume</option>
                                     <option value="under_10k" {{ old('transaction_volume') == 'under_10k' ? 'selected' : '' }}>Under $10,000</option>
@@ -564,41 +566,57 @@
                         </div>
                     </div>
 
-                    <!-- Investment Goals -->
+                    <!-- Trading Goals -->
                     <div class="form-section" data-aos="fade-up" data-aos-delay="100">
-                        <h3>Your Investment Goals</h3>
+                        <h3>Your Trading & Investment Goals</h3>
                         <p class="section-desc">What are you looking to achieve? (Select all that apply)</p>
 
                         <div class="goals-grid">
                             <div class="goal-item {{ in_array('diversification', old('investment_goal', [])) ? 'selected' : '' }}" onclick="toggleCheckbox('goal_diversification', this)">
                                 <input type="checkbox" name="investment_goal[]" value="diversification" id="goal_diversification" class="form-check-input" {{ in_array('diversification', old('investment_goal', [])) ? 'checked' : '' }}>
                                 <div>
-                                    <strong>Diversification & performance</strong>
-                                    <p class="small text-muted mb-0">Access to alternative investments and better trading performance</p>
+                                    <strong>Build a Diversified Portfolio</strong>
+                                    <p class="small text-muted mb-0">Access different assets and trading strategies for better performance</p>
                                 </div>
                             </div>
 
-                            <div class="goal-item {{ in_array('fixed_income', old('investment_goal', [])) ? 'selected' : '' }}" onclick="toggleCheckbox('goal_fixed_income', this)">
-                                <input type="checkbox" name="investment_goal[]" value="fixed_income" id="goal_fixed_income" class="form-check-input" {{ in_array('fixed_income', old('investment_goal', [])) ? 'checked' : '' }}>
+                            <div class="goal-item {{ in_array('income', old('investment_goal', [])) ? 'selected' : '' }}" onclick="toggleCheckbox('goal_income', this)">
+                                <input type="checkbox" name="investment_goal[]" value="income" id="goal_income" class="form-check-input" {{ in_array('income', old('investment_goal', [])) ? 'checked' : '' }}>
                                 <div>
-                                    <strong>Generate consistent fixed income</strong>
-                                    <p class="small text-muted mb-0">Lower-return but consistent income distributions</p>
+                                    <strong>Generate Regular Trading Income</strong>
+                                    <p class="small text-muted mb-0">Develop consistent income through active trading and strategic positions</p>
                                 </div>
                             </div>
 
-                            <div class="goal-item {{ in_array('venture_capital', old('investment_goal', [])) ? 'selected' : '' }}" onclick="toggleCheckbox('goal_venture', this)">
-                                <input type="checkbox" name="investment_goal[]" value="venture_capital" id="goal_venture" class="form-check-input" {{ in_array('venture_capital', old('investment_goal', [])) ? 'checked' : '' }}>
+                            <div class="goal-item {{ in_array('long_term', old('investment_goal', [])) ? 'selected' : '' }}" onclick="toggleCheckbox('goal_longterm', this)">
+                                <input type="checkbox" name="investment_goal[]" value="long_term" id="goal_longterm" class="form-check-input" {{ in_array('long_term', old('investment_goal', [])) ? 'checked' : '' }}>
                                 <div>
-                                    <strong>Venture capital & Long-term wealth</strong>
-                                    <p class="small text-muted mb-0">Long-term investments in private companies</p>
+                                    <strong>Long-term Wealth Building</strong>
+                                    <p class="small text-muted mb-0">Build sustainable wealth through long-term position trading and investing</p>
+                                </div>
+                            </div>
+
+                            <div class="goal-item {{ in_array('short_term', old('investment_goal', [])) ? 'selected' : '' }}" onclick="toggleCheckbox('goal_shortterm', this)">
+                                <input type="checkbox" name="investment_goal[]" value="short_term" id="goal_shortterm" class="form-check-input" {{ in_array('short_term', old('investment_goal', [])) ? 'checked' : '' }}>
+                                <div>
+                                    <strong>Day Trading & Short-term Gains</strong>
+                                    <p class="small text-muted mb-0">Capitalize on market volatility through short-term trading strategies</p>
+                                </div>
+                            </div>
+
+                            <div class="goal-item {{ in_array('copy_trading', old('investment_goal', [])) ? 'selected' : '' }}" onclick="toggleCheckbox('goal_copy', this)">
+                                <input type="checkbox" name="investment_goal[]" value="copy_trading" id="goal_copy" class="form-check-input" {{ in_array('copy_trading', old('investment_goal', [])) ? 'checked' : '' }}>
+                                <div>
+                                    <strong>Copy Trading from Experts</strong>
+                                    <p class="small text-muted mb-0">Follow and replicate trades from successful professional traders</p>
                                 </div>
                             </div>
 
                             <div class="goal-item {{ in_array('other', old('investment_goal', [])) ? 'selected' : '' }}" onclick="toggleCheckbox('goal_other', this)">
                                 <input type="checkbox" name="investment_goal[]" value="other" id="goal_other" class="form-check-input" {{ in_array('other', old('investment_goal', [])) ? 'checked' : '' }}>
                                 <div>
-                                    <strong>Other goals</strong>
-                                    <p class="small text-muted mb-0">Different investment objectives</p>
+                                    <strong>Other Trading Goals</strong>
+                                    <p class="small text-muted mb-0">Different trading objectives or strategies</p>
                                 </div>
                             </div>
                         </div>
@@ -608,12 +626,12 @@
                     <!-- Asset Classes -->
                     <div class="form-section" data-aos="fade-up" data-aos-delay="200">
                         <h3>Which asset classes interest you?</h3>
-                        <p class="section-desc">Choose one or more options</p>
+                        <p class="section-desc">Choose one or more options that align with your trading strategy</p>
 
                         <div class="assets-grid">
                             <div class="asset-item {{ in_array('stocks', old('asset_classes', [])) ? 'selected' : '' }}" onclick="toggleCheckbox('asset_stocks', this)">
                                 <input type="checkbox" name="asset_classes[]" value="stocks" id="asset_stocks" class="form-check-input" {{ in_array('stocks', old('asset_classes', [])) ? 'checked' : '' }}>
-                                <label for="asset_stocks" class="fw-bold">Stocks</label>
+                                <label for="asset_stocks" class="fw-bold">Stocks & Equities</label>
                             </div>
 
                             <div class="asset-item {{ in_array('crypto', old('asset_classes', [])) ? 'selected' : '' }}" onclick="toggleCheckbox('asset_crypto', this)">
@@ -621,23 +639,90 @@
                                 <label for="asset_crypto" class="fw-bold">Cryptocurrency</label>
                             </div>
 
-                            <div class="asset-item {{ in_array('venture', old('asset_classes', [])) ? 'selected' : '' }}" onclick="toggleCheckbox('asset_venture', this)">
-                                <input type="checkbox" name="asset_classes[]" value="venture" id="asset_venture" class="form-check-input" {{ in_array('venture', old('asset_classes', [])) ? 'checked' : '' }}>
-                                <label for="asset_venture" class="fw-bold">Venture Capital</label>
+                            <div class="asset-item {{ in_array('forex', old('asset_classes', [])) ? 'selected' : '' }}" onclick="toggleCheckbox('asset_forex', this)">
+                                <input type="checkbox" name="asset_classes[]" value="forex" id="asset_forex" class="form-check-input" {{ in_array('forex', old('asset_classes', [])) ? 'checked' : '' }}>
+                                <label for="asset_forex" class="fw-bold">Forex</label>
                             </div>
 
-                            <div class="asset-item {{ in_array('realestate', old('asset_classes', [])) ? 'selected' : '' }}" onclick="toggleCheckbox('asset_realestate', this)">
-                                <input type="checkbox" name="asset_classes[]" value="realestate" id="asset_realestate" class="form-check-input" {{ in_array('realestate', old('asset_classes', [])) ? 'checked' : '' }}>
-                                <label for="asset_realestate" class="fw-bold">Real Estate</label>
+                            <div class="asset-item {{ in_array('commodities', old('asset_classes', [])) ? 'selected' : '' }}" onclick="toggleCheckbox('asset_commodities', this)">
+                                <input type="checkbox" name="asset_classes[]" value="commodities" id="asset_commodities" class="form-check-input" {{ in_array('commodities', old('asset_classes', [])) ? 'checked' : '' }}>
+                                <label for="asset_commodities" class="fw-bold">Commodities</label>
+                            </div>
+
+                            <div class="asset-item {{ in_array('options', old('asset_classes', [])) ? 'selected' : '' }}" onclick="toggleCheckbox('asset_options', this)">
+                                <input type="checkbox" name="asset_classes[]" value="options" id="asset_options" class="form-check-input" {{ in_array('options', old('asset_classes', [])) ? 'checked' : '' }}>
+                                <label for="asset_options" class="fw-bold">Options & Derivatives</label>
+                            </div>
+
+                            <div class="asset-item {{ in_array('indices', old('asset_classes', [])) ? 'selected' : '' }}" onclick="toggleCheckbox('asset_indices', this)">
+                                <input type="checkbox" name="asset_classes[]" value="indices" id="asset_indices" class="form-check-input" {{ in_array('indices', old('asset_classes', [])) ? 'checked' : '' }}>
+                                <label for="asset_indices" class="fw-bold">Indices & ETFs</label>
                             </div>
                         </div>
                         @error('asset_classes') <span class="text-danger small">{{ $message }}</span> @enderror
                     </div>
 
+                    <!-- Learning Style -->
+                    <div class="form-section" data-aos="fade-up" data-aos-delay="250">
+                        <h3>How would you like to learn?</h3>
+                        <p class="section-desc">Select your preferred learning method</p>
+
+                        <div class="learning-grid">
+                            <div class="learning-item {{ old('learning_style') == 'video' ? 'selected' : '' }}" onclick="selectLearningStyle('video')">
+                                <input type="radio" name="learning_style" id="learn_video" value="video" class="form-check-input" {{ old('learning_style') == 'video' ? 'checked' : '' }} required>
+                                <div>
+                                    <strong>Video Tutorials</strong>
+                                    <p class="small text-muted mb-0">Learn through step-by-step video courses and market analysis</p>
+                                </div>
+                            </div>
+
+                            <div class="learning-item {{ old('learning_style') == 'webinar' ? 'selected' : '' }}" onclick="selectLearningStyle('webinar')">
+                                <input type="radio" name="learning_style" id="learn_webinar" value="webinar" class="form-check-input" {{ old('learning_style') == 'webinar' ? 'checked' : '' }}>
+                                <div>
+                                    <strong>Live Webinars</strong>
+                                    <p class="small text-muted mb-0">Interactive live sessions with expert traders and Q&A</p>
+                                </div>
+                            </div>
+
+                            <div class="learning-item {{ old('learning_style') == 'articles' ? 'selected' : '' }}" onclick="selectLearningStyle('articles')">
+                                <input type="radio" name="learning_style" id="learn_articles" value="articles" class="form-check-input" {{ old('learning_style') == 'articles' ? 'checked' : '' }}>
+                                <div>
+                                    <strong>Articles & Guides</strong>
+                                    <p class="small text-muted mb-0">In-depth written guides, strategies, and market analysis</p>
+                                </div>
+                            </div>
+
+                            <div class="learning-item {{ old('learning_style') == 'mentoring' ? 'selected' : '' }}" onclick="selectLearningStyle('mentoring')">
+                                <input type="radio" name="learning_style" id="learn_mentoring" value="mentoring" class="form-check-input" {{ old('learning_style') == 'mentoring' ? 'checked' : '' }}>
+                                <div>
+                                    <strong>One-on-One Mentoring</strong>
+                                    <p class="small text-muted mb-0">Personalized guidance and coaching from experienced traders</p>
+                                </div>
+                            </div>
+
+                            <div class="learning-item {{ old('learning_style') == 'community' ? 'selected' : '' }}" onclick="selectLearningStyle('community')">
+                                <input type="radio" name="learning_style" id="learn_community" value="community" class="form-check-input" {{ old('learning_style') == 'community' ? 'checked' : '' }}>
+                                <div>
+                                    <strong>Community Forums</strong>
+                                    <p class="small text-muted mb-0">Learn from peers, discuss strategies, and share experiences</p>
+                                </div>
+                            </div>
+
+                            <div class="learning-item {{ old('learning_style') == 'practice' ? 'selected' : '' }}" onclick="selectLearningStyle('practice')">
+                                <input type="radio" name="learning_style" id="learn_practice" value="practice" class="form-check-input" {{ old('learning_style') == 'practice' ? 'checked' : '' }}>
+                                <div>
+                                    <strong>Paper Trading</strong>
+                                    <p class="small text-muted mb-0">Practice trading with virtual money, no real risk</p>
+                                </div>
+                            </div>
+                        </div>
+                        @error('learning_style') <span class="text-danger small">{{ $message }}</span> @enderror
+                    </div>
+
                     <!-- Account Type Selection -->
                     <div class="form-section" data-aos="fade-up" data-aos-delay="300">
                         <h3>What account would you like to open?</h3>
-                        <p class="section-desc">Choose the account type that matches your needs</p>
+                        <p class="section-desc">Choose the account type that matches your trading needs</p>
 
                         <div class="row g-4">
                             <!-- Platform Account Option -->
@@ -645,8 +730,8 @@
                                 <div class="option-card {{ old('account_type') == 'personal' ? 'selected' : '' }}" onclick="selectAccountType('personal')">
                                     <input type="radio" name="account_type" id="account_personal" value="personal" class="form-check-input" {{ old('account_type') == 'personal' ? 'checked' : '' }} required>
                                     <div>
-                                        <h5 class="fw-bold mb-2">Platform Account</h5>
-                                        <p class="small text-muted mb-0">A flexible trading/investing account to help you build long-term wealth.</p>
+                                        <h5 class="fw-bold mb-2">Individual Trading Account</h5>
+                                        <p class="small text-muted mb-0">Execute your own trading strategies with advanced tools and analysis features.</p>
                                     </div>
                                 </div>
                             </div>
@@ -656,8 +741,8 @@
                                 <div class="option-card {{ old('account_type') == 'corporate' ? 'selected' : '' }}" onclick="selectAccountType('corporate')">
                                     <input type="radio" name="account_type" id="account_corporate" value="corporate" class="form-check-input" {{ old('account_type') == 'corporate' ? 'checked' : '' }}>
                                     <div>
-                                        <h5 class="fw-bold mb-2">Corporate Account <span class="badge ms-2" style="background: #8bc905; color: #0C3A30;">With Expert Traders</span></h5>
-                                        <p class="small text-muted mb-0">For expert traders who want to copy trades from specific Discord/Telegram community admins.</p>
+                                        <h5 class="fw-bold mb-2">Copy Trading Account <span class="badge ms-2" style="background: #8bc905; color: #0C3A30;">Expert Traders</span></h5>
+                                        <p class="small text-muted mb-0">Automatically copy trades from successful Discord/Telegram community traders.</p>
                                     </div>
                                 </div>
                             </div>
@@ -671,7 +756,7 @@
                                 <div class="d-flex align-items-center gap-2">
                                     <h5 style="font-size: 14px; color: #0C3A30; font-weight: 600; margin: 0;">
                                         <i class="ri-user-star-line me-2" style="color: #8bc905;"></i>
-                                        Choose your admin to copy trades
+                                        Choose your trading expert to copy trades
                                         @if(isset($feeds) && $feeds->count() > 0)
                                         <span class="badge rounded-pill" style="background: #8bc90520; color: #0C3A30; font-size: 11px; padding: 4px 10px;">
                                             <span id="adminCount">{{ $feeds->count() }}</span> available
@@ -701,7 +786,7 @@
                             <!-- Search Results Count -->
                             <div id="searchResultsInfo" class="mb-2 px-1" style="display: none;">
                                 <small style="color: #64748b;">
-                                    Found <span id="resultsCount">0</span> matching admins
+                                    Found <span id="resultsCount">0</span> matching traders
                                 </small>
                             </div>
 
@@ -806,7 +891,7 @@
                                         <i class="ri-search-line" style="color: #8bc905; font-size: 24px;"></i>
                                     </div>
                                 </div>
-                                <p class="text-dark mb-1" style="font-size: 14px; font-weight: 500;">No matching admins found</p>
+                                <p class="text-dark mb-1" style="font-size: 14px; font-weight: 500;">No matching traders found</p>
                                 <p class="text-muted" style="font-size: 12px;">Try adjusting your search terms</p>
                                 <button class="btn btn-sm mt-2" onclick="clearSearch()" style="background: #8bc905; color: white; border: none; padding: 6px 16px; border-radius: 20px;">
                                     Clear Search
@@ -834,8 +919,8 @@
                                         <i class="fa-solid fa-user-slash" style="color: #8bc905; font-size: 24px;"></i>
                                     </div>
                                 </div>
-                                <p class="text-dark mb-1" style="font-size: 14px; font-weight: 500;">No admins available yet</p>
-                                <p class="text-muted" style="font-size: 12px;">Check back later for available trading admins</p>
+                                <p class="text-dark mb-1" style="font-size: 14px; font-weight: 500;">No traders available yet</p>
+                                <p class="text-muted" style="font-size: 12px;">Check back later for available trading experts</p>
                             </div>
                             @endif
                         </div>
@@ -844,58 +929,27 @@
 
                     <!-- Financial Information -->
                     <div class="form-section" data-aos="fade-up" data-aos-delay="400">
-                        <h3>Financial Information</h3>
-                        <p class="section-desc">This helps us personalize your experience</p>
+                        <h3>Trading Capital & Financial Information</h3>
+                        <p class="section-desc">This helps us customize your trading experience</p>
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold">Investment Amount <span class="text-muted">($)</span></label>
+                                <label class="form-label fw-semibold">Initial Trading Capital <span class="text-muted">($)</span></label>
                                 <input type="number" name="investment_amount" class="form-control" value="{{ old('investment_amount', 1000) }}" min="0" step="100" required>
                                 @error('investment_amount') <span class="text-danger small">{{ $message }}</span> @enderror
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold">Financial Alternative</label>
-                                <input type="text" name="financial_alternative" class="form-control" value="{{ old('financial_alternative', 'Pension') }}" placeholder="e.g., Pension, Savings">
-                                @error('financial_alternative') <span class="text-danger small">{{ $message }}</span> @enderror
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold">Annual Income</label>
-                                <select name="annual_income" class="form-control" required>
-                                    <option value="">Select income range</option>
-                                    <option value="0-14999" {{ old('annual_income') == '0-14999' ? 'selected' : '' }}>$0 - $14,999</option>
-                                    <option value="15000-49999" {{ old('annual_income') == '15000-49999' ? 'selected' : '' }}>$15,000 - $49,999</option>
-                                    <option value="50000-99999" {{ old('annual_income') == '50000-99999' ? 'selected' : '' }}>$50,000 - $99,999</option>
-                                    <option value="100000+" {{ old('annual_income') == '100000+' ? 'selected' : '' }}>$100,000+</option>
-                                </select>
-                                @error('annual_income') <span class="text-danger small">{{ $message }}</span> @enderror
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold">Source of Initial Deposit</label>
+                                <label class="form-label fw-semibold">Source of Trading Capital</label>
                                 <select name="deposit_source" class="form-control" required>
                                     <option value="">Select source</option>
-                                    <option value="savings" {{ old('deposit_source') == 'savings' ? 'selected' : '' }}>Savings</option>
-                                    <option value="pension" {{ old('deposit_source') == 'pension' ? 'selected' : '' }}>Pension</option>
+                                    <option value="savings" {{ old('deposit_source') == 'savings' ? 'selected' : '' }}>Personal Savings</option>
+                                    <option value="pension" {{ old('deposit_source') == 'pension' ? 'selected' : '' }}>Pension Funds</option>
                                     <option value="inheritance" {{ old('deposit_source') == 'inheritance' ? 'selected' : '' }}>Inheritance</option>
-                                    <option value="investment" {{ old('deposit_source') == 'investment' ? 'selected' : '' }}>Previous Investments</option>
+                                    <option value="investment" {{ old('deposit_source') == 'investment' ? 'selected' : '' }}>Previous Investment Returns</option>
                                     <option value="other" {{ old('deposit_source') == 'other' ? 'selected' : '' }}>Other</option>
                                 </select>
                                 @error('deposit_source') <span class="text-danger small">{{ $message }}</span> @enderror
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold">Source of Ongoing Deposits</label>
-                                <select name="ongoing_deposit_source" class="form-control" required>
-                                    <option value="">Select source</option>
-                                    <option value="income" {{ old('ongoing_deposit_source') == 'income' ? 'selected' : '' }}>Regular Income</option>
-                                    <option value="pension" {{ old('ongoing_deposit_source') == 'pension' ? 'selected' : '' }}>Pension</option>
-                                    <option value="business" {{ old('ongoing_deposit_source') == 'business' ? 'selected' : '' }}>Business Profits</option>
-                                    <option value="investments" {{ old('ongoing_deposit_source') == 'investments' ? 'selected' : '' }}>Investment Returns</option>
-                                    <option value="other" {{ old('ongoing_deposit_source') == 'other' ? 'selected' : '' }}>Other</option>
-                                </select>
-                                @error('ongoing_deposit_source') <span class="text-danger small">{{ $message }}</span> @enderror
                             </div>
                         </div>
                     </div>
@@ -936,6 +990,22 @@
         } else {
             element.classList.remove('selected');
         }
+    }
+
+    // Learning style selection
+    function selectLearningStyle(value) {
+        document.getElementById('learn_video').checked = (value === 'video');
+        document.getElementById('learn_webinar').checked = (value === 'webinar');
+        document.getElementById('learn_articles').checked = (value === 'articles');
+        document.getElementById('learn_mentoring').checked = (value === 'mentoring');
+        document.getElementById('learn_community').checked = (value === 'community');
+        document.getElementById('learn_practice').checked = (value === 'practice');
+
+        // Update UI
+        document.querySelectorAll('[onclick^="selectLearningStyle"]').forEach(card => {
+            card.classList.remove('selected');
+        });
+        event.currentTarget.classList.add('selected');
     }
 
     // Account type selection

@@ -236,7 +236,7 @@
                         </div>
 
                         <div class="mb-3 col-md-6">
-                            <label for="">Username</label>
+                            <label for="">Username on Discord</label>
                             <input type="text" class="form-control" value="{{ old('username') }}" name="username" placeholder="Choose a username">
                             <span class="text-danger">@error('username') {{ $message }} @enderror</span>
                         </div>
@@ -262,14 +262,14 @@
                             <span class="text-danger">@error('password') {{ $message }} @enderror</span>
                         </div>
 
-                        <div class="mb-3 col-md-6 position-relative">
+                        <!-- <div class="mb-3 col-md-6 position-relative">
                             <label for="">Confirm Password</label>
                             <input type="password" id="regConfirmPassword" class="form-control pe-5" name="password_confirmation" placeholder="Confirm your password" value="{{ old('password_confirmation') }}">
                             <span class="password-toggle" onclick="toggleRegConfirmPassword()">
                                 <i class="ri-eye-line" id="regConfirmToggleIcon"></i>
                             </span>
                             <span class="text-danger">@error('password_confirmation') {{ $message }} @enderror</span>
-                        </div>
+                        </div> -->
 
                         <div class="mb-3 col-md-6">
                             <label for="country">Country</label>
@@ -309,10 +309,8 @@
                             </select>
                         </div>
 
-                        <div class="mb-3 col-md-6">
-                            <label for="">Referral ID (Optional)</label>
-                            <input type="text" class="form-control" value="{{ old('referral_id') }}" name="referral_id" placeholder="Enter referral code if you have one">
-                        </div>
+                
+                        
                     </div>
 
                     <!-- Section Divider -->
@@ -415,18 +413,6 @@ function toggleRegPassword() {
     }
 }
 
-function toggleRegConfirmPassword() {
-    const input = document.getElementById('regConfirmPassword');
-    const icon = document.getElementById('regConfirmToggleIcon');
-
-    if (input.type === 'password') {
-        input.type = 'text';
-        icon.classList.replace('ri-eye-line', 'ri-eye-off-line');
-    } else {
-        input.type = 'password';
-        icon.classList.replace('ri-eye-off-line', 'ri-eye-line');
-    }
-}
 
 // Select join source (FIXED)
 function selectJoinSource(event, source) {
@@ -452,15 +438,14 @@ function selectJoinSource(event, source) {
 
 // Validation
 function validateForm() {
-    const requiredFields = [
-        document.querySelector('input[name="name"]'),
-        document.querySelector('input[name="username"]'),
-        document.querySelector('input[name="email"]'),
-        document.querySelector('input[name="phone"]'),
-        document.getElementById('regPassword'),
-        document.getElementById('regConfirmPassword'),
-        document.getElementById('country'),
-    ];
+const requiredFields = [
+    document.querySelector('input[name="name"]'),
+    document.querySelector('input[name="username"]'),
+    document.querySelector('input[name="email"]'),
+    document.querySelector('input[name="phone"]'),
+    document.getElementById('regPassword'),
+    document.getElementById('country'),
+];
 
     const joinSource = document.getElementById('join_source').value;
     let isValid = true;

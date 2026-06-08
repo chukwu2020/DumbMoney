@@ -20,6 +20,7 @@ class UserTradingInfo extends Model
         'account_type',
         'copy_admin_id',
         'copy_admin_name',
+        'learning_style', 
         'copy_server_name',
         'investment_amount',
         'financial_alternative',
