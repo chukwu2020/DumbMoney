@@ -83,12 +83,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
    
-
-<!-- Smartsupp Live Chat script -->
 <!-- Smartsupp Live Chat script -->
 <script type="text/javascript">
 var _smartsupp = _smartsupp || {};
-_smartsupp.key = '0dda8c93da930491d9a0a2c655be10a8916850e0';
+_smartsupp.key = 'cd1b92e3d06cb7d8c3aa612a36bf5d08be3942b1';
 window.smartsupp||(function(d) {
   var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
   s=d.getElementsByTagName('script')[0];c=d.createElement('script');
@@ -98,7 +96,6 @@ window.smartsupp||(function(d) {
 </script>
 
 
-<noscript>Powered by <a href="https://dumbmoney.chartmasterscircle.com" target="_blank">Dumb Money</a></noscript>
 
 
 

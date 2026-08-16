@@ -248,14 +248,31 @@ Route::post('/deposit/giftcard', [DepositController::class, 'submitGiftCard'])->
     });
 
     // ==================== WALLETS MANAGEMENT ====================
-    Route::prefix('wallets')->group(function () {
-        Route::get('/', [WalletController::class, 'index'])->name('wallet.index');
-        Route::get('/create', [WalletController::class, 'addWallet'])->name('create_wallet');
-        Route::post('/store', [WalletController::class, 'storeWallet'])->name('wallet.create');
-        Route::delete('/{id}', [WalletController::class, 'destroy'])->name('wallet.delete');
-        Route::post('/generate-wallets', [WalletController::class, 'generate'])
-    ->name('user.wallets.generate');
-    });
+Route::prefix('wallets')->group(function () {
+    // List all wallets
+    Route::get('/', [WalletController::class, 'index'])->name('admin.wallets.index');
+    
+    // Create wallet
+    Route::get('/create', [WalletController::class, 'addWallet'])->name('admin.wallets.create');
+    Route::post('/store', [WalletController::class, 'storeWallet'])->name('admin.wallets.store');
+    
+    // Edit wallet
+    Route::get('/{id}/edit', [WalletController::class, 'edit'])->name('admin.wallets.edit');
+    Route::put('/{id}', [WalletController::class, 'update'])->name('admin.wallets.update');
+    
+    // Delete wallet
+    Route::delete('/{id}', [WalletController::class, 'destroy'])->name('admin.wallets.destroy');
+    
+    // Generate wallets for API
+    Route::post('/generate-wallets', [WalletController::class, 'generate'])->name('user.wallets.generate');
+});
+
+// Keep these for backward compatibility if needed
+Route::get('/create-wallet', [WalletController::class, 'addWallet'])->name('create_wallet');
+Route::post('/wallet/create', [WalletController::class, 'storeWallet'])->name('wallet.create');
+Route::delete('/wallet/delete/{id}', [WalletController::class, 'destroy'])->name('wallet.delete');
+
+
 
     // ==================== ADMIN ROUTES ====================
     Route::prefix('admin')->middleware('isAdmin')->group(function () {
